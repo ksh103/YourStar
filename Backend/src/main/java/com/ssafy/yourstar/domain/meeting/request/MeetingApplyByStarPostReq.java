@@ -9,7 +9,7 @@ import java.time.LocalDateTime;
 
 @Getter
 @Setter
-@ApiModel(value = "MeetingApplyByStarPostReq", description = "스타가 팬미팅 신청시 필요한 정보")
+@ApiModel(value = "MeetingApplyByStarPostReq", description = "스타가 팬미팅 신청이나 수정시 필요한 정보")
 public class MeetingApplyByStarPostReq {
     @ApiModelProperty(value = "소속사 코드", required = true)
     int managerCode;

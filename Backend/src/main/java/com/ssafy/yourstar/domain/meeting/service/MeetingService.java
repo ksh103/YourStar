@@ -7,5 +7,6 @@ import com.ssafy.yourstar.domain.meeting.request.MeetingApplyByUserPostReq;
 
 public interface MeetingService {
     Meeting meetingApplyByStar(MeetingApplyByStarPostReq meetingApplyByStarPostReq);
+    Meeting meetingModifyByStar(Meeting meeting);
     Applicant meetingApplyByUser(MeetingApplyByUserPostReq meetingApplyByUserPostReq);
 }

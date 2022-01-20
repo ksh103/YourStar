@@ -36,6 +36,14 @@ public class MeetingServiceImpl implements MeetingService {
     }
 
     @Override
+    public Meeting meetingModifyByStar(Meeting meeting) {
+        // 해당 팬미팅이 존재하면 수정
+        if (meetingRepository.findById(meeting.getMeetingId()).isPresent()) {
+            return meetingRepository.save(meeting);
+        } else return null;
+    }
+
+    @Override
     public Applicant meetingApplyByUser(MeetingApplyByUserPostReq meetingApplyByUserPostReq) {
         Applicant applicant = new Applicant();
 
