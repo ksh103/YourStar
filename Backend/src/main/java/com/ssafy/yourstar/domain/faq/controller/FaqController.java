@@ -33,5 +33,10 @@ public class FaqController {
         return ResponseEntity.status(200).body(BaseResponseBody.of(200, "Success"));
     }
 
+    @ApiOperation(value = "FAQ 전체 조회")
+    @GetMapping
+    public List<Faq> faqList() {
+        return faqService.faqList();
+    }
 
 }

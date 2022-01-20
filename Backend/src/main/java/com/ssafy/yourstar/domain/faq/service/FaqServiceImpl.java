@@ -24,4 +24,8 @@ public class FaqServiceImpl implements FaqService{
         return faqRepository.save(faq);
     }
 
+    @Override
+    public List<Faq> faqList() {
+        return faqRepository.findAll();
+    }
 }

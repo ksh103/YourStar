@@ -7,5 +7,5 @@ import java.util.List;
 
 public interface FaqService {
     Faq faqRegister(FaqRegisterPostReq faqRegister); // FAQ 등록
-
+    List<Faq> faqList();    // FAQ 전체 조회
 }
