@@ -1,7 +1,7 @@
-package com.ssafy.yourstar.member.service;
+package com.ssafy.yourstar.domain.member.service;
 
-import com.ssafy.yourstar.member.db.entity.Member;
-import com.ssafy.yourstar.member.db.repository.MemberRepositorySupport;
+import com.ssafy.yourstar.domain.member.db.entity.Member;
+import com.ssafy.yourstar.domain.member.db.repository.MemberRepositorySupport;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 

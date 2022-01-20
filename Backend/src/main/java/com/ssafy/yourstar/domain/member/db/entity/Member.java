@@ -1,4 +1,4 @@
-package com.ssafy.yourstar.member.db.entity;
+package com.ssafy.yourstar.domain.member.db.entity;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;

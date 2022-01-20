@@ -1,6 +1,6 @@
 package com.ssafy.yourstar.global.auth;
 
-import com.ssafy.yourstar.member.db.entity.Member;
+import com.ssafy.yourstar.domain.member.db.entity.Member;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;

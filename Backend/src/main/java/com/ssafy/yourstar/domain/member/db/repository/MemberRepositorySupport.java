@@ -1,7 +1,7 @@
-package com.ssafy.yourstar.member.db.repository;
+package com.ssafy.yourstar.domain.member.db.repository;
 
 import com.querydsl.jpa.impl.JPAQueryFactory;
-import com.ssafy.yourstar.member.db.entity.Member;
+import com.ssafy.yourstar.domain.member.db.entity.Member;
 import com.ssafy.yourstar.member.db.entity.QMember;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
