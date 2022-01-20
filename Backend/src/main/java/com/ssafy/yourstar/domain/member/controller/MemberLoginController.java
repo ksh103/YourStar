@@ -1,11 +1,11 @@
-package com.ssafy.yourstar.member.controller;
+package com.ssafy.yourstar.domain.member.controller;
 
+import com.ssafy.yourstar.domain.member.db.entity.Member;
+import com.ssafy.yourstar.domain.member.response.MemberLoginPostRes;
 import com.ssafy.yourstar.global.model.response.BaseResponseBody;
 import com.ssafy.yourstar.global.util.JwtTokenUtil;
-import com.ssafy.yourstar.member.db.entity.Member;
-import com.ssafy.yourstar.member.request.MemberLoginPostReq;
-import com.ssafy.yourstar.member.response.MemberLoginPostRes;
-import com.ssafy.yourstar.member.service.MemberService;
+import com.ssafy.yourstar.domain.member.request.MemberLoginPostReq;
+import com.ssafy.yourstar.domain.member.service.MemberService;
 import io.swagger.annotations.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;

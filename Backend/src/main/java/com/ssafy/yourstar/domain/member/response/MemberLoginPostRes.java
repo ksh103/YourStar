@@ -1,4 +1,4 @@
-package com.ssafy.yourstar.member.response;
+package com.ssafy.yourstar.domain.member.response;
 
 import com.ssafy.yourstar.global.model.response.BaseResponseBody;
 import io.swagger.annotations.ApiModel;

@@ -2,7 +2,7 @@ package com.ssafy.yourstar.global.config;
 
 import com.ssafy.yourstar.global.auth.JwtAuthenticationFilter;
 import com.ssafy.yourstar.global.auth.MemberDetaillService;
-import com.ssafy.yourstar.member.service.MemberService;
+import com.ssafy.yourstar.domain.member.service.MemberService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
