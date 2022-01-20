@@ -9,4 +9,5 @@ public interface FaqService {
     Faq faqRegister(FaqReq faqRegister);    // FAQ 등록
     List<Faq> faqList();    // FAQ 전체 조회
     Faq faqModify(int faqId, FaqReq faqModify);     // FAQ 수정
+    boolean faqRemove(int faqId);   // FAQ 삭제
 }

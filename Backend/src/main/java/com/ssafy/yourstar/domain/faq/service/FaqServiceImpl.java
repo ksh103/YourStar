@@ -7,6 +7,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Optional;
 
 @Service
 public class FaqServiceImpl implements FaqService{
@@ -38,5 +39,12 @@ public class FaqServiceImpl implements FaqService{
         faq.setFaqContent(faqModify.getFaqContent());
 
         return faqRepository.save(faq);
+    }
+
+    @Override
+    public boolean faqRemove(int faqId) {
+        Faq faq = faqRepository.findByFaqId(faqId);
+        faqRepository.delete(faq);
+        return true;
     }
 }
