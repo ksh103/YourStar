@@ -42,10 +42,12 @@ public class FaqController {
 
     @ApiOperation(value = "FAQ 수정")
     @PutMapping("/{faqId}")
-    public ResponseEntity<BaseResponseBody> faqModify(@PathVariable int faqId, @RequestBody Faq faq, HttpServletRequest request) {
+    public ResponseEntity<BaseResponseBody> faqModify(@PathVariable int faqId, @RequestBody FaqReq faqModify, HttpServletRequest request) {
         logger.info("faqModify - 호출");
-        faqService.faqModify(faqId, faq);
+        faqService.faqModify(faqId, faqModify);
         return ResponseEntity.status(200).body(BaseResponseBody.of(200, "Success"));
     }
+
+
 
 }

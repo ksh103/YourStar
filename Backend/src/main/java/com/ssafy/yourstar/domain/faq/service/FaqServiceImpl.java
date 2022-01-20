@@ -30,8 +30,13 @@ public class FaqServiceImpl implements FaqService{
     }
 
     @Override
-    public Faq faqModify(int faqId, Faq faq) {
+    public Faq faqModify(int faqId, FaqReq faqModify) {
+        Faq faq = new Faq();
+
         faq.setFaqId(faqId);
+        faq.setFaqTitle(faqModify.getFaqTitle());
+        faq.setFaqContent(faqModify.getFaqContent());
+
         return faqRepository.save(faq);
     }
 }
