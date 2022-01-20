@@ -7,6 +7,7 @@ import com.ssafy.yourstar.domain.meeting.service.MeetingService;
 import com.ssafy.yourstar.global.response.BaseResponseBody;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
+import io.swagger.annotations.ApiParam;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -43,6 +44,18 @@ public class MeetingController {
             return ResponseEntity.status(400).body(BaseResponseBody.of(400, "This MeetingId doesn't exist"));
         } else {
             return ResponseEntity.status(201).body(BaseResponseBody.of(201, "Success"));
+        }
+    }
+
+    @ApiOperation(value = "스타가 신청한 팬미팅 취소")
+    @DeleteMapping("/room-applicant/{meetingId}")
+    public ResponseEntity<? extends BaseResponseBody> meetingRemoveByStar
+            (@ApiParam(value = "팬미팅 번호") @PathVariable("meetingId") int meetingId) {
+        if (meetingService.meetingRemoveByStar(meetingId)) {
+            return ResponseEntity.status(201).body(BaseResponseBody.of(201, "Success"));
+        } else {
+            log.error("meetingRemoveByStar - This MeetingId doesn't exist");
+            return ResponseEntity.status(400).body(BaseResponseBody.of(400, "This MeetingId doesn't exist"));
         }
     }
 

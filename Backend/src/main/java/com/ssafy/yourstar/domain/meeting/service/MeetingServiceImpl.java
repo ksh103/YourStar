@@ -44,6 +44,15 @@ public class MeetingServiceImpl implements MeetingService {
     }
 
     @Override
+    public boolean meetingRemoveByStar(int meetingId) {
+        // 해당 팬미팅이 존재하면 삭제
+        if (meetingRepository.findById(meetingId).isPresent()) {
+            meetingRepository.deleteById(meetingId);
+            return true;
+        } else return false;
+    }
+
+    @Override
     public Applicant meetingApplyByUser(MeetingApplyByUserPostReq meetingApplyByUserPostReq) {
         Applicant applicant = new Applicant();
 
