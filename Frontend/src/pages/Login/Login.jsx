@@ -1,22 +1,34 @@
 import React from 'react';
 import { Block } from '../../styles/variables';
-import Box from '@mui/material/Box';
 import Grid from '@mui/material/Grid';
-// import { innerDiv } from './Login.style';
 import OutlinedInput from '@mui/material/OutlinedInput';
 import InputLabel from '@mui/material/InputLabel';
 import InputAdornment from '@mui/material/InputAdornment';
-// import FormHelperText from '@mui/material/FormHelperText';
 import FormControl from '@mui/material/FormControl';
 import TextField from '@mui/material/TextField';
-// import Visibility from '@mui/icons-material/Visibility';
-// import VisibilityOff from '@mui/icons-material/VisibilityOff';
 import Button from '@mui/material/Button';
-import Stack from '@mui/material/Stack';
-
 import LoginImage from "../Login/LOGIN_IMAGE.jpg"
 import {ImgTag} from "../Login/Login.style"
+import { createTheme, ThemeProvider } from '@mui/material/styles';
 
+const theme = createTheme({
+  palette: {
+    primary: {
+      // Purple and green play nicely together.
+      main: "#e57373",
+    },
+    secondary: {
+      // This is green.A700 as hex.
+      main: '#11cb5f',
+    },
+  },
+});
+
+// import Box from '@mui/material/Box';
+// import { innerDiv } from './Login.style';
+// import FormHelperText from '@mui/material/FormHelperText';
+// import Visibility from '@mui/icons-material/Visibility';
+// import VisibilityOff from '@mui/icons-material/VisibilityOff';
 export default function Login() {
   const [values, setValues] = React.useState({
     amount: '',
@@ -45,19 +57,23 @@ export default function Login() {
         }} 
         item xs={7} 
         container
-        direction="row"
+        direction="column"
         justifyContent="center"
         alignItems="center"
-        sx={{ 
+        sx={{
           my: "auto",
-          marginRight: "40"
+  
         }}
         >
-        <h1 style={{color : 'black'}}>회원가입</h1>
-
-        <TextField fullWidth sx={{ m: 1 }} id="outlined-basic" label="Outlined" variant="outlined" />
-
-        <FormControl fullWidth sx={{ m: 1 }} variant="outlined">
+        
+        <h1 style={{ marginBottom: "30px" , color:"#e57373"  }}>Login</h1>
+  
+        {/* <h1 style={{color : 'black'}}>Your Star</h1> */}
+        <h3>당신만의 스타를 만나러가세요</h3>
+        <FormControl sx={{ m: 1, width : "70%" , my : "10"}} variant="outlined">
+          <TextField  id="outlined-basic" label="Outlined" variant="outlined" />
+        </FormControl>
+        <FormControl sx={{ m: 1, width : "70%" }} variant="outlined">
           <InputLabel htmlFor="outlined-adornment-password">
             Password
           </InputLabel>
@@ -81,11 +97,41 @@ export default function Login() {
             label="Password"
           />
         </FormControl>
-        <Stack direction="row" spacing={3} style={{justifyContent: "center"}} >
-          <Button variant="contained" color="success" >
-            Login
-          </Button>
-        </Stack>
+        <Grid
+          
+          item xs={12} 
+          container
+          direction="row"
+          justifyContent="space-evenly"
+          alignItems="center"
+          sx={{
+            marginTop : "25px"
+          }}
+        >
+          <ThemeProvider theme={theme}>
+            <Button
+              xs={12}
+              variant="contained"
+              
+              sx={{
+                width : "70%",
+                height : "50px",
+              }}
+              >
+                Login
+            </Button>
+          </ThemeProvider>
+          <Grid
+            xs={12}
+            container
+            direction="row"
+            justifyContent="space-evenly"
+            alignItems="center"
+            >
+            <h3>아직 회원이 아니신가요?</h3>
+            <button>회원가입</button>
+          </Grid>
+        </Grid>
       </Grid>
 
       
