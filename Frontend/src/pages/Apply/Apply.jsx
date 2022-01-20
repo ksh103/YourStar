@@ -1,5 +1,5 @@
 import React from 'react';
 
 export default function Apply() {
-  return <div></div>;
+  return <div>apply</div>;
 }
