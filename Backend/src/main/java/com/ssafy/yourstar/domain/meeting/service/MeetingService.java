@@ -10,4 +10,5 @@ public interface MeetingService {
     Meeting meetingModifyByStar(Meeting meeting);
     boolean meetingRemoveByStar(int meetingId);
     Applicant meetingApplyByUser(MeetingApplyByUserPostReq meetingApplyByUserPostReq);
+    boolean meetingRemoveByUser(Applicant applicant);
 }

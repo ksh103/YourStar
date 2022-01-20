@@ -1,5 +1,6 @@
 package com.ssafy.yourstar.domain.meeting.controller;
 
+import com.ssafy.yourstar.domain.meeting.db.entity.Applicant;
 import com.ssafy.yourstar.domain.meeting.db.entity.Meeting;
 import com.ssafy.yourstar.domain.meeting.request.MeetingApplyByStarPostReq;
 import com.ssafy.yourstar.domain.meeting.request.MeetingApplyByUserPostReq;
@@ -52,7 +53,7 @@ public class MeetingController {
     public ResponseEntity<? extends BaseResponseBody> meetingRemoveByStar
             (@ApiParam(value = "팬미팅 번호") @PathVariable("meetingId") int meetingId) {
         if (meetingService.meetingRemoveByStar(meetingId)) {
-            return ResponseEntity.status(201).body(BaseResponseBody.of(201, "Success"));
+            return ResponseEntity.status(200).body(BaseResponseBody.of(200, "Success"));
         } else {
             log.error("meetingRemoveByStar - This MeetingId doesn't exist");
             return ResponseEntity.status(400).body(BaseResponseBody.of(400, "This MeetingId doesn't exist"));
@@ -68,5 +69,20 @@ public class MeetingController {
         meetingService.meetingApplyByUser(meetingApplyByUserPostReq);
 
         return ResponseEntity.status(201).body(BaseResponseBody.of(201, "Success"));
+    }
+
+    @ApiOperation(value = "팬이 신청한 팬미팅 취소")
+    @DeleteMapping("/fan-applicant/{memberId}/{meetingId}")
+    public ResponseEntity<? extends BaseResponseBody> meetingRemoveByUser
+            (@ApiParam(value = "회원 구분 번호") @PathVariable("memberId") int memberId,
+             @ApiParam(value = "팬미팅 번호") @PathVariable("meetingId") int meetingId) {
+        log.info("meetingRemoveByUser - Call");
+
+        Applicant applicant = new Applicant();
+        applicant.setMemberId(memberId);
+        applicant.setMeetingId(meetingId);
+        meetingService.meetingRemoveByUser(applicant);
+
+        return ResponseEntity.status(200).body(BaseResponseBody.of(200, "Success"));
     }
 }
