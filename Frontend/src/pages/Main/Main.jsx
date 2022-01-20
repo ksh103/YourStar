@@ -1,10 +1,12 @@
 import React from 'react';
-import { Block } from '../../styles/variables';
+import Universe from '../../components/Main/Universe';
+import MainComponent from '../../components/Main/Main';
 
 export default function Main() {
   return (
     <>
-      <Block>ㅎㅇㅎㅇ</Block>
+      <Universe></Universe>
+      <MainComponent></MainComponent>
     </>
   );
 }
