@@ -1,5 +1,6 @@
 export { default as Main } from './Main/Main';
-export { default as Member } from './Member/Member';
+export { default as Login } from './Login/Login';
+export { default as Signup } from './Signup/Signup';
 export { default as Admin } from './Admin/Admin';
 export { default as Apply } from './Apply/Apply';
 export { default as FAQ } from './FAQ/FAQ';

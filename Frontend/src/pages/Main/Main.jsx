@@ -1,5 +1,10 @@
 import React from 'react';
+import { Block } from '../../styles/variables';
 
 export default function Main() {
-  return <div>메인홈페이지</div>;
+  return (
+    <>
+      <Block>ㅎㅇㅎㅇ</Block>
+    </>
+  );
 }
