@@ -28,8 +28,8 @@ public class NoticeServiceImpl implements NoticeService {
     }
 
     @Override
-    public Page<Notice> noticeList(int page) {
-        return noticeRepository.findAll(PageRequest.of(page - 1, 5, Sort.by("noticeId").descending()));
+    public Page<Notice> noticeList(int page, int size) {
+        return noticeRepository.findAll(PageRequest.of(page - 1, size, Sort.by("noticeId").descending()));
     }
 
     @Override
