@@ -20,7 +20,7 @@ public class NoticeServiceImpl implements NoticeService {
         Notice notice = new Notice();
 
         notice.setNoticeTitle(noticeRegister.getNoticeTitle());
-        notice.setNoticeContent(noticeRegister.getNoticeTitle());
+        notice.setNoticeContent(noticeRegister.getNoticeContent());
 
         return noticeRepository.save(notice);
     }
@@ -31,14 +31,19 @@ public class NoticeServiceImpl implements NoticeService {
     }
 
     @Override
-    public Notice noticeModify(int noticeId, Notice notice) {
+    public Notice noticeDetail(int noticeId) {
+        return noticeRepository.findById(noticeId).get();
+    }
+
+    @Override
+    public Notice noticeModify(int noticeId, NoticeReq noticeModify) {
         // 해당 공지사항이 존재하면 수정. 존재하지 않으면 null 반환
         if (noticeRepository.findById(noticeId).isPresent()) {
-//            Notice notice = new Notice();
-//
-//            notice.setNoticeId(noticeId);
-//            notice.setNoticeTitle(noticeModify.getNoticeTitle());
-//            notice.setNoticeContent(noticeModify.getNoticeTitle());
+            Notice notice = new Notice();
+
+            notice = noticeRepository.findById(noticeId).get();
+            notice.setNoticeTitle(noticeModify.getNoticeTitle());
+            notice.setNoticeContent(noticeModify.getNoticeContent());
 
             return noticeRepository.save(notice);
         } else return null;

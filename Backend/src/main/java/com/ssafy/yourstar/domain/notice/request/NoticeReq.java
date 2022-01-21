@@ -7,7 +7,7 @@ import lombok.Setter;
 
 @Getter
 @Setter
-@ApiModel(value = "NoticeRegisterPostReq", description = "공지사항 등록시 필요한 정보")
+@ApiModel(value = "NoticeReq", description = "공지사항 등록 및 수정 시 필요한 정보")
 public class NoticeReq {
     @ApiModelProperty(value = "공지사항 제목", example = "비속어 사용 및 부적절한 행위 제재 안내", required = true)
     String noticeTitle;
