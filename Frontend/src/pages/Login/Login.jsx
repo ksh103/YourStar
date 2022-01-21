@@ -1,14 +1,15 @@
 import React from 'react';
-import { Block } from '../../styles/variables';
 import Grid from '@mui/material/Grid';
 import { createTheme, ThemeProvider } from '@mui/material/styles';
+import { LoginSignupBlock } from '../Login/Login.style';
 
-import {FiveGrid,SevenGrid,ParentGrid} from "../Login/DividGrid"
+import { FiveGrid, SevenGrid, LoginGrid } from '../Login/DividGrid';
+
 const theme = createTheme({
   palette: {
     primary: {
       // Purple and green play nicely together.
-      main: "#e57373",
+      main: '#e57373',
     },
     secondary: {
       // This is green.A700 as hex.
@@ -31,21 +32,13 @@ export default function Login() {
     showPassword: false,
   });
 
-  const handleChange = (prop) => (event) => {
+  const handleChange = prop => event => {
     setValues({ ...values, [prop]: event.target.value });
   };
 
-
   return (
-  <Block>
-    <Grid
-      container
-      style={{
-        height : "100%"
-      }}
-      >
-      <SevenGrid></SevenGrid>
-      <FiveGrid></FiveGrid>
-    </Grid>
-  </Block>)
+    <LoginSignupBlock>
+      <LoginGrid></LoginGrid>
+    </LoginSignupBlock>
+  );
 }
