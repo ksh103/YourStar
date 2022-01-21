@@ -58,6 +58,14 @@ public class MeetingServiceImpl implements MeetingService {
     }
 
     @Override
+    public Meeting meetingDetail(int meetingId) {
+        if (meetingRepository.findById(meetingId).isPresent()) {
+            return meetingRepository.findById(meetingId).get();
+        }
+        return null;
+    }
+
+    @Override
     public Page<Meeting> meetingPendingList(Pageable pageable) {
 
         return meetingRepository.findAllByIsApproveFalse(pageable);

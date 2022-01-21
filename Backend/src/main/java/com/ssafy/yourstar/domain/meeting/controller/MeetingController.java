@@ -4,6 +4,7 @@ import com.ssafy.yourstar.domain.meeting.db.entity.Applicant;
 import com.ssafy.yourstar.domain.meeting.db.entity.Meeting;
 import com.ssafy.yourstar.domain.meeting.request.MeetingApplyByStarPostReq;
 import com.ssafy.yourstar.domain.meeting.request.MeetingApplyByUserPostReq;
+import com.ssafy.yourstar.domain.meeting.response.MeetingDetailGetRes;
 import com.ssafy.yourstar.domain.meeting.response.MeetingPendingGetRes;
 import com.ssafy.yourstar.domain.meeting.service.MeetingService;
 import com.ssafy.yourstar.global.model.response.BaseResponseBody;
@@ -76,6 +77,18 @@ public class MeetingController {
         Page<Meeting> meetingPage = meetingService.meetingPendingList(pageable);
 
         return ResponseEntity.status(200).body(MeetingPendingGetRes.of(200, "Success", meetingPage));
+    }
+
+    @ApiOperation(value = "팬미팅 상세보기")
+    @GetMapping("/{meetingId}")
+    public ResponseEntity<MeetingDetailGetRes> meetingDetail(@ApiParam(value = "팬미팅 번호") @PathVariable int meetingId) {
+        Meeting meeting = meetingService.meetingDetail(meetingId);
+
+        if (meeting == null) {
+            return ResponseEntity.status(400).body(MeetingDetailGetRes.of(400, "This MeetingId doesn't exist", null));
+        } else {
+            return ResponseEntity.status(200).body(MeetingDetailGetRes.of(200, "Success", meeting));
+        }
     }
 
     @ApiOperation(value = "팬이 팬미팅 신청")
