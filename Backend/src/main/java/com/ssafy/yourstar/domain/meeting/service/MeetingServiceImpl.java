@@ -1,6 +1,7 @@
 package com.ssafy.yourstar.domain.meeting.service;
 
 import com.ssafy.yourstar.domain.meeting.db.entity.Applicant;
+import com.ssafy.yourstar.domain.meeting.db.entity.ApplicantID;
 import com.ssafy.yourstar.domain.meeting.db.entity.Meeting;
 import com.ssafy.yourstar.domain.meeting.db.repository.ApplicantRepository;
 import com.ssafy.yourstar.domain.meeting.db.repository.MeetingRepository;
@@ -65,10 +66,15 @@ public class MeetingServiceImpl implements MeetingService {
 
     @Override
     public boolean meetingRemoveByUser(int memberId, int meetingId) {
+        // 복합키이기 때문에 ID에 내용을 등록 후 사용
+        ApplicantID applicantID = new ApplicantID();
+        applicantID.setMemberId(memberId);
+        applicantID.setMeetingId(meetingId);
+
         // 해당 팬미팅이 존재하는지 조회 후 있을 때 삭제
-        if (applicantRepository.findByMemberIdAndMeetingId(memberId, meetingId).isPresent()) {
-            Applicant applicant = applicantRepository.findByMemberIdAndMeetingId(memberId, meetingId).get();
-            applicantRepository.delete(applicant);
+        if (applicantRepository.findById(applicantID).isPresent()) {
+            applicantRepository.deleteById(applicantID);
+
             return true;
         }
         return false;

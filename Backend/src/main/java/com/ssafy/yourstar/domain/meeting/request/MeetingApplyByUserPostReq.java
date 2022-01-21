@@ -9,9 +9,9 @@ import lombok.Setter;
 @Setter
 @ApiModel(value = "MeetingApplyByUserPostReq", description = "팬이 팬미팅 신청시 필요한 정보")
 public class MeetingApplyByUserPostReq {
-    @ApiModelProperty(value = "팬미팅 구분 번호", required = true)
+    @ApiModelProperty(value = "팬미팅 구분 번호", required = true, example = "3")
     int meetingId;
 
-    @ApiModelProperty(value = "회원 구분 번호", required = true)
+    @ApiModelProperty(value = "회원 구분 번호", required = true, example = "23")
     int memberId;
 }
