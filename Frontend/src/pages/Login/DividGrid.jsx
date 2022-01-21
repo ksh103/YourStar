@@ -199,8 +199,26 @@ export function SignupSevenGrid() {
             </Button>
           </Grid>
         </Grid>
-        <div>비밀번호</div>
-        <div>비밀번호확인</div>
+        <FormControl sx={{ width: '70%', marginY: '10px' }}>
+          <TextField
+            type="password"
+            label="Password"
+            xs={{
+              width: '70%',
+              marginTop: '5px',
+            }}
+          />
+        </FormControl>
+        <FormControl sx={{ width: '70%', marginY: '10px' }}>
+          <TextField
+            type="password"
+            label="Password Check"
+            xs={{
+              width: '70%',
+              marginTop: '5px',
+            }}
+          />
+        </FormControl>
         <FormControl sx={{ width: '70%', marginY: '10px' }}>
           <TextField
             label="NickName"
