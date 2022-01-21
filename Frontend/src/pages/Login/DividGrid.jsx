@@ -161,43 +161,84 @@ export function SignupSevenGrid() {
       {/* 우선 각 컴포 위치 지정 */}
 
       <ThemeProvider theme={theme}>
-        <FormControl sx={{ m: 1, width: '70%', my: '10' }}>
+        <FormControl sx={{ width: '70%', marginY: '10px' }}>
           <TextField
-            helperText="Please enter your name"
-            id="demo-helper-text-aligned"
             label="Name"
             xs={{
-              color: 'maincolor',
               width: '70%',
+              marginTop: '5px',
             }}
           />
-
-          <Grid
-            xs={12}
-            container
-            direction="row"
-            justifyContent="between"
-            alignItems="center"
-          >
-            <Grid xs={9}>
-              {/* 숫자입력 버튼 */}
-              전화번호
-            </Grid>
-            <Grid xs={3}>
-              {/* 인증버튼 */}
-              인증
-            </Grid>
-          </Grid>
-          <div>
-            <div>이메일</div>
-            <div>인증버튼</div>
-          </div>
-          <div>비밀번호</div>
-          <div>비밀번호확인</div>
-          <div>닉네임</div>
-          <div>주소검색</div>
-          <div>생년월일</div>
         </FormControl>
+        {/*  */}
+        <Grid
+          xs={12}
+          container
+          direction="row"
+          justifyContent="between"
+          alignItems="center"
+          sx={{
+            width: '70%',
+          }}
+        >
+          <Grid xs={9}>
+            <FormControl sx={{ width: '100%', marginY: '5px' }}>
+              <TextField label="Phone Number" />
+            </FormControl>
+          </Grid>
+          <Grid xs={3}>
+            {/* 인증버튼 */}
+            <Button
+              variant="contained"
+              sx={{
+                width: '70%',
+                height: '50px',
+              }}
+            >
+              인증
+            </Button>
+          </Grid>
+        </Grid>
+        <div>비밀번호</div>
+        <div>비밀번호확인</div>
+        <FormControl sx={{ width: '70%', marginY: '10px' }}>
+          <TextField
+            label="NickName"
+            xs={{
+              width: '70%',
+              marginTop: '5px',
+            }}
+          />
+        </FormControl>
+        <Grid
+          xs={12}
+          container
+          direction="row"
+          justifyContent="between"
+          alignItems="center"
+          sx={{
+            width: '70%',
+          }}
+        >
+          <Grid xs={9}>
+            <FormControl sx={{ width: '100%', marginY: '5px' }}>
+              <TextField label="Adress" />
+            </FormControl>
+          </Grid>
+          <Grid xs={3}>
+            {/* 인증버튼 */}
+            <Button
+              variant="contained"
+              sx={{
+                width: '70%',
+                height: '50px',
+              }}
+            >
+              검색
+            </Button>
+          </Grid>
+        </Grid>
+        <div>생년월일</div>
       </ThemeProvider>
     </Grid>
   );
