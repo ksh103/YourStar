@@ -18,9 +18,6 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.ArrayList;
-import java.util.List;
-
 @Api("팬미팅 관련 API")
 @Slf4j
 @RestController
@@ -47,6 +44,7 @@ public class MeetingController {
     public ResponseEntity<? extends BaseResponseBody> meetingModifyByStar
             (@RequestBody Meeting meeting) {
         log.info("meetingModifyByStar - Call");
+
         Meeting modifiedMeeting = meetingService.meetingModifyByStar(meeting);
         if (modifiedMeeting == null) {
             log.error("meetingModifyByStar - This MeetingId doesn't exist");
@@ -60,6 +58,8 @@ public class MeetingController {
     @DeleteMapping("/room-applicant/{meetingId}")
     public ResponseEntity<? extends BaseResponseBody> meetingRemoveByStar
             (@ApiParam(value = "팬미팅 번호") @PathVariable("meetingId") int meetingId) {
+        log.info("meetingRemoveByStar - Call");
+
         if (meetingService.meetingRemoveByStar(meetingId)) {
             return ResponseEntity.status(200).body(BaseResponseBody.of(200, "Success"));
         } else {
@@ -74,17 +74,35 @@ public class MeetingController {
         // 쿼리문으로 page와 size를 보내주면 해당하는 결과값만 리턴
         // ex) http://localhost:8080/api/meetings/room-applicant/pending?page=1&size=5
 
+        log.info("meetingPendingList - Call");
+
         Page<Meeting> meetingPage = meetingService.meetingPendingList(pageable);
 
         return ResponseEntity.status(200).body(MeetingPendingGetRes.of(200, "Success", meetingPage));
     }
 
+    @ApiOperation(value = "팬미팅 승인")
+    @GetMapping("/room-applicant/pending/{meetingId}")
+    public ResponseEntity<? extends BaseResponseBody> meetingPendingApprove(@ApiParam(value = "팬미팅 번호") @PathVariable int meetingId) {
+        log.info("meetingPendingApprove - Call");
+
+        if (meetingService.meetingPendingApprove(meetingId)) {
+            return ResponseEntity.status(200).body(BaseResponseBody.of(200, "Success"));
+        } else {
+            log.error("meetingPendingApprove - This MeetingId doesn't exist");
+            return ResponseEntity.status(400).body(BaseResponseBody.of(400, "This MeetingId doesn't exist"));
+        }
+    }
+
     @ApiOperation(value = "팬미팅 상세보기")
     @GetMapping("/{meetingId}")
     public ResponseEntity<MeetingDetailGetRes> meetingDetail(@ApiParam(value = "팬미팅 번호") @PathVariable int meetingId) {
+        log.info("meetingDetail - Call");
+
         Meeting meeting = meetingService.meetingDetail(meetingId);
 
         if (meeting == null) {
+            log.error("meetingDetail - This MeetingId doesn't exist");
             return ResponseEntity.status(400).body(MeetingDetailGetRes.of(400, "This MeetingId doesn't exist", null));
         } else {
             return ResponseEntity.status(200).body(MeetingDetailGetRes.of(200, "Success", meeting));
