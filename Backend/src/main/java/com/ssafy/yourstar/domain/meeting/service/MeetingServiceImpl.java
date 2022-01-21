@@ -8,7 +8,11 @@ import com.ssafy.yourstar.domain.meeting.db.repository.MeetingRepository;
 import com.ssafy.yourstar.domain.meeting.request.MeetingApplyByStarPostReq;
 import com.ssafy.yourstar.domain.meeting.request.MeetingApplyByUserPostReq;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
+
+import java.util.List;
 
 @Service
 public class MeetingServiceImpl implements MeetingService {
@@ -51,6 +55,33 @@ public class MeetingServiceImpl implements MeetingService {
             meetingRepository.deleteById(meetingId);
             return true;
         } else return false;
+    }
+
+    @Override
+    public Meeting meetingDetail(int meetingId) {
+        if (meetingRepository.findById(meetingId).isPresent()) {
+            return meetingRepository.findById(meetingId).get();
+        }
+        return null;
+    }
+
+    @Override
+    public Page<Meeting> meetingPendingList(Pageable pageable) {
+
+        return meetingRepository.findAllByIsApproveFalse(pageable);
+    }
+
+    @Override
+    public boolean meetingPendingApprove(int meetingId) {
+        if (meetingRepository.findById(meetingId).isPresent()) {
+            Meeting meeting = meetingRepository.findById(meetingId).get();
+
+            // 승인 상태로 변경 후 저장
+            meeting.setApprove(true);
+            meetingRepository.save(meeting);
+            return true;
+        }
+        return false;
     }
 
     @Override
