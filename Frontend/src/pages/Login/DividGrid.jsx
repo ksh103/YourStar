@@ -8,14 +8,65 @@ import TextField from '@mui/material/TextField';
 import Button from '@mui/material/Button';
 import { createTheme, ThemeProvider } from '@mui/material/styles';
 import { red } from '@mui/material/colors';
+import Radio from '@mui/material/Radio';
+import RadioGroup from '@mui/material/RadioGroup';
+import FormControlLabel from '@mui/material/FormControlLabel';
+import AdapterDateFns from '@mui/lab/AdapterDateFns';
+import LocalizationProvider from '@mui/lab/LocalizationProvider';
+import DatePicker from '@mui/lab/DatePicker';
 
-const maincolor = red[300];
+const DatePick = function BasicDatePicker() {
+  const [value, setValue] = React.useState(null);
+
+  return (
+    <FormControl sx={{ width: '105%', marginY: '5px' }}>
+      <LocalizationProvider dateAdapter={AdapterDateFns} xs={{ width: '100%' }}>
+        <DatePicker
+          label="Basic example"
+          value={value}
+          onChange={newValue => {
+            setValue(newValue);
+          }}
+          renderInput={params => <TextField {...params} />}
+        />
+      </LocalizationProvider>
+    </FormControl>
+  );
+};
+
+const RadioBox = function ControlledRadioButtonsGroup() {
+  const [value, setValue] = React.useState('female');
+
+  const handleChange = event => {
+    setValue(event.target.value);
+  };
+
+  return (
+    <FormControl
+      sx={{
+        width: '70%',
+        marginLeft: '35px',
+      }}
+    >
+      <RadioGroup
+        aria-labelledby="demo-controlled-radio-buttons-group"
+        name="controlled-radio-buttons-group"
+        value={value}
+        onChange={handleChange}
+      >
+        <FormControlLabel value="female" control={<Radio />} label="Female" />
+        <FormControlLabel value="male" control={<Radio />} label="Male" />
+      </RadioGroup>
+    </FormControl>
+  );
+};
+
 // main color , second color ui 지정용 theme
 const theme = createTheme({
   palette: {
     primary: {
       // Purple and green play nicely together.
-      main: '#FF5455',
+      main: '#2b8cc8',
     },
     secondary: {
       // This is green.A700 as hex.
@@ -65,7 +116,7 @@ export function SevenGrid() {
         my: 'auto',
       }}
     >
-      <h1 style={{ marginBottom: '75px', color: '#e57373', fontSize: '75px' }}>
+      <h1 style={{ marginBottom: '75px', color: '#2b8cc8', fontSize: '75px' }}>
         Login
       </h1>
       <h3>당신만의 스타를 만나러가세요</h3>
@@ -152,7 +203,14 @@ export function SignupSevenGrid() {
         my: 'auto',
       }}
     >
-      <h1 style={{ marginBottom: '75px', color: '#e57373', fontSize: '75px' }}>
+      <h1
+        style={{
+          marginBottom: '20px',
+          marginTop: '0px',
+          color: '#2b8cc8',
+          fontSize: '75px',
+        }}
+      >
         Sign-Up
       </h1>
       <h3>우리의 만남을 준비 해 볼까요?</h3>
@@ -182,7 +240,7 @@ export function SignupSevenGrid() {
           }}
         >
           <Grid xs={9}>
-            <FormControl sx={{ width: '100%', marginY: '5px' }}>
+            <FormControl sx={{ width: '105%', marginY: '5px' }}>
               <TextField label="Phone Number" />
             </FormControl>
           </Grid>
@@ -193,6 +251,7 @@ export function SignupSevenGrid() {
               sx={{
                 width: '70%',
                 height: '50px',
+                marginLeft: '35px',
               }}
             >
               인증
@@ -239,7 +298,7 @@ export function SignupSevenGrid() {
           }}
         >
           <Grid xs={9}>
-            <FormControl sx={{ width: '100%', marginY: '5px' }}>
+            <FormControl sx={{ width: '105%', marginY: '5px' }}>
               <TextField label="Adress" />
             </FormControl>
           </Grid>
@@ -250,16 +309,49 @@ export function SignupSevenGrid() {
               sx={{
                 width: '70%',
                 height: '50px',
+                marginLeft: '35px',
               }}
             >
               검색
             </Button>
           </Grid>
         </Grid>
-        <div>생년월일</div>
+        <Grid
+          xs={12}
+          container
+          direction="row"
+          justifyContent="between"
+          alignItems="center"
+          sx={{
+            width: '70%',
+          }}
+        >
+          <Grid xs={9}>
+            <DatePick></DatePick>
+          </Grid>
+          <Grid xs={3}>
+            {/* 인증버튼 */}
+            <RadioBox></RadioBox>
+          </Grid>
+        </Grid>
+        <Button
+          variant="contained"
+          sx={{
+            width: '70%',
+            height: '50px',
+            marginBottom: '75px',
+          }}
+        >
+          회원가입
+        </Button>
       </ThemeProvider>
     </Grid>
   );
 }
 
-export default { SevenGrid, LoginGrid, SignupSevenGrid };
+export default {
+  SevenGrid,
+  LoginGrid,
+  SignupSevenGrid,
+  RadioBox,
+};
