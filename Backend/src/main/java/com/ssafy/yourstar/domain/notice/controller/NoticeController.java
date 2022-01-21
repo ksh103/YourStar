@@ -38,9 +38,9 @@ public class NoticeController {
 
     @ApiOperation(value = "공지사항 전체 조회")
     @GetMapping
-    public Page<Notice> noticeList(@RequestParam int page) {
+    public Page<Notice> noticeList(@ApiParam(value = "페이지 번호") @RequestParam int page, @ApiParam(value = "페이지당 게시글 개수") @RequestParam int size) {
         log.info("noticeList - 호출");
-        return noticeService.noticeList(page);
+        return noticeService.noticeList(page, size);
     }
 
     @ApiOperation(value = "공지사항 상세 조회")
