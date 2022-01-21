@@ -1,6 +1,7 @@
 package com.ssafy.yourstar.domain.member.controller;
 
 import com.ssafy.yourstar.domain.member.db.entity.Member;
+import com.ssafy.yourstar.domain.member.request.MemberPasswordPostReq;
 import com.ssafy.yourstar.domain.member.request.MemberRegisterPostReq;
 import com.ssafy.yourstar.domain.member.response.MemberLoginPostRes;
 import com.ssafy.yourstar.global.model.response.BaseResponseBody;
@@ -47,11 +48,21 @@ public class MemberController {
     }
 
     @ApiOperation(value = "회원가입", notes = "<strong>Email, Password, 이름, 닉네임, 성별, 휴대전화, 생일</strong>입력을 통해 회원가입 한다.")
-    @PostMapping
+    @PostMapping("/register")
     public ResponseEntity<? extends BaseResponseBody> memberRegister (@RequestBody MemberRegisterPostReq memberRegister){
         log.info("memberRegister - Call");
 
         memberService.registerMember(memberRegister);
+        return ResponseEntity.status(201).body(BaseResponseBody.of(201, "Success"));
+    }
+
+
+    @ApiOperation(value = "비밀번호 초기화", notes = "<strong>Email, 이름</strong>입력을 통해 비밀번호 초기화를 한다.")
+    @PostMapping
+    public ResponseEntity<? extends BaseResponseBody> memberPasswordInit (@RequestBody MemberPasswordPostReq memberPasswordPostReq) {
+        log.info("memberPasswordInit - Call");
+
+        memberService.passwordInitMember(memberPasswordPostReq);
         return ResponseEntity.status(201).body(BaseResponseBody.of(201, "Success"));
     }
 }
