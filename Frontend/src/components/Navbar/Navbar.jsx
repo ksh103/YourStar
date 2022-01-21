@@ -1,20 +1,24 @@
 import React, { useState } from 'react';
 import { Link } from 'react-router-dom';
 import {
-  CenterMenu,
   NavbarWrapper,
+  CenterMenu,
+  NavbarMain,
   LeftMenu,
   RightMenu,
-  GridBlock,
 } from './Navbar.style';
 import logo from './yourstar_logo.png';
 import Box from '@mui/material/Box';
 import Drawer from '@mui/material/Drawer';
 import List from '@mui/material/List';
 import ListItem from '@mui/material/ListItem';
+import Grid from '@mui/material/Grid';
+import NavbarSub from './NavbarSub';
+import { MdMenu, MdStar, MdPerson, MdManageAccounts } from 'react-icons/md';
 export default function Navbar() {
   const [open, setOpen] = useState(false);
-  let role = 1;
+  const role = 1;
+  const name = '지수민님';
   const toggleDrawer = open => event => {
     if (
       event.type === 'keydown' &&
@@ -51,63 +55,36 @@ export default function Navbar() {
   );
 
   return (
-    <div>
-      <NavbarWrapper>
-        <GridBlock xs={4}>
+    <NavbarWrapper>
+      {/* 메인 메뉴  */}
+      <NavbarMain>
+        <Grid xs={3}>
           <LeftMenu>
-            <div onClick={toggleDrawer(true)}>⬜</div>
+            <MdMenu onClick={toggleDrawer(true)} />
             <React.Fragment key={'left'}>
               <Drawer anchor={'left'} open={open} onClose={toggleDrawer(false)}>
                 {list()}
               </Drawer>
             </React.Fragment>
           </LeftMenu>
-        </GridBlock>
-        <GridBlock xs={4}>
+        </Grid>
+        <Grid xs={6}>
           <CenterMenu>
             <Link to="/">
               <img src={logo} alt="yourstar" />
             </Link>
           </CenterMenu>
-        </GridBlock>
-        <GridBlock xs={4}>
+        </Grid>
+        <Grid xs={3}>
           <RightMenu>
-            <ul>
-              {role === 0 ? (
-                <li>
-                  <Link to="login">Login</Link>
-                </li>
-              ) : (
-                <>
-                  <li>
-                    <Link to="mypage">🧞‍♂️ 지수민 님</Link>
-                  </li>
-                  <li>
-                    <div>Logout</div>
-                  </li>
-                </>
-              )}
-
-              <li>
-                <Link to="faq">FAQ</Link>
-              </li>
-              <li>
-                <Link to="schedule">Meeting</Link>
-              </li>
-              {role === 2 && (
-                <li>
-                  <Link to="Apply">contact</Link>
-                </li>
-              )}
-              {role === 3 && (
-                <li>
-                  <Link to="Admin">Management</Link>
-                </li>
-              )}
-            </ul>
+            <MdStar />
+            {name}
           </RightMenu>
-        </GridBlock>
-      </NavbarWrapper>
-    </div>
+        </Grid>
+      </NavbarMain>
+
+      {/* 서브 메뉴 */}
+      <NavbarSub />
+    </NavbarWrapper>
   );
 }

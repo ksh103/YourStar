@@ -1,6 +1,7 @@
 import { createGlobalStyle } from 'styled-components';
 const GlobalStyle = createGlobalStyle`
   body {
+    min-width: 480px;
     box-sizing: border-box;
     margin: 0;
     padding: 0;
@@ -26,6 +27,10 @@ const GlobalStyle = createGlobalStyle`
   ul {
     padding: 0;
     margin: 0;
+  }
+
+  li {
+    list-style: none;
   }
 `;
 export default GlobalStyle;
