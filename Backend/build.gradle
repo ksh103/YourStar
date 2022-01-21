@@ -61,6 +61,9 @@ dependencies {
 
 	// datetime
 	implementation group: 'com.fasterxml.jackson.datatype', name: 'jackson-datatype-jsr310', version: '2.13.1'
+
+	// https://mvnrepository.com/artifact/org.apache.commons/commons-email
+	implementation group: 'org.apache.commons', name: 'commons-email', version: '1.4'
 }
 
 test {
