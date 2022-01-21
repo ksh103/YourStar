@@ -4,8 +4,23 @@ import styled from 'styled-components';
 
 // Colors
 
+export const blockColor = '#F2F4F5'; // 연한 그레이
+export const pointColor = '#FF5455';
+
 export const primaryColor = 'black';
 export const secondaryColor = 'white';
+
+// 각 테마별 배경색과 글씨색
+export const roomColor = {
+  white: { background: 'white', color: 'black' },
+  green: { background: '#D8FFD8', color: 'black' },
+  blue: { background: '#D8F1FF', color: 'black' },
+  pink: { background: '#FFD8FB', color: 'black' },
+  red: { background: '#FFDAD8', color: 'black' },
+  yellow: { background: '#EFF8BD', color: 'black' },
+  purplue: { background: '#E2D8FF', color: 'black' },
+  black: { background: 'black', color: 'white' },
+};
 
 // Media query breakpoints
 
@@ -17,10 +32,10 @@ const size = {
 };
 
 export const device = {
-  MobileLandscape: `(min-width: ${size.MobileLandscape})`,
-  TabletPortrait: `(min-width: ${size.TabletPortrait})`,
-  TabletLandscape: `(min-width: ${size.TabletLandscape})`,
-  Laptops: `(min-width: ${size.Laptops})`,
+  MobileLandscape: `(max-width: ${size.MobileLandscape})`,
+  TabletPortrait: `(max-width: ${size.TabletPortrait})`,
+  TabletLandscape: `(max-width: ${size.TabletLandscape})`,
+  Laptops: `(max-width: ${size.Laptops})`,
 };
 
 // Layout components
@@ -44,3 +59,4 @@ export const Block = styled.div`
   @media ${device.MobileLandscape} {
   }
 `;
+
