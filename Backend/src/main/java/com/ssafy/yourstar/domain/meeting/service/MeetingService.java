@@ -13,8 +13,10 @@ public interface MeetingService {
     Meeting meetingApplyByStar(MeetingApplyByStarPostReq meetingApplyByStarPostReq);
     Meeting meetingModifyByStar(Meeting meeting);
     boolean meetingRemoveByStar(int meetingId);
+    Page<Meeting> meetingList(Pageable pageable);
     Page<Meeting> meetingPendingList(Pageable pageable);
     boolean meetingPendingApprove(int meetingId);
+    Page<Meeting> meetingApproveList(Pageable pageable);
     Meeting meetingDetail(int meetingId);
     Applicant meetingApplyByUser(MeetingApplyByUserPostReq meetingApplyByUserPostReq);
     boolean meetingRemoveByUser(int memberId, int meetingId);
