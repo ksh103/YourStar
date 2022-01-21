@@ -1,5 +1,6 @@
 package com.ssafy.yourstar.domain.meeting.db.entity;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.Getter;
@@ -29,14 +30,17 @@ public class Meeting {
     String meetingName;
 
     @ApiModelProperty(value = "팬들이 팬미팅 신청 시작하는 날짜 및 시간", required = true)
+    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss", shape = JsonFormat.Shape.STRING)
     @Column(name = "meeting_open_date")
     LocalDateTime meetingOpenDate;
 
     @ApiModelProperty(value = "팬미팅 시작 날짜 및 시간", required = true)
+    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss", shape = JsonFormat.Shape.STRING)
     @Column(name = "meeting_start_date")
     LocalDateTime meetingStartDate;
 
     @ApiModelProperty(value = "팬미팅 종료 날짜 및 시간", required = true)
+    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss", shape = JsonFormat.Shape.STRING)
     @Column(name = "meeting_end_date")
     LocalDateTime meetingEndDate;
 
@@ -53,6 +57,6 @@ public class Meeting {
     String meetingDescription;
 
     @ApiModelProperty(value = "관리자의 팬미팅 승인 상태", required = true)
-    @Column(name = "isApprove")
+    @Column(name = "is_approve")
     boolean isApprove;
 }

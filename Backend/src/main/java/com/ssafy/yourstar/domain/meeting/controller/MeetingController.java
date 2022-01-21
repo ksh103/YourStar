@@ -5,7 +5,7 @@ import com.ssafy.yourstar.domain.meeting.db.entity.Meeting;
 import com.ssafy.yourstar.domain.meeting.request.MeetingApplyByStarPostReq;
 import com.ssafy.yourstar.domain.meeting.request.MeetingApplyByUserPostReq;
 import com.ssafy.yourstar.domain.meeting.service.MeetingService;
-import com.ssafy.yourstar.global.response.BaseResponseBody;
+import com.ssafy.yourstar.global.model.response.BaseResponseBody;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiParam;
@@ -28,6 +28,7 @@ public class MeetingController {
     public ResponseEntity<? extends BaseResponseBody> meetingApplyByStar
             (@RequestBody MeetingApplyByStarPostReq meetingApplyByStarPostReq) {
         log.info("meetingApplyByStar - Call");
+        log.info(meetingApplyByStarPostReq.toString());
 
         meetingService.meetingApplyByStar(meetingApplyByStarPostReq);
 
@@ -78,11 +79,11 @@ public class MeetingController {
              @ApiParam(value = "팬미팅 번호") @PathVariable("meetingId") int meetingId) {
         log.info("meetingRemoveByUser - Call");
 
-        Applicant applicant = new Applicant();
-        applicant.setMemberId(memberId);
-        applicant.setMeetingId(meetingId);
-        meetingService.meetingRemoveByUser(applicant);
-
-        return ResponseEntity.status(200).body(BaseResponseBody.of(200, "Success"));
+        if (meetingService.meetingRemoveByUser(memberId, meetingId)) {
+            return ResponseEntity.status(200).body(BaseResponseBody.of(200, "Success"));
+        } else {
+            log.error("meetingRemoveByUser - This MeetingId or MemberId doesn't exist");
+            return ResponseEntity.status(400).body(BaseResponseBody.of(400, "This MeetingId or MemberId doesn't exist"));
+        }
     }
 }

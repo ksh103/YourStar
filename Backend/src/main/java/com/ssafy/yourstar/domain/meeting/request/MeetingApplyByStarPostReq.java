@@ -1,5 +1,6 @@
 package com.ssafy.yourstar.domain.meeting.request;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.Getter;
@@ -18,12 +19,15 @@ public class MeetingApplyByStarPostReq {
     String meetingName;
 
     @ApiModelProperty(value = "팬들이 팬미팅 신청 시작하는 날짜 및 시간", required = true)
+    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss", shape = JsonFormat.Shape.STRING)
     LocalDateTime meetingOpenDate;
 
     @ApiModelProperty(value = "팬미팅 시작 날짜 및 시간", required = true)
+    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss", shape = JsonFormat.Shape.STRING)
     LocalDateTime meetingStartDate;
 
     @ApiModelProperty(value = "팬미팅 종료 날짜 및 시간", required = true)
+    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss", shape = JsonFormat.Shape.STRING)
     LocalDateTime meetingEndDate;
 
     @ApiModelProperty(value = "팬미팅 참여 가능 인원", required = true)
