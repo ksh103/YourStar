@@ -1,45 +1,76 @@
 import styled from 'styled-components';
-import Grid from '@mui/material/Grid';
 import { device } from '../../styles/variables';
 
-const NavbarWrapper = styled.div`
-  border: 2px solid blue;
+const NavbarMain = styled.div`
   display: flex;
-  justify-content: space-between;
-  font-size: 22px;
+  margin: 20px;
+  @media ${device.TabletPortrait} {
+    margin: 15px;
+  }
 `;
 const LeftMenu = styled.div`
+  width: 100%;
   display: none;
-  @media (max-width: 500px) {
+  font-size: 30px;
+  text-align: left;
+  @media ${device.TabletPortrait} {
     display: block;
   }
 `;
-const RightMenu = styled.div`
-  display: block;
-  @media (max-width: 500px) {
-    display: none;
-  }
-`;
-
-const Logo = styled.div`
-  border: 2px solid red;
-  display: inline-block;
+const CenterMenu = styled.div`
+  margin-top: 5px;
+  text-align: center;
   img {
     width: 230px;
   }
-  @media (max-width: 480px) {
+  @media ${device.TabletPortrait} {
     img {
-      width: 150px;
+      width: 180px;
     }
   }
 `;
-const GridBlock = styled(Grid)`
-  border: 2px solid white;
-  display: flex;
-  justify-content: space-around;
+const RightMenu = styled.div`
+  width: 100%;
+  font-size: 17px;
+  text-align: right;
+  display: block;
+  font-size: 20px;
+  margin: 5px;
+  @media ${device.TabletPortrait} {
+    display: none;
+  }
 `;
-export { NavbarWrapper, Logo, LeftMenu, RightMenu, GridBlock };
+const NavbarSubBlock = styled.div`
+  display: flex;
+  justify-content: center;
+  visibility: hidden;
+  @media ${device.TabletPortrait} {
+    display: none;
+  }
+`;
+const SubMenu = styled.div`
+  display: flex;
+  justify-content: space-between;
+  ul li {
+    margin: 0 20px;
+    text-align: center;
+    float: left;
+  }
+`;
+const NavbarWrapper = styled.div`
+  padding-bottom: 30px;
+  &:hover ${NavbarSubBlock} {
+    visibility: visible;
+    animation: ease-out forwards;
+  }
+`;
 
-// flex-start
-// flex-end
-// center
+export {
+  NavbarWrapper,
+  NavbarMain,
+  CenterMenu,
+  LeftMenu,
+  RightMenu,
+  NavbarSubBlock,
+  SubMenu,
+};

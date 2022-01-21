@@ -59,7 +59,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .and()
                 .addFilter(new JwtAuthenticationFilter(authenticationManager(), memberService)) //HTTP 요청에 JWT 토큰 인증 필터를 거치도록 필터를 추가
                 .authorizeRequests()
-                .antMatchers("/api/v3**", "/health", "/swagger-ui.html", "/swagger*/**", "/swagger-resources/**", "/webjars/**", "/v3/api-docs", "/api/members/login").permitAll()
+                .antMatchers("/api/v3**", "/health", "/swagger-ui.html", "/swagger*/**", "/swagger-resources/**", "/webjars/**", "/v3/api-docs", "/api/**", "/api/members", "/api/members/login").permitAll()
     	        	    .anyRequest().authenticated().and().cors();
     }
 

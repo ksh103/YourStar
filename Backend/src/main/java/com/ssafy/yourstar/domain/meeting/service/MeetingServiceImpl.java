@@ -1,13 +1,18 @@
 package com.ssafy.yourstar.domain.meeting.service;
 
 import com.ssafy.yourstar.domain.meeting.db.entity.Applicant;
+import com.ssafy.yourstar.domain.meeting.db.entity.ApplicantID;
 import com.ssafy.yourstar.domain.meeting.db.entity.Meeting;
 import com.ssafy.yourstar.domain.meeting.db.repository.ApplicantRepository;
 import com.ssafy.yourstar.domain.meeting.db.repository.MeetingRepository;
 import com.ssafy.yourstar.domain.meeting.request.MeetingApplyByStarPostReq;
 import com.ssafy.yourstar.domain.meeting.request.MeetingApplyByUserPostReq;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
+
+import java.util.List;
 
 @Service
 public class MeetingServiceImpl implements MeetingService {
@@ -53,6 +58,43 @@ public class MeetingServiceImpl implements MeetingService {
     }
 
     @Override
+    public Page<Meeting> meetingList(Pageable pageable) {
+        return meetingRepository.findAll(pageable);
+    }
+
+    @Override
+    public Meeting meetingDetail(int meetingId) {
+        if (meetingRepository.findById(meetingId).isPresent()) {
+            return meetingRepository.findById(meetingId).get();
+        }
+        return null;
+    }
+
+    @Override
+    public Page<Meeting> meetingPendingList(Pageable pageable) {
+
+        return meetingRepository.findAllByIsApproveFalse(pageable);
+    }
+
+    @Override
+    public boolean meetingPendingApprove(int meetingId) {
+        if (meetingRepository.findById(meetingId).isPresent()) {
+            Meeting meeting = meetingRepository.findById(meetingId).get();
+
+            // 승인 상태로 변경 후 저장
+            meeting.setApprove(true);
+            meetingRepository.save(meeting);
+            return true;
+        }
+        return false;
+    }
+
+    @Override
+    public Page<Meeting> meetingApproveList(Pageable pageable) {
+        return meetingRepository.findAllByIsApproveTrue(pageable);
+    }
+
+    @Override
     public Applicant meetingApplyByUser(MeetingApplyByUserPostReq meetingApplyByUserPostReq) {
         Applicant applicant = new Applicant();
 
@@ -64,9 +106,18 @@ public class MeetingServiceImpl implements MeetingService {
     }
 
     @Override
-    public boolean meetingRemoveByUser(Applicant applicant) {
-        // 해당 팬미팅이 존재하는지 조회 후 있을 때 삭제하는 코드로 수정
-        applicantRepository.delete(applicant);
-        return true;
+    public boolean meetingRemoveByUser(int memberId, int meetingId) {
+        // 복합키이기 때문에 ID에 내용을 등록 후 사용
+        ApplicantID applicantID = new ApplicantID();
+        applicantID.setMemberId(memberId);
+        applicantID.setMeetingId(meetingId);
+
+        // 해당 팬미팅이 존재하는지 조회 후 있을 때 삭제
+        if (applicantRepository.findById(applicantID).isPresent()) {
+            applicantRepository.deleteById(applicantID);
+
+            return true;
+        }
+        return false;
     }
 }

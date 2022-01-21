@@ -17,40 +17,40 @@ public class Member {
     @Id
     @Column(name = "member_id")
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    int memberId;
+    private int memberId;
 
     @Column(name = "member_email")
-    String memberEmail;
+    private String memberEmail;
 
     @Column(name = "code")
-    int code;
+    private int code;
 
     @JsonIgnore
     @JsonProperty(access = JsonProperty.Access.WRITE_ONLY)
     @Column(name = "member_pw")
-    String memberPassword;
+    private String memberPassword;
 
     @Column(name = "member_name")
-    String memberName;
+    private String memberName;
 
     @Column(name = "member_nick")
-    String memberNick;
+    private String memberNick;
 
     @Column(name = "member_phonenum")
-    String memberPhone;
+    private String memberPhone;
 
     @Column(name = "member_address")
-    String memberAddress;
+    private String memberAddress;
 
     @Column(name = "member_birth")
-    Date memberBirth;
+    private Date memberBirth;
 
     @Column(name = "member_gender")
-    String memberGender;
+    private String memberGender;
 
-    @Column(name = "is_Login")
-    Boolean isLogin;
+    @Column(name = "is_login")
+    private Boolean isLogin;
 
     @Column(name = "manager_code")
-    int managerCode;
+    private int managerCode;
 }

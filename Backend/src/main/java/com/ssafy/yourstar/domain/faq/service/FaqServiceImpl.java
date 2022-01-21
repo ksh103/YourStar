@@ -2,8 +2,9 @@ package com.ssafy.yourstar.domain.faq.service;
 
 import com.ssafy.yourstar.domain.faq.db.entity.Faq;
 import com.ssafy.yourstar.domain.faq.db.repository.FaqRepository;
-import com.ssafy.yourstar.domain.faq.request.FaqReq;
+import com.ssafy.yourstar.domain.faq.request.FaqRegisterPostReq;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -15,7 +16,7 @@ public class FaqServiceImpl implements FaqService{
     FaqRepository faqRepository;
 
     @Override
-    public Faq faqRegister(FaqReq faqRegister) {
+    public Faq faqRegister(FaqRegisterPostReq faqRegister) {
         Faq faq = new Faq();
 
         faq.setFaqTitle(faqRegister.getFaqTitle());
@@ -26,24 +27,22 @@ public class FaqServiceImpl implements FaqService{
 
     @Override
     public List<Faq> faqList() {
-        return faqRepository.findAll();
+        return faqRepository.findAll(Sort.by("noticeId").descending());
     }
 
     @Override
-    public Faq faqModify(int faqId, FaqReq faqModify) {
-        Faq faq = new Faq();
-
-        faq.setFaqId(faqId);
-        faq.setFaqTitle(faqModify.getFaqTitle());
-        faq.setFaqContent(faqModify.getFaqContent());
-
-        return faqRepository.save(faq);
+    public Faq faqModify(Faq faq) {
+        // FAQ 존재하면 수정
+        if (faqRepository.findById(faq.getFaqId()).isPresent()) {
+            return faqRepository.save(faq);
+        } else return null;
     }
 
     @Override
     public boolean faqRemove(int faqId) {
-        Faq faq = faqRepository.findByFaqId(faqId);
-        faqRepository.delete(faq);
-        return true;
+        if (faqRepository.findById(faqId).isPresent()) {
+            faqRepository.deleteById(faqId);
+            return true;
+        } else return false;
     }
 }
