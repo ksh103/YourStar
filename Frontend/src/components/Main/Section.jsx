@@ -1,6 +1,11 @@
 import React from 'react';
 import Button from '@mui/material/Button';
-import { SectionBlock, SectionBlock2, MeetStarButton } from './Section.style';
+import {
+  SectionBlock,
+  SectionBlock2,
+  MeetStarButton,
+  ButtonBlock,
+} from './Section.style';
 import ButtonGroup from '@mui/material/ButtonGroup';
 import { createTheme, ThemeProvider } from '@mui/material/styles';
 
@@ -19,7 +24,6 @@ export default function Section() {
   return (
     <div>
       <SectionBlock>
-        Your star <br />
         당신의 스타를 만나보세요
         <br />
       </SectionBlock>
@@ -36,7 +40,9 @@ export default function Section() {
           aria-label="outlined button group"
         >
           <ThemeProvider theme={theme}>
-            <Button>Meet star</Button>
+            <Button sx={{ color: 'white', fontWeight: 'Bold' }}>
+              Meet star
+            </Button>
           </ThemeProvider>
         </ButtonGroup>
       </MeetStarButton>

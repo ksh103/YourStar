@@ -1,19 +1,26 @@
-import { useRef, useEffect } from 'react';
+import { useRef, useEffect, useState } from 'react';
 import { UniverseBlock } from './Universe.style';
 
 const Universe = () => {
   const canvasRef = useRef(null);
-
+  const canvasRefMoon = useRef(null);
+  const canvasRefLogo = useRef(null);
+  const canvasRefArrow = useRef(null);
+  console.log(1);
+  const size = useWindowSize();
+  console.log(size);
   useEffect(() => {
+    console.log('3 in useEffect');
     const canvas = canvasRef.current;
     var ctx = canvas.getContext('2d'),
-      w = (canvas.width = 1900), // 캔버스 너비
-      h = (canvas.height = 1000), // 캔버스 높이
+      w = (canvas.width = size.width), // 캔버스 너비
+      h = (canvas.height = size.height), // 캔버스 높이
       hue = 217,
       stars = [],
       count = 0,
       maxStars = 1400;
 
+    ctx.clearRect(0, 0, size.width, size.height);
     var canvas2 = document.createElement('canvas'),
       ctx2 = canvas2.getContext('2d');
     canvas2.width = 100;
@@ -59,7 +66,7 @@ const Universe = () => {
       this.orbitX = w / 2;
       this.orbitY = h / 2;
       this.timePassed = random(0, maxStars);
-      this.speed = random(this.orbitRadius) / 50000;
+      this.speed = random(this.orbitRadius) / 500000;
       this.alpha = random(2, 10) / 10;
 
       count++;
@@ -108,15 +115,105 @@ const Universe = () => {
     }
 
     animation();
-  });
+  }, [size.width, size.height]);
+  console.log(2);
+  //moon canvas
+  useEffect(() => {
+    console.log('moonEffect');
+    const canvas = canvasRefMoon.current;
+
+    var ctx = canvas.getContext('2d');
+
+    var img = new Image();
+    img.src = require('./img/moon.png');
+    console.log(img.src);
+    img.onload = function () {
+      ctx.drawImage(img, 100, 100);
+    };
+    ctx.clearRect(0, 0, size.width, size.height);
+  }, [size.width, size.height]);
+
+  //logo canvas
+  useEffect(() => {
+    const canvas = canvasRefLogo.current;
+
+    var ctx = canvas.getContext('2d');
+
+    var img = new Image();
+    img.src = require('./img/yourstar_logo.png');
+    console.log(img.src);
+    img.onload = function () {
+      ctx.drawImage(img, 100, 100);
+    };
+    ctx.clearRect(0, 0, size.width, size.height);
+  }, [size.width, size.height]);
+
+  //underArrow canvas
+  useEffect(() => {
+    const canvas = canvasRefArrow.current;
+
+    var ctx = canvas.getContext('2d');
+
+    var img = new Image();
+    img.src = require('./img/underArrow.png');
+    console.log(img.src);
+    img.onload = function () {
+      ctx.drawImage(img, 100, 100, 50, 50);
+    };
+    ctx.clearRect(0, 0, size.width, size.height);
+  }, [size.width, size.height]);
 
   return (
     <div>
       <UniverseBlock>
-        <canvas ref={canvasRef} />
+        <div style={{ position: 'relative' }}>
+          <canvas id="background" ref={canvasRef} />
+          <canvas
+            style={{ position: 'absolute', top: 60, left: 610 }}
+            width="1000"
+            height="1000"
+            ref={canvasRefMoon}
+          />
+          <canvas
+            style={{ position: 'absolute', top: 650, left: 560 }}
+            width="1000"
+            height="1000"
+            ref={canvasRefLogo}
+          />
+          <canvas
+            style={{ position: 'absolute', top: 760, left: 850 }}
+            width="1000"
+            height="1000"
+            ref={canvasRefArrow}
+          />
+        </div>
       </UniverseBlock>
     </div>
   );
 };
 
+function useWindowSize() {
+  const [windowSize, setWindowSize] = useState({
+    width: undefined,
+    height: undefined,
+  });
+
+  useEffect(() => {
+    function handleResize() {
+      setWindowSize({
+        width: window.innerWidth,
+        height: window.innerHeight,
+      });
+    }
+
+    window.addEventListener('resize', handleResize);
+
+    handleResize();
+
+    // Remove event listener on cleanup
+    return () => window.removeEventListener('resize', handleResize);
+  }, []); // Empty array ensures that effect is only run on mount
+
+  return windowSize;
+}
 export default Universe;
