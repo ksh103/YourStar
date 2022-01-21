@@ -1,8 +1,9 @@
 import styled from 'styled-components';
+// import Button from '@mui/material/Button';
 
 const SectionBlock = styled.div`
   margin: 0 auto;
-  margin-top: 25px;
+  margin-top: 150px;
   font-size: 50px;
   text-align: center;
   margin-bottom: 15px;
@@ -17,5 +18,7 @@ const MeetStarButton = styled.div`
   text-align: center;
   margin-bottom: 100px;
 `;
-
+// const ButtonBlock = styled(Button)`
+//   color: white;
+// `;
 export { SectionBlock, SectionBlock2, MeetStarButton };

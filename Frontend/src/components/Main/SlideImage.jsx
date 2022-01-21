@@ -41,7 +41,7 @@ export default function SlideImage() {
       <SlideImageBlock>
         <Slider {...settings}>
           {Poster.map(poster => (
-            <div className="text-center">
+            <div>
               <img
                 src={poster.image}
                 width="480"
