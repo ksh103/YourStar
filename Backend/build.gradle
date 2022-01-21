@@ -1,6 +1,7 @@
 plugins {
 	id 'org.springframework.boot' version '2.5.8'
 	id 'io.spring.dependency-management' version '1.0.11.RELEASE'
+//	id "com.ewerk.gradle.plugins.querydsl" version "1.0.10"
 	id 'java'
 }
 
@@ -12,6 +13,7 @@ configurations {
 	compileOnly {
 		extendsFrom annotationProcessor
 	}
+
 }
 
 repositories {
@@ -56,6 +58,12 @@ dependencies {
 	// auth0
 	// https://mvnrepository.com/artifact/com.auth0/java-jwt
 	implementation group: 'com.auth0', name: 'java-jwt', version: '3.17.0'
+
+	// datetime
+	implementation group: 'com.fasterxml.jackson.datatype', name: 'jackson-datatype-jsr310', version: '2.13.1'
+
+	// https://mvnrepository.com/artifact/org.apache.commons/commons-email
+	implementation group: 'org.apache.commons', name: 'commons-email', version: '1.4'
 }
 
 test {

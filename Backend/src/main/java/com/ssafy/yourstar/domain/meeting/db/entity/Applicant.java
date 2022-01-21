@@ -1,23 +1,26 @@
 package com.ssafy.yourstar.domain.meeting.db.entity;
 
-import lombok.Getter;
-import lombok.Setter;
+import lombok.*;
 
 import javax.persistence.*;
 
+@Data
+@NoArgsConstructor
+@AllArgsConstructor
 @Entity
 @Getter
 @Setter
+@IdClass(ApplicantID.class)
 @Table(name = "applicant")
 public class Applicant {
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "meeting_id")
-    int meetingId;
+    private int meetingId;
 
+    @Id
     @Column(name = "member_id")
-    int memberId;
+    private int memberId;
 
     @Column(name = "applicant_warn_count")
-    int applicantWarnCount;
+    private int applicantWarnCount;
 }

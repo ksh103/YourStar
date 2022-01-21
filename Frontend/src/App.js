@@ -2,7 +2,16 @@ import React from 'react';
 import { BrowserRouter, Route, Switch } from 'react-router-dom';
 import Navbar from './components/Navbar/Navbar';
 import Footer from './components/Footer/Footer';
-import { Admin, Apply, FAQ, Main, Mypage, Room, Schedule } from './pages/index';
+import {
+  Admin,
+  Apply,
+  FAQ,
+  Main,
+  Mypage,
+  Room,
+  Schedule,
+  Signup,
+} from './pages/index';
 import Login from './pages/Login/Login';
 import GlobalStyle from './styles/global';
 
@@ -20,7 +29,7 @@ function App() {
             <Login />
           </Route>
           <Route path="/signup">
-            <Login />
+            <Signup />
           </Route>
           <Route path="/faq">
             <FAQ />
