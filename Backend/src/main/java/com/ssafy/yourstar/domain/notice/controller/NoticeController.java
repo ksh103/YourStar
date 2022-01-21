@@ -9,6 +9,7 @@ import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiParam;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -37,9 +38,9 @@ public class NoticeController {
 
     @ApiOperation(value = "공지사항 전체 조회")
     @GetMapping
-    public List<Notice> noticeList() {
+    public Page<Notice> noticeList(@RequestParam int page) {
         log.info("noticeList - 호출");
-        return noticeService.noticeList();
+        return noticeService.noticeList(page);
     }
 
     @ApiOperation(value = "공지사항 상세 조회")

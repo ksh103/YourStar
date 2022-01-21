@@ -4,6 +4,8 @@ import com.ssafy.yourstar.domain.notice.db.entity.Notice;
 import com.ssafy.yourstar.domain.notice.db.repository.NoticeRepository;
 import com.ssafy.yourstar.domain.notice.request.NoticeReq;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
@@ -26,8 +28,8 @@ public class NoticeServiceImpl implements NoticeService {
     }
 
     @Override
-    public List<Notice> noticeList() {
-        return noticeRepository.findAll(Sort.by("noticeId").descending());
+    public Page<Notice> noticeList(int page) {
+        return noticeRepository.findAll(PageRequest.of(page - 1, 5, Sort.by("noticeId").descending()));
     }
 
     @Override
