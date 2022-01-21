@@ -14,4 +14,11 @@ public class ApplicantRepositorySupport {
     private JPAQueryFactory jpaQueryFactory;
     QApplicant qApplicant = QApplicant.applicant;
 
+    public Optional<Applicant> findByMemberIdAndMeetingId(int memberId, int meetingId) {
+        Applicant applicant = jpaQueryFactory.select(qApplicant).from(qApplicant)
+                .where(qApplicant.memberId.eq(memberId).and(qApplicant.meetingId.eq(meetingId))).fetchOne();
+
+        if (applicant == null) return Optional.empty();
+        return Optional.ofNullable(applicant);
+    }
 }

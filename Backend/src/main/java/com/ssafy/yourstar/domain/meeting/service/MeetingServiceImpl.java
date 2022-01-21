@@ -64,9 +64,13 @@ public class MeetingServiceImpl implements MeetingService {
     }
 
     @Override
-    public boolean meetingRemoveByUser(Applicant applicant) {
-        // 해당 팬미팅이 존재하는지 조회 후 있을 때 삭제하는 코드로 수정
-        applicantRepository.delete(applicant);
-        return true;
+    public boolean meetingRemoveByUser(int memberId, int meetingId) {
+        // 해당 팬미팅이 존재하는지 조회 후 있을 때 삭제
+        if (applicantRepository.findByMemberIdAndMeetingId(memberId, meetingId).isPresent()) {
+            Applicant applicant = applicantRepository.findByMemberIdAndMeetingId(memberId, meetingId).get();
+            applicantRepository.delete(applicant);
+            return true;
+        }
+        return false;
     }
 }
