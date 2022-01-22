@@ -15,6 +15,9 @@ public class MemberRegisterPostReq {
     @ApiModelProperty(name="회원 code", example="3")
     private String code;
 
+    @ApiModelProperty(name="소속 코드", example ="0")
+    private int managerCode;
+
     @ApiModelProperty(name="회원 Email", example="ssafy@ssafy.com")
     private String memberEmail;
 
@@ -40,9 +43,10 @@ public class MemberRegisterPostReq {
     @ApiModelProperty(name="회원 성별", example="여자/남자")
     private String memberGender;
 
+    @ApiModelProperty(name="회원가입 승인 여부", example="0")
+    private boolean isApprove;
+
     @ApiModelProperty(name="로그인 여부", example="0")
     private boolean isLogin;
 
-    @ApiModelProperty(name="소속 코드", example ="0")
-    private int managerCode;
 }

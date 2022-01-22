@@ -9,4 +9,5 @@ public interface MemberService {
     Member loginMemberByMemberEmail(String memberEmail);
     Member registerMember(MemberRegisterPostReq memberRegisterInfo);
     Member passwordInitMember(MemberPasswordPostReq memberPasswordPostReq);
+    boolean registerApproveMember(String memberEmail);
 }
