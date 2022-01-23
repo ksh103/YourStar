@@ -29,13 +29,17 @@ export default function Mypage() {
     <Block style={{ paddingTop: '25px' }}>
       {/* 상단 프로필 */}
       <WhiteBlock>
-        <Grid container>
+        <Grid container sx={{ color: 'black', width: '100%', height: '100%' }}>
           <Grid xs></Grid>
-          <Grid xs={7} sx={{ color: 'black' }}>
+          <Grid xs={7}>
             <MypageProfileImgDiv>
               <MypageProfileImgTag src={winter}></MypageProfileImgTag>
             </MypageProfileImgDiv>
             <ProfileTextDiv>
+              {/* <p style={{ fontSize: '1.35em' }}>윈터 님</p>
+              <p style={{ fontSize: '1.35em' }}>User Id : winter</p>
+              <p style={{ fontSize: '1.35em' }}>UserEmail: winter@smtown.com</p>
+              <p style={{ fontSize: '1.35em' }}>JoinDate : 22.01.23</p> */}
               <h1>윈터 님</h1>
               <h3>User Id : winter</h3>
               <h2>UserEmail: winter@smtown.com</h2>
@@ -48,7 +52,7 @@ export default function Mypage() {
                 variant="outlined"
                 sx={{
                   width: '70%',
-                  height: '50px',
+                  height: '13%',
                   position: 'relative',
                   top: '50px',
                   borderRadius: '20px',
@@ -63,7 +67,7 @@ export default function Mypage() {
       </WhiteBlock>
 
       {/* 하단 내용삽입 */}
-      <div style={{ width: '90%', margin: 'auto' }}>
+      <div style={{ width: '90%', margin: 'auto', marginTop: '15px' }}>
         <LabTabs></LabTabs>
       </div>
     </Block>

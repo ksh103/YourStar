@@ -19,6 +19,8 @@ const MypageProfileImgTag = styled.img`
 const ProfileTextDiv = styled.div`
   position: relative;
   top: -50px;
+  width: 100%;
+  height: 100%;
 `;
 
 const WhiteBlock = styled.div`
@@ -31,4 +33,18 @@ const WhiteBlock = styled.div`
   box-shadow: 3px 3px 3px 2px #404040;
 `;
 
-export { MypageProfileImgDiv, MypageProfileImgTag, WhiteBlock, ProfileTextDiv };
+const ImageCard = styled.div`
+  width: 200px;
+  height: 250px;
+  background-color: white;
+  box-shadow: 3px 3px 3px 2px #404040;
+  border-radius: 20px;
+`;
+
+export {
+  MypageProfileImgDiv,
+  MypageProfileImgTag,
+  WhiteBlock,
+  ProfileTextDiv,
+  ImageCard,
+};

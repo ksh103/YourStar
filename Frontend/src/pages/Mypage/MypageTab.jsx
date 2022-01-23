@@ -5,6 +5,7 @@ import TabContext from '@mui/lab/TabContext';
 import TabList from '@mui/lab/TabList';
 import TabPanel from '@mui/lab/TabPanel';
 import Grid from '@mui/material/Grid';
+import BasicCard from './ItemCard';
 
 export default function LabTabs() {
   const [value, setValue] = React.useState('1');
@@ -32,7 +33,7 @@ export default function LabTabs() {
               color: 'black',
             }}
           >
-            여기에는 카드
+            <BasicCard></BasicCard>
           </Grid>
         </TabPanel>
         <TabPanel value="2"></TabPanel>
