@@ -13,8 +13,6 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
-import java.util.Optional;
-
 @Service
 @Slf4j
 public class QnaQuestionServiceImpl implements QnaQuestionService {
@@ -32,8 +30,7 @@ public class QnaQuestionServiceImpl implements QnaQuestionService {
         qnaQuestion.setQuestionTitle(qnaQuestionRegister.getQuestionTitle());
         qnaQuestion.setQuestionContent(qnaQuestionRegister.getQuestionContent());
 
-        Member member = memberRepository.findById(4).get();
-        System.out.println(member);
+        Member member = memberRepository.findById(qnaQuestionRegister.getMemberId()).get();
         qnaQuestion.setMember(member);
 
         return qnaQuestionRepository.save(qnaQuestion);
@@ -42,7 +39,7 @@ public class QnaQuestionServiceImpl implements QnaQuestionService {
     @Override
     public Page<QnaQuestion> qnaList(QnaListGetReq qnaList, int page, int size) {
         PageRequest pageRequest = PageRequest.of(page - 1, size, Sort.by("questionId").descending());
-        return qnaQuestionRepository.findAllByMember_MemberId(4, pageRequest);
+        return qnaQuestionRepository.findAllByMember_MemberId(qnaList.getMemberId(), pageRequest);
     }
 
     @Override

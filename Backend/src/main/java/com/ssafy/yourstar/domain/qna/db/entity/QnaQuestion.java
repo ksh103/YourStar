@@ -1,7 +1,6 @@
 package com.ssafy.yourstar.domain.qna.db.entity;
 
 import com.ssafy.yourstar.domain.member.db.entity.Member;
-import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.Getter;
