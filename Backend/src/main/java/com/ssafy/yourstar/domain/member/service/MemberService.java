@@ -16,4 +16,5 @@ public interface MemberService {
     boolean registerApproveMember(String memberEmail); // 회원가입 인증
 
     boolean emailCheckMember(String memberEmail);
+    boolean nickCheckMember(String memberNick);
 }

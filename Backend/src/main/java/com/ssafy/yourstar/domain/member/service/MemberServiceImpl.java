@@ -113,4 +113,10 @@ public class MemberServiceImpl implements  MemberService {
         if(memberRepository.findMemberByMemberEmail(memberEmail).isPresent()) return false;
         else return true;
     }
+
+    @Override
+    public boolean nickCheckMember(String memberNick) {
+        if(memberRepository.findMemberByMemberNick(memberNick).isPresent()) return false;
+        else return true;
+    }
 }

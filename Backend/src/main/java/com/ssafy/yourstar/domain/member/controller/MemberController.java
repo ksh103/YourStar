@@ -80,7 +80,7 @@ public class MemberController {
         return ResponseEntity.status(201).body(BaseResponseBody.of(201, "Success"));
     }
 
-    @ApiOperation(value = "이메일 중복 체크", notes = "<strong>Email</strong>중복 체크를 한다.")
+    @ApiOperation(value = "이메일 중복 체크", notes = "회원가입 시, <strong>Email</strong>중복 체크를 한다.")
     @GetMapping("/email-check/{memberEmail}")
     public ResponseEntity<? extends BaseResponseBody> memberEmailCheck(@PathVariable String memberEmail) {
         log.info("memberEmailCheck - Call");
@@ -90,6 +90,19 @@ public class MemberController {
             return ResponseEntity.status(200).body(BaseResponseBody.of(200, "Success"));
         }else {
             return ResponseEntity.status(401).body(BaseResponseBody.of(401, "Invalid Email"));
+        }
+    }
+
+    @ApiOperation(value = "닉네임 중복 체크", notes = "회원가입 시,<strong>닉네임</strong>중복 체크를 한다.")
+    @GetMapping("/nick-check/{memberNick}")
+    public ResponseEntity<? extends BaseResponseBody> memberNickCheck(@PathVariable String memberNick) {
+        log.info("memberNickCheck - Call");
+
+        // nickCheckMember가 true이면 사용할 수 있는 이메일
+        if(memberService.nickCheckMember(memberNick)) {
+            return ResponseEntity.status(200).body(BaseResponseBody.of(200, "Success"));
+        }else {
+            return ResponseEntity.status(401).body(BaseResponseBody.of(401, "Invalid NickName"));
         }
     }
 }
