@@ -1,5 +1,8 @@
 package com.ssafy.yourstar.domain.qna.db.entity;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonFormat;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import com.ssafy.yourstar.domain.member.db.entity.Member;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
@@ -32,15 +35,18 @@ public class QnaQuestion {
 
     @Column(name = "question_reg_dt")
     @CreationTimestamp
+    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss", shape = JsonFormat.Shape.STRING)
     @ApiModelProperty(value = "질문 생성 시간")
     LocalDateTime questionRegDt;
 
     // QNA 답변 테이블과 매핑
     @OneToOne(mappedBy = "questionId")
+    @JsonManagedReference
     private QnaAnswer qnaAnswer;
 
     // 회원 테이블과 매핑
     @ManyToOne
     @JoinColumn(name = "member_id")
+    @JsonBackReference
     private Member member;
 }

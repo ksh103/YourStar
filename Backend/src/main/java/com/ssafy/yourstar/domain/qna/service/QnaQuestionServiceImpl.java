@@ -5,13 +5,16 @@ import com.ssafy.yourstar.domain.member.db.repository.MemberRepository;
 import com.ssafy.yourstar.domain.qna.db.entity.QnaQuestion;
 import com.ssafy.yourstar.domain.qna.db.repository.QnaQuestionRepository;
 import com.ssafy.yourstar.domain.qna.request.QnaListGetReq;
-import com.ssafy.yourstar.domain.qna.request.QnaQuestionReq;
+import com.ssafy.yourstar.domain.qna.request.QnaQuestionModifyPutReq;
+import com.ssafy.yourstar.domain.qna.request.QnaQuestionRegisterPostReq;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
+
+import java.util.List;
 
 @Service
 @Slf4j
@@ -24,12 +27,13 @@ public class QnaQuestionServiceImpl implements QnaQuestionService {
     MemberRepository memberRepository;
 
     @Override
-    public QnaQuestion qnaQuestionRegister(QnaQuestionReq qnaQuestionRegister) {
+    public QnaQuestion qnaQuestionRegister(QnaQuestionRegisterPostReq qnaQuestionRegister) {
         QnaQuestion qnaQuestion = new QnaQuestion();
 
         qnaQuestion.setQuestionTitle(qnaQuestionRegister.getQuestionTitle());
         qnaQuestion.setQuestionContent(qnaQuestionRegister.getQuestionContent());
 
+        // 질문과 사용자 매핑하기
         Member member = memberRepository.findById(qnaQuestionRegister.getMemberId()).get();
         qnaQuestion.setMember(member);
 
@@ -39,7 +43,8 @@ public class QnaQuestionServiceImpl implements QnaQuestionService {
     @Override
     public Page<QnaQuestion> qnaList(QnaListGetReq qnaList, int page, int size) {
         PageRequest pageRequest = PageRequest.of(page - 1, size, Sort.by("questionId").descending());
-        return qnaQuestionRepository.findAllByMember_MemberId(qnaList.getMemberId(), pageRequest);
+        Page<QnaQuestion> qna = qnaQuestionRepository.findAllByMember_MemberId(qnaList.getMemberId(), pageRequest);
+        return qna;
     }
 
     @Override
@@ -48,12 +53,12 @@ public class QnaQuestionServiceImpl implements QnaQuestionService {
     }
 
     @Override
-    public QnaQuestion qnaQuestionModify(int questionId, QnaQuestionReq qnaQuestionModify) {
+    public QnaQuestion qnaQuestionModify(QnaQuestionModifyPutReq qnaQuestionModify) {
         // 해당 QNA가 존재하면 수정. 존재하지 않으면 null 반환
-        if (qnaQuestionRepository.findById(questionId).isPresent()) {
+        if (qnaQuestionRepository.findById(qnaQuestionModify.getQuestionId()).isPresent()) {
             QnaQuestion qnaQuestion = new QnaQuestion();
 
-            qnaQuestion = qnaQuestionRepository.findById(questionId).get();
+            qnaQuestion = qnaQuestionRepository.findById(qnaQuestionModify.getQuestionId()).get();
             qnaQuestion.setQuestionTitle(qnaQuestionModify.getQuestionTitle());
             qnaQuestion.setQuestionContent(qnaQuestionModify.getQuestionContent());
 

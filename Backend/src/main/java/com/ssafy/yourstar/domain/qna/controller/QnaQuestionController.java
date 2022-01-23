@@ -2,7 +2,8 @@ package com.ssafy.yourstar.domain.qna.controller;
 
 import com.ssafy.yourstar.domain.qna.db.entity.QnaQuestion;
 import com.ssafy.yourstar.domain.qna.request.QnaListGetReq;
-import com.ssafy.yourstar.domain.qna.request.QnaQuestionReq;
+import com.ssafy.yourstar.domain.qna.request.QnaQuestionModifyPutReq;
+import com.ssafy.yourstar.domain.qna.request.QnaQuestionRegisterPostReq;
 import com.ssafy.yourstar.domain.qna.service.QnaQuestionService;
 import com.ssafy.yourstar.global.model.response.BaseResponseBody;
 import io.swagger.annotations.Api;
@@ -17,7 +18,7 @@ import org.springframework.web.bind.annotation.*;
 import javax.servlet.http.HttpServletRequest;
 
 @Slf4j
-@Api(value = "QNA")
+@Api(value = "QNA 질문")
 @RestController
 @RequestMapping("/api/qna")
 public class QnaQuestionController {
@@ -43,7 +44,7 @@ public class QnaQuestionController {
 
     @ApiOperation(value = "QNA 질문 등록")
     @PostMapping("/questions")
-    public ResponseEntity<BaseResponseBody> qnaQuestionRegister(@RequestBody QnaQuestionReq qnaQuestionRegister, HttpServletRequest request) {
+    public ResponseEntity<BaseResponseBody> qnaQuestionRegister(@RequestBody QnaQuestionRegisterPostReq qnaQuestionRegister, HttpServletRequest request) {
         log.info("qnaQuestionRegister - 호출");
         qnaQuestionService.qnaQuestionRegister(qnaQuestionRegister);
 
@@ -51,11 +52,11 @@ public class QnaQuestionController {
     }
 
     @ApiOperation(value = "QNA 질문 수정")
-    @PutMapping("/questions/{questionId}")
+    @PutMapping("/questions")
     public ResponseEntity<BaseResponseBody> qnaQuestionModify
-            (@ApiParam(value = "QNA 질문 번호") @PathVariable("questionId") int questionId, @RequestBody QnaQuestionReq qnaQuestionModify, HttpServletRequest request) {
+            (@RequestBody QnaQuestionModifyPutReq qnaQuestionModify, HttpServletRequest request) {
         log.info("qnaQuestionModify - 호출");
-        if (qnaQuestionService.qnaQuestionModify(questionId, qnaQuestionModify) == null) {    // 해당 질문이 존재하지 않는 경우
+        if (qnaQuestionService.qnaQuestionModify(qnaQuestionModify) == null) {    // 해당 질문이 존재하지 않는 경우
             log.error("qnaQuestionModify - This questionId doesn't exist.");
             return ResponseEntity.status(404).body(BaseResponseBody.of(404, "This questionId doesn't exist."));
         } else {    // 정상 작동
