@@ -80,4 +80,16 @@ public class MemberController {
         return ResponseEntity.status(201).body(BaseResponseBody.of(201, "Success"));
     }
 
+    @ApiOperation(value = "이메일 중복 체크", notes = "<strong>Email</strong>중복 체크를 한다.")
+    @GetMapping("/email-check/{memberEmail}")
+    public ResponseEntity<? extends BaseResponseBody> memberEmailCheck(@PathVariable String memberEmail) {
+        log.info("memberEmailCheck - Call");
+
+        // emailCheckMember가 true이면 사용할 수 있는 이메일
+        if(memberService.emailCheckMember(memberEmail)) {
+            return ResponseEntity.status(200).body(BaseResponseBody.of(200, "Success"));
+        }else {
+            return ResponseEntity.status(401).body(BaseResponseBody.of(401, "Invalid Email"));
+        }
+    }
 }
