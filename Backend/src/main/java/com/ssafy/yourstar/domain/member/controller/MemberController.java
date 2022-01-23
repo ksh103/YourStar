@@ -34,13 +34,21 @@ public class MemberController {
         String memberEmail = memberLoginInfo.getMemberEmail();
         String memberPassword = memberLoginInfo.getMemberPassword();
 
-        Member member = memberService.loginMemberByMemberEmail(memberEmail);
+        if(memberService.loginApproveMember(memberEmail)) {
+            Member member = memberService.loginMemberByMemberEmail(memberEmail);
 
-         // 회원가입 구현되면 이거 사용
-        if(passwordEncoder.matches(memberPassword, member.getMemberPassword())) {
-            return ResponseEntity.ok(MemberLoginPostRes.of(201, "Success", JwtTokenUtil.getMemberLoginToken(memberEmail, member.getCode(), member.getMemberNick(), member.getIsLogin())));
+            if(passwordEncoder.matches(memberPassword, member.getMemberPassword())){
+
+                memberService.loginIsLoginMember(memberEmail); // 로그인 됐음을 DB에 저장 --> 로그인 여부 토큰에 담아서 보내기
+
+                return ResponseEntity.ok(MemberLoginPostRes.of(201, "Success", JwtTokenUtil.getMemberLoginToken(memberEmail, member.getCode(), member.getMemberNick(), member.getIsLogin())));
+            }else {
+                // 비밀번호가 일치하지 않을 때
+                return ResponseEntity.status(401).body(MemberLoginPostRes.of(401, "Invalid Password", null));
+            }
         }else {
-            return ResponseEntity.status(401).body(MemberLoginPostRes.of(401, "Invalid Password", null));
+            // 회원가입 이메일 인증을 하지 않았을 때(권한 없음)
+            return ResponseEntity.status(403).body(MemberLoginPostRes.of(403, "No permission", null));
         }
     }
 
@@ -53,6 +61,7 @@ public class MemberController {
         return ResponseEntity.status(201).body(BaseResponseBody.of(201, "Success"));
     }
 
+    @ApiOperation(value = "회원가입 승인", notes = "<strong>이메일과 회원 고유 랜덤 코드</strong>를 통해 회원가입 인증을 한다.")
     @GetMapping("/register/approve/{memberEmail}")
     public ResponseEntity<? extends BaseResponseBody> memberRegisterApprove (@PathVariable String memberEmail) {
         log.info("memberRegisterApprove - Call");

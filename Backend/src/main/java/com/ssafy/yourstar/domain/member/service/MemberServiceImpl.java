@@ -33,6 +33,27 @@ public class MemberServiceImpl implements  MemberService {
     }
 
     @Override
+    public boolean loginApproveMember(String memberEmail) {
+        if(memberRepository.findMemberByMemberEmailLikeAndIsApproveTrue(memberEmail).isPresent()) {
+            return true;
+        }
+        return false;
+    }
+
+    @Override
+    public boolean loginIsLoginMember(String memberEmail) {
+        if(memberRepository.findMemberByMemberEmail(memberEmail).isPresent()) {
+            Member member = memberRepository.findMemberByMemberEmail(memberEmail).get();
+
+            member.setIsLogin(true);
+            memberRepository.save(member);
+
+            return true;
+        }
+        return false;
+    }
+
+    @Override
     public Member registerMember(MemberRegisterPostReq memberRegisterInfo) {
         Member member = new Member();
 
