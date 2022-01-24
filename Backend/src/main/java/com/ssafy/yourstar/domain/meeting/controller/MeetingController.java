@@ -13,9 +13,12 @@ import io.swagger.annotations.ApiParam;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
 
 @Api("팬미팅 관련 API")
 @Slf4j
@@ -154,5 +157,16 @@ public class MeetingController {
             log.error("meetingRemoveByUser - This MeetingId or MemberId doesn't exist");
             return ResponseEntity.status(400).body(BaseResponseBody.of(400, "This MeetingId or MemberId doesn't exist"));
         }
+    }
+
+    @ApiOperation(value = "팬이 팬미팅 내역 확인")
+    @GetMapping("/fan-applicant/{memberId}")
+    public ResponseEntity<MeetingListGetRes> meetingApplyListByUser
+            (@ApiParam(value = "회원 구분 번호") @PathVariable("memberId") int memberId, int page, int size) {
+        log.info("meetingApplyListByUser - Call");
+
+        Page<Meeting> meetingPage = meetingService.meetingApplyListByUser(memberId, PageRequest.of(page - 1, size));
+
+        return ResponseEntity.status(200).body(MeetingListGetRes.of(200, "Success", meetingPage));
     }
 }

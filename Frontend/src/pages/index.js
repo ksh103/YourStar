@@ -7,3 +7,4 @@ export { default as FAQ } from './FAQ/FAQ';
 export { default as Mypage } from './Mypage/Mypage';
 export { default as Room } from './Room/Room';
 export { default as Schedule } from './Schedule/Schedule';
+export { default as Detail } from './Detail/Detail';

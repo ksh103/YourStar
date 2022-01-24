@@ -19,11 +19,14 @@ public class Member {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int memberId;
 
-    @Column(name = "member_email")
-    private String memberEmail;
-
     @Column(name = "code")
     private int code;
+
+    @Column(name = "manager_code")
+    private int managerCode;
+
+    @Column(name = "member_email")
+    private String memberEmail;
 
     @JsonIgnore
     @JsonProperty(access = JsonProperty.Access.WRITE_ONLY)
@@ -48,9 +51,9 @@ public class Member {
     @Column(name = "member_gender")
     private String memberGender;
 
+    @Column(name = "is_approve")
+    private Boolean isApprove;
+
     @Column(name = "is_login")
     private Boolean isLogin;
-
-    @Column(name = "manager_code")
-    private int managerCode;
 }

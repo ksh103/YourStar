@@ -1,5 +1,9 @@
 import React from 'react';
-
+import { ApplyBlock } from './Apply.style';
 export default function Apply() {
-  return <div>apply</div>;
+  return (
+    <ApplyBlock>
+      <div>apply</div>
+    </ApplyBlock>
+  );
 }
