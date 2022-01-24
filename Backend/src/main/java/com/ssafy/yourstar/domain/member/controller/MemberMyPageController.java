@@ -35,8 +35,9 @@ public class MemberMyPageController {
         else return ResponseEntity.status(500).body(BaseResponseBody.of(500, "Internal Server Error"));
     }
 
+    @ApiOperation(value = "회원 수정", notes = "<strong>비밀번호, 닉네임, 휴대전화, 주소</strong> 정보를 수정한다.")
     @PutMapping("/{memberId}")
-    public ResponseEntity<? extends BaseResponseBody> memberModify(@PathVariable int memberId, @RequestBody MemberModifyPostReq memberModifyPostReq) {
+    public ResponseEntity<? extends BaseResponseBody> memberModify(@PathVariable @ApiParam(value = "회원 인덱스 번호", required = true) int memberId, @RequestBody MemberModifyPostReq memberModifyPostReq) {
         log.info("memberModify - Call");
 
         if(memberService.memberModify(memberId, memberModifyPostReq) != null) {
