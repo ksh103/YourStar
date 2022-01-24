@@ -11,6 +11,7 @@ import {
   Room,
   Schedule,
   Signup,
+  Detail,
 } from './pages/index';
 import Login from './pages/Login/Login';
 import GlobalStyle from './styles/global';
@@ -48,6 +49,9 @@ function App() {
           </Route>
           <Route path="/room/:id">
             <Room />
+          </Route>
+          <Route path="/detail/:id">
+            <Detail />
           </Route>
         </Switch>
         <Footer />
