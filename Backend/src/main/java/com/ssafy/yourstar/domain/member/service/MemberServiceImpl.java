@@ -12,8 +12,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
-import java.text.SimpleDateFormat;
-
 @Service
 public class MemberServiceImpl implements  MemberService {
 
@@ -69,7 +67,8 @@ public class MemberServiceImpl implements  MemberService {
     public Member memberRegister(MemberRegisterPostReq memberRegisterInfo) {
         Member member = new Member();
 
-        SimpleDateFormat newDtFormat = new SimpleDateFormat("yyyy-MM-dd");
+        StringBuilder sb = new StringBuilder();
+        sb.append(memberRegisterInfo.getMemberBirth()).insert(4, "-").insert(7, "-");
 
         member.setCode(3); // 회원가입은 일반회원만 가능하므로 3으로 default
         member.setManagerCode(0); // 회원가입은 일반회원만 가능하므로 소속이 없음 --> 이 부분은 개선해야할듯. (테스트)
@@ -80,7 +79,7 @@ public class MemberServiceImpl implements  MemberService {
         member.setMemberNick(memberRegisterInfo.getMemberNick());
         member.setMemberPhone(memberRegisterInfo.getMemberPhone());
         member.setMemberAddress(memberRegisterInfo.getMemberAddress());
-        member.setMemberBirth(memberRegisterInfo.getMemberBirth());
+        member.setMemberBirth(sb.toString());
         member.setMemberGender(memberRegisterInfo.getMemberGender());
 
         member.setIsLogin(false); // 회원가입이라 로그인 안 한 상태

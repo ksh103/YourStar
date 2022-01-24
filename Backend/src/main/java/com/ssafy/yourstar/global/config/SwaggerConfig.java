@@ -1,4 +1,4 @@
-package com.ssafy.yourstar.global.auth.config;
+package com.ssafy.yourstar.global.config;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
