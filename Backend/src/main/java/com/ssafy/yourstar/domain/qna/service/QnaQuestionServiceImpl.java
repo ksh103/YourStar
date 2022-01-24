@@ -7,17 +7,14 @@ import com.ssafy.yourstar.domain.qna.db.repository.QnaQuestionRepository;
 import com.ssafy.yourstar.domain.qna.request.QnaListGetReq;
 import com.ssafy.yourstar.domain.qna.request.QnaQuestionModifyPutReq;
 import com.ssafy.yourstar.domain.qna.request.QnaQuestionRegisterPostReq;
-import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
-import java.util.List;
 
 @Service
-@Slf4j
 public class QnaQuestionServiceImpl implements QnaQuestionService {
 
     @Autowired
