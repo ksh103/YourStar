@@ -3,6 +3,7 @@ package com.ssafy.yourstar.domain.member.service;
 import com.ssafy.yourstar.domain.member.db.entity.Member;
 import com.ssafy.yourstar.domain.member.db.repository.MemberRepository;
 import com.ssafy.yourstar.domain.member.db.repository.MemberRepositorySupport;
+import com.ssafy.yourstar.domain.member.request.MemberModifyPostReq;
 import com.ssafy.yourstar.domain.member.request.MemberPasswordPostReq;
 import com.ssafy.yourstar.domain.member.request.MemberRegisterPostReq;
 import com.ssafy.yourstar.global.util.MemberPasswordMailUtil;
@@ -136,5 +137,21 @@ public class MemberServiceImpl implements  MemberService {
             memberRepository.deleteById(memberId);
             return true;
         } else return false;
+    }
+
+    @Override
+    public Member memberModify(int memberId, MemberModifyPostReq memberModifyPostReq) {
+        if(memberRepository.findById(memberId).isPresent()) {
+            Member member = new Member();
+
+            member = memberRepository.findById(memberId).get();
+
+            member.setMemberNick(memberModifyPostReq.getMemberNick());
+            member.setMemberPassword(passwordEncoder.encode(memberModifyPostReq.getMemberPassword()));
+            member.setMemberPhone(memberModifyPostReq.getMemberPhone());
+            member.setMemberAddress(memberModifyPostReq.getMemberAddress());
+
+            return memberRepository.save(member);
+        }else return null;
     }
 }
