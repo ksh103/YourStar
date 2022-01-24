@@ -17,6 +17,8 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.*;
 
+import java.text.ParseException;
+
 @Api(value = "회원 관리 API")
 @Slf4j
 @RestController
@@ -43,7 +45,7 @@ public class MemberController {
 
                 memberService.memberIsLogin(memberEmail); // 로그인 됐음을 DB에 저장 --> 로그인 여부 토큰에 담아서 보내기
 
-                return ResponseEntity.ok(MemberLoginPostRes.of(201, "Success", JwtTokenUtil.getMemberLoginToken(member.getMemberId(), memberEmail, member.getCode(), member.getMemberNick(), member.getIsLogin())));
+                return ResponseEntity.ok(MemberLoginPostRes.of(201, "Success", JwtTokenUtil.getMemberLoginToken(memberEmail, member)));
             }else {
                 // 비밀번호가 일치하지 않을 때
                 return ResponseEntity.status(401).body(MemberLoginPostRes.of(401, "Invalid Password", null));
@@ -67,7 +69,7 @@ public class MemberController {
 
     @ApiOperation(value = "회원가입", notes = "<strong>Email, Password, 이름, 닉네임, 성별, 휴대전화, 생일</strong>입력을 통해 회원가입 한다.")
     @PostMapping("/register")
-    public ResponseEntity<? extends BaseResponseBody> memberRegister (@RequestBody @ApiParam(value = "회원가입 정보", required = true) MemberRegisterPostReq memberRegister){
+    public ResponseEntity<? extends BaseResponseBody> memberRegister (@RequestBody @ApiParam(value = "회원가입 정보", required = true) MemberRegisterPostReq memberRegister) throws ParseException {
         log.info("memberRegister - Call");
 
         memberService.memberRegister(memberRegister);

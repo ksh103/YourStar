@@ -8,7 +8,6 @@ import lombok.Getter;
 import lombok.Setter;
 
 import javax.persistence.*;
-import java.util.Date;
 
 @Entity
 @Getter
@@ -59,7 +58,7 @@ public class Member {
 
     @ApiModelProperty(value = "회원 생일", example = "1999-01-01")
     @Column(name = "member_birth")
-    private Date memberBirth;
+    private String memberBirth;
 
     @ApiModelProperty(value = "회원 성별", example = "여자/남자")
     @Column(name = "member_gender")

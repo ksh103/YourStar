@@ -4,9 +4,6 @@ import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.Getter;
 import lombok.Setter;
-import org.springframework.format.annotation.DateTimeFormat;
-
-import java.util.Date;
 
 @Getter
 @Setter
@@ -36,9 +33,8 @@ public class MemberRegisterPostReq {
     @ApiModelProperty(name="회원 주소", example="부산광역시")
     private String memberAddress;
 
-    @ApiModelProperty(name="회원 생일", example="1900-00-00")
-    @DateTimeFormat(pattern="yyyy-MM-dd")
-    private Date memberBirth;
+    @ApiModelProperty(name="회원 생일", example="19991010")
+    private String memberBirth;
 
     @ApiModelProperty(name="회원 성별", example="여자/남자")
     private String memberGender;

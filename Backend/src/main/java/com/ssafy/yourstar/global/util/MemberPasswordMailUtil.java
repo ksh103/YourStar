@@ -36,10 +36,13 @@ public class MemberPasswordMailUtil {
         final String fromEmail = "yourstar_ssafy@naver.com";
         final String fromName = "Your star";
         final String subject = "Your star 계정 패스워드 초기화 정보입니다.";
-        String msg = "<div style='border: 1px solid black; padding: 10px; font-family: verdana;'>";
-        msg += "<h2>안녕하세요. <span style='color: blue;'>" + memberPasswordPostReq.getMemberName() + "</span>님.</h2>";
-        msg += "<p>초기화된 비밀번호를 전송해 드립니다. 비밀번호를 변경하여 사용하세요.</p>";
-        msg += "<p>임시 비밀번호 : <span style='color: blue;'>" + newMemberPassword + "</span></p></div>";
+        String msg = "<div style=\"font-family: 'Apple SD Gothic Neo', 'sans-serif' !important; width: 540px; height: 600px; border-top: 4px solid #212121; margin: 100px auto; padding: 30px 0; box-sizing: border-box;\">";
+        msg += "<h1 style=\"margin: 0; padding: 0 5px; font-size: 28px; font-weight: 400;\">";
+        msg += "<span style=\"font-size: 15px; margin: 0 0 10px 3px;\">Your Star</span><br />";
+        msg += "안녕하세요. <span style=\"color: #212121;\">"+ memberPasswordPostReq.getMemberName() +"</span>님. </h1> ";
+        msg += "<p style=\"font-size: 16px; line-height: 26px; margin-top: 50px; padding: 0 5px;\">";
+        msg += "아래 <b style=\"color: #212121;\">'초기화 된 비밀번호'</b> 를 전송해드립니다.<br />\n" + "비밀번호를 변경하여 사용하세요.<br/>";
+        msg += "임시 비밀번호 : <span style='color: blue;'>" + newMemberPassword + "</span></p></a>\n" + "</div>";
 
         try {
             HtmlEmail email = new HtmlEmail();

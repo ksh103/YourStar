@@ -1,4 +1,4 @@
-package com.ssafy.yourstar.global.auth.config;
+package com.ssafy.yourstar.global.config;
 
 import com.ssafy.yourstar.global.auth.JwtAuthenticationFilter;
 import com.ssafy.yourstar.global.auth.MemberDetaillService;

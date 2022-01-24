@@ -4,6 +4,7 @@ import com.auth0.jwt.JWT;
 import com.auth0.jwt.JWTVerifier;
 import com.auth0.jwt.algorithms.Algorithm;
 import com.auth0.jwt.exceptions.*;
+import com.ssafy.yourstar.domain.member.db.entity.Member;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
@@ -41,14 +42,35 @@ public class JwtTokenUtil {
                 .build();
     }
     
-    public static String getMemberLoginToken(int memberId, String memberEmail, int code, String memberNick, Boolean isLogin ) {
-    		Date expires = JwtTokenUtil.getTokenExpiration(expirationTime);
+//    public static String getMemberLoginToken(int memberId, String memberEmail, int code, String memberNick, Boolean isLogin ) {
+//    		Date expires = JwtTokenUtil.getTokenExpiration(expirationTime);
+//        return JWT.create()
+//                .withClaim("memberId", memberId)
+//                .withClaim("memberEmail", memberEmail)
+//                .withClaim("code", code)
+//                .withClaim("memberNick", memberNick)
+//                .withClaim("isLogin", isLogin)
+////                .withExpiresAt(expires)
+////                .withIssuer(ISSUER)
+////                .withIssuedAt(Date.from(LocalDateTime.now().atZone(ZoneId.systemDefault()).toInstant()))
+//                .sign(Algorithm.HMAC512(secretKey.getBytes()));
+//    }
+
+    public static String getMemberLoginToken(String memberEmail, Member member) {
+        Date expires = JwtTokenUtil.getTokenExpiration(expirationTime);
         return JWT.create()
-                .withClaim("memberId", memberId)
+                .withClaim("memberId", member.getMemberId())
+                .withClaim("code", member.getCode())
+                .withClaim("managerCode", member.getManagerCode())
                 .withClaim("memberEmail", memberEmail)
-                .withClaim("code", code)
-                .withClaim("memberNick", memberNick)
-                .withClaim("isLogin", isLogin)
+                .withClaim("memberName", member.getMemberName())
+                .withClaim("memberNick", member.getMemberNick())
+                .withClaim("memberPhone", member.getMemberPhone())
+                .withClaim("memberAddress", member.getMemberAddress())
+                .withClaim("memberGender", member.getMemberGender())
+                .withClaim("memberBirth", member.getMemberBirth())
+                .withClaim("isApprove", member.getIsApprove())
+                .withClaim("isLogin", member.getIsLogin())
 //                .withExpiresAt(expires)
 //                .withIssuer(ISSUER)
 //                .withIssuedAt(Date.from(LocalDateTime.now().atZone(ZoneId.systemDefault()).toInstant()))

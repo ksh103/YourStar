@@ -1,4 +1,4 @@
-package com.ssafy.yourstar.global.auth.config;
+package com.ssafy.yourstar.global.config;
 
 import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.databind.ObjectMapper;
