@@ -1,5 +1,6 @@
 package com.ssafy.yourstar.domain.meeting.controller;
 
+import com.ssafy.yourstar.domain.meeting.db.entity.Applicant;
 import com.ssafy.yourstar.domain.meeting.db.entity.Meeting;
 import com.ssafy.yourstar.domain.meeting.request.MeetingApplyByStarPostReq;
 import com.ssafy.yourstar.domain.meeting.request.MeetingApplyByUserPostReq;
@@ -161,12 +162,12 @@ public class MeetingController {
 
     @ApiOperation(value = "팬이 팬미팅 내역 확인")
     @GetMapping("/fan-applicant/{memberId}")
-    public ResponseEntity<MeetingListGetRes> meetingApplyListByUser
+    public Page<Applicant> meetingApplyListByUser
             (@ApiParam(value = "회원 구분 번호") @PathVariable("memberId") int memberId, int page, int size) {
         log.info("meetingApplyListByUser - Call");
 
-        Page<Meeting> meetingPage = meetingService.meetingApplyListByUser(memberId, PageRequest.of(page - 1, size));
+        Page<Applicant> meetingPage = meetingService.meetingApplyListByUser(memberId, PageRequest.of(page - 1, size));
 
-        return ResponseEntity.status(200).body(MeetingListGetRes.of(200, "Success", meetingPage));
+        return meetingPage;
     }
 }

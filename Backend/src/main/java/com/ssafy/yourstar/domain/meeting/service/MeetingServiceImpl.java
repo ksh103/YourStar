@@ -127,7 +127,8 @@ public class MeetingServiceImpl implements MeetingService {
     }
 
     @Override
-    public Page<Meeting> meetingApplyListByUser(int memberId, Pageable pageable) {
-        return meetingRepositorySpp.findAllApplyMeetingByMemberId(memberId, pageable);
+    public Page<Applicant> meetingApplyListByUser(int memberId, Pageable pageable) {
+//        return meetingRepositorySpp.findAllApplyMeetingByMemberId(memberId, pageable);
+        return applicantRepository.findAllByMemberId(memberId, pageable);
     }
 }
