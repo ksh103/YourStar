@@ -61,7 +61,10 @@ const NavbarWrapper = styled.div`
   padding-bottom: 30px;
   &:hover ${NavbarSubBlock} {
     visibility: visible;
-    animation: ease-out forwards;
+    transition: 0.5s;
+  }
+  @media ${device.TabletPortrait} {
+    padding-bottom: 0px;
   }
 `;
 
