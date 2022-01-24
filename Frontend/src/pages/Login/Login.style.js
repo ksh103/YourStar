@@ -1,4 +1,5 @@
 import styled from 'styled-components';
+import { blockColor, device, pointColor } from '../../styles/variables';
 
 const innerDiv = styled.div`
   height: 100%;
@@ -19,13 +20,6 @@ const size = {
   Laptops: '1200px',
 };
 
-export const device = {
-  MobileLandscape: `(min-width: ${size.MobileLandscape})`,
-  TabletPortrait: `(min-width: ${size.TabletPortrait})`,
-  TabletLandscape: `(min-width: ${size.TabletLandscape})`,
-  Laptops: `(min-width: ${size.Laptops})`,
-};
-
 const LoginSignupBlock = styled.div`
   //border: 1px solid red;
   margin-top: 50px;
@@ -38,8 +32,30 @@ const LoginSignupBlock = styled.div`
   border-radius: 30px;
   text-align: center;
   /* width: 100vw; */
-  @media ${device.MobileLandscape} {
+  @media ${device.TabletPortrait} {
+    width: 100%;
+    border-radius: 0px;
   }
 `;
 
-export { innerDiv, ImgTag, LoginSignupBlock };
+const InFormBlock = styled.div`
+  max-width: 800px;
+  width: 70%;
+  height: 78.5vh;
+  background-color: ${blockColor};
+  border-radius: 10px;
+  color: black;
+  overflow-y: auto;
+  @media ${device.TabletPortrait} {
+    width: 100%;
+    border-radius: 0px;
+  }
+`;
+
+const ScheduleWrapper = styled.div`
+  width: 100%;
+  display: flex;
+  justify-content: center;
+`;
+
+export { innerDiv, ImgTag, LoginSignupBlock, InFormBlock, ScheduleWrapper };
