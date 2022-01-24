@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { AdminBlock, Title, Image, Section1, Section2 } from './Admin.style';
+import { AdminBlock, Title, Image, Section1, Section2 } from './Detail.style';
 import { Block } from '../../styles/variables';
 import { Button, Grid } from '@mui/material';
 import poster from '../../components/Main/img/서강준포스터.jpg';
@@ -8,7 +8,7 @@ import HorizonLine from '../../components/Utils/HorizontalLine';
 
 export default function Admin() {
   const [PosterDetail, SetPosterDetail] = useState({
-    미팅id: 1,
+    미팅id: 1, // 여기서 link로 받아온 id를 이용하여 DB에서 데이터를 받아와 저장한 후 뿌려준다.
     소속코드: 12323,
     이름: '서강준님 3차 ONLINE FAN MEETING',
     예매시작시간: '2022/02/11 6pm',
@@ -20,6 +20,7 @@ export default function Admin() {
       "그룹 2PM 멤버겸 배우 이준호는 오는 22일과 23일 양일간 서울 용산구 블루스퀘어 마스터카드홀에서 오프라인 단독 팬미팅 'JUNHO THE MOMENT' 를 개최한다. 23일에는 오프라인 팬미팅과 함께 비욘드 라이브 플랫폼을 통해 동시 진행되는 온라인 유료  생중계로 월드와이드 팬들과 소통한다.",
     팬미팅승인상태: true,
   });
+  const [UserButton, SetUserButton] = useState(3);
   return (
     <>
       <AdminBlock>
@@ -75,15 +76,40 @@ export default function Admin() {
               <Grid xs={12}>
                 <Section2>
                   <div>{PosterDetail.미팅설명}</div>
-                  <Button
-                    variant="contained"
-                    sx={{
-                      width: '100px',
-                      height: '40px',
-                    }}
-                  >
-                    등록하기
-                  </Button>
+                  {UserButton === 1 && (
+                    <Button
+                      variant="contained"
+                      sx={{
+                        width: '100px',
+                        height: '40px',
+                      }}
+                    >
+                      예매하기
+                    </Button>
+                  )}
+                  {UserButton === 2 && (
+                    <Button
+                      variant="contained"
+                      sx={{
+                        width: '100px',
+                        height: '40px',
+                      }}
+                    >
+                      입장하기
+                    </Button>
+                  )}
+                  {UserButton === 3 && (
+                    <Button
+                      variant="contained"
+                      disabled
+                      sx={{
+                        width: '100px',
+                        height: '40px',
+                      }}
+                    >
+                      종료
+                    </Button>
+                  )}
                 </Section2>
               </Grid>
             </Grid>
