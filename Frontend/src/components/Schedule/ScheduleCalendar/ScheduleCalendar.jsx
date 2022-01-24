@@ -16,9 +16,42 @@ const meeting = [
     name: '김다미 팬미팅1',
     meeting_start_date: '2022-01-30 14:00:00',
   },
+  {
+    id: 2,
+    name: '김다미 팬미팅2',
+    meeting_start_date: '2022-01-30 01:00:00',
+  },
+  {
+    id: 3,
+    name: '지수민',
+    meeting_start_date: '2022-01-11 01:00:00',
+  },
+  {
+    id: 4,
+    name: '아이돌박동준',
+    meeting_start_date: '2022-01-21 01:00:00',
+  },
+  {
+    id: 5,
+    name: '손은성',
+    meeting_start_date: '2022-01-01 01:00:00',
+  },
+  {
+    id: 6,
+    name: '손은성',
+    meeting_start_date: '2022-01-01 01:00:00',
+  },
+  {
+    id: 7,
+    name: '손은성',
+    meeting_start_date: '2022-01-02 01:00:00',
+  },
+  {
+    id: 8,
+    name: '손은성',
+    meeting_start_date: '2022-01-03 01:00:00',
+  },
 ];
-const dd = new Date(meeting[0].meeting_start_date);
-console.log(dd);
 export default function ScheduleCalendar() {
   const [date, setDate] = useState(moment());
   const movePrevMonth = () => {
@@ -49,7 +82,6 @@ export default function ScheduleCalendar() {
                 .week(w)
                 .startOf('week')
                 .add(n + i, 'day');
-
               // 오늘이 current와 같다면우선 ' 선택'으로 두자
               let isToday =
                 moment().format('YYYYMMDD') === current.format('YYYYMMDD')
@@ -60,11 +92,17 @@ export default function ScheduleCalendar() {
               let isGrayed =
                 current.format('MM') !== date.format('MM') ? 'grayed' : '';
 
+              const schedule = meeting.filter(
+                m =>
+                  current.format('YYYY-MM-DD') ===
+                  m.meeting_start_date.slice(0, 10)
+              );
               return (
                 <ScheduleCalendarDay
                   className={`${isToday} ${isGrayed}`}
                   key={i}
                   date={current.format('D')}
+                  schedule={schedule}
                 />
               );
             })}
