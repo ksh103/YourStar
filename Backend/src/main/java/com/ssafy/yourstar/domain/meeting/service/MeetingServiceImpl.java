@@ -127,8 +127,41 @@ public class MeetingServiceImpl implements MeetingService {
     }
 
     @Override
-    public Page<Applicant> meetingApplyListByUser(int memberId, Pageable pageable) {
-//        return meetingRepositorySpp.findAllApplyMeetingByMemberId(memberId, pageable);
-        return applicantRepository.findAllByMemberId(memberId, pageable);
+    public Page<Meeting> meetingApplyListByUser(int memberId, Pageable pageable) {
+        // queryDSL을 사용한 코드
+        return meetingRepositorySpp.findAllApplyMeetingByMemberId(memberId, pageable);
+//        return applicantRepository.findAllByMemberId(memberId, pageable);
+    }
+
+    @Override
+    public Applicant applicantDetail(int memberId, int meetingId) {
+        ApplicantID applicantID = new ApplicantID();
+        applicantID.setMemberId(memberId);
+        applicantID.setMeetingId(meetingId);
+
+        // 값이 있다면 리턴 아니면 null
+        if (applicantRepository.findById(applicantID).isPresent()) {
+            return applicantRepository.findById(applicantID).get();
+        } else {
+            return null;
+        }
+    }
+
+    @Override
+    public boolean meetingGiveWarnToUser(int memberId, int meetingId) {
+        ApplicantID applicantID = new ApplicantID();
+        applicantID.setMemberId(memberId);
+        applicantID.setMeetingId(meetingId);
+
+        // 값이 있다면 경고 업데이트 아니면 false
+        if (applicantRepository.findById(applicantID).isPresent()) {
+            Applicant applicant = applicantRepository.findById(applicantID).get();
+            applicant.setApplicantWarnCount(applicant.getApplicantWarnCount() + 1); // 현재 경고 횟수에서 +1
+            applicantRepository.save(applicant); // 값 업데이트
+
+            return true;
+        } else {
+            return false;
+        }
     }
 }

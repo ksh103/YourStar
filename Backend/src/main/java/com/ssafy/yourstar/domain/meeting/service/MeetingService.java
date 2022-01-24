@@ -20,5 +20,7 @@ public interface MeetingService {
     Meeting meetingDetail(int meetingId);
     Applicant meetingApplyByUser(MeetingApplyByUserPostReq meetingApplyByUserPostReq);
     boolean meetingRemoveByUser(int memberId, int meetingId);
-    Page<Applicant> meetingApplyListByUser(int memberId, Pageable pageable);
+    Page<Meeting> meetingApplyListByUser(int memberId, Pageable pageable);
+    Applicant applicantDetail(int memberId, int meetingId);
+    boolean meetingGiveWarnToUser(int memberId, int meetingId);
 }

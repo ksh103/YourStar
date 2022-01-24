@@ -11,5 +11,6 @@ import java.util.Optional;
 
 @Repository
 public interface ApplicantRepository extends JpaRepository<Applicant, ApplicantID> {
-    Page<Applicant> findAllByMemberId(int memberId, Pageable pageable);
+    // joinColumn 을 사용했을 때
+//    Page<Applicant> findAllByMemberId(int memberId, Pageable pageable);
 }
