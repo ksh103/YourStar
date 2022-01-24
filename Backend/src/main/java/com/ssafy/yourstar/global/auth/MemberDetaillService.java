@@ -17,7 +17,7 @@ public class MemberDetaillService implements UserDetailsService{
 	
     @Override
     public UserDetails loadUserByUsername(String memberName) throws UsernameNotFoundException {
-    		Member member = memberService.loginMemberByMemberEmail(memberName);
+    		Member member = memberService.memberLoginByMemberEmail(memberName);
     		if(member != null) {
     			MemberDetails memberDetails = new MemberDetails(member);
     			return memberDetails;

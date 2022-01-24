@@ -163,13 +163,13 @@ public class MeetingController {
 
     @ApiOperation(value = "팬이 팬미팅 내역 확인")
     @GetMapping("/fan-applicant/{memberId}")
-    public ResponseEntity<MeetingListGetRes> meetingApplyListByUser
+    public Page<Applicant> meetingApplyListByUser
             (@ApiParam(value = "회원 구분 번호") @PathVariable("memberId") int memberId, int page, int size) {
         log.info("meetingApplyListByUser - Call");
 
-        Page<Meeting> meetingPage = meetingService.meetingApplyListByUser(memberId, PageRequest.of(page - 1, size));
+        Page<Applicant> meetingPage = meetingService.meetingApplyListByUser(memberId, PageRequest.of(page - 1, size));
 
-        return ResponseEntity.status(200).body(MeetingListGetRes.of(200, "Success", meetingPage));
+        return meetingPage;
     }
 
     @ApiOperation(value = "팬미팅에 참여한 팬의 경고 횟수 확인")
