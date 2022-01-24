@@ -118,16 +118,4 @@ public class MemberController {
         }
         else return ResponseEntity.status(401).body(BaseResponseBody.of(401, "Invalid NickName"));
     }
-
-
-    @ApiOperation(value = "회원 탈퇴", notes = "token에 담은 <strong>memberId</strong> 정보를 통해 회원 탈퇴를 한다.")
-    @DeleteMapping("/{memberId}")
-    public ResponseEntity<? extends BaseResponseBody> memberRemove(@PathVariable @ApiParam(value = "회원 인덱스 번호", required = true) int memberId) {
-        log.info("memberRemove - Call");
-
-        if(memberService.memberRemove(memberId)) {
-            return ResponseEntity.status(200).body(BaseResponseBody.of(200, "Success"));
-        }
-        else return ResponseEntity.status(500).body(BaseResponseBody.of(500, "Internal Server Error"));
-    }
 }
