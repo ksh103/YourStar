@@ -27,21 +27,20 @@ public class MemberServiceImpl implements  MemberService {
 
 
     @Override
-    public Member loginMemberByMemberEmail(String memberEmail) {
+    public Member memberLoginByMemberEmail(String memberEmail) {
         Member member = memberRepositorySupport.memberLoginByMemberEmail(memberEmail).get();
         return member;
     }
 
     @Override
-    public boolean loginApproveMember(String memberEmail) {
+    public boolean memberLoginApprove(String memberEmail) {
         if(memberRepository.findMemberByMemberEmailLikeAndIsApproveTrue(memberEmail).isPresent()) {
             return true;
-        }
-        return false;
+        }else return false;
     }
 
     @Override
-    public boolean loginIsLoginMember(String memberEmail) {
+    public boolean memberIsLogin(String memberEmail) {
         if(memberRepository.findMemberByMemberEmail(memberEmail).isPresent()) {
             Member member = memberRepository.findMemberByMemberEmail(memberEmail).get();
 
@@ -49,12 +48,11 @@ public class MemberServiceImpl implements  MemberService {
             memberRepository.save(member);
 
             return true;
-        }
-        return false;
+        }else return false;
     }
 
     @Override
-    public Member registerMember(MemberRegisterPostReq memberRegisterInfo) {
+    public Member memberRegister(MemberRegisterPostReq memberRegisterInfo) {
         Member member = new Member();
 
         SimpleDateFormat newDtFormat = new SimpleDateFormat("yyyy-MM-dd");
@@ -79,7 +77,7 @@ public class MemberServiceImpl implements  MemberService {
     }
 
     @Override
-    public Member passwordInitMember(MemberPasswordPostReq memberPasswordPostReq) {
+    public Member memberPasswordInit(MemberPasswordPostReq memberPasswordPostReq) {
         Member member = new Member();
 
         if(memberRepository.findMemberByMemberEmailAndMemberName(memberPasswordPostReq.getMemberEmail(), memberPasswordPostReq.getMemberName()).isPresent()) {
@@ -96,7 +94,7 @@ public class MemberServiceImpl implements  MemberService {
     }
 
     @Override
-    public boolean registerApproveMember(String memberEmail) {
+    public boolean memberRegisterApprove(String memberEmail) {
         if(memberRepository.findMemberByMemberEmail(memberEmail).isPresent()) {
             Member member = memberRepository.findMemberByMemberEmail(memberEmail).get();
 
@@ -104,19 +102,26 @@ public class MemberServiceImpl implements  MemberService {
             memberRepository.save(member);
 
             return true;
-        }
-        return false;
+        }else return false;
     }
 
     @Override
-    public boolean emailCheckMember(String memberEmail) {
+    public boolean memberEmailCheck(String memberEmail) {
         if(memberRepository.findMemberByMemberEmail(memberEmail).isPresent()) return false;
         else return true;
     }
 
     @Override
-    public boolean nickCheckMember(String memberNick) {
+    public boolean memberNickCheck(String memberNick) {
         if(memberRepository.findMemberByMemberNick(memberNick).isPresent()) return false;
         else return true;
+    }
+
+    @Override
+    public boolean memberRemove(int memberId) {
+        if(memberRepository.findById(memberId).isPresent()) {
+            memberRepository.deleteById(memberId);
+            return true;
+        } else return false;
     }
 }
