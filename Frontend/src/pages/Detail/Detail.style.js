@@ -1,28 +1,64 @@
 import styled from 'styled-components';
+import { blockColor, device } from '../../styles/variables';
 
-const AdminBlock = styled.div``;
-const Title = styled.div`
-  font-size: 3vw;
+const DetailWrapper = styled.div`
+  width: 100%;
+  display: flex;
+  justify-content: center;
+`;
+
+const DetailBlock = styled.div`
+  max-width: 1200px;
+  width: 70%;
+  height: 78.5vh;
+  overflow-y: auto;
+  background-color: ${blockColor};
+  border-radius: 10px;
   color: black;
-  height: 20vh;
+  @media ${device.TabletPortrait} {
+    width: 100%;
+    border-radius: 0px;
+  }
+`;
+const Icon = styled.div`
+  size: 3vw;
+  padding-top: 10px;
+  padding-right: 0.5vw;
+  cursor: pointer;
+  &:hover {
+    transform: scale(1.1);
+    transition: 0.5s;
+  }
+`;
+const Title = styled.div`
+  font-size: 2.2vw;
+  color: black;
+  height: 10vh;
   /* border: solid red; */
   display: flex; // div태그 내 text 수직, 수평정렬
   align-items: center; // div태그 내 text 수직, 수평정렬
   /* justify-content: center; // div태그 내 text 수직, 수평정렬 */
   div {
-    padding-left: 2vw;
+    padding-left: 1.2vw;
     text-align: left;
   }
 `;
 const Image = styled.div`
-  height: 69vh;
+  width: 100%;
+  height: 100%;
   color: black;
+  position: relative;
   /* border: solid red; */
   img {
     padding-top: 2.8vh;
+    padding-left: 0.5vw;
     width: 100%;
+    height: 100%;
+    object-fit: cover;
+    border-radius: 6%;
   }
 `;
+
 const Section1 = styled.div`
   padding-left: 2vw;
   margin: 0 auto;
@@ -50,11 +86,6 @@ const Section2 = styled.div`
     text-align: left;
     font-size: 1vw;
   }
-  Button {
-    position: relative;
-    top: 50%;
-    left: 46%;
-  }
 `;
 
-export { AdminBlock, Title, Image, Section1, Section2 };
+export { Icon, Title, Image, Section1, Section2, DetailWrapper, DetailBlock };

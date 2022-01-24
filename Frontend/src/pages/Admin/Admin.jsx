@@ -1,10 +1,18 @@
 import React, { useState } from 'react';
-import { AdminBlock, Title, Image, Section1, Section2 } from './Admin.style';
-import { Block } from '../../styles/variables';
-import { Button, Grid } from '@mui/material';
+import {
+  AdminBlock,
+  AdminWrapper,
+  Title,
+  Image,
+  Section1,
+  Section2,
+  Icon,
+} from './Admin.style';
+import { Grid } from '@mui/material';
 import poster from '../../components/Main/img/서강준포스터.jpg';
 import { IoIosArrowBack } from 'react-icons/io';
 import HorizonLine from '../../components/Utils/HorizontalLine';
+import SubmitButton from '../../components/Utils/SubmitButton';
 
 export default function Admin() {
   const [PosterDetail, SetPosterDetail] = useState({
@@ -22,14 +30,15 @@ export default function Admin() {
   });
   return (
     <>
-      <AdminBlock>
-        <Block>
+      <AdminWrapper>
+        <AdminBlock>
           <Grid container>
             <Grid xs={12}>
               <Title>
-                <div>
-                  <IoIosArrowBack size="50" /> {PosterDetail.이름}
-                </div>
+                <Icon>
+                  <IoIosArrowBack />
+                </Icon>
+                {PosterDetail.이름}
               </Title>
               <HorizonLine />
             </Grid>
@@ -46,7 +55,7 @@ export default function Admin() {
                   <table>
                     <tbody>
                       <tr>
-                        <td>예매 시작시간</td>
+                        <td style={{ width: '25%' }}>예매 시작시간</td>
                         <td>{PosterDetail.예매시작시간}</td>
                       </tr>
                       <tr>
@@ -75,21 +84,13 @@ export default function Admin() {
               <Grid xs={12}>
                 <Section2>
                   <div>{PosterDetail.미팅설명}</div>
-                  <Button
-                    variant="contained"
-                    sx={{
-                      width: '100px',
-                      height: '40px',
-                    }}
-                  >
-                    등록하기
-                  </Button>
+                  <SubmitButton name="등록하기"></SubmitButton>
                 </Section2>
               </Grid>
             </Grid>
           </Grid>
-        </Block>
-      </AdminBlock>
+        </AdminBlock>
+      </AdminWrapper>
     </>
   );
 }
