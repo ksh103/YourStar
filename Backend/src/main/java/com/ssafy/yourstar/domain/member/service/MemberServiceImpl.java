@@ -52,6 +52,19 @@ public class MemberServiceImpl implements  MemberService {
     }
 
     @Override
+    public boolean memberLogout(int memberId) {
+        if(memberRepository.findById(memberId).isPresent()) {
+            Member member = memberRepository.findById(memberId).get();
+
+            member.setIsLogin(false);
+            memberRepository.save(member);
+
+            return true;
+        }
+        return false;
+    }
+
+    @Override
     public Member memberRegister(MemberRegisterPostReq memberRegisterInfo) {
         Member member = new Member();
 

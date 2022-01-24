@@ -10,6 +10,8 @@ public interface MemberService {
     boolean memberLoginApprove(String memberEmail); // 회원가입 인증 여부 확인 후 로그인
     boolean memberIsLogin(String memberEmail); // 로그인 여부 체크
 
+    boolean memberLogout(int memberId); // 로그아웃
+
     Member memberPasswordInit(MemberPasswordPostReq memberPasswordPostReq); // 비밀번호 초기화
 
     Member memberRegister(MemberRegisterPostReq memberRegisterInfo); // 회원가입
