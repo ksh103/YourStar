@@ -54,6 +54,17 @@ public class MemberController {
         }
     }
 
+
+    @ApiOperation(value = "로그아웃", notes = "로그아웃 후, DB에 isLogin 0으로 반환한다.")
+    @GetMapping("/logout/{memberId}")
+    public ResponseEntity<? extends  BaseResponseBody> memberLogout (@PathVariable @ApiParam(value = "회원 인덱스 번호", required = true) int memberId) {
+        log.info("memberLogout - Call");
+
+        memberService.memberLogout(memberId);
+        return ResponseEntity.status(201).body(BaseResponseBody.of(200, "Success"));
+    }
+
+
     @ApiOperation(value = "회원가입", notes = "<strong>Email, Password, 이름, 닉네임, 성별, 휴대전화, 생일</strong>입력을 통해 회원가입 한다.")
     @PostMapping("/register")
     public ResponseEntity<? extends BaseResponseBody> memberRegister (@RequestBody @ApiParam(value = "회원가입 정보", required = true) MemberRegisterPostReq memberRegister){
@@ -62,6 +73,7 @@ public class MemberController {
         memberService.memberRegister(memberRegister);
         return ResponseEntity.status(201).body(BaseResponseBody.of(201, "Success"));
     }
+
 
     @ApiOperation(value = "회원가입 승인", notes = "<strong>이메일과 회원 고유 랜덤 코드</strong>를 통해 회원가입 인증을 한다.")
     @GetMapping("/register/approve/{memberEmail}")
@@ -73,6 +85,7 @@ public class MemberController {
         return ResponseEntity.status(200).body(BaseResponseBody.of(200, "Success"));
     }
 
+
     @ApiOperation(value = "비밀번호 초기화", notes = "<strong>Email, 이름</strong>입력을 통해 비밀번호 초기화를 한다.")
     @PostMapping
     public ResponseEntity<? extends BaseResponseBody> memberPasswordInit (@RequestBody @ApiParam(value = "이메일, 이름 입력을 통해 회원 확인 후 비밀번호 초기화", required = true) MemberPasswordPostReq memberPasswordPostReq) {
@@ -81,6 +94,7 @@ public class MemberController {
         memberService.memberPasswordInit(memberPasswordPostReq);
         return ResponseEntity.status(201).body(BaseResponseBody.of(201, "Success"));
     }
+
 
     @ApiOperation(value = "이메일 중복 체크", notes = "회원가입 시, <strong>Email</strong>중복 체크를 한다.")
     @GetMapping("/email-check/{memberEmail}")
@@ -91,6 +105,7 @@ public class MemberController {
         if(memberService.memberEmailCheck(memberEmail)) return ResponseEntity.status(200).body(BaseResponseBody.of(200, "Success"));
         else return ResponseEntity.status(401).body(BaseResponseBody.of(401, "Invalid Email"));
     }
+
 
     @ApiOperation(value = "닉네임 중복 체크", notes = "회원가입 시,<strong>닉네임</strong>중복 체크를 한다.")
     @GetMapping("/nick-check/{memberNick}")
@@ -104,8 +119,10 @@ public class MemberController {
         else return ResponseEntity.status(401).body(BaseResponseBody.of(401, "Invalid NickName"));
     }
 
+
+    @ApiOperation(value = "회원 탈퇴", notes = "token에 담은 <strong>memberId</strong> 정보를 통해 회원 탈퇴를 한다.")
     @DeleteMapping("/{memberId}")
-    public ResponseEntity<? extends BaseResponseBody> memberRemove(@PathVariable int memberId) {
+    public ResponseEntity<? extends BaseResponseBody> memberRemove(@PathVariable @ApiParam(value = "회원 인덱스 번호", required = true) int memberId) {
         log.info("memberRemove - Call");
 
         if(memberService.memberRemove(memberId)) {
