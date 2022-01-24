@@ -41,9 +41,10 @@ public class JwtTokenUtil {
                 .build();
     }
     
-    public static String getMemberLoginToken(String memberEmail, int code, String memberNick, Boolean isLogin ) {
+    public static String getMemberLoginToken(int memberId, String memberEmail, int code, String memberNick, Boolean isLogin ) {
     		Date expires = JwtTokenUtil.getTokenExpiration(expirationTime);
         return JWT.create()
+                .withClaim("memberId", memberId)
                 .withClaim("memberEmail", memberEmail)
                 .withClaim("code", code)
                 .withClaim("memberNick", memberNick)
