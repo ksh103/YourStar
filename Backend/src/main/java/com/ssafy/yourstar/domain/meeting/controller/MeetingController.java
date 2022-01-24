@@ -163,11 +163,11 @@ public class MeetingController {
 
     @ApiOperation(value = "팬이 팬미팅 내역 확인")
     @GetMapping("/fan-applicant/{memberId}")
-    public Page<Applicant> meetingApplyListByUser
+    public Page<Meeting> meetingApplyListByUser
             (@ApiParam(value = "회원 구분 번호") @PathVariable("memberId") int memberId, int page, int size) {
         log.info("meetingApplyListByUser - Call");
 
-        Page<Applicant> meetingPage = meetingService.meetingApplyListByUser(memberId, PageRequest.of(page - 1, size));
+        Page<Meeting> meetingPage = meetingService.meetingApplyListByUser(memberId, PageRequest.of(page - 1, size));
 
         return meetingPage;
     }
