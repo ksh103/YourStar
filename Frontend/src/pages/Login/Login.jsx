@@ -1,7 +1,11 @@
 import React from 'react';
 import Grid from '@mui/material/Grid';
 import { createTheme, ThemeProvider } from '@mui/material/styles';
-import { LoginSignupBlock } from '../Login/Login.style';
+import {
+  LoginSignupBlock,
+  InFormBlock,
+  ScheduleWrapper,
+} from '../Login/Login.style';
 
 import { FiveGrid, SevenGrid, LoginGrid } from '../Login/DividGrid';
 
@@ -37,8 +41,10 @@ export default function Login() {
   };
 
   return (
-    <LoginSignupBlock>
-      <LoginGrid></LoginGrid>
-    </LoginSignupBlock>
+    <ScheduleWrapper>
+      <InFormBlock>
+        <LoginGrid></LoginGrid>
+      </InFormBlock>
+    </ScheduleWrapper>
   );
 }

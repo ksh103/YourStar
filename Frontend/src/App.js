@@ -15,6 +15,8 @@ import {
 } from './pages/index';
 import Login from './pages/Login/Login';
 import GlobalStyle from './styles/global';
+import InformChange from './pages/Mypage/InformChange';
+import FindPassword from './pages/Login/FindPassword';
 
 function App() {
   return (
@@ -52,6 +54,12 @@ function App() {
           </Route>
           <Route path="/detail/:id">
             <Detail />
+          </Route>
+          <Route path="/InformChange">
+            <InformChange />
+          </Route>
+          <Route path="/FindPW">
+            <FindPassword />
           </Route>
         </Switch>
         <Footer />
