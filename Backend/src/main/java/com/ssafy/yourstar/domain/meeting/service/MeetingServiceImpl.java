@@ -5,10 +5,12 @@ import com.ssafy.yourstar.domain.meeting.db.entity.ApplicantID;
 import com.ssafy.yourstar.domain.meeting.db.entity.Meeting;
 import com.ssafy.yourstar.domain.meeting.db.repository.ApplicantRepository;
 import com.ssafy.yourstar.domain.meeting.db.repository.MeetingRepository;
+import com.ssafy.yourstar.domain.meeting.db.repository.MeetingRepositorySpp;
 import com.ssafy.yourstar.domain.meeting.request.MeetingApplyByStarPostReq;
 import com.ssafy.yourstar.domain.meeting.request.MeetingApplyByUserPostReq;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
@@ -21,6 +23,9 @@ public class MeetingServiceImpl implements MeetingService {
 
     @Autowired
     ApplicantRepository applicantRepository;
+
+    @Autowired
+    MeetingRepositorySpp meetingRepositorySpp;
 
 
     @Override
@@ -119,5 +124,10 @@ public class MeetingServiceImpl implements MeetingService {
             return true;
         }
         return false;
+    }
+
+    @Override
+    public Page<Meeting> meetingApplyListByUser(int memberId, Pageable pageable) {
+        return meetingRepositorySpp.findAllApplyMeetingByMemberId(memberId, pageable);
     }
 }
