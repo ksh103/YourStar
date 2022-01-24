@@ -1,6 +1,7 @@
 package com.ssafy.yourstar.domain.member.service;
 
 import com.ssafy.yourstar.domain.member.db.entity.Member;
+import com.ssafy.yourstar.domain.member.request.MemberModifyPostReq;
 import com.ssafy.yourstar.domain.member.request.MemberPasswordPostReq;
 import com.ssafy.yourstar.domain.member.request.MemberRegisterPostReq;
 
@@ -17,8 +18,10 @@ public interface MemberService {
     Member memberRegister(MemberRegisterPostReq memberRegisterInfo); // 회원가입
     boolean memberRegisterApprove(String memberEmail); // 회원가입 인증
 
-    boolean memberEmailCheck(String memberEmail);
-    boolean memberNickCheck(String memberNick);
+    boolean memberEmailCheck(String memberEmail); // 이메일 중복 체크
+    boolean memberNickCheck(String memberNick); // 닉네임 중복 체크
 
-    boolean memberRemove(int memberId);
+    boolean memberRemove(int memberId); // 회원 탈퇴
+
+    Member memberModify(int memberId, MemberModifyPostReq memberModifyPostReq); // 회원 정보 수정
 }

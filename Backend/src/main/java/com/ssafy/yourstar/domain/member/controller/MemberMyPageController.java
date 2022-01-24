@@ -1,5 +1,6 @@
 package com.ssafy.yourstar.domain.member.controller;
 
+import com.ssafy.yourstar.domain.member.request.MemberModifyPostReq;
 import com.ssafy.yourstar.domain.member.service.MemberService;
 import com.ssafy.yourstar.global.model.response.BaseResponseBody;
 import io.swagger.annotations.Api;
@@ -9,13 +10,12 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.crypto.password.PasswordEncoder;
-import org.springframework.web.bind.annotation.DeleteMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 @Api(value = "회원 마이페이지 API")
 @Slf4j
 @RestController
+@RequestMapping("/api/members")
 public class MemberMyPageController {
 
     @Autowired
@@ -35,4 +35,14 @@ public class MemberMyPageController {
         else return ResponseEntity.status(500).body(BaseResponseBody.of(500, "Internal Server Error"));
     }
 
+    @PutMapping("/{memberId}")
+    public ResponseEntity<? extends BaseResponseBody> memberModify(@PathVariable int memberId, @RequestBody MemberModifyPostReq memberModifyPostReq) {
+        log.info("memberModify - Call");
+
+        if(memberService.memberModify(memberId, memberModifyPostReq) != null) {
+            return ResponseEntity.status(201).body(BaseResponseBody.of(201, "Success"));
+        }else {
+            return ResponseEntity.status(404).body(BaseResponseBody.of(404, "No modifications exist."));
+        }
+    }
 }
