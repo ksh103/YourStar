@@ -1,5 +1,5 @@
 import styled from 'styled-components';
-import { pointColor } from '../../../styles/variables';
+import { pointColor, scheduleColor } from '../../../styles/variables';
 const SchduleCalendarWrapper = styled.div`
   width: 100%;
   height: 100%;
@@ -11,7 +11,7 @@ const Header = styled.div`
   display: flex;
   justify-content: center;
   align-items: center;
-  font-size: 20px;
+  font-size: 22px;
 
   & > span {
     margin: 0 50px;
@@ -36,7 +36,7 @@ const Dow = styled.div`
   width: 100%;
   height: 35px;
   text-align: center;
-  font-size: 17px;
+  font-size: 15px;
   font-weight: bold;
   color: ${props => (props.color ? props.color : 'black')};
   border-bottom: 1px solid gray;
@@ -68,15 +68,18 @@ const DayBlock = styled.div`
 `;
 
 const PlanButton = styled.span`
+  background-color: ${props => scheduleColor[props.num % 6]};
   text-align: center;
-  font-size: 15px;
+  font-size: 14px;
+  font-weight: bold;
   overflow: hidden;
   text-overflow: ellipsis;
   white-space: nowrap;
   height: 20px;
   width: 100%;
-  border-radius: 7px;
-  color: white;
+  border-radius: 15px;
+  color: black;
+
   cursor: pointer;
 `;
 export {
