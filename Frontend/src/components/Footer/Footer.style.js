@@ -5,7 +5,7 @@ const FooterBlock = styled.div`
   font-size: small;
   color: white;
   position: relative;
-  margin-bottom: 50px;
+  margin: 30px 0;
 `;
 
 export { FooterBlock };
