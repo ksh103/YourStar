@@ -6,5 +6,8 @@ export { default as Apply } from './Apply/Apply';
 export { default as FAQ } from './FAQ/FAQ';
 export { default as Mypage } from './Mypage/Mypage';
 export { default as Room } from './Room/Room';
+export { default as RoomDongJun } from './Room/DongJun/RoomDonJun';
+export { default as RoomEunSeong } from './Room/EunSeong/RoomEunSeong';
+export { default as RoomSumin } from './Room/Sumin/RoomSumin';
 export { default as Schedule } from './Schedule/Schedule';
 export { default as Detail } from './Detail/Detail';

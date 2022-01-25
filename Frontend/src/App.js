@@ -12,6 +12,9 @@ import {
   Schedule,
   Signup,
   Detail,
+  RoomDongJun,
+  RoomEunSeong,
+  RoomSumin,
 } from './pages/index';
 import Login from './pages/Login/Login';
 import GlobalStyle from './styles/global';
@@ -60,6 +63,15 @@ function App() {
           </Route>
           <Route path="/FindPW">
             <FindPassword />
+          </Route>
+          <Route path="/DongJun">
+            <RoomDongJun />
+          </Route>
+          <Route path="/EunSeong">
+            <RoomEunSeong />
+          </Route>
+          <Route path="/Sumin">
+            <RoomSumin />
           </Route>
         </Switch>
         <Footer />
