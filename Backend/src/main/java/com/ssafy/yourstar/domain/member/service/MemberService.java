@@ -17,4 +17,6 @@ public interface MemberService {
 
     boolean emailCheckMember(String memberEmail);
     boolean nickCheckMember(String memberNick);
+
+    String passwordEncode(String password);
 }

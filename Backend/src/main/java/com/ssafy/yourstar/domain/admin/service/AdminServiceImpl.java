@@ -6,6 +6,7 @@ import com.ssafy.yourstar.domain.admin.request.NewAccountRes;
 import com.ssafy.yourstar.domain.member.db.entity.ManagerGroup;
 import com.ssafy.yourstar.domain.member.db.entity.Member;
 import com.ssafy.yourstar.domain.member.db.repository.MemberRepository;
+import com.ssafy.yourstar.domain.member.service.MemberService;
 import com.ssafy.yourstar.global.util.MemberPasswordMailUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -26,8 +27,8 @@ public class AdminServiceImpl implements AdminService{
     @Autowired
     AdminRepository adminRepository;
 
-//    @Autowired
-//    PasswordEncoder passwordEncoder;
+    @Autowired
+    MemberService memberService;
 
     @Override
     public Page<Member> memberList(String code, int page, int size) {
@@ -72,8 +73,9 @@ public class AdminServiceImpl implements AdminService{
             member.setMemberEmail(email);
 
             String password = MemberPasswordMailUtil.getRandomPassword(12);
-            member.setMemberPassword(password);
-//            member.setMemberPassword(passwordEncoder.encode(password));
+//            member.setMemberPassword(password);
+
+            member.setMemberPassword(memberService.passwordEncode(password));
 
             member.setMemberName(managerRegister.getManagerCodeName() + i);
             member.setMemberNick(managerRegister.getManagerCodeName() + i);

@@ -119,4 +119,10 @@ public class MemberServiceImpl implements  MemberService {
         if(memberRepository.findMemberByMemberNick(memberNick).isPresent()) return false;
         else return true;
     }
+
+    @Override
+    public String passwordEncode(String password) {
+        return passwordEncoder.encode(password);
+    }
+
 }
