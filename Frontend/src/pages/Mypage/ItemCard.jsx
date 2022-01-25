@@ -1,10 +1,39 @@
 import React from 'react';
-import { ImageCard } from './Mypage.style';
+import { ImageCard, NonStarCard } from './Mypage.style';
+import Grid from '@mui/material/Grid';
 
-export default function ItemCard() {
+function ItemCard() {
   return (
-    <div style={{ width: '100%' }}>
+    <Grid
+      xl={3}
+      md={4}
+      sm={6}
+      sx={{
+        width: '100%',
+        marginBottom: '20px',
+        marginRight: '0px',
+      }}
+    >
       <ImageCard>아아아</ImageCard>
-    </div>
+    </Grid>
   );
 }
+
+function StarCard() {
+  return (
+    <Grid
+      xl={3}
+      md={4}
+      sm={6}
+      sx={{
+        width: '100%',
+        marginBottom: '20px',
+        marginRight: '0px',
+      }}
+    >
+      <NonStarCard>이건실패용</NonStarCard>
+    </Grid>
+  );
+}
+
+export { StarCard, ItemCard };

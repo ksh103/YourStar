@@ -5,7 +5,7 @@ import TabContext from '@mui/lab/TabContext';
 import TabList from '@mui/lab/TabList';
 import TabPanel from '@mui/lab/TabPanel';
 import Grid from '@mui/material/Grid';
-import BasicCard from './ItemCard';
+import { ItemCard } from './ItemCard';
 
 export default function LabTabs() {
   const [value, setValue] = React.useState('1');
@@ -31,9 +31,14 @@ export default function LabTabs() {
             alignItems="center"
             sx={{
               color: 'black',
+              marginTop: '15px',
             }}
           >
-            <BasicCard></BasicCard>
+            <ItemCard></ItemCard>
+            <ItemCard></ItemCard>
+            <ItemCard></ItemCard>
+            <ItemCard></ItemCard>
+            <ItemCard></ItemCard>
           </Grid>
         </TabPanel>
         <TabPanel value="2"></TabPanel>

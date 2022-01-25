@@ -22,6 +22,16 @@ export const roomColor = {
   black: { background: 'black', color: 'white' },
 };
 
+// 스케줄 일정 버튼색
+export const scheduleColor = [
+  '#D8FFD8',
+  '#D8F1FF',
+  '#FFD8FB',
+  '#FFDAD8',
+  '#EFF8BD',
+  '#E2D8FF',
+];
+
 // Media query breakpoints
 
 const size = {
@@ -59,4 +69,3 @@ export const Block = styled.div`
   @media ${device.MobileLandscape} {
   }
 `;
-

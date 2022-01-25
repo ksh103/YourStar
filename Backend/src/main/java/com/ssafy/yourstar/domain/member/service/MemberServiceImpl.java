@@ -3,6 +3,7 @@ package com.ssafy.yourstar.domain.member.service;
 import com.ssafy.yourstar.domain.member.db.entity.Member;
 import com.ssafy.yourstar.domain.member.db.repository.MemberRepository;
 import com.ssafy.yourstar.domain.member.db.repository.MemberRepositorySupport;
+import com.ssafy.yourstar.domain.member.request.MemberModifyPostReq;
 import com.ssafy.yourstar.domain.member.request.MemberPasswordPostReq;
 import com.ssafy.yourstar.domain.member.request.MemberRegisterPostReq;
 import com.ssafy.yourstar.global.util.MemberPasswordMailUtil;
@@ -10,8 +11,6 @@ import com.ssafy.yourstar.global.util.MemberRegisterMailUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
-
-import java.text.SimpleDateFormat;
 
 @Service
 public class MemberServiceImpl implements  MemberService {
@@ -27,25 +26,36 @@ public class MemberServiceImpl implements  MemberService {
 
 
     @Override
-    public Member loginMemberByMemberEmail(String memberEmail) {
+    public Member memberLoginByMemberEmail(String memberEmail) {
         Member member = memberRepositorySupport.memberLoginByMemberEmail(memberEmail).get();
         return member;
     }
 
     @Override
-    public boolean loginApproveMember(String memberEmail) {
+    public boolean memberLoginApprove(String memberEmail) {
         if(memberRepository.findMemberByMemberEmailLikeAndIsApproveTrue(memberEmail).isPresent()) {
             return true;
-        }
-        return false;
+        }else return false;
     }
 
     @Override
-    public boolean loginIsLoginMember(String memberEmail) {
+    public boolean memberIsLogin(String memberEmail) {
         if(memberRepository.findMemberByMemberEmail(memberEmail).isPresent()) {
             Member member = memberRepository.findMemberByMemberEmail(memberEmail).get();
 
             member.setIsLogin(true);
+            memberRepository.save(member);
+
+            return true;
+        }else return false;
+    }
+
+    @Override
+    public boolean memberLogout(int memberId) {
+        if(memberRepository.findById(memberId).isPresent()) {
+            Member member = memberRepository.findById(memberId).get();
+
+            member.setIsLogin(false);
             memberRepository.save(member);
 
             return true;
@@ -54,10 +64,11 @@ public class MemberServiceImpl implements  MemberService {
     }
 
     @Override
-    public Member registerMember(MemberRegisterPostReq memberRegisterInfo) {
+    public Member memberRegister(MemberRegisterPostReq memberRegisterInfo) {
         Member member = new Member();
 
-        SimpleDateFormat newDtFormat = new SimpleDateFormat("yyyy-MM-dd");
+        StringBuilder sb = new StringBuilder();
+        sb.append(memberRegisterInfo.getMemberBirth()).insert(4, "-").insert(7, "-");
 
         member.setCode(3); // 회원가입은 일반회원만 가능하므로 3으로 default
         member.setManagerCode(0); // 회원가입은 일반회원만 가능하므로 소속이 없음 --> 이 부분은 개선해야할듯. (테스트)
@@ -68,7 +79,7 @@ public class MemberServiceImpl implements  MemberService {
         member.setMemberNick(memberRegisterInfo.getMemberNick());
         member.setMemberPhone(memberRegisterInfo.getMemberPhone());
         member.setMemberAddress(memberRegisterInfo.getMemberAddress());
-        member.setMemberBirth(memberRegisterInfo.getMemberBirth());
+        member.setMemberBirth(sb.toString());
         member.setMemberGender(memberRegisterInfo.getMemberGender());
 
         member.setIsLogin(false); // 회원가입이라 로그인 안 한 상태
@@ -79,7 +90,7 @@ public class MemberServiceImpl implements  MemberService {
     }
 
     @Override
-    public Member passwordInitMember(MemberPasswordPostReq memberPasswordPostReq) {
+    public Member memberPasswordInit(MemberPasswordPostReq memberPasswordPostReq) {
         Member member = new Member();
 
         if(memberRepository.findMemberByMemberEmailAndMemberName(memberPasswordPostReq.getMemberEmail(), memberPasswordPostReq.getMemberName()).isPresent()) {
@@ -96,7 +107,7 @@ public class MemberServiceImpl implements  MemberService {
     }
 
     @Override
-    public boolean registerApproveMember(String memberEmail) {
+    public boolean memberRegisterApprove(String memberEmail) {
         if(memberRepository.findMemberByMemberEmail(memberEmail).isPresent()) {
             Member member = memberRepository.findMemberByMemberEmail(memberEmail).get();
 
@@ -104,25 +115,46 @@ public class MemberServiceImpl implements  MemberService {
             memberRepository.save(member);
 
             return true;
-        }
-        return false;
+        }else return false;
     }
 
     @Override
-    public boolean emailCheckMember(String memberEmail) {
+    public boolean memberEmailCheck(String memberEmail) {
         if(memberRepository.findMemberByMemberEmail(memberEmail).isPresent()) return false;
         else return true;
     }
 
     @Override
-    public boolean nickCheckMember(String memberNick) {
+    public boolean memberNickCheck(String memberNick) {
         if(memberRepository.findMemberByMemberNick(memberNick).isPresent()) return false;
         else return true;
+    }
+
+    public boolean memberRemove(int memberId) {
+        if(memberRepository.findById(memberId).isPresent()) {
+            memberRepository.deleteById(memberId);
+            return true;
+        } else return false;
+    }
+
+    @Override
+    public Member memberModify(int memberId, MemberModifyPostReq memberModifyPostReq) {
+        if(memberRepository.findById(memberId).isPresent()) {
+            Member member = new Member();
+
+            member = memberRepository.findById(memberId).get();
+
+            member.setMemberNick(memberModifyPostReq.getMemberNick());
+            member.setMemberPassword(passwordEncoder.encode(memberModifyPostReq.getMemberPassword()));
+            member.setMemberPhone(memberModifyPostReq.getMemberPhone());
+            member.setMemberAddress(memberModifyPostReq.getMemberAddress());
+
+            return memberRepository.save(member);
+        }else return null;
     }
 
     @Override
     public String passwordEncode(String password) {
         return passwordEncoder.encode(password);
     }
-
 }

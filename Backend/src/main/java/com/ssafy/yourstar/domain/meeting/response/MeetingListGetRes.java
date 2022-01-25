@@ -13,14 +13,14 @@ import org.springframework.data.domain.Page;
 @ApiModel(value = "MeetingListGetRes", description = "팬미팅 리스트 응답 정보")
 public class MeetingListGetRes extends BaseResponseBody {
     @ApiModelProperty(value = "페이징 처리된 컨텐츠")
-    Page<Meeting> meetingPage;
+    Page<Meeting> meetings;
 
     // 페이징한 컨텐츠 정보와 statusCode, message를 모아서 리턴하는 응답
     public static MeetingListGetRes of(Integer statusCode, String message, Page<Meeting> meetingPage) {
         MeetingListGetRes res = new MeetingListGetRes();
         res.setStatusCode(statusCode);
         res.setMessage(message);
-        res.setMeetingPage(meetingPage);
+        res.setMeetings(meetingPage);
 
         return res;
     }

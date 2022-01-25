@@ -1,8 +1,10 @@
 package com.ssafy.yourstar.domain.meeting.controller;
 
+import com.ssafy.yourstar.domain.meeting.db.entity.Applicant;
 import com.ssafy.yourstar.domain.meeting.db.entity.Meeting;
 import com.ssafy.yourstar.domain.meeting.request.MeetingApplyByStarPostReq;
 import com.ssafy.yourstar.domain.meeting.request.MeetingApplyByUserPostReq;
+import com.ssafy.yourstar.domain.meeting.response.ApplicantDetailGetRes;
 import com.ssafy.yourstar.domain.meeting.response.MeetingDetailGetRes;
 import com.ssafy.yourstar.domain.meeting.response.MeetingListGetRes;
 import com.ssafy.yourstar.domain.meeting.service.MeetingService;
@@ -161,12 +163,44 @@ public class MeetingController {
 
     @ApiOperation(value = "팬이 팬미팅 내역 확인")
     @GetMapping("/fan-applicant/{memberId}")
-    public ResponseEntity<MeetingListGetRes> meetingApplyListByUser
+    public Page<Meeting> meetingApplyListByUser
             (@ApiParam(value = "회원 구분 번호") @PathVariable("memberId") int memberId, int page, int size) {
         log.info("meetingApplyListByUser - Call");
 
         Page<Meeting> meetingPage = meetingService.meetingApplyListByUser(memberId, PageRequest.of(page - 1, size));
 
-        return ResponseEntity.status(200).body(MeetingListGetRes.of(200, "Success", meetingPage));
+        return meetingPage;
+    }
+
+    @ApiOperation(value = "팬미팅에 참여한 팬의 경고 횟수 확인")
+    @GetMapping("/warning/{memberId}/{meetingId}")
+    public ResponseEntity<ApplicantDetailGetRes> applicantDetail
+            (@ApiParam(value = "회원 구분 번호") @PathVariable("memberId") int memberId,
+            @ApiParam(value = "팬미팅 번호") @PathVariable("meetingId") int meetingId) {
+        log.info("applicantDetail - Call");
+
+        Applicant applicant = meetingService.applicantDetail(memberId, meetingId);
+
+        if (applicant == null) {
+            log.error("applicantDetail - This MemberId or MeetingId doesn't exist");
+            return ResponseEntity.status(400).body(ApplicantDetailGetRes.of(400, "This MemberId or MeetingId doesn't exist", null));
+        } else {
+            return ResponseEntity.status(200).body(ApplicantDetailGetRes.of(200, "Success", applicant));
+        }
+    }
+
+    @ApiOperation(value = "팬미팅에 참여한 팬에게 경고 주기")
+    @PutMapping("/warning/{memberId}/{meetingId}")
+    public ResponseEntity<BaseResponseBody> meetingGiveWarnToUser
+            (@ApiParam(value = "회원 구분 번호") @PathVariable("memberId") int memberId,
+             @ApiParam(value = "팬미팅 번호") @PathVariable("meetingId") int meetingId) {
+        log.info("meetingGiveWarnToUser - Call");
+
+        if (meetingService.meetingGiveWarnToUser(memberId, meetingId)) {
+            return ResponseEntity.status(200).body(BaseResponseBody.of(200, "Success"));
+        } else {
+            log.error("meetingGiveWarnToUser - This MeetingId or MemberId doesn't exist");
+            return ResponseEntity.status(400).body(BaseResponseBody.of(400, "This MeetingId or MemberId doesn't exist"));
+        }
     }
 }
