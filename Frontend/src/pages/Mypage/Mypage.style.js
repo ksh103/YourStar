@@ -101,16 +101,6 @@ const InFormBlock = styled.div`
   border-radius: 10px;
   color: black;
   overflow-y: auto;
-  &::-webkit-scrollbar {
-    width: 8px;
-    height: 8px;
-    border-radius: 6px;
-    background: rgba(255, 255, 255, 0.4);
-  }
-  &::-webkit-scrollbar-thumb {
-    background: rgba(0, 0, 0, 0.3);
-    border-radius: 6px;
-  }
   @media ${device.TabletPortrait} {
     width: 100%;
     border-radius: 0px;
