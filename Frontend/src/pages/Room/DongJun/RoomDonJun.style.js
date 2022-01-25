@@ -18,14 +18,6 @@ const QuestionDiv = styled.div`
   box-shadow: 3px 3px gray;
 `;
 
-const QuestionMyScreen = styled.div`
-  width: 285px;
-  height: 220px;
-  background-color: white;
-  border-radius: 35px;
-  box-shadow: 3px 3px gray;
-`;
-
 const QuestionOthersScreen = styled.div`
   width: 980px;
   height: 220px;
@@ -33,23 +25,3 @@ const QuestionOthersScreen = styled.div`
   border-radius: 35px;
   box-shadow: 3px 3px gray;
 `;
-
-const ChatInput = styled.input`
-  border-radius: 20px;
-  max-width : 220px
-  width: 220px;
-  height: 50px;
-  background-color: #e2d8ff;
-  border: none;
-  position: absolute;
-  top: 67.5%;
-  left: 7.5%;
-`;
-
-export {
-  QuestionMain,
-  QuestionDiv,
-  QuestionMyScreen,
-  QuestionOthersScreen,
-  ChatInput,
-};
