@@ -75,8 +75,8 @@ public class AdminServiceImpl implements AdminService{
             String password = MemberPasswordMailUtil.getRandomPassword(12);
             member.setMemberPassword(memberService.passwordEncode(password));
 
-            member.setMemberName(managerRegister.getManagerCodeName() + i);
-            member.setMemberNick(managerRegister.getManagerCodeName() + i);
+            member.setMemberName(managerRegister.getManagerCodeName() + " 관계자" + i);
+            member.setMemberNick(managerRegister.getManagerCodeName() + " 관계자" + i);
 
             member.setIsLogin(false); // 회원가입이라 로그인 안 한 상태
             member.setIsApprove(true); // 회원가입 승인
