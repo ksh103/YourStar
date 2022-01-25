@@ -40,13 +40,14 @@ public class QnaQuestion {
     LocalDateTime questionRegDt;
 
     // QNA 답변 테이블과 매핑
-    @OneToOne(mappedBy = "questionId")
+    @OneToOne(mappedBy = "questionId", cascade = CascadeType.ALL)
     @JsonManagedReference
     private QnaAnswer qnaAnswer;
 
     // 회원 테이블과 매핑
     @ManyToOne
-    @JoinColumn(name = "member_id")
+    @JoinColumn(name = "member_id", updatable = false, insertable = false)
     @JsonBackReference
     private Member member;
+
 }

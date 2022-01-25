@@ -24,4 +24,6 @@ public interface MemberService {
     boolean memberRemove(int memberId); // 회원 탈퇴
 
     Member memberModify(int memberId, MemberModifyPostReq memberModifyPostReq); // 회원 정보 수정
+
+    String passwordEncode(String password);
 }

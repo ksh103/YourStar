@@ -130,7 +130,6 @@ public class MemberServiceImpl implements  MemberService {
         else return true;
     }
 
-    @Override
     public boolean memberRemove(int memberId) {
         if(memberRepository.findById(memberId).isPresent()) {
             memberRepository.deleteById(memberId);
@@ -152,5 +151,10 @@ public class MemberServiceImpl implements  MemberService {
 
             return memberRepository.save(member);
         }else return null;
+    }
+
+    @Override
+    public String passwordEncode(String password) {
+        return passwordEncoder.encode(password);
     }
 }
