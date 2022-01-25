@@ -33,9 +33,9 @@ public class AdminServiceImpl implements AdminService{
     @Override
     public Page<Member> memberList(String code, int page, int size) {
         PageRequest pageRequest = PageRequest.of(page - 1, size, Sort.by("memberId").descending());
-        if (code.equals("0")) {
+        if (code.equals("0")) { // 전체 조회
             return memberRepository.findAll(pageRequest);
-        } else {
+        } else {    // 회원 코드별로 조회 (2 - 관계자, 3 - 일반회원)
             int Intcode = Integer.parseInt(code);
             return memberRepository.findAllByCode(Intcode, pageRequest);
         }
@@ -73,8 +73,6 @@ public class AdminServiceImpl implements AdminService{
             member.setMemberEmail(email);
 
             String password = MemberPasswordMailUtil.getRandomPassword(12);
-//            member.setMemberPassword(password);
-
             member.setMemberPassword(memberService.passwordEncode(password));
 
             member.setMemberName(managerRegister.getManagerCodeName() + i);
@@ -84,7 +82,6 @@ public class AdminServiceImpl implements AdminService{
             member.setIsApprove(true); // 회원가입 승인
 
             memberRepository.save(member);
-
             NewAccountRes newAccountRes = new NewAccountRes(email, password);
 
             accounts.add(newAccountRes);
