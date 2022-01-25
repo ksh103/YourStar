@@ -14,7 +14,6 @@ import Button from '@mui/material/Button';
 import { createTheme, ThemeProvider } from '@mui/material/styles';
 import LabTabs from './MypageTab.jsx';
 import StarLabTabs from './StarMypageTab.jsx';
-import './style.css';
 import { FaUserAstronaut } from 'react-icons/fa';
 import { BsFillGearFill, BsFillStarFill } from 'react-icons/bs';
 

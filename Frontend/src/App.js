@@ -23,7 +23,6 @@ function App() {
     <>
       <GlobalStyle />
       <BrowserRouter>
-        <Navbar />
         <Switch>
           <Route exact path="/">
             <Main />
@@ -62,7 +61,6 @@ function App() {
             <FindPassword />
           </Route>
         </Switch>
-        <Footer />
       </BrowserRouter>
     </>
   );
