@@ -1,6 +1,5 @@
 package com.ssafy.yourstar.domain.admin.service;
 
-import com.fasterxml.jackson.annotation.JsonCreator;
 import com.ssafy.yourstar.domain.admin.db.repository.AdminRepository;
 import com.ssafy.yourstar.domain.admin.request.ManagerRegisterPostReq;
 import com.ssafy.yourstar.domain.admin.request.NewAccountRes;
@@ -12,6 +11,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
@@ -26,6 +26,8 @@ public class AdminServiceImpl implements AdminService{
     @Autowired
     AdminRepository adminRepository;
 
+//    @Autowired
+//    PasswordEncoder passwordEncoder;
 
     @Override
     public Page<Member> memberList(String code, int page, int size) {
