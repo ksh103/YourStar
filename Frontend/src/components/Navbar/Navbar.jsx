@@ -17,7 +17,6 @@ import NavbarSub from './NavbarSub';
 import { MdMenu, MdStar, MdPerson, MdManageAccounts } from 'react-icons/md';
 export default function Navbar() {
   const [open, setOpen] = useState(false);
-  const role = 1;
   const name = '지수민님';
   const toggleDrawer = open => event => {
     if (

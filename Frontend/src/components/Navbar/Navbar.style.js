@@ -66,6 +66,7 @@ const NavbarWrapper = styled.div`
   @media ${device.TabletPortrait} {
     padding-bottom: 0px;
   }
+  border: 1px solid red;
 `;
 
 export {

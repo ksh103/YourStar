@@ -10,8 +10,6 @@ const AdminWrapper = styled.div`
 const AdminBlock = styled.div`
   max-width: 1200px;
   width: 70%;
-  height: 78.5vh;
-  overflow-y: auto;
   background-color: ${blockColor};
   border-radius: 10px;
   color: black;

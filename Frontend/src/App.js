@@ -26,7 +26,6 @@ function App() {
     <>
       <GlobalStyle />
       <BrowserRouter>
-        <Navbar />
         <Switch>
           <Route exact path="/">
             <Main />
@@ -74,7 +73,6 @@ function App() {
             <RoomSumin />
           </Route>
         </Switch>
-        <Footer />
       </BrowserRouter>
     </>
   );
