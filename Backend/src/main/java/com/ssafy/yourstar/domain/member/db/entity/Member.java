@@ -3,16 +3,12 @@ package com.ssafy.yourstar.domain.member.db.entity;
 import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
-import com.ssafy.yourstar.domain.qna.db.entity.QnaQuestion;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.Getter;
 import lombok.Setter;
 
 import javax.persistence.*;
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.List;
 
 @Entity
 @Getter
@@ -82,8 +78,4 @@ public class Member {
     @JoinColumn(name = "manager_code", updatable = false, insertable = false)
     @JsonBackReference
     private ManagerGroup managerGroup;
-
-   // QNA - question 매핑
-    @OneToMany(mappedBy = "member", cascade = CascadeType.ALL)
-    private List<QnaQuestion> qnaQuestion = new ArrayList<>();
 }
