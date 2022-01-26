@@ -1,6 +1,7 @@
 import React from 'react';
 import styled from 'styled-components';
-import DefaultUserScreen from '../CommonComponents/MainItems/DefaultUserScreen';
+import QuestionMainScreen from '../../../components/room/CommonComponents/MainItems/Game/QuestionMainScreen';
+import SubStickBar from '../../../components/room/CommonComponents/BottomItems/QnAstick/SubStickBar';
 import LongStick from '../CommonComponents/BottomItems/LongStick';
 // 포지션작업
 const BackgroundDiv = styled.div`
@@ -9,10 +10,11 @@ const BackgroundDiv = styled.div`
   background-color: #e2d8ff;
 `;
 
-export default function Admin() {
+export default function StarQnA() {
   return (
     <BackgroundDiv>
-      <DefaultUserScreen></DefaultUserScreen>
+      <QuestionMainScreen></QuestionMainScreen>
+      <SubStickBar></SubStickBar>
       <LongStick></LongStick>
     </BackgroundDiv>
   );

@@ -1,59 +1,21 @@
-import React from 'react';
-import styled from 'styled-components';
-import MyScreen from '../../../components/room/CommonComponents/MainItems/MyScreen/MyScreen';
-import MiddleChatting from '../../../components/room/CommonComponents/RightSideItems/Chatting/MiddleChatting';
-import OXUserScreen from '../../../components/room/CommonComponents/MainItems/Game/OXUserScreen';
-// 질문화면
+// import React from 'react';
+// import styled from 'styled-components';
+// import UserOXGame from '../../../components/room/Game/OXGame/UserOXGame';
+// import QnAList from '../../../components/room/QnA/QnAList';
+// import StarQnA from '../../../components/room/QnA/StarQnA';
+// import StarOXGame from '../../../components/room/Game/OXGame/StarOXGame';
+// import UserRandom from '../../../components/room/Random/UserRandom';
+// import UserBasic from '../../../components/room/UserBasic/UserBasic';
+// import StarRandom from '../../../components/room/Random/StarRandom';
+// import Admin from '../../../components/room/Admin/Admin';
+// import AdminGrid from '../../../components/room/Admin/AdminGrid';
+// import UserConsonantGameResult from '../../../components/room/Game/ConsonantGame/UserConsonantGameResult';
+// import UserConsonantGameStart from '../../../components/room/Game/ConsonantGame/UserConsonantGameStart';
+// import UserQnA from '../../../components/room/QnA/UserQnA';
+// import Concert from '../../../components/room/Concert/Concert';
 
-// 포지션작업
-const BackgroundDiv = styled.div`
-  width: 100%;
-  height: 100%;
-  background-color: #e2d8ff;
-`;
+// // 포지션작업
 
-const ChatDiv = styled.div`
-  position: absolute;
-  top: 4.5%;
-  right: 8%;
-`;
-
-const MainDiv = styled.div`
-  position: absolute;
-  top: 4.5%;
-  left: 8%;
-`;
-
-const MyScreenDiv = styled.div`
-  position: absolute;
-  top: 74%;
-  left: 8%;
-`;
-
-const StickBarDiv = styled.div`
-  position: absolute;
-  top: 65.5%;
-  left: 8%;
-`;
-
-const OtherPersonDiv = styled.div`
-  position: absolute;
-  top: 74%;
-  right: 8%;
-`;
-
-const RandomMainDiv = styled.div`
-  position: absolute;
-  top: 4.5%;
-  left: 8%;
-`;
-
-export default function RoomDonJun() {
-  return (
-    <BackgroundDiv>
-      <MyScreen></MyScreen>
-      <MiddleChatting></MiddleChatting>
-      <OXUserScreen></OXUserScreen>
-    </BackgroundDiv>
-  );
-}
+// export default function RoomDonJun() {
+//   return <Concert></Concert>;
+// }

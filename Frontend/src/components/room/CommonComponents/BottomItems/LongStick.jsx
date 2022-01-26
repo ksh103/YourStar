@@ -1,28 +1,29 @@
 import React from 'react';
 import styled from 'styled-components';
-import OtherScreenAngle from '../OtherScreen/OtherScreenAngle';
-import { MainDiv } from '../Main.style';
-
-const StarScreen = styled.div`
-  overflow: auto;
-  position: relative;
-  width: 60.041vw;
-  height: 82vh;
+import OtherScreenAngle from '../MainItems/OtherScreen/OtherScreenAngle';
+import { OtherPersonDiv } from '../MainItems/Main.style';
+const OtherPersonSc = styled.div`
+  max-width: 83.541vw;
+  width: 83.541vw;
+  height: 22.4719vh;
   background-color: white;
   border-radius: 3.0643vh;
   box-shadow: 0.306vh 0.306vh gray;
+  overflow-x: auto;
+  white-space: nowrap;
+  margin: 0 0;
 `;
 
 const PerScPosition = styled.div`
   position: relative;
-  top: 2%;
-  left: 4%;
+  top: 4.5%;
+  left: 3%;
 `;
 
-export default function StarChosungScreen() {
+export default function LongStick() {
   return (
-    <MainDiv>
-      <StarScreen>
+    <OtherPersonDiv>
+      <OtherPersonSc>
         <PerScPosition>
           <OtherScreenAngle></OtherScreenAngle>
           <OtherScreenAngle></OtherScreenAngle>
@@ -36,13 +37,8 @@ export default function StarChosungScreen() {
           <OtherScreenAngle></OtherScreenAngle>
           <OtherScreenAngle></OtherScreenAngle>
           <OtherScreenAngle></OtherScreenAngle>
-          <OtherScreenAngle></OtherScreenAngle>
-          <OtherScreenAngle></OtherScreenAngle>
-          <OtherScreenAngle></OtherScreenAngle>
-          <OtherScreenAngle></OtherScreenAngle>
-          <OtherScreenAngle></OtherScreenAngle>
         </PerScPosition>
-      </StarScreen>
-    </MainDiv>
+      </OtherPersonSc>
+    </OtherPersonDiv>
   );
 }

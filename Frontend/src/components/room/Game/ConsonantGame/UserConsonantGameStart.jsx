@@ -1,8 +1,8 @@
 import React from 'react';
 import styled from 'styled-components';
-import MyScreen from '../CommonComponents/MainItems/MyScreens/MyScreen';
-import OtherPersonScreen from '../CommonComponents/MainItems/OtherScreen/OtherPersonScreen';
-import DefaultUserScreen from '../CommonComponents/MainItems/DefaultUserScreen';
+import DefaultUserScreen from '../../CommonComponents/MainItems/DefaultUserScreen';
+import MyScreen from '../../CommonComponents/MainItems/MyScreens/MyScreen';
+import OtherPersonScreen from '../../CommonComponents/MainItems/OtherScreen/OtherPersonScreen';
 // 포지션작업
 const BackgroundDiv = styled.div`
   width: 100%;
@@ -10,7 +10,7 @@ const BackgroundDiv = styled.div`
   background-color: #e2d8ff;
 `;
 
-export default function UserBasic() {
+export default function UserConsonantGameStart() {
   return (
     <BackgroundDiv>
       <DefaultUserScreen></DefaultUserScreen>

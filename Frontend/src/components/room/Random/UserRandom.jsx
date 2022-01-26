@@ -1,8 +1,8 @@
 import React from 'react';
 import styled from 'styled-components';
+import RandomChoiceMain from '../CommonComponents/MainItems/Game/RandomChoiceMain';
 import MyScreen from '../CommonComponents/MainItems/MyScreens/MyScreen';
 import OtherPersonScreen from '../CommonComponents/MainItems/OtherScreen/OtherPersonScreen';
-import DefaultUserScreen from '../CommonComponents/MainItems/DefaultUserScreen';
 // 포지션작업
 const BackgroundDiv = styled.div`
   width: 100%;
@@ -10,10 +10,10 @@ const BackgroundDiv = styled.div`
   background-color: #e2d8ff;
 `;
 
-export default function UserBasic() {
+export default function UserRandom() {
   return (
     <BackgroundDiv>
-      <DefaultUserScreen></DefaultUserScreen>
+      <RandomChoiceMain></RandomChoiceMain>
       <MyScreen></MyScreen>
       <OtherPersonScreen></OtherPersonScreen>
     </BackgroundDiv>
