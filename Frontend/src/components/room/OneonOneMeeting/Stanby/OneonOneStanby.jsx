@@ -1,6 +1,5 @@
 import React from 'react';
 import { OneonOneDisplayBox } from './OneonOneStanby.style';
-import Chatting from '../../Chatting/Chatting';
 // import { WaitingTimeBox } from './OneonOneStanby.style';
 import { StanbySelfCamBox } from './OneonOneStanby.style';
 import { StanbyChattingBox } from './OneonOneStanby.style';
