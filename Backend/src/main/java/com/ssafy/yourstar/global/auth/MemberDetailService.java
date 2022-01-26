@@ -20,7 +20,7 @@ public class MemberDetailService implements UserDetailsService{
 	
     @Override
     public UserDetails loadUserByUsername(String memberName) throws UsernameNotFoundException {
-    		Member member = memberService.memberLoginByMemberEmail(memberName);
+    		Member member = memberService.memberDetail(memberName);
     		if(member != null) {
 				List<String> roles = new ArrayList<>();
 				if (member.getCode() == 1) {

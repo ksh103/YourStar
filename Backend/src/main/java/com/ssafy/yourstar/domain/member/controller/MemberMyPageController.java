@@ -37,7 +37,7 @@ public class MemberMyPageController {
 
         MemberDetails memberDetails = (MemberDetails) authentication.getDetails();
 
-        return memberService.memberLoginByMemberEmail(memberDetails.getUsername());
+        return memberService.memberDetail(memberDetails.getUsername());
     }
 
     @ApiOperation(value = "회원 탈퇴", notes = "token에 담은 <strong>memberId</strong> 정보를 통해 회원 탈퇴를 한다.")

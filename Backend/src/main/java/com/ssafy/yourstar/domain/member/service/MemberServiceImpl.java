@@ -2,7 +2,6 @@ package com.ssafy.yourstar.domain.member.service;
 
 import com.ssafy.yourstar.domain.member.db.entity.Member;
 import com.ssafy.yourstar.domain.member.db.repository.MemberRepository;
-import com.ssafy.yourstar.domain.member.db.repository.MemberRepositorySupport;
 import com.ssafy.yourstar.domain.member.request.MemberModifyPostReq;
 import com.ssafy.yourstar.domain.member.request.MemberPasswordPostReq;
 import com.ssafy.yourstar.domain.member.request.MemberRegisterPostReq;
@@ -19,15 +18,12 @@ public class MemberServiceImpl implements  MemberService {
     private MemberRepository memberRepository;
 
     @Autowired
-    private MemberRepositorySupport memberRepositorySupport;
-
-    @Autowired
     PasswordEncoder passwordEncoder;
 
 
     @Override
-    public Member memberLoginByMemberEmail(String memberEmail) {
-        Member member = memberRepositorySupport.memberLoginByMemberEmail(memberEmail).get();
+    public Member memberDetail(String memberEmail) {
+        Member member = memberRepository.findMemberByMemberEmail(memberEmail).get();
         return member;
     }
 

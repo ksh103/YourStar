@@ -39,7 +39,7 @@ public class MemberController {
         String memberPassword = memberLoginInfo.getMemberPassword();
 
         if(memberService.memberLoginApprove(memberEmail)) {
-            Member member = memberService.memberLoginByMemberEmail(memberEmail);
+            Member member = memberService.memberDetail(memberEmail);
 
             if(passwordEncoder.matches(memberPassword, member.getMemberPassword())){
 
