@@ -5,6 +5,11 @@ import styled from 'styled-components';
 import MyScreen from './MyScreen';
 import SubStickBar from './SubStickBar';
 import OtherPersonScreen from './OtherPersonScreen';
+import RandomChoiceMain from './RandomChoiceMain';
+import UserChosungScreen from './UserChosungScreen';
+import StarChosungScreen from './StarChosungScreen';
+import OXUserScreen from './OXUserScreen';
+import EmoziBar from './EmoziBar';
 // 질문화면
 
 // 포지션작업
@@ -40,28 +45,38 @@ const StickBarDiv = styled.div`
 
 const OtherPersonDiv = styled.div`
   position: absolute;
-  top 74%;
-  right: 8%
+  top: 74%;
+  right: 8%;
+`;
+
+const RandomMainDiv = styled.div`
+  position: absolute;
+  top: 4.5%;
+  left: 8%;
 `;
 
 export default function RoomDonJun() {
   return (
     <BackgroundDiv>
-      <MainDiv>
+      {/* <MainDiv>
         <QuestionMainScreen></QuestionMainScreen>
-      </MainDiv>
-      <ChatDiv>
+      </MainDiv> */}
+      <RandomMainDiv>
+        <OXUserScreen></OXUserScreen>
+      </RandomMainDiv>
+      {/* <ChatDiv>
         <QuestionChat></QuestionChat>
-      </ChatDiv>
-      <MyScreenDiv>
+      </ChatDiv> */}
+      {/* <MyScreenDiv>
         <MyScreen></MyScreen>
-      </MyScreenDiv>
-      <StickBarDiv>
+      </MyScreenDiv> */}
+      {/* <StickBarDiv>
         <SubStickBar></SubStickBar>
-      </StickBarDiv>
-      <OtherPersonDiv>
+      </StickBarDiv> */}
+      {/* <OtherPersonDiv>
         <OtherPersonScreen></OtherPersonScreen>
-      </OtherPersonDiv>
+      </OtherPersonDiv> */}
+      <EmoziBar></EmoziBar>
     </BackgroundDiv>
   );
 }
