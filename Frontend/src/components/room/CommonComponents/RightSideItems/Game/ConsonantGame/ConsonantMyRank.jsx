@@ -1,6 +1,6 @@
 import React from 'react';
 import styled from 'styled-components';
-import { HalfSideDiv1, SmallBox } from '../../../Chatting/Chatting.style';
+import { HalfSideDiv1, SmallBox } from '../../../../Chatting/Chatting.style';
 
 const RankBox = styled.div`
   position: absolute;

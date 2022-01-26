@@ -1,5 +1,5 @@
 import React from 'react';
-import { HalfSideDiv1, SmallBox } from '../../Chatting/Chatting.style';
+import { HalfSideDiv1, SmallBox } from '../../../Chatting/Chatting.style';
 import styled from 'styled-components';
 
 const ScheduleListWrapper = styled.div`
