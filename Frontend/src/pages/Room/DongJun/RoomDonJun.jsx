@@ -1,15 +1,8 @@
 import React from 'react';
-import QuestionChat from './QuestionChat';
-import QuestionMainScreen from './QuestionMainScreen';
 import styled from 'styled-components';
-import MyScreen from '../../../components/room/CommonComponents/MainItems/MyScreen';
-import SubStickBar from '../../../components/room/CommonComponents/BottomItems/SubStickBar';
-import OtherPersonScreen from './OtherPersonScreen';
-import RandomChoiceMain from './RandomChoiceMain';
-import UserChosungScreen from './UserChosungScreen';
-import StarChosungScreen from './StarChosungScreen';
-import OXUserScreen from './OXUserScreen';
-import EmoziBar from './EmoziBar';
+import MyScreen from '../../../components/room/CommonComponents/MainItems/MyScreen/MyScreen';
+import MiddleChatting from '../../../components/room/CommonComponents/RightSideItems/Chatting/MiddleChatting';
+import OXUserScreen from '../../../components/room/CommonComponents/MainItems/Game/OXUserScreen';
 // 질문화면
 
 // 포지션작업
@@ -58,25 +51,9 @@ const RandomMainDiv = styled.div`
 export default function RoomDonJun() {
   return (
     <BackgroundDiv>
-      {/* <MainDiv>
-        <QuestionMainScreen></QuestionMainScreen>
-      </MainDiv> */}
-      {/* <RandomMainDiv>
-        <OXUserScreen></OXUserScreen>
-      </RandomMainDiv> */}
-      {/* <ChatDiv>
-        <QuestionChat></QuestionChat>
-      </ChatDiv> */}
-      {/* <MyScreenDiv>
-        <MyScreen></MyScreen>
-      </MyScreenDiv> */}
-      {/* <StickBarDiv>
-        <SubStickBar></SubStickBar>
-      </StickBarDiv> */}
-      {/* <OtherPersonDiv>
-        <OtherPersonScreen></OtherPersonScreen>
-      </OtherPersonDiv> */}
-      {/* <EmoziBar></EmoziBar> */}
+      <MyScreen></MyScreen>
+      <MiddleChatting></MiddleChatting>
+      <OXUserScreen></OXUserScreen>
     </BackgroundDiv>
   );
 }

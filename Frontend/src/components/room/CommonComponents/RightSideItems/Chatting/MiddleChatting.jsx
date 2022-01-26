@@ -7,7 +7,6 @@ import {
   ThridSideDiv2,
   ThridSideDiv3,
 } from './Chatting.style';
-import { WaitingTimeWrapper } from '../OneonOneMeeting/Stanby/OneonOneStanby.style';
 
 export default function MiddleChatting() {
   return (

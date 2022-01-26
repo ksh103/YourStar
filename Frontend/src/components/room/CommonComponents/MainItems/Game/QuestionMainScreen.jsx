@@ -1,6 +1,6 @@
 import React from 'react';
 import styled from 'styled-components';
-
+import { MainDiv } from '../Main.style';
 // 51 ->
 const QuestionMain = styled.div`
   position: relative;
@@ -12,5 +12,9 @@ const QuestionMain = styled.div`
 `;
 
 export default function QuestionMainScreen() {
-  return <QuestionMain></QuestionMain>;
+  return (
+    <MainDiv>
+      <QuestionMain></QuestionMain>
+    </MainDiv>
+  );
 }

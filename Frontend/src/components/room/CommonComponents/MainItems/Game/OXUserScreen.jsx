@@ -1,5 +1,6 @@
 import React from 'react';
 import styled from 'styled-components';
+import { MainDiv } from '../Main.style';
 
 const OXuserSc = styled.div`
   position: relative;
@@ -11,5 +12,9 @@ const OXuserSc = styled.div`
 `;
 
 export default function OXUserScreen() {
-  return <OXuserSc></OXuserSc>;
+  return (
+    <MainDiv>
+      <OXuserSc></OXuserSc>
+    </MainDiv>
+  );
 }

@@ -9,6 +9,16 @@ const StickBar = styled.div`
   box-shadow: 0.306vh 0.306vh gray;
 `;
 
+const StickBarDiv = styled.div`
+  position: absolute;
+  top: 65.5%;
+  left: 8%;
+`;
+
 export default function SubStickBar() {
-  return <StickBar></StickBar>;
+  return (
+    <StickBarDiv>
+      <StickBar></StickBar>
+    </StickBarDiv>
+  );
 }

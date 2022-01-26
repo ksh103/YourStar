@@ -1,5 +1,6 @@
 import React from 'react';
 import styled from 'styled-components';
+import { MainDiv } from '../Main.style';
 
 const UserChoSc = styled.div`
   position: relative;
@@ -11,5 +12,9 @@ const UserChoSc = styled.div`
 `;
 
 export default function UserChosungScreen() {
-  return <UserChoSc></UserChoSc>;
+  return (
+    <MainDiv>
+      <UserChoSc></UserChoSc>
+    </MainDiv>
+  );
 }

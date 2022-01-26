@@ -1,6 +1,6 @@
 import React from 'react';
 import styled from 'styled-components';
-
+import { MainDiv } from '../Main.style';
 // 60vw 가로폭
 const RandomChoiceSc = styled.div`
   position: relative;
@@ -15,9 +15,11 @@ const RandomChoiceSc = styled.div`
 
 export default function RandomChoiceMain() {
   return (
-    <div>
-      <RandomChoiceSc></RandomChoiceSc>
-      <RandomChoiceSc></RandomChoiceSc>
-    </div>
+    <MainDiv>
+      <div>
+        <RandomChoiceSc></RandomChoiceSc>
+        <RandomChoiceSc></RandomChoiceSc>
+      </div>
+    </MainDiv>
   );
 }

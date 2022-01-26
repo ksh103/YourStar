@@ -1,6 +1,7 @@
 import React from 'react';
 import styled from 'styled-components';
 import MyScreenAngle from './MyScreenAngle';
+import { MyScreenDiv } from '../Main.style';
 
 const QuestionMyScreen = styled.div`
   width: 14.843vw;
@@ -12,8 +13,10 @@ const QuestionMyScreen = styled.div`
 
 export default function MyScreen() {
   return (
-    <QuestionMyScreen>
-      <MyScreenAngle></MyScreenAngle>
-    </QuestionMyScreen>
+    <MyScreenDiv>
+      <QuestionMyScreen>
+        <MyScreenAngle></MyScreenAngle>
+      </QuestionMyScreen>
+    </MyScreenDiv>
   );
 }
