@@ -1,7 +1,9 @@
 import React from 'react';
 import styled from 'styled-components';
-import RandomChoiceMain from '../../../components/room/CommonComponents/MainItems/Game/RandomChoiceMain';
+import RandomChoiceMain from '../CommonComponents/MainItems/Game/RandomChoiceMain';
 import LongStick from '../CommonComponents/BottomItems/LongStick';
+import ScheduleListSelect from '../CommonComponents/RightSideItems/Star/ScheduleListSelect';
+import SmallChatting from '../CommonComponents/RightSideItems/Chatting/SmallChatting';
 // 포지션작업
 const BackgroundDiv = styled.div`
   width: 100%;
@@ -13,6 +15,8 @@ export default function StarRandom() {
   return (
     <BackgroundDiv>
       <RandomChoiceMain></RandomChoiceMain>
+      <ScheduleListSelect></ScheduleListSelect>
+      <SmallChatting></SmallChatting>
       <LongStick></LongStick>
     </BackgroundDiv>
   );

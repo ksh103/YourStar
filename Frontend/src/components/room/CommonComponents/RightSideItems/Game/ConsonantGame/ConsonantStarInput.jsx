@@ -3,7 +3,7 @@ import {
   HalfSideDiv2,
   SmallBox,
   SmallChattingInputBox,
-} from '../../../../Chatting/Chatting.style';
+} from '../../Chatting/Chatting.style';
 
 export default function ConsonantStarInput() {
   return (

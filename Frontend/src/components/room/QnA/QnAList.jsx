@@ -2,7 +2,9 @@ import React from 'react';
 import styled from 'styled-components';
 import StarQnAListScreen from '../CommonComponents/MainItems/Game/StarQnAListScreen';
 import MyScreen from '../CommonComponents/MainItems/MyScreens/MyScreen';
-import OtherPersonScreen from '../../../components/room/CommonComponents/MainItems/OtherScreen/OtherPersonScreen';
+import OtherPersonScreen from '../CommonComponents/MainItems/OtherScreen/OtherPersonScreen';
+import ScheduleListSelect from '../CommonComponents/RightSideItems/Star/ScheduleListSelect';
+import SmallChatting from '../CommonComponents/RightSideItems/Chatting/SmallChatting';
 // 포지션작업
 const BackgroundDiv = styled.div`
   width: 100%;
@@ -14,7 +16,8 @@ export default function QnAList() {
   return (
     <BackgroundDiv>
       <StarQnAListScreen></StarQnAListScreen>
-
+      <ScheduleListSelect></ScheduleListSelect>
+      <SmallChatting></SmallChatting>
       <MyScreen></MyScreen>
       <OtherPersonScreen></OtherPersonScreen>
     </BackgroundDiv>

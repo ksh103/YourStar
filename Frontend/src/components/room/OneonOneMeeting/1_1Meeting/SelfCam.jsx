@@ -4,8 +4,8 @@ import styled from 'styled-components';
 const SelfCamBox = styled.div`
   /* border: solid red; */
   border-radius: 5%;
-  height: 70vh;
-  width: 30vw;
+  height: 75vh;
+  width: 35vw;
   background-color: white;
 `;
 

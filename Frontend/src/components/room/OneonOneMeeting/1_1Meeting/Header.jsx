@@ -47,7 +47,7 @@ const CaptureIcon = styled.div`
 `;
 
 export default function Header() {
-  const [user, setUser] = useState('스타');
+  const [user, setUser] = useState('사용자');
   return (
     <>
       <div>

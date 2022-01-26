@@ -14,7 +14,7 @@ const EmoziCompo = styled.div`
 
 const EmoziPs = styled.div`
   position: absolute;
-  top: 83%;
+  top: 85%;
   left: 20%;
 `;
 

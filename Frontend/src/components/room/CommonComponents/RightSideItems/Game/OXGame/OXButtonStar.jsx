@@ -1,6 +1,6 @@
 import React from 'react';
 import styled from 'styled-components';
-import { SmallBox, HalfSideDiv2 } from '../../../../Chatting/Chatting.style';
+import { SmallBox, HalfSideDiv2 } from '../../Chatting/Chatting.style';
 
 const OButton = styled.div`
   position: absolute;

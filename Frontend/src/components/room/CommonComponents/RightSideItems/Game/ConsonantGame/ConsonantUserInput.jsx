@@ -4,7 +4,7 @@ import {
   SmallBox,
   SmallChattingInputBox,
   SmallChattingListBox,
-} from '../../../../Chatting/Chatting.style';
+} from '../../Chatting/Chatting.style';
 
 export default function ConsonantUserInput() {
   return (
