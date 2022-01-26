@@ -2,8 +2,8 @@ import React from 'react';
 import QuestionChat from './QuestionChat';
 import QuestionMainScreen from './QuestionMainScreen';
 import styled from 'styled-components';
-import MyScreen from './MyScreen';
-import SubStickBar from './SubStickBar';
+import MyScreen from '../../../components/room/CommonComponents/MainItems/MyScreen';
+import SubStickBar from '../../../components/room/CommonComponents/BottomItems/SubStickBar';
 import OtherPersonScreen from './OtherPersonScreen';
 import RandomChoiceMain from './RandomChoiceMain';
 import UserChosungScreen from './UserChosungScreen';
@@ -61,9 +61,9 @@ export default function RoomDonJun() {
       {/* <MainDiv>
         <QuestionMainScreen></QuestionMainScreen>
       </MainDiv> */}
-      <RandomMainDiv>
+      {/* <RandomMainDiv>
         <OXUserScreen></OXUserScreen>
-      </RandomMainDiv>
+      </RandomMainDiv> */}
       {/* <ChatDiv>
         <QuestionChat></QuestionChat>
       </ChatDiv> */}
@@ -76,7 +76,7 @@ export default function RoomDonJun() {
       {/* <OtherPersonDiv>
         <OtherPersonScreen></OtherPersonScreen>
       </OtherPersonDiv> */}
-      <EmoziBar></EmoziBar>
+      {/* <EmoziBar></EmoziBar> */}
     </BackgroundDiv>
   );
 }
