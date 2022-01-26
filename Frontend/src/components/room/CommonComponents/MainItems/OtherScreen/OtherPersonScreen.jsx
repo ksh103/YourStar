@@ -1,7 +1,7 @@
 import React from 'react';
 import styled from 'styled-components';
 import OtherScreenAngle from './OtherScreenAngle';
-
+import { OtherPersonDiv } from '../Main.style';
 const OtherPersonSc = styled.div`
   max-width: 65.041vw;
   width: 65.041vw;
@@ -22,21 +22,23 @@ const PerScPosition = styled.div`
 
 export default function OtherPersonScreen() {
   return (
-    <OtherPersonSc>
-      <PerScPosition>
-        <OtherScreenAngle></OtherScreenAngle>
-        <OtherScreenAngle></OtherScreenAngle>
-        <OtherScreenAngle></OtherScreenAngle>
-        <OtherScreenAngle></OtherScreenAngle>
-        <OtherScreenAngle></OtherScreenAngle>
-        <OtherScreenAngle></OtherScreenAngle>
-        <OtherScreenAngle></OtherScreenAngle>
-        <OtherScreenAngle></OtherScreenAngle>
-        <OtherScreenAngle></OtherScreenAngle>
-        <OtherScreenAngle></OtherScreenAngle>
-        <OtherScreenAngle></OtherScreenAngle>
-        <OtherScreenAngle></OtherScreenAngle>
-      </PerScPosition>
-    </OtherPersonSc>
+    <OtherPersonDiv>
+      <OtherPersonSc>
+        <PerScPosition>
+          <OtherScreenAngle></OtherScreenAngle>
+          <OtherScreenAngle></OtherScreenAngle>
+          <OtherScreenAngle></OtherScreenAngle>
+          <OtherScreenAngle></OtherScreenAngle>
+          <OtherScreenAngle></OtherScreenAngle>
+          <OtherScreenAngle></OtherScreenAngle>
+          <OtherScreenAngle></OtherScreenAngle>
+          <OtherScreenAngle></OtherScreenAngle>
+          <OtherScreenAngle></OtherScreenAngle>
+          <OtherScreenAngle></OtherScreenAngle>
+          <OtherScreenAngle></OtherScreenAngle>
+          <OtherScreenAngle></OtherScreenAngle>
+        </PerScPosition>
+      </OtherPersonSc>
+    </OtherPersonDiv>
   );
 }

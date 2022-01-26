@@ -1,6 +1,8 @@
 import React from 'react';
 import styled from 'styled-components';
 import OtherScreenAngle from './OtherScreenAngle';
+import { MainDiv } from '../Main.style';
+
 const StarScreen = styled.div`
   overflow: auto;
   position: relative;
@@ -19,26 +21,28 @@ const PerScPosition = styled.div`
 
 export default function StarChosungScreen() {
   return (
-    <StarScreen>
-      <PerScPosition>
-        <OtherScreenAngle></OtherScreenAngle>
-        <OtherScreenAngle></OtherScreenAngle>
-        <OtherScreenAngle></OtherScreenAngle>
-        <OtherScreenAngle></OtherScreenAngle>
-        <OtherScreenAngle></OtherScreenAngle>
-        <OtherScreenAngle></OtherScreenAngle>
-        <OtherScreenAngle></OtherScreenAngle>
-        <OtherScreenAngle></OtherScreenAngle>
-        <OtherScreenAngle></OtherScreenAngle>
-        <OtherScreenAngle></OtherScreenAngle>
-        <OtherScreenAngle></OtherScreenAngle>
-        <OtherScreenAngle></OtherScreenAngle>
-        <OtherScreenAngle></OtherScreenAngle>
-        <OtherScreenAngle></OtherScreenAngle>
-        <OtherScreenAngle></OtherScreenAngle>
-        <OtherScreenAngle></OtherScreenAngle>
-        <OtherScreenAngle></OtherScreenAngle>
-      </PerScPosition>
-    </StarScreen>
+    <MainDiv>
+      <StarScreen>
+        <PerScPosition>
+          <OtherScreenAngle></OtherScreenAngle>
+          <OtherScreenAngle></OtherScreenAngle>
+          <OtherScreenAngle></OtherScreenAngle>
+          <OtherScreenAngle></OtherScreenAngle>
+          <OtherScreenAngle></OtherScreenAngle>
+          <OtherScreenAngle></OtherScreenAngle>
+          <OtherScreenAngle></OtherScreenAngle>
+          <OtherScreenAngle></OtherScreenAngle>
+          <OtherScreenAngle></OtherScreenAngle>
+          <OtherScreenAngle></OtherScreenAngle>
+          <OtherScreenAngle></OtherScreenAngle>
+          <OtherScreenAngle></OtherScreenAngle>
+          <OtherScreenAngle></OtherScreenAngle>
+          <OtherScreenAngle></OtherScreenAngle>
+          <OtherScreenAngle></OtherScreenAngle>
+          <OtherScreenAngle></OtherScreenAngle>
+          <OtherScreenAngle></OtherScreenAngle>
+        </PerScPosition>
+      </StarScreen>
+    </MainDiv>
   );
 }
