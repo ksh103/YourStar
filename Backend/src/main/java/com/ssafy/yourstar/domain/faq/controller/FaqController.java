@@ -56,7 +56,7 @@ public class FaqController {
     public ResponseEntity<BaseResponseBody> faqRemove(@PathVariable int faqId) {
         log.info("faqRemove - 호출");
         if (faqService.faqRemove(faqId)) {  // 정상 작동
-            return ResponseEntity.status(201).body(BaseResponseBody.of(201, "Success"));
+            return ResponseEntity.status(201).body(BaseResponseBody.of(200, "Success"));
         } else {    // 해당 FAQ 게시물 존재하지 않는 경우
             log.error("faqRemove - This faqId doesn't exist.");
             return ResponseEntity.status(404).body(BaseResponseBody.of(404, "This faqId doesn't exist."));

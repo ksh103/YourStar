@@ -9,7 +9,8 @@ public interface MemberService {
 
     Member memberDetail(String memberEmail); // 로그인
     boolean memberLoginApprove(String memberEmail); // 회원가입 인증 여부 확인 후 로그인
-    boolean memberIsLogin(String memberEmail); // 로그인 여부 체크
+    boolean memberLoginCheck(String memberEmail); // 현재 로그인 상태인지 확인
+    boolean memberIsLogin(String memberEmail); // DB에 로그인 처리
 
     boolean memberLogout(int memberId); // 로그아웃
 

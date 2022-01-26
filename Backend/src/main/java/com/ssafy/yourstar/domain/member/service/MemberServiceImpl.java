@@ -35,6 +35,13 @@ public class MemberServiceImpl implements  MemberService {
     }
 
     @Override
+    public boolean memberLoginCheck(String memberEmail) {
+        // 로그인 가능하다면 true, 아니면 false
+        if(memberRepository.findMemberByMemberEmailAndIsLoginFalse(memberEmail).isPresent()) return true;
+        return false;
+    }
+
+    @Override
     public boolean memberIsLogin(String memberEmail) {
         if(memberRepository.findMemberByMemberEmail(memberEmail).isPresent()) {
             Member member = memberRepository.findMemberByMemberEmail(memberEmail).get();
