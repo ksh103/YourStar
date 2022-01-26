@@ -3,6 +3,7 @@ import styled from 'styled-components';
 import RandomChoiceMain from '../CommonComponents/MainItems/Game/RandomChoiceMain';
 import MyScreen from '../CommonComponents/MainItems/MyScreens/MyScreen';
 import OtherPersonScreen from '../CommonComponents/MainItems/OtherScreen/OtherPersonScreen';
+import LongChatting from '../CommonComponents/RightSideItems/Chatting/LongChatting';
 // 포지션작업
 const BackgroundDiv = styled.div`
   width: 100%;
@@ -14,6 +15,7 @@ export default function UserRandom() {
   return (
     <BackgroundDiv>
       <RandomChoiceMain></RandomChoiceMain>
+      <LongChatting></LongChatting>
       <MyScreen></MyScreen>
       <OtherPersonScreen></OtherPersonScreen>
     </BackgroundDiv>

@@ -6,14 +6,9 @@ import {
   HalfSideDiv1,
   HalfSideDiv2,
 } from './Chatting.style';
-export default function SmallChating() {
+export default function SmallChatting() {
   return (
     <>
-      <HalfSideDiv1>
-        <SmallBox>
-          <SmallChattingInputBox></SmallChattingInputBox>
-        </SmallBox>
-      </HalfSideDiv1>
       <HalfSideDiv2>
         <SmallBox>
           <SmallChattingListBox>asdasd</SmallChattingListBox>

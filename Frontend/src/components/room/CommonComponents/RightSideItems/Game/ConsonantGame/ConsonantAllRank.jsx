@@ -1,5 +1,5 @@
 import React from 'react';
-import { HalfSideDiv1, SmallBox } from '../Chatting/Chatting.style';
+import { HalfSideDiv1, SmallBox } from '../../Chatting/Chatting.style';
 import styled from 'styled-components';
 
 const ScheduleListWrapper = styled.div`
@@ -27,19 +27,19 @@ const ScheduleListBox = styled.div`
   align-items: center;
 `;
 
-export default function ScheduleListSelect() {
+export default function ConsonantAllRank() {
   return (
     <>
       <HalfSideDiv1>
         <SmallBox>
           <ScheduleListWrapper>
-            <ScheduleListBox>1</ScheduleListBox>
-            <ScheduleListBox>2</ScheduleListBox>
-            <ScheduleListBox>3</ScheduleListBox>
-            <ScheduleListBox>4</ScheduleListBox>
-            <ScheduleListBox>5</ScheduleListBox>
-            <ScheduleListBox>6</ScheduleListBox>
-            <ScheduleListBox>7</ScheduleListBox>
+            <ScheduleListBox>나중 랭크 이름적어주기</ScheduleListBox>
+            <ScheduleListBox>지수민</ScheduleListBox>
+            <ScheduleListBox>박동준</ScheduleListBox>
+            <ScheduleListBox>강소현</ScheduleListBox>
+            <ScheduleListBox>안영원</ScheduleListBox>
+            <ScheduleListBox>김지슬</ScheduleListBox>
+            <ScheduleListBox>손은성</ScheduleListBox>
           </ScheduleListWrapper>
         </SmallBox>
       </HalfSideDiv1>

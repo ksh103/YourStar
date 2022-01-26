@@ -142,6 +142,44 @@ const MiddleChattingListBox = styled.div`
   color: white;
 `;
 
+const ConcertChattingBox = styled.div`
+  position: relative;
+  width: 20vw;
+  height: 75vh;
+  background-color: white;
+  border-radius: 1vw;
+  box-shadow: 0.306vh 0.306vh gray;
+`;
+
+const ConcertChattingInputBox = styled.input`
+  position: absolute;
+  top: 90%;
+  left: 10%;
+  right: 10%;
+  border-radius: 1vw;
+  width: 75%;
+  height: 5.1vh;
+  background-color: #e2d8ff;
+  border: none;
+  padding-right: 0.52vw;
+  padding-left: 0.52vw;
+`;
+
+const ConcertChattingListBox = styled.div`
+  position: absolute;
+  top: 1%;
+  left: 10%;
+  right: 10%;
+  margin: 1vh auto;
+  border-radius: 1vw;
+  width: 75%;
+  height: 60vh;
+  padding: 1vh;
+  margin-top: 2vh;
+  background-color: black;
+  color: white;
+`;
+
 export {
   LongChattingInputBox,
   LongChattingListBox,
@@ -157,4 +195,7 @@ export {
   MiddleChattingListBox,
   MiddleChattingInputBox,
   MiddleChattingBox,
+  ConcertChattingBox,
+  ConcertChattingListBox,
+  ConcertChattingInputBox,
 };
