@@ -15,12 +15,11 @@ import io.swagger.annotations.ApiParam;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.PageRequest;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-
-import java.util.List;
+import org.springframework.web.multipart.MultipartHttpServletRequest;
 
 @Api("팬미팅 관련 API")
 @Slf4j
@@ -31,31 +30,26 @@ public class MeetingController {
     @Autowired
     MeetingService meetingService;
 
-    @ApiOperation(value = "스타가 팬미팅 신청") // 이미지 등록하는 api 필요
-    @PostMapping("/room-applicant")
+    @ApiOperation(value = "스타가 팬미팅 신청")
+    @PostMapping(value = "/room-applicant", consumes= {MediaType.APPLICATION_JSON_VALUE, MediaType.MULTIPART_FORM_DATA_VALUE} )
     public ResponseEntity<? extends BaseResponseBody> meetingApplyByStar
-            (@RequestBody MeetingApplyByStarPostReq meetingApplyByStarPostReq) {
+            (@RequestPart(value = "meetingApply") MeetingApplyByStarPostReq meetingApplyByStarPostReq, MultipartHttpServletRequest request) {
         log.info("meetingApplyByStar - Call");
         log.info(meetingApplyByStarPostReq.toString());
 
-        meetingService.meetingApplyByStar(meetingApplyByStarPostReq);
-
+        meetingService.meetingApplyByStar(meetingApplyByStarPostReq, request);
         return ResponseEntity.status(201).body(BaseResponseBody.of(201, "Success"));
     }
 
     @ApiOperation(value = "스타가 팬미팅 수정")
-    @PutMapping("/room-applicant")
+    @PutMapping(value = "/room-applicant", consumes= {MediaType.APPLICATION_JSON_VALUE, MediaType.MULTIPART_FORM_DATA_VALUE})
     public ResponseEntity<? extends BaseResponseBody> meetingModifyByStar
-            (@RequestBody Meeting meeting) {
+            (@RequestPart(value = "meetingModify") Meeting meeting, MultipartHttpServletRequest request) {
         log.info("meetingModifyByStar - Call");
 
-        Meeting modifiedMeeting = meetingService.meetingModifyByStar(meeting);
-        if (modifiedMeeting == null) {
-            log.error("meetingModifyByStar - This MeetingId doesn't exist");
-            return ResponseEntity.status(400).body(BaseResponseBody.of(400, "This MeetingId doesn't exist"));
-        } else {
-            return ResponseEntity.status(201).body(BaseResponseBody.of(201, "Success"));
-        }
+        meetingService.meetingModifyByStar(meeting, request);
+
+        return ResponseEntity.status(201).body(BaseResponseBody.of(201, "Success"));
     }
 
     @ApiOperation(value = "스타가 신청한 팬미팅 취소")
