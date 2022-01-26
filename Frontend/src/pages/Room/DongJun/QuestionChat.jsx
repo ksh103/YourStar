@@ -3,11 +3,11 @@ import styled from 'styled-components';
 
 const QuestionChating = styled.div`
   position: relative;
-  width: 14.0625vw;
+  width: 20vw;
   height: 66.39vh;
   background-color: white;
-  border-radius: 5%;
-  box-shadow: 3px 3px gray;
+  border-radius: 1vw;
+  box-shadow: 0.306vh 0.306vh gray;
 `;
 
 const QuestionInput = styled.input`
@@ -15,8 +15,8 @@ const QuestionInput = styled.input`
   top: 90%;
   left: 10%;
   right: 10%;
-  border-radius: 5%;
-  width: 10.416vw;
+  border-radius: 1vw;
+  width: 75%;
   height: 5.1vh;
   background-color: #e2d8ff;
   border: none;
@@ -30,8 +30,8 @@ const QuestionChatingList = styled.div`
   left: 10%;
   right: 10%;
   margin: 1vh auto;
-  border-radius: 5%;
-  width: 10.416vw;
+  border-radius: 1vw;
+  width: 75%;
   height: 54vh;
   padding: 1vh;
   margin-top: 2vh;
