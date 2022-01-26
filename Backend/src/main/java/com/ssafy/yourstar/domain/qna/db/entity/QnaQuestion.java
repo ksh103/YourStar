@@ -1,6 +1,5 @@
 package com.ssafy.yourstar.domain.qna.db.entity;
 
-import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 import com.ssafy.yourstar.domain.member.db.entity.Member;
@@ -25,6 +24,10 @@ public class QnaQuestion {
     @ApiModelProperty(value = "질문 구분 번호")
     private int questionId;
 
+    @Column(name = "member_id")
+    @ApiModelProperty(value = "질문 작성자 구분 번호", required = true)
+    private int memberId;
+
     @Column(name = "question_title")
     @ApiModelProperty(value = "질문 제목", required = true)
     private String questionTitle;
@@ -45,9 +48,8 @@ public class QnaQuestion {
     private QnaAnswer qnaAnswer;
 
     // 회원 테이블과 매핑
-    @ManyToOne
+    @OneToOne
     @JoinColumn(name = "member_id", updatable = false, insertable = false)
-    @JsonBackReference
     private Member member;
 
 }
