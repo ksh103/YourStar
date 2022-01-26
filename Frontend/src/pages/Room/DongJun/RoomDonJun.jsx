@@ -40,8 +40,8 @@ const StickBarDiv = styled.div`
 
 const OtherPersonDiv = styled.div`
   position: absolute;
-  top 74%;
-  right: 8%
+  top: 74%;
+  right: 8%;
 `;
 
 export default function RoomDonJun() {

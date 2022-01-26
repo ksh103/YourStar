@@ -26,10 +26,10 @@ const SelfCamWrapper = styled.div`
 
 const WaitingTimeWrapper = styled.div`
   border-radius: 1vw;
-  margin-left: 3vw;
-  margin-right: 3vw;
+  width: 20vw;
   height: 21vh;
   background-color: white;
+  box-shadow: 0.306vh 0.306vh gray;
 `;
 const StanbyChattingBox = styled.div`
   /* border: solid red; */
