@@ -50,7 +50,11 @@ export const device = {
 
 // Layout components
 
-export const Layout = styled.div``;
+export const Layout = styled.div`
+  position: relative;
+  min-height: 500px;
+  height: 100vh;
+`;
 
 export const Block = styled.div`
   //border: 1px solid red;

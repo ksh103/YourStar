@@ -3,11 +3,13 @@ package com.ssafy.yourstar.global.auth;
 import com.ssafy.yourstar.domain.member.db.entity.Member;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
+import java.util.stream.Collectors;
 
 /**
  * 현재 액세스 토큰으로 부터 인증된 유저의 부가 상세정보(활성화 여부, 만료, 롤 등) 정의.
@@ -20,11 +22,15 @@ public class MemberDetails implements UserDetails {
     boolean accountNonLocked;
     boolean credentialNonExpired;
     boolean enabled = false;
-    List<GrantedAuthority> roles = new ArrayList<>();
+    List<String> roles = new ArrayList<>();
     
-    public MemberDetails(Member member) {
+    public MemberDetails(Member member, List<String> roles) {
     		super();
     		this.member = member;
+
+			for (String role : roles) {
+				this.roles.add(role);
+			}
     }
     
     public Member getMember() {
@@ -36,7 +42,7 @@ public class MemberDetails implements UserDetails {
 	}
 	@Override
 	public String getUsername() {
-		return this.member.getMemberName();
+		return this.member.getMemberEmail();
 	}
 	@Override
 	public boolean isAccountNonExpired() {
@@ -56,9 +62,8 @@ public class MemberDetails implements UserDetails {
 	}
 	@Override
 	public Collection<? extends GrantedAuthority> getAuthorities() {
-		return this.roles;
-	}
-	public void setAuthorities(List<GrantedAuthority> roles) {
-		this.roles = roles;
+		return this.roles
+				.stream().map(SimpleGrantedAuthority::new)
+				.collect(Collectors.toList());
 	}
 }
