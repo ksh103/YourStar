@@ -70,7 +70,6 @@ export default function Header() {
         {user === '스타' && (
           <HeaderBox>
             <StarBox>
-              {' '}
               <div>
                 <IoIosAlarm
                   style={{

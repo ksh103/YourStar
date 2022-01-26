@@ -1,8 +1,9 @@
 import React from 'react';
-import OneonOneDisplay from './OneonOneDisplay';
-import WaitingTime from './WaitingTime';
-import StanbySelfCam from './StanbySelfCam';
-import Chatting from './Chatting';
+import { OneonOneDisplayBox } from './OneonOneStanby.style';
+import Chatting from '../../Chatting/Chatting';
+// import { WaitingTimeBox } from './OneonOneStanby.style';
+import { StanbySelfCamBox } from './OneonOneStanby.style';
+import { StanbyChattingBox } from './OneonOneStanby.style';
 import {
   StanbyBox,
   ChattingWrapper,
@@ -16,17 +17,19 @@ export default function OneonOneStanby() {
       <StanbyBox>
         <Grid container>
           <Grid xs={9}>
-            <OneonOneDisplay></OneonOneDisplay>
+            <OneonOneDisplayBox></OneonOneDisplayBox>
           </Grid>
           <Grid xs={3}>
             <WaitingTimeWrapper>
-              <WaitingTime></WaitingTime>
+              {/* 순서, 타이머 넣기 */}
+              {/* <WaitingTimeBox></WaitingTimeBox> */}
             </WaitingTimeWrapper>
             <ChattingWrapper>
-              <Chatting></Chatting>
+              <StanbyChattingBox></StanbyChattingBox>
             </ChattingWrapper>
+
             <SelfCamWrapper>
-              <StanbySelfCam></StanbySelfCam>
+              <StanbySelfCamBox></StanbySelfCamBox>
             </SelfCamWrapper>
           </Grid>
         </Grid>
