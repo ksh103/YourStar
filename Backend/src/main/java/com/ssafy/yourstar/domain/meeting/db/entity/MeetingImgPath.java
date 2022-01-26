@@ -31,7 +31,7 @@ public class MeetingImgPath {
 
     @ApiModelProperty(value = "파일 크기", required = true)
     @Column(name = "file_size")
-    private int fileSize;
+    private Long fileSize;
 
     @ApiModelProperty(value = "파일 확장자명", required = true)
     @Column(name = "file_content_type")
