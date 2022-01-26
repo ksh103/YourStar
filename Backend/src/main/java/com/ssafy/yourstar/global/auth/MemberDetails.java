@@ -8,7 +8,6 @@ import org.springframework.security.core.userdetails.UserDetails;
 
 import java.util.ArrayList;
 import java.util.Collection;
-import java.util.Collections;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -43,7 +42,7 @@ public class MemberDetails implements UserDetails {
 	}
 	@Override
 	public String getUsername() {
-		return this.member.getMemberName();
+		return this.member.getMemberEmail();
 	}
 	@Override
 	public boolean isAccountNonExpired() {
