@@ -7,7 +7,7 @@ import com.ssafy.yourstar.domain.member.request.MemberRegisterPostReq;
 
 public interface MemberService {
 
-    Member memberLoginByMemberEmail(String memberEmail); // 로그인
+    Member memberDetail(String memberEmail); // 로그인
     boolean memberLoginApprove(String memberEmail); // 회원가입 인증 여부 확인 후 로그인
     boolean memberIsLogin(String memberEmail); // 로그인 여부 체크
 

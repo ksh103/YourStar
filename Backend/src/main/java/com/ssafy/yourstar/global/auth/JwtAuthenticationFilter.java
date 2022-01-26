@@ -64,7 +64,7 @@ public class JwtAuthenticationFilter extends BasicAuthenticationFilter {
             // 토큰에서 PK인 이메일 정보가 있는지 확인 후 다음 처리
             if (memberEmail != null) {
                 // jwt 토큰에 포함된 계정 정보(memberEmail) 통해 실제 디비에 해당 정보의 계정이 있는지 조회.
-                Member member = memberService.memberLoginByMemberEmail(memberEmail);
+                Member member = memberService.memberDetail(memberEmail);
 
                 // 해당 멤버의 권한을 확인하고 입력
                 if(member != null) {
