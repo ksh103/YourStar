@@ -1,6 +1,6 @@
 import React from 'react';
 import styled from 'styled-components';
-import DefaultUserScreen from '../CommonComponents/MainItems/DefaultUserScreen';
+import RandomChoiceMain from '../../../components/room/CommonComponents/MainItems/Game/RandomChoiceMain';
 import LongStick from '../CommonComponents/BottomItems/LongStick';
 // 포지션작업
 const BackgroundDiv = styled.div`
@@ -9,10 +9,10 @@ const BackgroundDiv = styled.div`
   background-color: #e2d8ff;
 `;
 
-export default function Admin() {
+export default function StarRandom() {
   return (
     <BackgroundDiv>
-      <DefaultUserScreen></DefaultUserScreen>
+      <RandomChoiceMain></RandomChoiceMain>
       <LongStick></LongStick>
     </BackgroundDiv>
   );
