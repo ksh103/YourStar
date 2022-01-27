@@ -30,7 +30,7 @@ export default function Warning() {
       </AlertHead>
       {/* 내용물 */}
       <AlertBody>
-        <RedCard></RedCard>
+        <YelloCard></YelloCard>
       </AlertBody>
     </AlertParentDiv>
   );

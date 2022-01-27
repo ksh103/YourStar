@@ -9,10 +9,10 @@ const RedDiv = styled.div`
   height: 35vh;
   border-radius: 3vh;
   background-color: red;
-  animation: fadein 4s;
-  -moz-animation: fadein 4s;
-  -webkit-animation: fadein 4s;
-  -o-animation: fadein 4s;
+  animation: fadein 0.5s;
+  -moz-animation: fadein 0.5s;
+  -webkit-animation: fadein 0.5s;
+  -o-animation: fadein 0.5s;
   @keyframes fadein {
     from {
       opacity: 0;

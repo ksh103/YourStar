@@ -9,10 +9,10 @@ const YelloDiv = styled.div`
   height: 35vh;
   border-radius: 3vh;
   background-color: yellow;
-  animation: fadein 4s;
-  -moz-animation: fadein 4s;
-  -webkit-animation: fadein 4s;
-  -o-animation: fadein 4s;
+  animation: fadein 1s;
+  -moz-animation: fadein 1s;
+  -webkit-animation: fadein 1s;
+  -o-animation: fadein 1s;
   @keyframes fadein {
     from {
       opacity: 0;
