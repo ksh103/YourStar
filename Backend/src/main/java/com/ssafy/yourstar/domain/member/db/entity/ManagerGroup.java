@@ -13,7 +13,7 @@ import java.util.List;
 @Getter
 @Setter
 @Table(name = "manager_group")
-@ApiModel(value = "관계자 그룹")
+@ApiModel(value = "ManagerGroup", description = "관계자 그룹")
 public class ManagerGroup {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

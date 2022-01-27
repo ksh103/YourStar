@@ -1,5 +1,7 @@
 package com.ssafy.yourstar.domain.meeting.db.entity;
 
+import io.swagger.annotations.ApiModel;
+import io.swagger.annotations.ApiModelProperty;
 import lombok.*;
 
 import javax.persistence.*;
@@ -8,16 +10,20 @@ import javax.persistence.*;
 @Getter
 @Setter
 @IdClass(ApplicantID.class)
+@ApiModel(value = "Applicant", description = "팬미팅 신청자 정보")
 @Table(name = "applicant")
 public class Applicant {
+    @ApiModelProperty(value = "팬미팅 구분 번호", example = "7")
     @Id
     @Column(name = "meeting_id")
     private int meetingId;
 
+    @ApiModelProperty(value = "회원 구분 번호", example = "1")
     @Id
     @Column(name = "member_id")
     private int memberId;
 
+    @ApiModelProperty(value = "해당 팬미팅에서 받은 경고 횟수", example = "1")
     @Column(name = "applicant_warn_count")
     private int applicantWarnCount;
 

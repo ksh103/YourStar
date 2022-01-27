@@ -42,8 +42,8 @@ public class MeetingServiceImpl implements MeetingService {
     @Value("${app.fileupload.uploadDir}")
     private String uploadFolder;
 
-    @Value("${app.fileupload.uploadPath}")
-    private String uploadPath;
+//    @Value("${app.fileupload.uploadPath}")
+    private String uploadPath = "/home/ubuntu";
 
     @Override
     public MeetingGetRes meetingApplyByStar(MeetingApplyByStarPostReq meetingApplyByStarPostReq, MultipartHttpServletRequest request) {
@@ -63,7 +63,6 @@ public class MeetingServiceImpl implements MeetingService {
 
         try {
             List<MultipartFile> fileList = request.getFiles("file");
-
             File uploadDir = new File(uploadPath + File.separator + uploadFolder);
 
             // upload 폴더 존재하지 않으면 생성

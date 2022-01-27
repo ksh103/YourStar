@@ -65,7 +65,7 @@ public class NoticeController {
     public ResponseEntity<BaseResponseBody> noticeRemove(@PathVariable int noticeId, HttpServletRequest request) {
         log.info("noticeRemove - 호출");
         if (noticeService.noticeRemove(noticeId)) {  // 정상 작동
-            return ResponseEntity.status(201).body(BaseResponseBody.of(201, "Success"));
+            return ResponseEntity.status(201).body(BaseResponseBody.of(200, "Success"));
         } else {    // 해당 공지사항이 존재하지 않는 경우
             log.error("noticeRemove - This noticeId doesn't exist.");
             return ResponseEntity.status(404).body(BaseResponseBody.of(404, "This noticeId doesn't exist."));

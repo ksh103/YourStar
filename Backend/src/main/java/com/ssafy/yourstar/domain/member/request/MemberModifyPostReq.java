@@ -7,7 +7,7 @@ import lombok.Setter;
 
 @Getter
 @Setter
-@ApiModel("MemberModifyPostRequest")
+@ApiModel(value = "MemberModifyPostRequest", description = "멤버 정보 수정시 필요 정보")
 public class MemberModifyPostReq {
 
     @ApiModelProperty(value = "회원 Password", example="1234")
