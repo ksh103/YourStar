@@ -4,12 +4,7 @@ import RandomChoiceMain from '../CommonComponents/MainItems/Game/RandomChoiceMai
 import LongStick from '../CommonComponents/BottomItems/LongStick';
 import ScheduleListSelect from '../CommonComponents/RightSideItems/Star/ScheduleListSelect';
 import SmallChatting from '../CommonComponents/RightSideItems/Chatting/SmallChatting';
-// 포지션작업
-const BackgroundDiv = styled.div`
-  width: 100%;
-  height: 100%;
-  background-color: #e2d8ff;
-`;
+import { BackgroundDiv } from '../styles/roomGlobal';
 
 export default function StarRandom() {
   return (

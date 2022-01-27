@@ -4,12 +4,8 @@ import StarChosungScreen from '../../CommonComponents/MainItems/Game/StarChosung
 import ScheduleListSelect from '../../CommonComponents/RightSideItems/Star/ScheduleListSelect';
 import UserSelfCamRight from '../../CommonComponents/RightSideItems/User/UserSelfCamRight';
 import ConsonantStarInput from '../../CommonComponents/RightSideItems/Game/ConsonantGame/ConsonantStarInput';
+import { BackgroundDiv } from '../../styles/roomGlobal';
 // 포지션작업
-const BackgroundDiv = styled.div`
-  width: 100%;
-  height: 100%;
-  background-color: #e2d8ff;
-`;
 
 export default function StarConsonantGame() {
   return (

@@ -12,14 +12,13 @@ export const secondaryColor = 'white';
 
 // 각 테마별 배경색과 글씨색
 export const roomColor = {
-  white: { background: 'white', color: 'black' },
   green: { background: '#D8FFD8', color: 'black' },
   blue: { background: '#D8F1FF', color: 'black' },
   pink: { background: '#FFD8FB', color: 'black' },
   red: { background: '#FFDAD8', color: 'black' },
   yellow: { background: '#EFF8BD', color: 'black' },
-  purplue: { background: '#E2D8FF', color: 'black' },
-  black: { background: 'black', color: 'white' },
+  purple: { background: '#E2D8FF', color: 'black' },
+  gray: { background: '#C4C4C4', color: 'white' },
 };
 
 // 스케줄 일정 버튼색
