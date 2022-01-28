@@ -1,6 +1,6 @@
 import React from 'react';
 import styled from 'styled-components';
-
+import { useSelector, useDispatch } from 'react-redux';
 const StickBar = styled.div`
   width: 60.1416vw;
   height: 5.517vh;

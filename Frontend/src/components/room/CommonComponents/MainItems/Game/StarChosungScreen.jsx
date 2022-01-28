@@ -4,19 +4,24 @@ import OtherScreenAngle from '../OtherScreen/OtherScreenAngle';
 import { MainDiv } from '../Main.style';
 
 const StarScreen = styled.div`
-  overflow: auto;
+  overflow-x: auto;
   position: relative;
   width: 60.041vw;
   height: 82vh;
+  max-height: 82vh;
   background-color: white;
   border-radius: 3.0643vh;
   box-shadow: 0.306vh 0.306vh gray;
 `;
 
 const PerScPosition = styled.div`
-  position: relative;
+  position: absolute;
+  display: flex;
+  flex-direction: column;
+  flex-wrap: wrap;
   top: 2%;
-  left: 4%;
+  left: 3%;
+  height: 82vh;
 `;
 
 export default function StarChosungScreen() {
@@ -24,7 +29,7 @@ export default function StarChosungScreen() {
     <MainDiv>
       <StarScreen>
         <PerScPosition>
-          <OtherScreenAngle></OtherScreenAngle>
+          <OtherScreenAngle value="3"></OtherScreenAngle>
           <OtherScreenAngle></OtherScreenAngle>
           <OtherScreenAngle></OtherScreenAngle>
           <OtherScreenAngle></OtherScreenAngle>
