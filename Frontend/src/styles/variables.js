@@ -51,24 +51,26 @@ export const device = {
 
 export const Layout = styled.div`
   position: relative;
-  min-height: 500px;
+  min-height: 600px;
   height: 100vh;
 `;
-
+export const Wrapper = styled.div`
+  height: 78%;
+  @media ${device.TabletPortrait} {
+    height: 80%;
+  }
+  display: flex;
+  justify-content: center;
+  align-items: center;
+`;
 export const Block = styled.div`
-  //border: 1px solid red;
-  margin: 0 auto;
-  margin-top: 50px;
-  margin-bottom: 50px;
-  margin-left: 25vh;
-  margin-right: 25vh;
-  background-color: white;
-  height: 90vh;
-  max-height: 100%;
-  border-radius: 30px;
-  text-align: center;
-  box-shadow: 5px 5px 5px 5px gray;
-  /* width: 100vw; */
-  @media ${device.MobileLandscape} {
+  max-width: 1200px;
+  width: 70%;
+  height: 100%;
+  background-color: ${blockColor};
+  border-radius: 10px;
+  @media ${device.TabletPortrait} {
+    border-radius: 0px;
+    width: 100%;
   }
 `;
