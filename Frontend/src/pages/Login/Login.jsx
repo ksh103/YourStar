@@ -1,50 +1,54 @@
 import React from 'react';
-import Grid from '@mui/material/Grid';
-import { createTheme, ThemeProvider } from '@mui/material/styles';
+import { Layout, Wrapper } from '../../styles/variables';
+import Navbar from '../../components/Navbar/Navbar';
+import Footer from '../../components/Footer/Footer';
 import {
-  LoginSignupBlock,
-  InFormBlock,
-  ScheduleWrapper,
-} from '../Login/Login.style';
+  LoginBlock,
+  LoginContent,
+  LoginContentRow,
+  LoginHeader,
+} from './Login.style';
+import { Link } from 'react-router-dom';
 
-import { FiveGrid, SevenGrid, LoginGrid } from '../Login/DividGrid';
-
-const theme = createTheme({
-  palette: {
-    primary: {
-      // Purple and green play nicely together.
-      main: '#e57373',
-    },
-    secondary: {
-      // This is green.A700 as hex.
-      main: '#11cb5f',
-    },
-  },
-});
-
-// import Box from '@mui/material/Box';
-// import { innerDiv } from './Login.style';
-// import FormHelperText from '@mui/material/FormHelperText';
-// import Visibility from '@mui/icons-material/Visibility';
-// import VisibilityOff from '@mui/icons-material/VisibilityOff';
 export default function Login() {
-  const [values, setValues] = React.useState({
-    amount: '',
-    password: '',
-    weight: '',
-    weightRange: '',
-    showPassword: false,
-  });
-
-  const handleChange = prop => event => {
-    setValues({ ...values, [prop]: event.target.value });
-  };
+  // const [values, setValues] = React.useState({
+  //   amount: '',
+  //   password: '',
+  //   weight: '',
+  //   weightRange: '',
+  //   showPassword: false,
+  // });
 
   return (
-    <ScheduleWrapper>
-      <InFormBlock>
-        <LoginGrid></LoginGrid>
-      </InFormBlock>
-    </ScheduleWrapper>
+    <Layout>
+      <Navbar />
+      <Wrapper>
+        <LoginBlock>
+          <LoginHeader>
+            <div id="title">LOGIN</div>
+            <div id="word">당신의 스타를 만나보세요!</div>
+          </LoginHeader>
+          <LoginContent>
+            <LoginContentRow>
+              <input id="id" type="text" placeholder="id" />
+            </LoginContentRow>
+            <LoginContentRow>
+              <input type="password" placeholder="password" />
+            </LoginContentRow>
+            <LoginContentRow>
+              <button id="login-button">로그인</button>
+            </LoginContentRow>
+            <LoginContentRow>
+              <div id="footer">
+                <p>아직 회원이 아니신가요?</p>
+                <Link to="/signup">회원가입</Link>
+                <Link to="/find/password">비밀번호 찾기</Link>
+              </div>
+            </LoginContentRow>
+          </LoginContent>
+        </LoginBlock>
+      </Wrapper>
+      <Footer />
+    </Layout>
   );
 }
