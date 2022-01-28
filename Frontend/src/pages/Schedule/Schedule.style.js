@@ -1,40 +1,30 @@
 import styled from 'styled-components';
-import { blockColor, device, pointColor } from '../../styles/variables';
-
-const ScheduleWrapper = styled.div`
-  width: 100%;
-  display: flex;
-  justify-content: center;
-`;
-
-const ScheduleBlock = styled.div`
-  max-width: 1200px;
-  width: 70%;
-  background-color: ${blockColor};
-  border-radius: 10px;
-  color: black;
-  @media ${device.TabletPortrait} {
-    width: 100%;
-    border-radius: 0px;
-  }
-`;
+import { device, pointColor } from '../../styles/variables';
 
 const ScheduleMenu = styled.div`
-  text-align: center;
-  padding: 15px 0;
+  height: 12%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
 `;
 
 const Menu = styled.div`
   cursor: pointer;
   color: ${props => (props.flag === 1 ? pointColor : 'black')};
-  font-size: 35px;
+  font-size: 2em;
   margin: 0 15px;
   display: inline-block;
 `;
 
 const ScheduleContent = styled.div`
-  height: 70vh;
-  overflow-y: auto;
-  margin: 0 20px;
+  height: 88%;
+  #schedule {
+    height: 100%;
+    margin: 0 10px;
+    overflow-y: auto;
+    @media ${device.TabletPortrait} {
+      margin: 0;
+    }
+  }
 `;
-export { ScheduleBlock, ScheduleMenu, Menu, ScheduleWrapper, ScheduleContent };
+export { ScheduleMenu, Menu, ScheduleContent };

@@ -15,6 +15,7 @@ const ScheduleCardImage = styled.div`
   height: 150px;
   border-radius: 8px;
   overflow: hidden;
+  background-color: gray;
   img {
     cursor: pointer;
     width: 100%;
@@ -30,8 +31,9 @@ const ScheduleCardImage = styled.div`
 const ScheduleCardContent = styled.div`
   width: 45%;
   margin: 10px;
+  color: black;
   #title {
-    font-size: 24px;
+    font-size: 1.3em;
     font-weight: bold;
     margin-bottom: 7px;
     cursor: pointer;
@@ -40,7 +42,7 @@ const ScheduleCardContent = styled.div`
     }
   }
   #date {
-    font-size: 15px;
+    font-size: 1em;
     color: gray;
   }
 `;

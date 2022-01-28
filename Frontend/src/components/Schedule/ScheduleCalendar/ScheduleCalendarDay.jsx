@@ -1,4 +1,5 @@
 import React from 'react';
+import { Link } from 'react-router-dom';
 import { DayBlock, PlanButton } from './ScheduleCalendar.style';
 
 export default function ScheduleCalendarDay({ date, className, schedule }) {
@@ -12,7 +13,7 @@ export default function ScheduleCalendarDay({ date, className, schedule }) {
   const currentPlan = currentSchedule.map(s => {
     return (
       <PlanButton key={s.id} num={s.id}>
-        {s.name}
+        <Link to={`/schedule/${s.id}`}>{s.name}</Link>
       </PlanButton>
     );
   });

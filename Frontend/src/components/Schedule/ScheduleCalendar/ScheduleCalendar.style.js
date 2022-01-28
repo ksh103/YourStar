@@ -7,7 +7,8 @@ const SchduleCalendarWrapper = styled.div`
 `;
 
 const Header = styled.div`
-  height: 7vh;
+  color: black;
+  height: 7%;
   display: flex;
   justify-content: center;
   align-items: center;
@@ -50,6 +51,8 @@ const DayBlock = styled.div`
   flex-direction: column;
   flex-wrap: nowrap;
   overflow: hidden;
+  color: black;
+  font-size: 0.8em;
   &.grayed {
     color: gray;
   }

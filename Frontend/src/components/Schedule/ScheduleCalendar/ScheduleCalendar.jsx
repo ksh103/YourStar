@@ -10,49 +10,7 @@ import {
 import { MdChevronLeft, MdChevronRight } from 'react-icons/md';
 import ScheduleCalendarDay from './ScheduleCalendarDay';
 
-const meeting = [
-  {
-    id: 1,
-    name: '김다미 팬미팅1',
-    meeting_start_date: '2022-01-30 14:00:00',
-  },
-  {
-    id: 2,
-    name: '김다미 팬미팅2',
-    meeting_start_date: '2022-01-30 01:00:00',
-  },
-  {
-    id: 3,
-    name: '지수민',
-    meeting_start_date: '2022-01-11 01:00:00',
-  },
-  {
-    id: 4,
-    name: '아이돌박동준',
-    meeting_start_date: '2022-01-21 01:00:00',
-  },
-  {
-    id: 5,
-    name: '손은성',
-    meeting_start_date: '2022-01-01 01:00:00',
-  },
-  {
-    id: 6,
-    name: '손은성',
-    meeting_start_date: '2022-01-01 01:00:00',
-  },
-  {
-    id: 7,
-    name: '손은성',
-    meeting_start_date: '2022-01-02 01:00:00',
-  },
-  {
-    id: 8,
-    name: '손은성',
-    meeting_start_date: '2022-01-03 01:00:00',
-  },
-];
-export default function ScheduleCalendar() {
+export default function ScheduleCalendar({ meeting }) {
   const [date, setDate] = useState(moment());
   const movePrevMonth = () => {
     setDate(date.clone().subtract(1, 'month'));

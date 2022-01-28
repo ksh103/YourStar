@@ -13,13 +13,6 @@ const ImgTag = styled.img`
   border: 2px solid white;
 `;
 
-const size = {
-  MobileLandscape: '480px',
-  TabletPortrait: '768px',
-  TabletLandscape: '992px',
-  Laptops: '1200px',
-};
-
 const LoginSignupBlock = styled.div`
   //border: 1px solid red;
   margin-top: 50px;
@@ -58,4 +51,77 @@ const ScheduleWrapper = styled.div`
   justify-content: center;
 `;
 
-export { innerDiv, ImgTag, LoginSignupBlock, InFormBlock, ScheduleWrapper };
+const LoginBlock = styled.div`
+  min-height: 480px;
+  min-width: 350px;
+  width: 55vh;
+  height: 70vh;
+  background-color: ${blockColor};
+  border-radius: 10px;
+  @media ${device.TabletPortrait} {
+    border-radius: 0px;
+    width: 100%;
+    height: 100%;
+  }
+`;
+const LoginHeader = styled.div`
+  margin-top: 1em;
+  height: 30%;
+  flex-direction: column;
+  #title {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 80%;
+    font-size: 2em;
+    font-weight: bold;
+    color: ${pointColor};
+  }
+  #word {
+    text-align: center;
+    height: 20%;
+    font-size: 15px;
+    color: black;
+  }
+`;
+
+const LoginContent = styled.div`
+  height: 50%;
+`;
+const LoginContentRow = styled.div`
+  input {
+    display: block;
+    width: 280px;
+    height: 50px;
+    margin: 12px auto;
+    padding: 0 20px;
+    background-color: #dfdfdf;
+    border: 0;
+    border-radius: 4px;
+  }
+  #login-button {
+    display: block;
+    width: 320px;
+    height: 50px;
+    margin: 12px auto;
+    border: 0;
+    border-radius: 4px;
+    color: white;
+    background-color: ${pointColor};
+  }
+  #footer {
+    text-align: center;
+  }
+`;
+
+export {
+  LoginContentRow,
+  LoginHeader,
+  LoginContent,
+  LoginBlock,
+  innerDiv,
+  ImgTag,
+  LoginSignupBlock,
+  InFormBlock,
+  ScheduleWrapper,
+};

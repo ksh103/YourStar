@@ -1,25 +1,6 @@
 import styled from 'styled-components';
-import { blockColor, device, pointColor } from '../../styles/variables';
+import { pointColor } from '../../styles/variables';
 
-const ScheduleWrapper = styled.div`
-  width: 100%;
-  display: flex;
-  justify-content: center;
-`;
-
-const ScheduleBlock = styled.div`
-  max-width: 1200px;
-  width: 70%;
-  height: 78.5vh;
-  overflow-y: auto;
-  background-color: ${blockColor};
-  border-radius: 10px;
-  color: black;
-  @media ${device.TabletPortrait} {
-    width: 100%;
-    border-radius: 0px;
-  }
-`;
 const Title = styled.div`
   font-size: 2.2vw;
   color: black;
@@ -39,7 +20,6 @@ const Title = styled.div`
 const UploadImage = styled.div`
   border-radius: 5%;
   background-color: #dfe4ea;
-  /* border: solid red; */
   margin-top: 5vh;
   margin-left: 3vw;
   margin-right: 2vw;
@@ -50,10 +30,21 @@ const UploadImage = styled.div`
 `;
 
 const InputData = styled.div`
-  /* border: solid red; */
   margin-top: 5vh;
   margin-right: 3vw;
-  height: 56vh;
+  margin-bottom: 1em;
 `;
 
-export { ScheduleWrapper, Title, ScheduleBlock, UploadImage, InputData };
+const ApplyButton = styled.div`
+  margin-right: 3vw;
+  text-align: center;
+  button {
+    width: 100px;
+    height: 40px;
+    color: white;
+    background-color: ${pointColor};
+    border-radius: 10px;
+  }
+`;
+
+export { Title, UploadImage, InputData, ApplyButton };

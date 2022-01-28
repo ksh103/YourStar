@@ -5,9 +5,7 @@ import { device } from '../../styles/variables';
 const Section1 = styled.div`
   padding-left: 2vw;
   margin: 0 auto;
-  height: 34.2vh;
   color: black;
-  /* border: solid red; */
   table {
     width: 100%;
     text-align: left;
@@ -15,7 +13,7 @@ const Section1 = styled.div`
   td {
     font-size: 1vw;
     font-weight: bold;
-    padding-top: 2.8vh;
+    padding-top: 2.4vh;
   }
   input {
     width: 80%;
@@ -48,13 +46,19 @@ export default function ApplyInputSection() {
           <table>
             <tbody>
               <tr>
-                <td style={{ width: '28%' }}>예매 시작시간</td>
+                <td style={{ width: '28%' }}>예매 시간</td>
                 <td>
                   <input type={'datetime-local'}></input>
                 </td>
               </tr>
               <tr>
-                <td>팬미팅 시작시간</td>
+                <td>시작시간</td>
+                <td>
+                  <input type={'datetime-local'}></input>
+                </td>
+              </tr>
+              <tr>
+                <td>종료시간</td>
                 <td>
                   <input type={'datetime-local'}></input>
                 </td>
