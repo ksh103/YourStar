@@ -1,7 +1,5 @@
 import React from 'react';
 import { BrowserRouter, Route, Switch } from 'react-router-dom';
-import Navbar from './components/Navbar/Navbar';
-import Footer from './components/Footer/Footer';
 import {
   Admin,
   Apply,
@@ -11,15 +9,16 @@ import {
   Room,
   Schedule,
   Signup,
-  Detail,
+  ScheduleDetail,
+  FindPassword,
   RoomDongJun,
   RoomEunSeong,
   RoomSumin,
+  AdminMeetingDetail,
+  Login,
 } from './pages/index';
-import Login from './pages/Login/Login';
 import GlobalStyle from './styles/global';
 import InformChange from './pages/Mypage/InformChange';
-import FindPassword from './pages/Login/FindPassword';
 
 function App() {
   return (
@@ -30,38 +29,42 @@ function App() {
           <Route exact path="/">
             <Main />
           </Route>
-          <Route path="/login">
+          <Route exact path="/login">
             <Login />
           </Route>
-          <Route path="/signup">
+          <Route exact path="/signup">
             <Signup />
           </Route>
-          <Route path="/faq">
+          <Route exact path="/faq">
             <FAQ />
           </Route>
-          <Route path="/apply">
+          <Route exact path="/apply">
             <Apply />
           </Route>
-          <Route path="/admin">
+          <Route exact path="/admin/:id">
+            <AdminMeetingDetail />
+          </Route>
+          <Route exact path="/admin">
             <Admin />
           </Route>
-          <Route path="/schedule">
+          <Route exact path="/schedule/:id">
+            <ScheduleDetail />
+          </Route>
+          <Route exact path="/schedule">
             <Schedule />
           </Route>
-          <Route path="/mypage">
+          <Route exact path="/mypage">
             <Mypage />
           </Route>
-          <Route path="/room/:id">
-            <Room />
+          <Route exact path="/Find/password">
+            <FindPassword />
           </Route>
-          <Route path="/detail/:id">
-            <Detail />
+
+          <Route exact path="/room">
+            <Room />
           </Route>
           <Route path="/InformChange">
             <InformChange />
-          </Route>
-          <Route path="/FindPW">
-            <FindPassword />
           </Route>
           <Route path="/DongJun">
             <RoomDongJun />
