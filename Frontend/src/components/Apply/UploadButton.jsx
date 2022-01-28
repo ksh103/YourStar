@@ -18,7 +18,7 @@ export default function UploadButton() {
           aria-label="upload picture"
           component="span"
         >
-          <IoIosAddCircleOutline size={'4vw'} />
+          <IoIosAddCircleOutline size={'40px'} />
         </IconButton>
       </label>
     </>
