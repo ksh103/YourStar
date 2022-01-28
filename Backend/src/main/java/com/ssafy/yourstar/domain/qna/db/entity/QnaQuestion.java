@@ -16,7 +16,7 @@ import java.time.LocalDateTime;
 @Getter
 @Setter
 @Table(name = "qna_question")
-@ApiModel(value = "QNA - 질문")
+@ApiModel(value = "QnaQuestion", description = "QNA 질문")
 public class QnaQuestion {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
