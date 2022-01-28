@@ -9,6 +9,7 @@ const YelloDiv = styled.div`
   height: 35vh;
   border-radius: 3vh;
   background-color: yellow;
+  box-shadow: 0.306vh 0.306vh black;
   animation: fadein 1s;
   -moz-animation: fadein 1s;
   -webkit-animation: fadein 1s;

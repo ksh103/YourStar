@@ -3,8 +3,8 @@ import styled from 'styled-components';
 
 //margin: 3.125vh 2vh;
 const OtherAngelStyle = styled.div`
-  display: inline-flex;
-  margin: 2vh 1vw;
+  // display: inline-flex;
+  margin: 2vh 1.2vw;
   height: 15.628vh;
   width: 11.6666vw;
   background-color: gray;
