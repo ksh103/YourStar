@@ -85,5 +85,36 @@ const Section2 = styled.div`
     font-size: 1vw;
   }
 `;
+const AdminHeader = styled.div`
+  height: 12%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  font-size: 1.3em;
+  font-weight: bold;
+`;
+const AdminContent = styled.div`
+  height: 88%;
+  #admin {
+    height: 100%;
+    margin: 0 10px;
+    overflow-y: auto;
+    display: flex;
+    justify-content: center;
+    @media ${device.TabletPortrait} {
+      margin: 0;
+    }
+  }
+`;
 
-export { AdminBlock, Icon, AdminWrapper, Title, Image, Section1, Section2 };
+export {
+  AdminBlock,
+  Icon,
+  AdminWrapper,
+  Title,
+  Image,
+  Section1,
+  Section2,
+  AdminHeader,
+  AdminContent,
+};

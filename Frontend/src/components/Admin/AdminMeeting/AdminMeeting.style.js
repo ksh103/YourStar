@@ -1,116 +1,61 @@
 import styled from 'styled-components';
-import { blockColor, device } from '../../../styles/variables';
-
-const AdminMeetingListWrapper = styled.div`
-  width: 100%;
-  height: 70vh;
-  overflow-y: auto;
-`;
-const AdminMeetingListBlock = styled.div`
-  background-color: white;
-  margin: 20px 50px;
-`;
+import { device, pointColor } from '../../../styles/variables';
 
 const AdminMeetingApproveButton = styled.button`
-  background-color: ${props => (props.color === 0 ? 'coral' : 'skyblue')};
+  background-color: ${props => (props.color === 0 ? 'lightpink' : 'lightblue')};
   width: 60px;
   border-radius: 10px; ;
 `;
-
-const AdminWrapper = styled.div`
-  width: 100%;
+const AdminMeetingDetailFooter = styled.div`
+  text-align: center;
+  button {
+    width: 100px;
+    height: 40px;
+    background-color: ${props => (props.color === 0 ? pointColor : 'gray')};
+    border-radius: 10px;
+    color: white;
+    margin: 10px;
+  }
+`;
+const AdminMeetindDetailHeader = styled.div`
+  height: 12%;
+  margin: 0 1.5em;
   display: flex;
-  justify-content: center;
-`;
-
-const AdminBlock = styled.div`
-  max-width: 1200px;
-  width: 70%;
-  background-color: ${blockColor};
-  border-radius: 10px;
-  color: black;
-  @media ${device.TabletPortrait} {
-    width: 100%;
-    border-radius: 0px;
+  align-items: center;
+  #meeting-icon {
+    cursor: pointer;
+    font-size: 30px;
+    &:hover {
+      color: ${pointColor};
+    }
+  }
+  #meeting-name {
+    font-size: 1.3em;
+    margin-left: 3em;
+    @media ${device.TabletPortrait} {
+      font-size: 1.1em;
+      margin-left: 1em;
+    }
   }
 `;
-const Icon = styled.div`
-  size: 3vw;
-  padding-top: 10px;
-  padding-right: 0.5vw;
-  cursor: pointer;
-  &:hover {
-    transform: scale(1.1);
-    transition: 0.5s;
-  }
-`;
-const Title = styled.div`
-  font-size: 2.2vw;
-  color: black;
-  height: 10vh;
-  /* border: solid red; */
-  display: flex; // div태그 내 text 수직, 수평정렬
-  align-items: center; // div태그 내 text 수직, 수평정렬
-  /* justify-content: center; // div태그 내 text 수직, 수평정렬 */
-  div {
-    padding-left: 1.2vw;
-    text-align: left;
-  }
-`;
-const Image = styled.div`
-  width: 100%;
-  height: 100%;
-  color: black;
-  position: relative;
-  /* border: solid red; */
-  img {
-    padding-top: 2.8vh;
-    padding-left: 0.5vw;
-    width: 100%;
+const AdminMeetingDetailContent = styled.div`
+  height: 88%;
+  #detail {
     height: 100%;
-    object-fit: cover;
-    border-radius: 6%;
+    margin: 0 10px;
+    overflow-y: auto;
+    @media ${device.TabletPortrait} {
+      margin: 0;
+    }
+  }
+  #detail #detail2 {
+    display: flex;
+    justify-content: center;
   }
 `;
-
-const Section1 = styled.div`
-  padding-left: 2vw;
-  margin: 0 auto;
-  height: 34.2vh;
-  color: black;
-  /* border: solid red; */
-  table {
-    width: 100%;
-    text-align: left;
-  }
-  td {
-    font-size: 1vw;
-    font-weight: bold;
-    padding-top: 2.8vh;
-  }
-`;
-const Section2 = styled.div`
-  height: 34.2vh;
-  color: black;
-  padding-right: 2vw;
-  /* border: solid red; */
-  div {
-    padding-top: 2.8vh;
-    padding-left: 2vw;
-    text-align: left;
-    font-size: 1vw;
-  }
-`;
-
 export {
-  AdminBlock,
-  Icon,
-  AdminWrapper,
-  Title,
-  Image,
-  Section1,
-  Section2,
-  AdminMeetingListWrapper,
-  AdminMeetingListBlock,
+  AdminMeetingDetailFooter,
   AdminMeetingApproveButton,
+  AdminMeetindDetailHeader,
+  AdminMeetingDetailContent,
 };
