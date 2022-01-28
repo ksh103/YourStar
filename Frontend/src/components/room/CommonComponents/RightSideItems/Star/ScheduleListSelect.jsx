@@ -1,6 +1,8 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { HalfSideDiv1, SmallBox } from '../Chatting/Chatting.style';
 import styled from 'styled-components';
+import { useSelector, useDispatch } from 'react-redux';
+import { changeList } from '../../../../../store/modules/selectList';
 
 const ScheduleListWrapper = styled.div`
   /* border: solid red; */
@@ -27,19 +29,35 @@ const ScheduleListBox = styled.div`
   align-items: center;
 `;
 
+const List = [
+  '대기화면',
+  '공연모드',
+  'QnA모드',
+  '랜덤추첨',
+  'O/X게임',
+  '초성게임',
+  '1:1팬미팅',
+];
+
 export default function ScheduleListSelect() {
+  // const { selectNum } = useSelector(state => ({
+  //   selectNum: state.selectmode.selectNum,
+  // }));
+
+  const dispatch = useDispatch();
+
+  const SetSelect = selectNum => dispatch(changeList(selectNum));
+
   return (
     <>
       <HalfSideDiv1>
         <SmallBox>
           <ScheduleListWrapper>
-            <ScheduleListBox>1</ScheduleListBox>
-            <ScheduleListBox>2</ScheduleListBox>
-            <ScheduleListBox>3</ScheduleListBox>
-            <ScheduleListBox>4</ScheduleListBox>
-            <ScheduleListBox>5</ScheduleListBox>
-            <ScheduleListBox>6</ScheduleListBox>
-            <ScheduleListBox>7</ScheduleListBox>
+            {List.map((list, index) => (
+              <ScheduleListBox key={index} onClick={() => SetSelect(index)}>
+                {list}
+              </ScheduleListBox>
+            ))}
           </ScheduleListWrapper>
         </SmallBox>
       </HalfSideDiv1>
