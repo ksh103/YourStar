@@ -1,3 +1,3 @@
 import { combineReducers } from 'redux';
-
-export default combineReducers({});
+import selectmode from './selectList';
+export default combineReducers({ selectmode });
