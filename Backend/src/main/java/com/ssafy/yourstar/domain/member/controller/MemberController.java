@@ -47,7 +47,7 @@ public class MemberController {
 
                     memberService.memberIsLogin(memberEmail); // 로그인 됐음을 DB에 저장 --> 로그인 여부 토큰에 담아서 보내기
 
-                    return ResponseEntity.ok(MemberLoginPostRes.of(201, "Success", JwtTokenUtil.getMemberLoginToken(memberEmail)));
+                    return ResponseEntity.status(200).body(MemberLoginPostRes.of(200, "Success", JwtTokenUtil.getMemberLoginToken(memberEmail)));
                 }else {
                     // 비밀번호가 일치하지 않을 때
                     return ResponseEntity.status(401).body(MemberLoginPostRes.of(401, "Invalid Password", null));
@@ -66,7 +66,7 @@ public class MemberController {
         log.info("memberLogout - Call");
 
         memberService.memberLogout(memberId);
-        return ResponseEntity.status(201).body(BaseResponseBody.of(200, "Success"));
+        return ResponseEntity.status(200).body(BaseResponseBody.of(200, "Success"));
     }
 
 
