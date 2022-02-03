@@ -42,8 +42,8 @@ public class MeetingServiceImpl implements MeetingService {
     @Value("${app.fileupload.uploadDir}")
     private String uploadFolder;
 
-//    @Value("${app.fileupload.uploadPath}")
-    private String uploadPath = "/home/ubuntu";
+    @Value("${app.fileupload.uploadPath}")
+    private String uploadPath;
 
     @Override
     public MeetingGetRes meetingApplyByStar(MeetingApplyByStarPostReq meetingApplyByStarPostReq, MultipartHttpServletRequest request) {
@@ -202,9 +202,7 @@ public class MeetingServiceImpl implements MeetingService {
     }
 
     @Override
-    public Page<Meeting> meetingList(Pageable pageable) {
-        return meetingRepository.findAll(pageable);
-    }
+    public Page<Meeting> meetingList(Pageable pageable) {return meetingRepository.findAll(pageable);}
 
     @Override
     public Meeting meetingDetail(int meetingId) {
