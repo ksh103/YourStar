@@ -80,9 +80,9 @@ const NavbarWrapper = styled.div`
     opacity: 1;
     transition: 0.5s;
   }
-  height: 12%;
+  height: 12vh;
   @media ${device.TabletPortrait} {
-    height: 10%;
+    height: 10vh;
   }
 `;
 

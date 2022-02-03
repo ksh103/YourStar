@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import { Block, blockColor, Layout, Wrapper } from '../../styles/variables.js';
 import Navbar from '../../components/Navbar/Navbar.jsx';
 import { FAQContent, FAQContentRow, FAQHeader } from './FAQ.style.js';
@@ -7,7 +7,7 @@ import AccordionDetails from '@mui/material/AccordionDetails';
 import AccordionSummary from '@mui/material/AccordionSummary';
 import { MdExpandMore } from 'react-icons/md';
 import Footer from '../../components/Footer/Footer.jsx';
-
+import axios from 'axios';
 const datas = [
   {
     id: 1,
@@ -46,6 +46,13 @@ const datas = [
   },
 ];
 const FAQDate = () => {
+  const check = () => {
+    const a = axios
+      .get('http://i6e204.p.ssafy.io:8080/api/faq?page=1&size=5')
+      .then(res => res.status === 200 && console.log(res));
+  };
+  check();
+
   return datas.map(faq => (
     <FAQContentRow key={faq.id}>
       <Accordion>
