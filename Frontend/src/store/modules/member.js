@@ -12,12 +12,6 @@ const initialState = {
   findPwLoading: false, // 비밀번호 시도중
   findPwDone: false,
   findPwError: null,
-  updateMemberLoading: false, // 회원수정
-  updateMemberDone: false,
-  updateMemberError: false,
-  deleteMemberLoading: false, // 회원탈퇴
-  deleteMemberDone: false,
-  deleteMemberError: false,
   me: null,
 };
 
@@ -36,14 +30,6 @@ export const SIGN_UP_FAILURE = 'SIGN_UP_FAILURE';
 export const FIND_PW_REQUEST = 'FIND_PW_REQUEST';
 export const FIND_PW_SUCCESS = 'FIND_PW_SUCCESS';
 export const FIND_PW_FAILURE = 'FIND_PW_FAILURE';
-
-export const UPDATE_MEMBER_REQUEST = 'UPDATE_MEMBER_REQUEST';
-export const UPDATE_MEMBER_SUCCESS = 'UPDATE_MEMBER_SUCCESS';
-export const UPDATE_MEMBER_FAILURE = 'UPDATE_MEMBER_FAILURE';
-
-export const DELETE_MEMBER_REQUEST = 'DELETE_MEMBER_REQUEST';
-export const DELETE_MEMBER_SUCCESS = 'DELETE_MEMBER_SUCCESS';
-export const DELETE_MEMBER_FAILURE = 'DELETE_MEMBER_FAILURE';
 
 const reducer = (state = initialState, action) =>
   produce(state, draft => {
@@ -101,32 +87,6 @@ const reducer = (state = initialState, action) =>
       case FIND_PW_FAILURE:
         draft.findPwLoading = false;
         draft.findPwError = action.error;
-        break;
-      case UPDATE_MEMBER_REQUEST:
-        draft.updateMemberLoading = true;
-        draft.updateMemberError = null;
-        draft.updateMemberDone = false;
-        break;
-      case UPDATE_MEMBER_SUCCESS:
-        draft.updateMemberLoading = false;
-        draft.updateMemberDone = true;
-        break;
-      case UPDATE_MEMBER_FAILURE:
-        draft.updateMemberLoading = false;
-        draft.updateMemberError = action.error;
-        break;
-      case DELETE_MEMBER_REQUEST:
-        draft.deleteMemberLoading = true;
-        draft.deleteMemberError = null;
-        draft.deleteMemberDone = false;
-        break;
-      case DELETE_MEMBER_SUCCESS:
-        draft.deleteMemberLoading = false;
-        draft.deleteMemberDone = true;
-        break;
-      case DELETE_MEMBER_FAILURE:
-        draft.deleteMemberLoading = false;
-        draft.deleteMemberError = action.error;
         break;
       default:
         break;
