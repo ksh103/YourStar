@@ -5,7 +5,7 @@ const FooterBlock = styled.div`
   display: flex;
   font-size: 10px;
   color: gray;
-  height: 10%;
+  height: 10vh;
   justify-content: center;
   align-items: center;
   @media ${device.TabletPortrait} {

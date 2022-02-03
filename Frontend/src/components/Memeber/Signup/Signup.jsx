@@ -98,7 +98,20 @@ export default function Signup() {
                 </FormControl>
               </SignupContentRow>
               <SignupContentRow>
-                <Radio /> 남<Radio /> 여
+                {/* <input
+                  type="radio"
+                  value="남자"
+                  checked={gender === '남자' ? true : false}
+                  onChange={onGenderHandler}
+                ></input>
+                남
+                <input
+                  type="radio"
+                  value="여자"
+                  checked={gender === '여자' ? true : false}
+                  onChange={onGenderHandler}
+                ></input> */}
+                여
               </SignupContentRow>
               <SignupContentRow>
                 <button className="signup-button">가입하기</button>
@@ -109,17 +122,5 @@ export default function Signup() {
       </Wrapper>
       <Footer />
     </Layout>
-    // <ScheduleWrapper>
-    // <InFormBlock>
-    //   <Grid
-    //     container
-    //     style={{
-    //       height: '100%',
-    //     }}
-    //   >
-    //     <SignupSevenGrid></SignupSevenGrid>
-    //   </Grid>
-    // </InFormBlock>
-    // </ScheduleWrapper>
   );
 }

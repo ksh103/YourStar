@@ -1,14 +1,13 @@
 import { useRef, useEffect, useState } from 'react';
+import Navbar from '../Navbar/Navbar';
 import { UniverseBlock } from './Universe.style';
-
+import moon from '../../assets/images/moon.png';
 const Universe = () => {
   const canvasRef = useRef(null);
   const canvasRefMoon = useRef(null);
   const canvasRefLogo = useRef(null);
   const canvasRefArrow = useRef(null);
-  console.log(1);
   const size = useWindowSize();
-  console.log(size);
   useEffect(() => {
     console.log('3 in useEffect');
     const canvas = canvasRef.current;
@@ -116,24 +115,22 @@ const Universe = () => {
 
     animation();
   }, [size.width, size.height]);
-  console.log(2);
   //moon canvas
   useEffect(() => {
-    console.log('moonEffect');
     const canvas = canvasRefMoon.current;
 
     var ctx = canvas.getContext('2d');
 
     var img = new Image();
-    img.src = require('./img/moon.png');
-    console.log(img.src);
+    img.src = require('../../assets/images/moon.png');
     img.onload = function () {
-      ctx.drawImage(img, 100, 100);
+      ctx.drawImage(img, 0, 0);
     };
+    console.log(size.width, size.height);
     ctx.clearRect(0, 0, size.width, size.height);
   }, [size.width, size.height]);
 
-  //logo canvas
+  // logo canvas
   useEffect(() => {
     const canvas = canvasRefLogo.current;
 
@@ -148,7 +145,7 @@ const Universe = () => {
     ctx.clearRect(0, 0, size.width, size.height);
   }, [size.width, size.height]);
 
-  //underArrow canvas
+  // underArrow canvas
   useEffect(() => {
     const canvas = canvasRefArrow.current;
 
@@ -164,31 +161,34 @@ const Universe = () => {
   }, [size.width, size.height]);
 
   return (
-    <div>
-      <UniverseBlock>
-        <div style={{ position: 'relative' }}>
-          <canvas id="background" ref={canvasRef} />
-          <canvas
-            style={{ position: 'absolute', top: 60, left: 610 }}
-            width="1000"
-            height="1000"
-            ref={canvasRefMoon}
-          />
-          <canvas
-            style={{ position: 'absolute', top: 650, left: 560 }}
-            width="1000"
-            height="1000"
-            ref={canvasRefLogo}
-          />
-          <canvas
-            style={{ position: 'absolute', top: 760, left: 850 }}
-            width="1000"
-            height="1000"
-            ref={canvasRefArrow}
-          />
-        </div>
-      </UniverseBlock>
-    </div>
+    <UniverseBlock>
+      <div style={{ position: 'relative' }}>
+        <canvas
+          id="background"
+          ref={canvasRef}
+          style={{ position: 'absolute', top: 0, left: 0, right: 0 }}
+        />
+        <canvas
+          style={{ position: 'absolute', top: 60, left: 610 }}
+          width="1000"
+          height="1000"
+          ref={canvasRefMoon}
+        />
+
+        <canvas
+          style={{ position: 'absolute', top: 650, left: 560 }}
+          width="1000"
+          height="1000"
+          ref={canvasRefLogo}
+        />
+        <canvas
+          style={{ position: 'absolute', top: 760, left: 850 }}
+          width="1000"
+          height="1000"
+          ref={canvasRefArrow}
+        />
+      </div>
+    </UniverseBlock>
   );
 };
 

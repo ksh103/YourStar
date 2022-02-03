@@ -1,4 +1,5 @@
 import styled from 'styled-components';
+import space from '../assets/images/space.jpg';
 
 // Values
 
@@ -50,9 +51,14 @@ export const device = {
 // Layout components
 
 export const Layout = styled.div`
+  background-image: url(${space});
   position: relative;
   min-height: 600px;
   height: 100vh;
+  background-size: cover;
+  @media ${device.TabletPortrait} {
+    background: none;
+  }
 `;
 export const Wrapper = styled.div`
   height: 78%;

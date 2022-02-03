@@ -1,5 +1,5 @@
 import styled from 'styled-components';
-import { blockColor, device, pointColor } from '../../styles/variables';
+import { blockColor, device } from '../../styles/variables';
 
 const MypageProfileImgDiv = styled.div`
   width: 15vh;
@@ -107,15 +107,28 @@ const InFormBlock = styled.div`
   }
 `;
 
-export {
-  MypageProfileImgDiv,
-  MypageProfileImgTag,
-  WhiteBlock,
-  ProfileTextDiv,
-  ImageCard,
-  ScheduleWrapper,
-  ScheduleBlock,
-  InFormBlock,
-  StarCard,
-  NonStarCard,
-};
+const MypageWrapper = styled.div`
+  height: 100%;
+  margin: 0 10px;
+  overflow-y: auto;
+  @media ${device.TabletPortrait} {
+    margin: 0;
+  }
+`;
+
+const MypageHeader = styled.div`
+  display: flex;
+  justify-content: center;
+  padding: 20px;
+  @media ${device.TabletPortrait} {
+    padding: 10px;
+  }
+`;
+const MypageContent = styled.div`
+  width: 100%;
+  .poster {
+    padding: 0 10%;
+  }
+`;
+
+export { MypageWrapper, MypageHeader, MypageContent };

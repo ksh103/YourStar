@@ -16,9 +16,9 @@ import {
   RoomSumin,
   AdminMeetingDetail,
   Login,
+  MypageDetail,
 } from './pages/index';
 import GlobalStyle from './styles/global';
-import InformChange from './pages/Mypage/InformChange';
 
 function App() {
   return (
@@ -56,15 +56,15 @@ function App() {
           <Route exact path="/mypage">
             <Mypage />
           </Route>
-          <Route exact path="/Find/password">
+          <Route exact path="/find/password">
             <FindPassword />
           </Route>
 
           <Route exact path="/room">
             <Room />
           </Route>
-          <Route path="/InformChange">
-            <InformChange />
+          <Route path="/mypage/:id">
+            <MypageDetail />
           </Route>
           <Route path="/DongJun">
             <RoomDongJun />
