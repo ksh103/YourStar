@@ -38,6 +38,7 @@ const MeetingRoom = (state = initialState, action) => {
       console.log('액션에따른 수행중');
       console.log(action);
       return {
+        ...state,
         chattingList: [...state.chattingList, action.payload],
       };
     default:

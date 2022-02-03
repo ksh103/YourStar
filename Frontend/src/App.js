@@ -17,6 +17,9 @@ import {
   AdminMeetingDetail,
   Login,
   MypageDetail,
+  RoomJisul,
+  RoomYoungWon,
+  RoomSohyun,
 } from './pages/index';
 import GlobalStyle from './styles/global';
 
@@ -74,6 +77,15 @@ function App() {
           </Route>
           <Route path="/Sumin">
             <RoomSumin />
+          </Route>
+          <Route path="/Sohyun">
+            <RoomSohyun />
+          </Route>
+          <Route path="/YoungWon">
+            <RoomYoungWon />
+          </Route>
+          <Route path="/Jisul">
+            <RoomJisul />
           </Route>
         </Switch>
       </BrowserRouter>

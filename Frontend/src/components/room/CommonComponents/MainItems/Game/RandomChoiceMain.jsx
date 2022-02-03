@@ -35,7 +35,7 @@ const UserList = [
   '공혁준',
   '육지담',
 ];
-
+//git commit -m "[S06P12E204-261] FE-미팅룸UI: RandomGame생성&미팅룸redux 생성 &  "
 const shuffleArray = array => {
   for (let i = 0; i < array.length; i++) {
     let j = Math.floor(Math.random() * (i + 1));

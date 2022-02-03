@@ -4,19 +4,22 @@ import { OpenVidu } from 'openvidu-browser';
 import React, { Component } from 'react';
 import './App.css';
 import UserVideoComponent from './UserVideoComponent';
+import { connect } from 'react-redux';
+import { ChattingAction } from '../../../store/modules/meetingRoom';
 
-const OPENVIDU_SERVER_URL = 'https://' + window.location.hostname + ':4443';
-const OPENVIDU_SERVER_SECRET = 'MY_SECRET';
+const OPENVIDU_SERVER_URL = 'https://i6e204.p.ssafy.io:8443';
+const OPENVIDU_SERVER_SECRET = 'YOURSTAR';
 const BackgroundDiv = styled.div`
   width: 100%;
   height: 100%;
   background-color: #e2d8ff;
+  color: 'white';
 `;
 
-class RoomDonJun extends Component {
+class RoomYoungWon extends Component {
   constructor(props) {
     super(props);
-
+    // 현재 세션에서 사용될 state들을 정의함
     this.state = {
       mySessionId: 'SessionA',
       myUserName: 'Participant' + Math.floor(Math.random() * 100),
@@ -27,7 +30,8 @@ class RoomDonJun extends Component {
       messages: [],
       testInputValue: '',
     };
-
+    // 여기는 컴포넌트 내부에서 쓰이는 내용들에대한 bind 처리
+    // 새로운 message를 보낸다 or 세션참여 or 종료와같은 기능들을 정의해놓은곳
     this.joinSession = this.joinSession.bind(this);
     this.leaveSession = this.leaveSession.bind(this);
     this.handleChangeSessionId = this.handleChangeSessionId.bind(this);
@@ -47,16 +51,13 @@ class RoomDonJun extends Component {
 
   sendmessageByEnter(e) {
     if (e.key === 'Enter') {
-      this.setState({
-        messages: [
-          ...this.state.messages,
-          {
-            userName: this.state.myUserName,
-            text: this.state.testInputValue,
-            chatClass: 'messages__item--operator',
-          },
-        ],
-      });
+      const inputValue = {
+        userName: this.state.myUserName,
+        text: this.state.testInputValue,
+        chatClass: 'messages__item--operator',
+      };
+      console.log(this.state.testInputValue, '입력값');
+      this.props.doChattingAction(inputValue);
       const mySession = this.state.session;
 
       mySession.signal({
@@ -73,17 +74,15 @@ class RoomDonJun extends Component {
   // 게임 등수 + 싸인한 파일 --> 스토어
   sendmessageByClick() {
     console.log('클릭을 했어요!');
-    this.setState({
-      messages: [
-        ...this.state.messages,
-        {
-          userName: this.state.myUserName,
-          text: this.state.testInputValue,
 
-          chatClass: 'messages__item--operator',
-        },
-      ],
-    });
+    const inputValue = {
+      userName: this.state.myUserName,
+      text: this.state.testInputValue,
+      chatClass: 'messages__item--operator',
+    };
+    console.log(this.state.testInputValue, '입력값');
+    this.props.doChattingAction(inputValue);
+
     const mySession = this.state.session;
     mySession.signal({
       data: `${this.state.myUserName},${this.state.testInputValue}`,
@@ -91,7 +90,6 @@ class RoomDonJun extends Component {
       type: 'chat',
     });
 
-    console.log('여기는왔음', this.state.messages);
     this.setState({
       testInputValue: '',
     });
@@ -99,6 +97,8 @@ class RoomDonJun extends Component {
 
   componentDidMount() {
     window.addEventListener('beforeunload', this.onbeforeunload);
+    const { chattingList } = this.props;
+    console.log(chattingList, '리스트');
   }
 
   componentWillUnmount() {
@@ -183,18 +183,25 @@ class RoomDonJun extends Component {
 
         mySession.on('signal:chat', event => {
           let chatdata = event.data.split(',');
-          console.log(this.state.messages, '여기');
+          console.log(chatdata, '채팅데이터');
           if (chatdata[0] !== this.state.myUserName) {
-            this.setState({
-              messages: [
-                ...this.state.messages,
-                {
-                  userName: chatdata[0],
-                  text: chatdata[1],
-                  chatClass: 'messages__item--visitor',
-                },
-              ],
-            });
+            // this.setState({
+            //   messages: [
+            //     ...this.state.messages,
+            //     {
+            //       userName: chatdata[0],
+            //       text: chatdata[1],
+            //       chatClass: 'messages__item--visitor',
+            //     },
+            //   ],
+            // });
+            const inputValue = {
+              userName: chatdata[0],
+              text: chatdata[1],
+              chatClass: 'messages__item--operator',
+            };
+            console.log(this.state.testInputValue, '세션온');
+            this.props.doChattingAction(inputValue);
           }
         });
         // --- 4) Connect to the session with a valid user token ---
@@ -266,11 +273,13 @@ class RoomDonJun extends Component {
   }
 
   render() {
+    const { chattingList } = this.props;
     const mySessionId = this.state.mySessionId;
     const myUserName = this.state.myUserName;
-    const mt = this.state.messages;
     return (
       <BackgroundDiv>
+        {/* 컴포넌트는 들고왔을 때 잘 작동함 */}
+
         <div className="container">
           {this.state.session === undefined ? (
             <div id="join">
@@ -329,11 +338,14 @@ class RoomDonJun extends Component {
                 }}
               >
                 <p>messages</p>
-                <p>
-                  {mt.map((value, idx) => {
-                    return <p>{value.text}</p>;
-                  })}
-                </p>
+
+                {chattingList.map((value, idx) => {
+                  return (
+                    <div key={idx + value.text}>
+                      <p>{value.text}</p>
+                    </div>
+                  );
+                })}
               </div>
               <div id="session-header">
                 <h1 id="session-title">{mySessionId}</h1>
@@ -479,4 +491,15 @@ class RoomDonJun extends Component {
   }
 }
 
-export default RoomDonJun;
+const mapStateToProps = state => ({
+  chattingList: state.MeetingRoom.chattingList,
+});
+
+const mapDispatchToProps = dispatch => {
+  return {
+    // dispatch 가져오기
+    doChattingAction: inputValue => dispatch(ChattingAction(inputValue)),
+  };
+};
+
+export default connect(mapStateToProps, mapDispatchToProps)(RoomYoungWon);
