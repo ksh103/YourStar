@@ -1,16 +1,29 @@
-import { takeEvery } from 'redux-saga/effects';
+import { all, fork, put, takeLatest, call } from 'redux-saga/effects';
+import { FaqListAPI } from '../apis/Main/faq';
+import {
+  LOAD_FAQS_REQUEST,
+  LOAD_FAQS_SUCCESS,
+  LOAD_FAQS_FAILURE,
+} from '../modules/faq';
 
-export default function* watchFaq() {
-  yield takeEvery();
+function* loadFaqs(action) {
+  try {
+    const result = yield call(FaqListAPI, action.data);
+    yield put({
+      type: LOAD_FAQS_SUCCESS,
+      data: result,
+    });
+  } catch (err) {
+    yield put({
+      type: LOAD_FAQS_FAILURE,
+    });
+  }
 }
 
-// import createRequestSaga from 'utils/createRequestSaga';
-// import { introActions } from 'store/modules/intro';
-// import { takeEvery } from 'redux-saga/effects';
-// import introAPI from 'store/apis/intro';
+function* watchLoadFaqs() {
+  yield takeLatest(LOAD_FAQS_REQUEST, loadFaqs);
+}
 
-// const saga = createRequestSaga(introActions, introAPI);
-
-// export default function* watchIntro() {
-//   yield takeEvery(introActions.REQUEST, saga);
-// }
+export default function* faqSaga() {
+  yield all([fork(watchLoadFaqs)]);
+}

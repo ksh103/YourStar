@@ -10,5 +10,6 @@ export default function configureStore() {
     rootReducer,
     composeWithDevTools(applyMiddleware(...middlewares))
   );
+  sagaMiddleware.run(rootSaga);
   return store;
 }
