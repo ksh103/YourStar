@@ -14,6 +14,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Sort;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -30,7 +31,7 @@ public class MeetingController {
     public ResponseEntity<MeetingListGetRes> meetingList(int page, int size) {
         log.info("meetingList - Call");
 
-        Page<Meeting> meetingPage = meetingService.meetingList(PageRequest.of(page - 1, size));
+        Page<Meeting> meetingPage = meetingService.meetingList(PageRequest.of(page - 1, size, Sort.by(Sort.Direction.DESC, "meetingOpenDate")));
 
         return ResponseEntity.status(200).body(MeetingListGetRes.of(200, "Success", meetingPage));
     }
