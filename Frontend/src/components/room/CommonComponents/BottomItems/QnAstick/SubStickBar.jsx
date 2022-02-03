@@ -1,6 +1,13 @@
-import React from 'react';
+import React, { useState } from 'react';
 import styled from 'styled-components';
 import { useSelector, useDispatch } from 'react-redux';
+import {
+  changeQnAMode,
+  ChattingAction,
+} from '../../../../../store/modules/meetingRoom';
+
+// dispatch action 사용하기! 이때는 넘겨주는 값이 있어야합니다.
+// useSelectot  -> state의 정보 받아오기
 const StickBar = styled.div`
   width: 60.1416vw;
   height: 5.517vh;
@@ -15,10 +22,124 @@ const StickBarDiv = styled.div`
   left: 8%;
 `;
 
+const GridDiv = styled.div`
+  width: 100%;
+  height: 100%;
+  display: flex;
+  justify-content: flex-start;
+  align-items: center;
+  margin-left: 2vw;
+  color: black;
+`;
+
+const InnerDiv = styled.button`
+  margin: 1vw;
+  color: black;
+`;
+
+const StickBarUserDiv = styled.div`
+  position: absolute;
+  top: 50.5%;
+  left: 8%;
+`;
+
+const UserInput = styled.input`
+  outlint: 0.3vw solid black;
+  border-color: black;
+  width: 40vw;
+  height: 4vh;
+  border-radius: 3vh;
+  padding-left: 0.5vw;
+  margin: 1vw;
+`;
+
+// 필요한 state
+// 1. 유저 id 를 통한 구분
+// 2. 모드변경에 따른 ui 구성 분기점 --> 분기점 만들었다!
+// 3. 유저의 경우 입력창에 대한 정보처리 --> 리스트 형식으로의 입력, 유저정보에 따라 달라지게
+// 4. 유저가 제출했을때의 상태 변경
 export default function SubStickBar() {
-  return (
-    <StickBarDiv>
-      <StickBar></StickBar>
-    </StickBarDiv>
-  );
+  const [QnAText, setQnAText] = useState('');
+
+  const valueChange = e => {
+    console.log(e.target.value);
+    setQnAText(e.target.value);
+  };
+  // qna가 시작되었는지 확인하기
+  const { QnAmode } = useSelector(state => ({
+    QnAmode: state.changeQnAmode.QnAmode,
+  }));
+
+  const { userSubmitState } = useSelector(state => ({
+    userSubmitState: state.userCheck.userSubmitState,
+  }));
+
+  const { userId } = useSelector(state => ({
+    userId: state.userCheck.userId,
+  }));
+
+  const dispatch = useDispatch();
+
+  // 모드 변경
+  const QnAChange = number => dispatch(changeQnAMode(number));
+
+  if (userId === 0) {
+    return (
+      <>
+        <StickBarDiv>
+          <StickBar>
+            <GridDiv>
+              <InnerDiv onClick={() => QnAChange(0)}>Q&A 시작</InnerDiv>|
+              <InnerDiv onClick={() => QnAChange(1)}>Q&A 종료</InnerDiv>|
+              <InnerDiv onClick={() => QnAChange(2)}>Q&A 리스트</InnerDiv>
+            </GridDiv>
+          </StickBar>
+        </StickBarDiv>
+        {/* 유저ui 확인 */}
+      </>
+    );
+  } else {
+    return (
+      <>
+        <StickBarUserDiv>
+          {QnAmode === 0 ? (
+            <StickBar>
+              <GridDiv>
+                {userSubmitState === true ? (
+                  <>
+                    <div style={{ color: 'black' }}>
+                      기다리시면 채택된 질문이 나옵니다.
+                    </div>
+                    <button>다시 작성하기</button>
+                  </>
+                ) : (
+                  <>
+                    <h2>Q.</h2>
+                    <form>
+                      <UserInput
+                        value={QnAText}
+                        onChange={valueChange}
+                      ></UserInput>
+                      <button>제출하기</button>
+                    </form>
+                  </>
+                )}
+              </GridDiv>
+            </StickBar>
+          ) : (
+            <>
+              <StickBar>
+                <GridDiv>
+                  <div style={{ color: 'black' }}>
+                    QnA입력이 종료되었습니다. 기다리시면 채댁된 질문이 나옵니다.
+                  </div>
+                  <button>다시 작성하기</button>
+                </GridDiv>
+              </StickBar>
+            </>
+          )}
+        </StickBarUserDiv>
+      </>
+    );
+  }
 }

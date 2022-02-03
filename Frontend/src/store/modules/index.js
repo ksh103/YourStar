@@ -4,4 +4,12 @@ import member from './member';
 import faq from './faq';
 import meeting from './meeting';
 import mypage from './mypage';
-export default combineReducers({ selectmode, member, meeting, faq, mypage });
+import MeetingRoom from './meetingRoom';
+export default combineReducers({
+  selectmode,
+  member,
+  meeting,
+  faq,
+  mypage,
+  MeetingRoom,
+});
