@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import moment from 'moment';
 import {
   SchduleCalendarWrapper,
@@ -9,9 +9,24 @@ import {
 } from './ScheduleCalendar.style';
 import { MdChevronLeft, MdChevronRight } from 'react-icons/md';
 import ScheduleCalendarDay from './ScheduleCalendarDay';
+import { useDispatch, useSelector } from 'react-redux';
+import { APPROVED_MEETINGS_REQUEST } from '../../../store/modules/meeting';
 
-export default function ScheduleCalendar({ meeting }) {
+export default function ScheduleCalendar() {
+  const dispatch = useDispatch();
+  const { approvedMeetings, approvedMeetingsDone } = useSelector(
+    state => state.meeting
+  );
   const [date, setDate] = useState(moment());
+  useEffect(() => {
+    if (!approvedMeetingsDone) {
+      dispatch({
+        type: APPROVED_MEETINGS_REQUEST,
+        data: { page: 1, size: 10 },
+      });
+    }
+  }, [dispatch, approvedMeetingsDone]);
+
   const movePrevMonth = () => {
     setDate(date.clone().subtract(1, 'month'));
   };
@@ -50,10 +65,10 @@ export default function ScheduleCalendar({ meeting }) {
               let isGrayed =
                 current.format('MM') !== date.format('MM') ? 'grayed' : '';
 
-              const schedule = meeting.filter(
+              const schedule = approvedMeetings.filter(
                 m =>
                   current.format('YYYY-MM-DD') ===
-                  m.meeting_start_date.slice(0, 10)
+                  m.meetingStartDate.slice(0, 10)
               );
               return (
                 <ScheduleCalendarDay
@@ -86,7 +101,7 @@ export default function ScheduleCalendar({ meeting }) {
           <Dow>FRI</Dow>
           <Dow color="#4b87ff">SAT</Dow>
         </Weekend>
-        {generate()}
+        {approvedMeetingsDone && generate()}
       </DateContainer>
     </SchduleCalendarWrapper>
   );

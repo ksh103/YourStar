@@ -63,17 +63,16 @@ const ScheduleDetailRightWrapper = styled.div`
 `;
 
 const ScheduleDetailImage = styled.div`
-  height: 80%;
   text-align: center;
   img {
     max-width: 300px;
-    max-height: 100%;
+    max-height: 50vh;
     width: 100%;
     object-fit: contain;
   }
 `;
 const ScheduleDetailButton = styled.div`
-  height: 20%;
+  height: 10vh;
   display: flex;
   justify-content: center;
   align-items: center;
