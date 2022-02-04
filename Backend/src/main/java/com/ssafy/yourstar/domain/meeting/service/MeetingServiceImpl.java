@@ -11,6 +11,7 @@ import com.ssafy.yourstar.domain.meeting.db.repository.MeetingRepositorySpp;
 import com.ssafy.yourstar.domain.meeting.request.MeetingApplyByStarPostReq;
 import com.ssafy.yourstar.domain.meeting.request.MeetingApplyByUserPostReq;
 import com.ssafy.yourstar.domain.meeting.response.MeetingGetRes;
+import com.ssafy.yourstar.domain.member.db.entity.Member;
 import org.apache.commons.io.FilenameUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
@@ -268,6 +269,11 @@ public class MeetingServiceImpl implements MeetingService {
         // queryDSL을 사용한 코드
         return meetingRepositorySpp.findAllApplyMeetingByMemberId(memberId, pageable);
 //        return applicantRepository.findAllByMemberId(memberId, pageable);
+    }
+
+    @Override
+    public Page<Member> meetingApplyList(int meetingId, Pageable pageable) {
+        return meetingRepositorySpp.findAllApplyMeetingListByMeetingId(meetingId, pageable);
     }
 
     @Override

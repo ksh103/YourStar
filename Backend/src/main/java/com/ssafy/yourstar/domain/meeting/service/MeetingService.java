@@ -5,6 +5,7 @@ import com.ssafy.yourstar.domain.meeting.db.entity.Meeting;
 import com.ssafy.yourstar.domain.meeting.request.MeetingApplyByStarPostReq;
 import com.ssafy.yourstar.domain.meeting.request.MeetingApplyByUserPostReq;
 import com.ssafy.yourstar.domain.meeting.response.MeetingGetRes;
+import com.ssafy.yourstar.domain.member.db.entity.Member;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.web.multipart.MultipartHttpServletRequest;
@@ -19,6 +20,9 @@ public interface MeetingService {
     Page<Meeting> meetingApproveList(Pageable pageable);
     Meeting meetingDetail(int meetingId);
     Applicant meetingApplyByUser(MeetingApplyByUserPostReq meetingApplyByUserPostReq);
+    
+    Page<Member> meetingApplyList(int meetingId, Pageable pageable); // 팬미팅 신청 명단
+    
     boolean meetingRemoveByUser(int memberId, int meetingId);
     Page<Meeting> meetingApplyListByUser(int memberId, Pageable pageable);
     Applicant applicantDetail(int memberId, int meetingId);
