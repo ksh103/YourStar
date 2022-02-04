@@ -19,12 +19,11 @@ const reducer = (state = initialState, action) =>
         draft.loadFaqsDone = false;
         draft.loadFaqsError = null;
         break;
-      case LOAD_FAQS_SUCCESS: {
+      case LOAD_FAQS_SUCCESS:
         draft.loadFaqsLoading = false;
         draft.loadFaqsDone = true;
         draft.faqs = action.data;
         break;
-      }
       case LOAD_FAQS_FAILURE:
         draft.loadFaqsLoading = false;
         draft.loadFaqsError = action.error;

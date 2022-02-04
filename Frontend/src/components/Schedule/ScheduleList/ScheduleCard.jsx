@@ -9,18 +9,17 @@ import poster from '../poster1.jpg';
 import { Link } from 'react-router-dom';
 
 export default function ScheduleCard({ data }) {
-  const meeting_id = 1;
   return (
     <ScheduleCardRow>
       <ScheduleCardBlock>
         <ScheduleCardImage>
-          <Link to="/schedule/1">
+          <Link to={{ pathname: `/schedule/${data.meetingId}`, state: data }}>
             <img src={poster} alt="poster" />
           </Link>
         </ScheduleCardImage>
         <ScheduleCardContent>
-          <Link to={`/schedule/${meeting_id}`}>
-            <div id="title">{data.name}</div>
+          <Link to={{ pathname: `/schedule/${data.meetingId}`, state: data }}>
+            <div id="title">{data.meetingName}</div>
           </Link>
           <div id="date">{data.meeting_start_date}</div>
         </ScheduleCardContent>

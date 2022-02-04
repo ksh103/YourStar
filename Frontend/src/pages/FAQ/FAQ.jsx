@@ -9,43 +9,6 @@ import { MdExpandMore } from 'react-icons/md';
 import Footer from '../../components/Footer/Footer.jsx';
 import { LOAD_FAQS_REQUEST } from '../../store/modules/faq';
 import { useDispatch, useSelector } from 'react-redux';
-const datas = [
-  {
-    id: 1,
-    title: '박동준은 아이돌인가요?',
-    content: '아니요. 래퍼 쌈디입니다.',
-  },
-  {
-    id: 2,
-    title: '박동준은 아이돌인가요?',
-    content: '아니요. 래퍼 쌈디입니다.',
-  },
-  {
-    id: 3,
-    title: '박동준은 아이돌인가요?',
-    content: '아니요. 래퍼 쌈디입니다.',
-  },
-  {
-    id: 4,
-    title: '박동준은 아이돌인가요?',
-    content: '아니요. 래퍼 쌈디입니다.',
-  },
-  {
-    id: 5,
-    title: '박동준은 아이돌인가요?',
-    content: '아니요. 래퍼 쌈디입니다.',
-  },
-  {
-    id: 6,
-    title: '박동준은 아이돌인가요?',
-    content: '아니요. 래퍼 쌈디입니다.',
-  },
-  {
-    id: 7,
-    title: '박동준은 아이돌인가요?',
-    content: '아니요. 래퍼 쌈디입니다.',
-  },
-];
 
 export default function FAQ() {
   const dispatch = useDispatch();

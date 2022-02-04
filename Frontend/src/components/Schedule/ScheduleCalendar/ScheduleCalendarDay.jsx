@@ -6,14 +6,16 @@ export default function ScheduleCalendarDay({ date, className, schedule }) {
   if (schedule.length > 0) {
   }
   const currentSchedule = schedule.sort((a, b) => {
-    const x = new Date(a.meeting_start_date);
-    const y = new Date(b.meeting_start_date);
+    const x = new Date(a.meetingStartDate);
+    const y = new Date(b.meetingStartDate);
     return x.getTime() - y.getTime();
   });
   const currentPlan = currentSchedule.map(s => {
     return (
-      <PlanButton key={s.id} num={s.id}>
-        <Link to={`/schedule/${s.id}`}>{s.name}</Link>
+      <PlanButton key={s.meetingId} num={s.meetingId}>
+        <Link to={{ pathname: `/schedule/${s.meetingId}`, state: s }}>
+          {s.meetingName}
+        </Link>
       </PlanButton>
     );
   });
