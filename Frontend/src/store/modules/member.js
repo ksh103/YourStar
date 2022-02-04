@@ -9,10 +9,15 @@ const initialState = {
   signUpLoading: false, // 회원가입 시도중
   signUpDone: false,
   signUpError: null,
+  emailCheckLoading: false, // 이메일 인증시도중
+  emailCheckDone: false,
+  emailCheckError: null,
+  nickCheckLoading: false, // 닉네임 중복체크 시도중
+  nickCheckDone: false,
+  nickCheckError: null,
   findPwLoading: false, // 비밀번호 시도중
   findPwDone: false,
   findPwError: null,
-  me: null,
 };
 
 export const LOG_IN_REQUEST = 'LOG_IN_REQUEST';
@@ -27,9 +32,19 @@ export const SIGN_UP_REQUEST = 'SIGN_UP_REQUEST';
 export const SIGN_UP_SUCCESS = 'SIGN_UP_SUCCESS';
 export const SIGN_UP_FAILURE = 'SIGN_UP_FAILURE';
 
+export const EMAIL_CHECK_REQUEST = 'EMAIL_CHECK_REQUEST';
+export const EMAIL_CHECK_SUCCESS = 'EMAIL_CHECK_SUCCESS';
+export const EMAIL_CHECK_FAILURE = 'EMAIL_CHECK_FAILURE';
+
+export const NICK_CHECK_REQUEST = 'NICK_CHECK_REQUEST';
+export const NICK_CHECK_SUCCESS = 'NICK_CHECK_SUCCESS';
+export const NICK_CHECK_FAILURE = 'NICK_CHECK_FAILURE';
+
 export const FIND_PW_REQUEST = 'FIND_PW_REQUEST';
 export const FIND_PW_SUCCESS = 'FIND_PW_SUCCESS';
 export const FIND_PW_FAILURE = 'FIND_PW_FAILURE';
+
+export const GO_TO_HOME = 'GO_TO_HOME';
 
 const reducer = (state = initialState, action) =>
   produce(state, draft => {
@@ -70,10 +85,37 @@ const reducer = (state = initialState, action) =>
       case SIGN_UP_SUCCESS:
         draft.signUpLoading = false;
         draft.signUpDone = true;
+        draft.nickCheckDone = false; // 닉네임 수정 중복확인을 위해 회원가입 후 nickCheckDone 초기화
         break;
       case SIGN_UP_FAILURE:
         draft.signUpLoading = false;
         draft.signUpError = action.error;
+        break;
+      case EMAIL_CHECK_REQUEST:
+        draft.emailCheckLoading = true;
+        draft.emailCheckError = null;
+        draft.emailCheckDone = false;
+        break;
+      case EMAIL_CHECK_SUCCESS:
+        draft.emailCheckLoading = false;
+        draft.emailCheckDone = true;
+        break;
+      case EMAIL_CHECK_FAILURE:
+        draft.emailCheckLoading = false;
+        draft.emailCheckError = action.error;
+        break;
+      case NICK_CHECK_REQUEST:
+        draft.nickCheckLoading = true;
+        draft.nickCheckError = null;
+        draft.nickCheckDone = false;
+        break;
+      case NICK_CHECK_SUCCESS:
+        draft.nickCheckLoading = false;
+        draft.nickCheckDone = true;
+        break;
+      case NICK_CHECK_FAILURE:
+        draft.nickCheckLoading = false;
+        draft.nickCheckError = action.error;
         break;
       case FIND_PW_REQUEST:
         draft.findPwLoading = true;

@@ -1,5 +1,5 @@
 import axios from 'axios';
-import BASE_URL from '../../../utils/contants';
+import { BASE_URL } from '../../../utils/contants';
 
 // 가입 회원 정보 확인
 // !!!!!!!!!!!!!!header에 관리자 토큰 담아서 보내줘야함 그래야 정보가 나옴!!!!!!

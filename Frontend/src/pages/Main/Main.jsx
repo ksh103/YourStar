@@ -5,8 +5,20 @@ import { MainButton, MainSection } from './Main.style';
 import Navbar from '../../components/Navbar/Navbar';
 import Footer from '../../components/Footer/Footer';
 import { Link } from 'react-router-dom';
+import { useDispatch, useSelector } from 'react-redux';
 import { Layout } from '../../styles/variables';
+import { MY_PAGE_REQUEST } from '../../store/modules/mypage';
 export default function Main() {
+  const dispatch = useDispatch();
+  const { logInDone } = useSelector(state => state.member);
+
+  if (!logInDone && sessionStorage.length > 0) {
+    // 만약 토큰이 남아 있다면 or 새로고침 되었을 때 동작하도록 해야함
+    dispatch({
+      type: MY_PAGE_REQUEST,
+    });
+  }
+
   return (
     <>
       <Navbar />

@@ -5,7 +5,6 @@ const initialState = {
     code: 0,
     managerCode: 0,
     email: '',
-    password: '',
     name: '',
     nick: '',
     phone: '',
@@ -48,6 +47,18 @@ const reducer = (state = initialState, action) =>
       case MY_PAGE_SUCCESS:
         draft.myPageLoading = false;
         draft.myPageDone = true;
+        console.log(action.data);
+        draft.me.code = action.data.code;
+        draft.me.memberId = action.data.memberId;
+        draft.me.managerCode = action.data.managerCode;
+        draft.me.email = action.data.memberEmail;
+        draft.me.name = action.data.memberName;
+        draft.me.nick = action.data.memberNick;
+        draft.me.phone = action.data.memberPhone;
+        draft.me.address = action.data.memberAddress;
+        draft.me.birth = action.data.memberBirth;
+        draft.me.gender = action.data.memberGender;
+        draft.me.isLogin = action.data.isLogin;
         break;
       case MY_PAGE_FAILURE:
         draft.myPageLoading = false;

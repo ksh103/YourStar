@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { Block, Layout, Wrapper } from '../../../styles/variables';
 import Footer from '../../Footer/Footer';
 import Navbar from '../../Navbar/Navbar';
@@ -7,12 +7,90 @@ import {
   MypageDetailContent,
   MypageDetailHeader,
   MypageDetailWrapper,
+  UserModifyHeader,
 } from './MypageDetail.style';
 import {
   SignupContent,
   SignupContentRow,
 } from '../../Memeber/Signup/Signup.style';
+import { NICK_CHECK_REQUEST } from '../../../store/modules/member';
+import { useDispatch, useSelector } from 'react-redux';
+import {
+  DELETE_MEMBER_REQUEST,
+  UPDATE_MEMBER_REQUEST,
+} from '../../../store/modules/mypage';
 export default function MypageDetail() {
+  const dispatch = useDispatch();
+  const [phoneNumber, setPhoneNumber] = useState('');
+  const [password, setPassword] = useState('');
+  const [passwordCheck, setPasswordCheck] = useState('');
+  const [nickName, setNickName] = useState('');
+  const [address, setAddress] = useState('');
+  const { nickCheckDone } = useSelector(state => state.member);
+  const { me } = useSelector(state => state.mypage);
+  const onPhoneNumberHandler = e => {
+    setPhoneNumber(e.target.value);
+  };
+  const onPasswordHandler = e => {
+    setPassword(e.target.value);
+  };
+  const onPasswordCheckHandler = e => {
+    setPasswordCheck(e.target.value);
+  };
+  const onNickNameHandler = e => {
+    setNickName(e.target.value);
+  };
+  const onAddressHandler = e => {
+    setAddress(e.target.value);
+  };
+
+  const nickCheckButton = () => {
+    dispatch({
+      type: NICK_CHECK_REQUEST,
+      data: { nickName: nickName },
+    });
+  };
+
+  const UserUpdateButton = () => {
+    // 유효성 검사
+    if (phoneNumber === '') {
+      alert('핸드폰 번호를 입력해주세요');
+    } else if (password === '') {
+      alert('비밀번호를 입력해주세요');
+    } else if (password !== passwordCheck) {
+      alert('비밀번호가 일치하지 않습니다.');
+    } else if (nickName === '') {
+      alert('닉네임을 입력해주세요');
+    } else if (address === '') {
+      alert('주소를 입력해주세요');
+    } else if (!nickCheckDone) {
+      alert('닉네임 중복체크를 해주세요');
+    } else {
+      dispatch({
+        type: UPDATE_MEMBER_REQUEST,
+        data: {
+          memberId: me.memberId,
+          memberPhone: phoneNumber,
+          memberPassword: password,
+          memberNick: nickName,
+          memberAddress: address,
+        },
+      });
+    }
+  };
+
+  const UserDeleteButton = () => {
+    if (window.confirm('정말 탈퇴 하시겠습니까?')) {
+      dispatch({
+        type: DELETE_MEMBER_REQUEST,
+        data: { memberId: me.memberId },
+      });
+    } else {
+      console.log('취소');
+      return;
+    }
+  };
+
   return (
     <Layout>
       <Navbar />
@@ -24,29 +102,17 @@ export default function MypageDetail() {
                 <IoIosArrowBack onClick={() => window.history.back()} />
               </div>
             </MypageDetailHeader>
+            <UserModifyHeader>
+              <div id="title">User Modify</div>
+            </UserModifyHeader>
             <MypageDetailContent>
               <SignupContent>
                 <SignupContentRow>
                   <input
                     type="text"
-                    className="input check-input"
-                    placeholder="Email"
-                    id="email"
-                  ></input>
-                  <button className="check-button">인증</button>
-                </SignupContentRow>
-                <SignupContentRow>
-                  <input
-                    type="text"
-                    className="input"
-                    placeholder="Name"
-                  ></input>
-                </SignupContentRow>
-                <SignupContentRow>
-                  <input
-                    type="text"
                     className="input"
                     placeholder="Phone Number"
+                    onChange={onPhoneNumberHandler}
                   ></input>
                 </SignupContentRow>
                 <SignupContentRow>
@@ -54,6 +120,7 @@ export default function MypageDetail() {
                     type="password"
                     className="input"
                     placeholder="Password"
+                    onChange={onPasswordHandler}
                   ></input>
                 </SignupContentRow>
                 <SignupContentRow>
@@ -61,28 +128,53 @@ export default function MypageDetail() {
                     type="password"
                     className="input"
                     placeholder="Password Check"
-                  ></input>
-                </SignupContentRow>
-                <SignupContentRow>
-                  <input
-                    type="text"
-                    className="input"
-                    placeholder="NickName"
+                    onChange={onPasswordCheckHandler}
                   ></input>
                 </SignupContentRow>
                 <SignupContentRow>
                   <input
                     type="text"
                     className="input check-input"
+                    placeholder="NickName"
+                    onChange={onNickNameHandler}
+                  ></input>
+                  <button
+                    className="check-button"
+                    onClick={() => {
+                      nickCheckButton();
+                    }}
+                  >
+                    인증
+                  </button>
+                </SignupContentRow>
+                <SignupContentRow>
+                  <input
+                    type="text"
+                    className="input check-input"
                     placeholder="Adress"
+                    onChange={onAddressHandler}
                   ></input>
                   <button className="check-button">검색</button>
                 </SignupContentRow>
 
                 <SignupContentRow>
-                  <button className="signup-button">수정하기</button>
+                  <button
+                    className="signup-button"
+                    onClick={() => {
+                      UserUpdateButton();
+                    }}
+                  >
+                    수정하기
+                  </button>
                 </SignupContentRow>
-                <SignupContentRow>회원탈퇴</SignupContentRow>
+                <SignupContentRow
+                  style={{ cursor: 'pointer' }}
+                  onClick={() => {
+                    UserDeleteButton();
+                  }}
+                >
+                  회원탈퇴
+                </SignupContentRow>
               </SignupContent>
             </MypageDetailContent>
           </MypageDetailWrapper>
