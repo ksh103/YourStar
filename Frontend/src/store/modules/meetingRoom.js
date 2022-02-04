@@ -1,5 +1,6 @@
 const CHANGE_QNA_MODE = 'CHANGE_QNA_MODE';
 const CHATTING_LIST_PLUS = 'CHATTING_LIST_PLUS';
+const MEETINGROOM_USER_UPDATE = 'MEETINGROOM_USER_UPDATE';
 
 // QnA 모드를 변경하기위한 action
 // 스타가 의 조작에 대한 action이라고 이해하면 된다.
@@ -20,11 +21,20 @@ export const ChattingAction = inputValue => {
   };
 };
 
+// 미팅룸에서 새로 들어온 subscriber를 업데이트하는 action
+export const UserUpdate = subscriber => {
+  return {
+    type: MEETINGROOM_USER_UPDATE,
+    payload: subscriber,
+  };
+};
+
 // 평소 컴포넌트에서 선언하던 state들!
 const initialState = {
   // 초기에는 시작 안한 상태!
   QnAmode: 0,
   chattingList: [],
+  subscribers: [],
 };
 
 const MeetingRoom = (state = initialState, action) => {
@@ -40,6 +50,12 @@ const MeetingRoom = (state = initialState, action) => {
       return {
         ...state,
         chattingList: [...state.chattingList, action.payload],
+      };
+    case MEETINGROOM_USER_UPDATE:
+      console.log('유저님 입장하십니다.');
+      return {
+        ...state,
+        subscribers: [...state.subscribers, action.payload],
       };
     default:
       return state; // 기본 값 반환!
