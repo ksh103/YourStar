@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { Layout, Wrapper } from '../../../styles/variables';
 import Footer from '../../Footer/Footer';
 import Navbar from '../../Navbar/Navbar';
@@ -8,8 +8,27 @@ import {
   FindPwContentRow,
   FindPwHeader,
 } from './FindPassword.style';
+import { useDispatch } from 'react-redux';
+import { FIND_PW_REQUEST } from '../../../store/modules/member';
 
 export default function FindPassword() {
+  const [name, setName] = useState('');
+  const [email, setEmail] = useState('');
+
+  const dispatch = useDispatch();
+
+  const findPwButton = () => {
+    if (name === '') {
+      alert('이름을 입력해주세요');
+    } else if (email === '') {
+      alert('이메일을 입력해주세요');
+    } else {
+      dispatch({
+        type: FIND_PW_REQUEST,
+        data: { name: name, email: email },
+      });
+    }
+  };
   return (
     <Layout>
       <Navbar />
@@ -23,13 +42,27 @@ export default function FindPassword() {
           </FindPwHeader>
           <FindPwContent>
             <FindPwContentRow>
-              <input type="text" placeholder="Name" id="name" />
+              <input
+                type="text"
+                placeholder="Name"
+                id="name"
+                onChange={e => {
+                  setName(e.target.value);
+                }}
+              />
             </FindPwContentRow>
             <FindPwContentRow>
-              <input type="text" placeholder="Email" id="email" />
+              <input
+                type="text"
+                placeholder="Email"
+                id="email"
+                onChange={e => {
+                  setEmail(e.target.value);
+                }}
+              />
             </FindPwContentRow>
             <FindPwContentRow>
-              <button>찾기</button>
+              <button onClick={() => findPwButton()}>찾기</button>
             </FindPwContentRow>
           </FindPwContent>
         </FindPwBlock>

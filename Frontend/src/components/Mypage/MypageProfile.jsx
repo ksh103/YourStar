@@ -7,22 +7,24 @@ import {
 } from './Mypage.style';
 import { MdStar, MdPerson, MdSettings } from 'react-icons/md';
 import { Link } from 'react-router-dom';
+import { useSelector } from 'react-redux';
 export default function MypageProfile() {
-  const role = 3;
+  const { me, myPageDone } = useSelector(state => state.mypage);
+  // const role = 3;
   return (
     <MypageProfileWrapper>
       <div>
         <MypageProfileBlock>
           <div id="profileIcon">
             <MypageIconBlock>
-              {role === 1 && <MdPerson />}
-              {role === 2 && <MdStar />}
-              {role === 3 && <MdSettings />}
+              {me.code === 1 && <MdPerson />}
+              {me.code === 2 && <MdStar />}
+              {me.code === 3 && <MdSettings />}
             </MypageIconBlock>
           </div>
           <div>
-            <div id="profileNickname">김다미바라기</div>
-            <div id="profileEmail">wltn1873@naver.com</div>
+            <div id="profileNickname">{me.name}</div>
+            <div id="profileEmail">{me.email}</div>
           </div>
         </MypageProfileBlock>
         <MypageProfileButton>

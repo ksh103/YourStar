@@ -1,5 +1,5 @@
 import styled from 'styled-components';
-import { device } from '../../../styles/variables';
+import { device, pointColor } from '../../../styles/variables';
 const MypageDetailWrapper = styled.div`
   height: 100%;
   height: 100%;
@@ -19,8 +19,25 @@ const MypageDetailHeader = styled.div`
     cursor: pointer;
   }
 `;
+const UserModifyHeader = styled.div`
+  height: 20%;
+  #title {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 80%;
+    font-size: 2em;
+    font-weight: bold;
+    color: ${pointColor};
+  }
+  #word {
+    text-align: center;
+    color: black;
+    font-size: 15px;
+  }
+`;
 const MypageDetailContent = styled.div`
-  height: 88%;
+  height: 60%;
   #scroll {
     height: 100%;
     margin: 0 8px;
@@ -30,4 +47,9 @@ const MypageDetailContent = styled.div`
     }
   }
 `;
-export { MypageDetailWrapper, MypageDetailHeader, MypageDetailContent };
+export {
+  MypageDetailWrapper,
+  MypageDetailHeader,
+  MypageDetailContent,
+  UserModifyHeader,
+};

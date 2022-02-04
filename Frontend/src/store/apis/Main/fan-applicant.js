@@ -1,5 +1,5 @@
 import axios from 'axios';
-import BASE_URL from '../../../utils/contants';
+import { BASE_URL } from '../../../utils/contants';
 
 // 팬이 팬미팅 신청
 export async function FanApplicantAPI(meetingId, memberId) {

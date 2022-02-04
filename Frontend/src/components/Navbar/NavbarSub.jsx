@@ -1,19 +1,26 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
 import { NavbarSubBlock, SubMenu } from './Navbar.style';
+import { useSelector, useDispatch } from 'react-redux';
+import { LOG_OUT_REQUEST } from '../../store/modules/member';
 
 export default function NavbarSub() {
-  const role = 2; // 0: 비로그인 ,1:사용자, 2: 스타 ,3:관리자
+  const { me } = useSelector(state => state.mypage); // 0: 비로그인 ,1:사용자, 2: 스타 ,3:관리자
+  const dispatch = useDispatch();
+
+  const LogoutButton = () => {
+    dispatch({ type: LOG_OUT_REQUEST, data: { memberId: me.memberId } });
+  };
   return (
     <NavbarSubBlock>
       <SubMenu>
         <ul>
-          {role === 2 && (
+          {me.code === 2 && (
             <li>
               <Link to="/apply">Contact</Link>
             </li>
           )}
-          {role === 3 && (
+          {me.code === 3 && (
             <li>
               <Link to="/admin">Management</Link>
             </li>
@@ -24,7 +31,7 @@ export default function NavbarSub() {
           <li>
             <Link to="/faq">FAQ</Link>
           </li>
-          {role === 0 ? (
+          {me.code === 0 ? (
             <>
               <li>
                 <Link to="/login">Login</Link>
@@ -38,7 +45,14 @@ export default function NavbarSub() {
               <li>
                 <Link to="/mypage">Mypage</Link>
               </li>
-              <li>Logout</li>
+              <li
+                style={{ cursor: 'pointer' }}
+                onClick={() => {
+                  LogoutButton();
+                }}
+              >
+                Logout
+              </li>
             </>
           )}
           <li></li>

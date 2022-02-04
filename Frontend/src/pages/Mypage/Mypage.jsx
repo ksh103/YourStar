@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import Navbar from '../../components/Navbar/Navbar';
 import Footer from '../../components/Footer/Footer';
 import { Block, Layout, Wrapper } from '../../styles/variables';
@@ -7,6 +7,8 @@ import MypageProfile from '../../components/Mypage/MypageProfile';
 import MypageMenu from '../../components/Mypage/MypageMenu';
 import MypageCard from '../../components/Mypage/MypageCard';
 import Grid from '@mui/material/Grid';
+import { MY_PAGE_REQUEST } from '../../store/modules/mypage';
+import { useDispatch, useSelector } from 'react-redux';
 const data = [
   {
     id: 1,
@@ -34,6 +36,16 @@ export default function Mypage() {
     } else if (menu === 3) {
     }
   };
+
+  const dispatch = useDispatch();
+  // const { me, myPageDone } = useSelector(state => state.mypage);
+
+  useEffect(() => {
+    dispatch({
+      type: MY_PAGE_REQUEST,
+    });
+  }, [dispatch]);
+
   return (
     <Layout>
       <Navbar />

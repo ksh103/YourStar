@@ -1,8 +1,8 @@
 import axios from 'axios';
-import BASE_URL from '../../../utils/contants';
+import { BASE_URL } from '../../../utils/contants';
 
 // 로그인
-export async function LoginAPI(id, pw) {
+export async function LoginAPI({ id, pw }) {
   const result = await axios.post(`${BASE_URL}members/login`, {
     memberEmail: id,
     memberPassword: pw,
@@ -11,8 +11,9 @@ export async function LoginAPI(id, pw) {
 }
 
 // 로그아웃
-export async function LogoutAPI(index) {
-  const result = await axios.get(`${BASE_URL}members/logout/${index}`);
+export async function LogoutAPI({ memberId }) {
+  console.log(memberId);
+  const result = await axios.get(`${BASE_URL}members/logout/${memberId}`);
   return result;
 }
 
@@ -41,13 +42,14 @@ export async function SignupAPI({
 }
 
 // 이메일 중복체크
-export async function EmailCheckAPI(email) {
+export async function EmailCheckAPI({ email }) {
+  console.log('콘솔 : ' + email);
   const result = await axios.get(`${BASE_URL}members/email-check/${email}`);
   return result;
 }
 
 // 비밀번호 초기화
-export async function ResetPasswordAPI(email, name) {
+export async function ResetPasswordAPI({ email, name }) {
   const result = await axios.post(`${BASE_URL}members`, {
     memberEmail: email,
     memberName: name,
@@ -56,7 +58,7 @@ export async function ResetPasswordAPI(email, name) {
 }
 
 // 닉네임 중복체크
-export async function NickNameCheckAPI(nickName) {
+export async function NickNameCheckAPI({ nickName }) {
   const result = await axios.get(`${BASE_URL}members/nick-check/${nickName}`);
   return result;
 }
