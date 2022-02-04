@@ -11,8 +11,8 @@ import org.springframework.stereotype.Repository;
 @Repository
 public interface MeetingRepository extends JpaRepository<Meeting, Integer> {
     Page<Meeting> findAllByIsApproveFalse(Pageable pageable);
-    Page<Meeting> findAllByIsApproveTrue(Pageable pageable);
 
-    @Query("SELECT m FROM Meeting m WHERE m.meetingStartDate >= CURRENT_TIMESTAMP")
+    @Query("SELECT m FROM Meeting m WHERE m.isApprove = true and m.meetingStartDate >= CURRENT_TIMESTAMP ")
+    Page<Meeting> findAllByIsApproveTrue(Pageable pageable);
     Page<Meeting> findAll(Pageable pageable);
 }
