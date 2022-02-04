@@ -3,6 +3,7 @@ package com.ssafy.yourstar.domain.meeting.controller;
 import com.ssafy.yourstar.domain.meeting.db.entity.Meeting;
 import com.ssafy.yourstar.domain.meeting.request.MeetingApplyByUserPostReq;
 import com.ssafy.yourstar.domain.meeting.service.MeetingService;
+import com.ssafy.yourstar.domain.member.db.entity.Member;
 import com.ssafy.yourstar.global.model.response.BaseResponseBody;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
@@ -57,5 +58,16 @@ public class FanApplicantController {
         Page<Meeting> meetingPage = meetingService.meetingApplyListByUser(memberId, PageRequest.of(page - 1, size));
 
         return meetingPage;
+    }
+
+    @ApiOperation(value = "팬미팅 신청 명단")
+    @GetMapping("/fan-applicant/list/{meetingId}")
+    public Page<Member> meetingApplyList
+            (@ApiParam(value = "팬미팅 구분 번호") @PathVariable("meetingId") int meetingId, int page, int size) {
+        log.info("meetingApplyList - Call");
+
+        Page<Member> memberPage = meetingService.meetingApplyList(meetingId, PageRequest.of(page - 1, size));
+
+        return memberPage;
     }
 }
