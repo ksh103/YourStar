@@ -31,7 +31,7 @@ public class MeetingController {
     public ResponseEntity<MeetingListGetRes> meetingList(int page, int size) {
         log.info("meetingList - Call");
 
-        Page<Meeting> meetingPage = meetingService.meetingList(PageRequest.of(page - 1, size, Sort.by(Sort.Direction.DESC, "meetingOpenDate")));
+        Page<Meeting> meetingPage = meetingService.meetingList(PageRequest.of(page - 1, size));
 
         return ResponseEntity.status(200).body(MeetingListGetRes.of(200, "Success", meetingPage));
     }
@@ -67,7 +67,7 @@ public class MeetingController {
     public ResponseEntity<MeetingListGetRes> meetingApproveList(int page, int size) {
         log.info("meetingApproveList - Call");
 
-        Page<Meeting> meetingPage = meetingService.meetingApproveList(PageRequest.of(page - 1, size));
+        Page<Meeting> meetingPage = meetingService.meetingApproveList(PageRequest.of(page - 1, size, Sort.by(Sort.Direction.DESC, "meetingStartDate")));
 
         return ResponseEntity.status(200).body(MeetingListGetRes.of(200, "Success", meetingPage));
     }

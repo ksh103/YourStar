@@ -96,8 +96,12 @@ public class MemberController {
     public ResponseEntity<? extends BaseResponseBody> memberPasswordInit (@RequestBody @ApiParam(value = "이메일, 이름 입력을 통해 회원 확인 후 비밀번호 초기화", required = true) MemberPasswordPostReq memberPasswordPostReq) {
         log.info("memberPasswordInit - Call");
 
-        memberService.memberPasswordInit(memberPasswordPostReq);
-        return ResponseEntity.status(201).body(BaseResponseBody.of(201, "Success"));
+        if(memberService.memberPasswordInit(memberPasswordPostReq) != null) {
+            memberService.memberPasswordInit(memberPasswordPostReq);
+            return ResponseEntity.status(201).body(BaseResponseBody.of(201, "Success"));
+        }else {
+            return ResponseEntity.status(401).body(BaseResponseBody.of(401, "Invalid Email Or Name"));
+        }
     }
 
 
