@@ -15,12 +15,10 @@ const OtherPersonSc = styled.div`
   overflow-x: auto;
   white-space: nowrap;
   margin: 0 0;
-`;
-
-const PerScPosition = styled.div`
-  position: relative;
-  top: 4.5%;
-  left: 3%;
+  display: Flex;
+  direction: row;
+  align-items: center;
+  justify-content: flex-start;
 `;
 
 export default function OtherPersonScreen() {
@@ -31,14 +29,16 @@ export default function OtherPersonScreen() {
   return (
     <OtherPersonDiv>
       <OtherPersonSc>
-        <PerScPosition>
-          {subscribers &&
-            subscribers.map((sub, i) => (
-              <div key={i} onClick={() => this.handleMainVideoStream(sub)}>
-                <UserVideoComponent streamManager={sub} />
-              </div>
-            ))}
-        </PerScPosition>
+        {subscribers &&
+          subscribers.map((sub, i) => (
+            <div
+              // className="stream-container col-md-6 col-xs-6"
+              key={i}
+              onClick={() => this.handleMainVideoStream(sub)}
+            >
+              <UserVideoComponent streamManager={sub} />
+            </div>
+          ))}
       </OtherPersonSc>
     </OtherPersonDiv>
   );

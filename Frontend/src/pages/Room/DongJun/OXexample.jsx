@@ -302,7 +302,7 @@ class RoomDonJun extends Component {
     return (
       <BackgroundDiv>
         {/* 컴포넌트는 들고왔을 때 잘 작동함 */}
-
+        {/* 입장전 */}
         <div className="container">
           {this.state.session === undefined ? (
             <div id="join">
@@ -350,6 +350,7 @@ class RoomDonJun extends Component {
             </div>
           ) : null}
         </div>
+        {/* 입장후 */}
         {this.state.session !== undefined ? <UserOXGame></UserOXGame> : null}
       </BackgroundDiv>
     );

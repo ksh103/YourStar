@@ -13,7 +13,7 @@ const OXuserSc = styled.div`
 
 export default function OXUserScreen() {
   return (
-    <MainDiv>
+    <MainDiv className="아따쥑이네">
       <OXuserSc></OXuserSc>
     </MainDiv>
   );

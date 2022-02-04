@@ -1,19 +1,31 @@
 video {
-  width: 15vw;
-  height: 20vh;
+  width: 13vw;
+  height: 19vh;
+  /* cursor: pointer; */
+  border-radius: 2vw;
+  float: left;
+  margin: 1vw;
+  object-fit: cover;
+}
+
+.hiddenConsole > .son {
+  display: none;
   position: relative;
-  cursor: pointer;
-  border-radius: 30px;
+  background-color: aqua;
+  border-radius: 2vw;
+  z-index: 1;
+  background-color: black;
+  color: red;
 }
-.streamcomponent div {
+
+.hiddenConsole:hover .son {
+  display: block;
   position: absolute;
-  background: #f8f8f8;
-  padding-left: 5px;
-  padding-right: 5px;
-  color: #777777;
-  font-weight: bold;
-  border-bottom-right-radius: 4px;
-}
-p {
-  margin: 0;
+  width: 13vw;
+  height: 19vh;
+  background-color: rgba(0, 0, 0, 0.493);
+  border-radius: 2vw;
+  z-index: 1;
+  color: white;
+  margin: 1vw;
 }
