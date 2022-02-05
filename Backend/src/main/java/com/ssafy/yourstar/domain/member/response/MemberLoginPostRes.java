@@ -15,7 +15,7 @@ public class MemberLoginPostRes extends BaseResponseBody {
     @ApiModelProperty(name="JWT 인증 토큰")
     String accessToken;
 
-    public static MemberLoginPostRes of(Integer statusCode, String message, String accessToken) {
+    public static MemberLoginPostRes of(Integer statusCode,String message, String accessToken) {
         MemberLoginPostRes res = new MemberLoginPostRes();
         res.setStatusCode(statusCode);
         res.setMessage(message);

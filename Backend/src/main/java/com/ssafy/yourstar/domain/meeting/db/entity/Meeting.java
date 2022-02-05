@@ -1,6 +1,7 @@
 package com.ssafy.yourstar.domain.meeting.db.entity;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.Getter;
@@ -59,4 +60,9 @@ public class Meeting {
     @ApiModelProperty(value = "관리자의 팬미팅 승인 상태", required = true, example = "false")
     @Column(name = "is_approve")
     private boolean isApprove;
+
+    // 이미지 파일 테이블과 Mapping
+    @OneToOne(mappedBy = "meetingId", cascade = CascadeType.ALL)
+    @JsonManagedReference
+    private MeetingImgPath meetingImgPath;
 }

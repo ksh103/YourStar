@@ -13,10 +13,14 @@ import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiParam;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.*;
 
+import java.net.URI;
+import java.net.URISyntaxException;
 import java.text.ParseException;
 
 @Api(value = "회원 관리 API")
@@ -32,7 +36,7 @@ public class MemberController {
 
     @PostMapping("/login")
     @ApiOperation(value = "로그인", notes = "<strong>Email과 Password</strong>입력을 통해 로그인 한다.")
-    public ResponseEntity<MemberLoginPostRes> memberLogin(@RequestBody @ApiParam(value = "로그인 정보", required = true) MemberLoginPostReq memberLoginInfo) {
+    public ResponseEntity<MemberLoginPostRes> memberLogin(@RequestBody @ApiParam(value = "로그인 정보", required = true) MemberLoginPostReq memberLoginInfo) throws URISyntaxException {
         log.info("memberLogin - Call");
 
         String memberEmail = memberLoginInfo.getMemberEmail();
@@ -47,7 +51,7 @@ public class MemberController {
 
                     memberService.memberIsLogin(memberEmail); // 로그인 됐음을 DB에 저장 --> 로그인 여부 토큰에 담아서 보내기
 
-                    return ResponseEntity.status(200).body(MemberLoginPostRes.of(200, "Success", JwtTokenUtil.getMemberLoginToken(memberEmail)));
+                    return ResponseEntity.status(201).body(MemberLoginPostRes.of(201, "Success", JwtTokenUtil.getMemberLoginToken(memberEmail)));
                 }else {
                     // 비밀번호가 일치하지 않을 때
                     return ResponseEntity.status(401).body(MemberLoginPostRes.of(401, "Invalid Password", null));
@@ -82,12 +86,17 @@ public class MemberController {
 
     @ApiOperation(value = "회원가입 승인", notes = "<strong>이메일과 회원 고유 랜덤 코드</strong>를 통해 회원가입 인증을 한다.")
     @GetMapping("/register/approve/{memberEmail}")
-    public ResponseEntity<? extends BaseResponseBody> memberRegisterApprove (@PathVariable @ApiParam(value = "회원가입한 이메일", required = true) String memberEmail) {
+    public ResponseEntity<? extends BaseResponseBody> memberRegisterApprove (@PathVariable @ApiParam(value = "회원가입한 이메일", required = true) String memberEmail) throws URISyntaxException {
         log.info("memberRegisterApprove - Call");
+
+        URI redirectUri = new URI("https://i6e204.p.ssafy.io/login");
+
+        HttpHeaders httpHeaders = new HttpHeaders();
+        httpHeaders.setLocation(redirectUri);
 
         memberService.memberRegisterApprove(memberEmail);
 
-        return ResponseEntity.status(200).body(BaseResponseBody.of(200, "Success"));
+        return new ResponseEntity<>(httpHeaders, HttpStatus.TEMPORARY_REDIRECT);
     }
 
 
