@@ -91,7 +91,7 @@ public class MeetingServiceImpl implements MeetingService {
 
                 // 파일 정보 DB에 저장
                 MeetingImgPath meetingImgPath = new MeetingImgPath();
-                meetingImgPath.setMeetingId(meetingId);
+//                meetingImgPath.setMeetingId(meetingId);
                 meetingImgPath.setFileName(fileName);
                 meetingImgPath.setFileSize(part.getSize());
                 meetingImgPath.setFileContentType(part.getContentType());
@@ -161,7 +161,7 @@ public class MeetingServiceImpl implements MeetingService {
 
                     // 파일 정보 DB에 저장
                     MeetingImgPath meetingImgPath = new MeetingImgPath();
-                    meetingImgPath.setMeetingId(meetingId);
+//                    meetingImgPath.setMeetingId(meetingId);
                     meetingImgPath.setFileName(fileName);
                     meetingImgPath.setFileSize(part.getSize());
                     meetingImgPath.setFileContentType(part.getContentType());
