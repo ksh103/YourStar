@@ -4,6 +4,7 @@ import com.google.gson.JsonObject;
 import com.ssafy.yourstar.domain.meeting.request.MeetingExitPostReq;
 import com.ssafy.yourstar.domain.meeting.request.MeetingJoinPostReq;
 import com.ssafy.yourstar.domain.meeting.service.MeetingService;
+import com.ssafy.yourstar.domain.meeting.service.OpenviduService;
 import com.ssafy.yourstar.global.model.response.BaseResponseBody;
 import io.openvidu.java.client.*;
 import io.swagger.annotations.Api;
@@ -27,7 +28,7 @@ import java.util.concurrent.ConcurrentHashMap;
 public class OpenviduController {
 
 	@Autowired
-	MeetingService meetingService;
+	OpenviduService openviduService;
 
 	// 오픈비두 객체 SDK
 	private OpenVidu openVidu;
@@ -55,24 +56,19 @@ public class OpenviduController {
 	public ResponseEntity<? extends BaseResponseBody> meetingPendingApprove(@ApiParam(value = "팬미팅 번호") @PathVariable int meetingId) throws URISyntaxException, OpenViduJavaClientException, OpenViduHttpException {
 		log.info("meetingPendingApprove - Call");
 
-		// 세션 만들기
-		RecordingProperties properties = new RecordingProperties.Builder().name("박동준의 팬미팅").build();
-		SessionProperties sessionProperties = new SessionProperties.Builder().customSessionId("3").defaultRecordingProperties(properties).build();
-
-		Session session = this.openVidu.createSession(sessionProperties);
-		log.error(String.valueOf(session.getSessionId()));
-
-		// 만든 세션 미팅룸 관리 map에 저장
-		this.mapSessions.put(meetingId, session);
-
-		// 미팅룸 <-> 사용자 map에 저장
-		this.mapSessionNamesTokens.put(meetingId, new ConcurrentHashMap<>());
-
-		if (meetingService.meetingPendingApprove(meetingId)) {
+		int returnCode = openviduService.meetingPendingApprove(meetingId);
+		
+		if (returnCode == 0) {	// 미팅룸 승인 및 세션 생성이 정상적으로 이루어짐
 			return ResponseEntity.status(200).body(BaseResponseBody.of(200, "Success"));
-		} else {
+		} else if (returnCode == 1){	// 미팅룸 승인 및 세션 생성이 이미 이루어진 상태
+			log.error("meetingPendingApprove - This Meeting is already approved");
+			return ResponseEntity.status(400).body(BaseResponseBody.of(400, "This Meeting is already approved"));
+		} else if (returnCode == 2){	// 해당 미팅룸이 존재하지 않는 경우
 			log.error("meetingPendingApprove - This MeetingId doesn't exist");
 			return ResponseEntity.status(400).body(BaseResponseBody.of(400, "This MeetingId doesn't exist"));
+		} else {	// 세션 생성에 실패한 경우
+			log.error("meetingPendingApprove - Failed to create session");
+			return ResponseEntity.status(400).body(BaseResponseBody.of(400, "Failed to create session"));
 		}
 	}
 
