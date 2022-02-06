@@ -11,19 +11,20 @@ import Navbar from '../../Navbar/Navbar';
 import Footer from '../../Footer/Footer';
 import ScheduleDetailLeft from '../../Schedule/ScheduleDetail/ScheduleDetailLeft';
 import ScheduleDetailRight from '../../Schedule/ScheduleDetail/ScheduleDetailRight';
-import { useLocation } from 'react-router';
-import { useDispatch } from 'react-redux';
-import { SELECT_MEETING_REQUEST } from '../../../store/modules/meeting';
+import { useParams } from 'react-router-dom';
+import { useDispatch, useSelector } from 'react-redux';
+import { DETAIL_MEETING_REQUEST } from '../../../store/modules/meeting';
 
 export default function ScheduleDetail() {
-  const { state } = useLocation();
   const dispatch = useDispatch();
+  const { id } = useParams();
+  const { meeting, detailMeetingLoading } = useSelector(state => state.meeting);
   useEffect(() => {
     dispatch({
-      type: SELECT_MEETING_REQUEST,
-      data: state,
+      type: DETAIL_MEETING_REQUEST,
+      data: id,
     });
-  }, [dispatch, state]);
+  }, [id, dispatch]);
 
   return (
     <Layout>
@@ -36,14 +37,14 @@ export default function ScheduleDetail() {
                 <div id="meeting-icon">
                   <IoIosArrowBack onClick={() => window.history.back()} />
                 </div>
-                <div id="meeting-name">{state.meetingName}</div>
+                <div id="meeting-name">{meeting.name}</div>
               </ScheduleDetailTitle>
             </ScheduleDetailHeader>
             <ScheduleDetailContent>
               <div id="detail">
                 <div id="detail2">
                   <ScheduleDetailLeft />
-                  <ScheduleDetailRight data={state} />
+                  <ScheduleDetailRight />
                 </div>
               </div>
             </ScheduleDetailContent>

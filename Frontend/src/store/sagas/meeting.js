@@ -1,8 +1,8 @@
 import { all, fork, put, takeLatest, call } from 'redux-saga/effects';
 import {
+  MeetingDetailAPI,
   MeetingAllListAPI,
   ApprovedMeetingListAPI,
-  UpcomingMeetingListAPI,
   PendingMeetingAPI,
   WarningCount,
   WarningToMemberAPI,
@@ -11,15 +11,15 @@ import {
   DeleteMeetingAPI,
 } from '../apis/Main/meeting';
 import {
+  DETAIL_MEETING_FAILURE,
+  DETAIL_MEETING_REQUEST,
+  DETAIL_MEETING_SUCCESS,
   TOTAL_MEETINGS_FAILURE,
   TOTAL_MEETINGS_REQUEST,
   TOTAL_MEETINGS_SUCCESS,
   APPROVED_MEETINGS_REQUEST,
   APPROVED_MEETINGS_SUCCESS,
   APPROVED_MEETINGS_FAILURE,
-  UPCOMING_MEETINGS_REQUEST,
-  UPCOMING_MEETINGS_SUCCESS,
-  UPCOMING_MEETINGS_FAILURE,
   UPDATE_ISAPPROVE_REQUEST,
   UPDATE_ISAPPROVE_SUCCESS,
   UPDATE_ISAPPROVE_FAILURE,
@@ -37,6 +37,19 @@ import {
   DELETE_MEETING_FAILURE,
 } from '../modules/meeting';
 
+function* detailMeeting(action) {
+  try {
+    const result = yield call(MeetingDetailAPI, action.data);
+    yield put({
+      type: DETAIL_MEETING_SUCCESS,
+      data: result,
+    });
+  } catch (err) {
+    yield put({
+      type: DETAIL_MEETING_FAILURE,
+    });
+  }
+}
 function* totalMeetings(action) {
   try {
     const result = yield call(MeetingAllListAPI, action.data);
@@ -60,19 +73,6 @@ function* approvedMeetings(action) {
   } catch (err) {
     yield put({
       type: APPROVED_MEETINGS_FAILURE,
-    });
-  }
-}
-function* upcomingMeetings(action) {
-  try {
-    const result = yield call(UpcomingMeetingListAPI, action.data);
-    yield put({
-      type: UPCOMING_MEETINGS_SUCCESS,
-      data: result,
-    });
-  } catch (err) {
-    yield put({
-      type: UPCOMING_MEETINGS_FAILURE,
     });
   }
 }
@@ -142,14 +142,14 @@ function* deleteMeeting(action) {
   }
 }
 
+function* watchDetailMeeting() {
+  yield takeLatest(DETAIL_MEETING_REQUEST, detailMeeting);
+}
 function* watchTotalMeetings() {
   yield takeLatest(TOTAL_MEETINGS_REQUEST, totalMeetings);
 }
 function* watchAprovedMeetings() {
   yield takeLatest(APPROVED_MEETINGS_REQUEST, approvedMeetings);
-}
-function* watchUpcomingMeetings() {
-  yield takeLatest(UPCOMING_MEETINGS_REQUEST, upcomingMeetings);
 }
 function* watchUpdateIsApprove() {
   yield takeLatest(UPDATE_ISAPPROVE_REQUEST, updateIsApprove);
@@ -169,9 +169,9 @@ function* watchDeleteMeeting() {
 
 export default function* meetingSaga() {
   yield all([
+    fork(watchDetailMeeting),
     fork(watchTotalMeetings),
     fork(watchAprovedMeetings),
-    fork(watchUpcomingMeetings),
     fork(watchUpdateIsApprove),
     fork(watchWarningMember),
     fork(watchInsertMeeting),

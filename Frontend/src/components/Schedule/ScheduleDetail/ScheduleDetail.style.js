@@ -39,6 +39,9 @@ const ScheduleDetailContent = styled.div`
     overflow-y: auto;
     display: flex;
     justify-content: center;
+    @media ${device.TabletPortrait} {
+      margin: 0;
+    }
   }
   #detail #detail2 {
     width: 80%;
@@ -76,25 +79,45 @@ const ScheduleDetailButton = styled.div`
   display: flex;
   justify-content: center;
   align-items: center;
-  button {
+  div {
+    color: white;
     max-width: 250px;
     width: 50%;
     height: 50%;
     font-size: 1em;
     font-weight: bold;
-    color: white;
-    background-color: skyblue;
-    border-radius: 2em;
+    text-align: center;
+    border-radius: 20px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    ${props => {
+      if (props.color === '1') {
+        return {
+          backgroundColor: 'lightblue',
+          color: 'white',
+          cursor: 'pointer',
+        };
+      } else if (props.color === '2') {
+        return {
+          backgroundColor: pointColor,
+          color: 'white',
+          cursor: 'pointer',
+        };
+      } else {
+        return { backgroundColor: 'lightgray', color: 'gray' };
+      }
+    }};
   }
 `;
 const ScheduleDetail1 = styled.div`
-  padding: 1.5em;
+  margin: 1.5em;
 `;
 const ScheduleDetail2 = styled.div`
-  padding: 1.5em;
+  margin: 1.5em;
+  padding: 1.5em 0;
 
-  border-top: 1px solid gray;
-  border-bottom: 1px solid gray;
+  border-top: 1.5px solid gray;
 `;
 
 export {

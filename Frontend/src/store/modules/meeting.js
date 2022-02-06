@@ -1,14 +1,18 @@
 import produce from 'immer';
 const initialState = {
+  meeting: {},
+  totalMeetings: [],
+  approvedMeetings: [],
+
+  detailMeetingLoading: false, // 미팅 상세정보
+  detailMeetingDone: false,
+  detailMeetingError: null,
   totalMeetingsLoading: false, // 전체 미팅일정
   totalMeetingsDone: false,
   totalMeetingsError: null,
   approvedMeetingsLoading: false, // 승인된 미팅일정
   approvedMeetingsDone: false,
   approvedMeetingsError: null,
-  upcomingMeetingsLoading: false, // 예정된 미팅일정
-  upcomingMeetingsDone: false,
-  upcomingMeetingsError: null,
   updateIsApproveLoading: false, // 팬미팅 승인 업데이트
   updateIsApproveDone: false,
   updateIsApproveError: null,
@@ -24,13 +28,11 @@ const initialState = {
   deleteMeetingLoading: false, // 미팅 삭제
   deleteMeetingDone: false,
   deleteMeetingError: null,
-
-  meetingPage: 1,
-  meeting: null,
-  totalMeetings: [],
-  approvedMeetings: [],
-  upcomingMeetings: [],
 };
+
+export const DETAIL_MEETING_REQUEST = 'DETAIL_MEETING_REQUEST'; // 상세정보 미팅
+export const DETAIL_MEETING_SUCCESS = 'DETAIL_MEETING_SUCCESS';
+export const DETAIL_MEETING_FAILURE = 'DETAIL_MEETING_FAILURE';
 
 export const TOTAL_MEETINGS_REQUEST = 'TOTAL_MEETINGS_REQUEST'; // 전체미팅
 export const TOTAL_MEETINGS_SUCCESS = 'TOTAL_MEETINGS_SUCCESS';
@@ -39,10 +41,6 @@ export const TOTAL_MEETINGS_FAILURE = 'TOTAL_MEETINGS_FAILURE';
 export const APPROVED_MEETINGS_REQUEST = 'APPROVED_MEETINGS_REQUEST'; //  승인된 미팅
 export const APPROVED_MEETINGS_SUCCESS = 'APPROVED_MEETINGS_SUCCESS';
 export const APPROVED_MEETINGS_FAILURE = 'APPROVED_MEETINGS_FAILURE';
-
-export const UPCOMING_MEETINGS_REQUEST = 'UPCOMING_MEETINGS_REQUEST'; // 예정 미팅
-export const UPCOMING_MEETINGS_SUCCESS = 'UPCOMING_MEETINGS_SUCCESS';
-export const UPCOMING_MEETINGS_FAILURE = 'UPCOMING_MEETINGS_FAILURE';
 
 export const UPDATE_ISAPPROVE_REQUEST = 'UPDATE_ISAPPROVE_REQUEST'; // 팬미팅 승인하기
 export const UPDATE_ISAPPROVE_SUCCESS = 'UPDATE_ISAPPROVE_SUCCESS';
@@ -64,11 +62,23 @@ export const DELETE_MEETING_REQUEST = 'DELETE_MEETING_REQUEST'; // 미팅 취소
 export const DELETE_MEETING_SUCCESS = 'DELETE_MEETING_SUCCESS';
 export const DELETE_MEETING_FAILURE = 'DELETE_MEETING_FAILURE';
 
-export const SELECT_MEETING_REQUEST = 'SELECT_MEETING_REQUEST'; // 미팅 상세보기
-
 const reducer = (state = initialState, action) =>
   produce(state, draft => {
     switch (action.type) {
+      case DETAIL_MEETING_REQUEST:
+        draft.detailMeetingLoading = true;
+        draft.detailMeetingDone = false;
+        draft.detailMeetingError = null;
+        break;
+      case DETAIL_MEETING_SUCCESS:
+        draft.detailMeetingLoading = false;
+        draft.detailMeetingDone = true;
+        draft.meeting = action.data;
+        break;
+      case DETAIL_MEETING_FAILURE:
+        draft.detailMeetingLoading = false;
+        draft.detailMeetingError = action.error;
+        break;
       case TOTAL_MEETINGS_REQUEST:
         draft.totalMeetingsLoading = true;
         draft.totalMeetingsDone = false;
@@ -96,23 +106,6 @@ const reducer = (state = initialState, action) =>
       case APPROVED_MEETINGS_FAILURE:
         draft.approvedMeetingsLoading = false;
         draft.approvedMeetingsError = action.error;
-        break;
-      case UPCOMING_MEETINGS_REQUEST:
-        draft.upcomingMeetingsLoading = true;
-        draft.upcomingMeetingsDone = false;
-        draft.upcomingMeetingsError = null;
-        break;
-      case UPCOMING_MEETINGS_SUCCESS:
-        draft.upcomingMeetingsLoading = false;
-        draft.upcomingMeetingsDone = true;
-        draft.upcomingMeetings = action.data;
-        break;
-      case UPCOMING_MEETINGS_FAILURE:
-        draft.upcomingMeetingsLoading = false;
-        draft.upcomingMeetingsError = action.error;
-        break;
-      case SELECT_MEETING_REQUEST:
-        draft.meeting = action.data;
         break;
       case INSERT_MEETING_REQUEST:
         draft.insertMeetingLoading = true;

@@ -2,25 +2,57 @@ import axios from 'axios';
 import { BASE_URL } from '../../../utils/contants';
 
 // 팬미팅 상세보기
-export async function MeetingDetailAPI(meetingId) {
-  const result = await axios.get(`${BASE_URL}meetings/${meetingId}`);
-  return result;
+export async function MeetingDetailAPI(id) {
+  const result = await axios
+    .get(`${BASE_URL}meetings/${id}`)
+    .then(res => res.data.meeting);
+  console.log(result);
+  return {
+    id: result.meetingId,
+    code: result.managerCode,
+    name: result.meetingName,
+    openDate: result.meetingOpenDate,
+    startDate: result.meetingStartDate,
+    endDate: result.meetingEndDate,
+    cnt: result.meetingCnt,
+    price: result.meetingPrice,
+    description: result.meetingDescription,
+    image: result.meetingImgPath,
+  };
 }
 
 // 팬미팅 전체보기
 export async function MeetingAllListAPI({ page, size }) {
-  const result = await axios.get(
-    `${BASE_URL}meetings/room-applicant?page=1&size=10`
-  );
-  return result.data.meetings.content;
+  const result = await axios
+    .get(`${BASE_URL}meetings/room-applicant?page=${page}&size=${size}`)
+    .then(res => res.data.meetings.content);
+  return result.map(data => {
+    return {
+      id: data.meetingId,
+      name: data.meetingName,
+      startDate: data.meetingStartDate,
+      endDate: data.meetingEndDate,
+      approve: data.approve,
+      image: data.meetingImgPath,
+    };
+  });
 }
 
 // 승인된 팬미팅 전체보기
 export async function ApprovedMeetingListAPI({ page, size }) {
-  const result = await axios.get(
-    `${BASE_URL}meetings/room-applicant/approve?page=${page}&size=${size}`
-  );
-  return result.data.meetings.content;
+  const result = await axios
+    .get(`${BASE_URL}meetings/room-applicant/approve?page=${page}&size=${size}`)
+    .then(res => res.data.meetings.content);
+  return result.map(data => {
+    return {
+      id: data.meetingId,
+      name: data.meetingName,
+      startDate: data.meetingStartDate,
+      endDate: data.meetingEndDate,
+      approve: data.approve,
+      image: data.meetingImgPath,
+    };
+  });
 }
 // 예정된 팬미팅 전체보기
 export async function UpcomingMeetingListAPI(page, size) {

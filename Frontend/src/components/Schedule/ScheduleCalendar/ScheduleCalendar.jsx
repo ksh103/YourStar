@@ -10,22 +10,21 @@ import {
 import { MdChevronLeft, MdChevronRight } from 'react-icons/md';
 import ScheduleCalendarDay from './ScheduleCalendarDay';
 import { useDispatch, useSelector } from 'react-redux';
-import { APPROVED_MEETINGS_REQUEST } from '../../../store/modules/meeting';
+import { TOTAL_MEETINGS_REQUEST } from '../../../store/modules/meeting';
 
 export default function ScheduleCalendar() {
   const dispatch = useDispatch();
-  const { approvedMeetings, approvedMeetingsDone } = useSelector(
-    state => state.meeting
-  );
+  const { totalMeetings, totalMeetingsDone, totalMeetingsLoading } =
+    useSelector(state => state.meeting);
   const [date, setDate] = useState(moment());
   useEffect(() => {
-    if (!approvedMeetingsDone) {
+    if (!totalMeetingsDone && !totalMeetingsLoading) {
       dispatch({
-        type: APPROVED_MEETINGS_REQUEST,
+        type: TOTAL_MEETINGS_REQUEST,
         data: { page: 1, size: 10 },
       });
     }
-  }, [dispatch, approvedMeetingsDone]);
+  }, [dispatch, totalMeetingsDone, totalMeetingsLoading]);
 
   const movePrevMonth = () => {
     setDate(date.clone().subtract(1, 'month'));
@@ -65,17 +64,18 @@ export default function ScheduleCalendar() {
               let isGrayed =
                 current.format('MM') !== date.format('MM') ? 'grayed' : '';
 
-              const schedule = approvedMeetings.filter(
-                m =>
+              const schedule = totalMeetings.filter(
+                meeting =>
+                  meeting.approve &&
                   current.format('YYYY-MM-DD') ===
-                  m.meetingStartDate.slice(0, 10)
+                    meeting.startDate.slice(0, 10)
               );
               return (
                 <ScheduleCalendarDay
                   className={`${isToday} ${isGrayed}`}
                   key={i}
                   date={current.format('D')}
-                  schedule={schedule}
+                  meetings={schedule}
                 />
               );
             })}
@@ -101,7 +101,7 @@ export default function ScheduleCalendar() {
           <Dow>FRI</Dow>
           <Dow color="#4b87ff">SAT</Dow>
         </Weekend>
-        {approvedMeetingsDone && generate()}
+        {totalMeetingsDone && generate()}
       </DateContainer>
     </SchduleCalendarWrapper>
   );
