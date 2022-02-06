@@ -1,5 +1,9 @@
 import styled from 'styled-components';
-import { pointColor, scheduleColor } from '../../../styles/variables';
+import {
+  blockColor,
+  pointColor,
+  scheduleColor,
+} from '../../../styles/variables';
 const SchduleCalendarWrapper = styled.div`
   width: 100%;
   height: 100%;
@@ -71,7 +75,8 @@ const DayBlock = styled.div`
 `;
 
 const PlanButton = styled.span`
-  background-color: ${props => scheduleColor[props.num % 6]};
+  background-color: ${props =>
+    props.color === -1 ? 'lightgray' : scheduleColor[props.color % 6]};
   text-align: center;
   font-size: 14px;
   font-weight: bold;
