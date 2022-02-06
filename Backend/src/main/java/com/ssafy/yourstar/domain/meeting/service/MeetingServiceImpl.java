@@ -221,19 +221,6 @@ public class MeetingServiceImpl implements MeetingService {
     }
 
     @Override
-    public boolean meetingPendingApprove(int meetingId) {
-        if (meetingRepository.findById(meetingId).isPresent()) {
-            Meeting meeting = meetingRepository.findById(meetingId).get();
-
-            // 승인 상태로 변경 후 저장
-            meeting.setApprove(true);
-            meetingRepository.save(meeting);
-            return true;
-        }
-        return false;
-    }
-
-    @Override
     public Page<Meeting> meetingApproveList(Pageable pageable) {
         return meetingRepository.findAllByIsApproveTrue(pageable);
     }
