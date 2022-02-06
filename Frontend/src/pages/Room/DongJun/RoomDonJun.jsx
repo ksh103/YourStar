@@ -9,9 +9,11 @@ import {
   ChattingAction,
   UserUpdate,
   UpdateMyInformation,
+  MainStreamManagerInfo,
 } from '../../../store/modules/meetingRoom';
 import MyScreen from '../../../components/room/CommonComponents/MainItems/MyScreens/MyScreen';
-
+import RoomComponent from './RoomComponent';
+import UserOXGame from '../../../components/room/Game/OXGame/UserOXGame';
 const OPENVIDU_SERVER_URL = 'https://i6e204.p.ssafy.io:8443';
 const OPENVIDU_SERVER_SECRET = 'YOURSTAR';
 const BackgroundDiv = styled.div`
@@ -66,6 +68,10 @@ class RoomDonJun extends Component {
     this.sendmessageByClick = this.sendmessageByClick.bind(this);
     this.handleChatMessageChange = this.handleChatMessageChange.bind(this);
     this.sendmessageByEnter = this.sendmessageByEnter.bind(this);
+  }
+
+  changeScreen(e) {
+    console.log(e);
   }
 
   handleChatMessageChange(e) {
@@ -192,8 +198,12 @@ class RoomDonJun extends Component {
           var subscriber = mySession.subscribe(event.stream, undefined);
           // var subscribers = this.state.subscribers;
           // console.log('입장하셨네요! 액션으로 가주세요!');
-          // console.log(subscriber, '서브스크라이버');
+          console.log(
+            subscriber.stream.session.connection.role,
+            '서브스크라이버'
+          );
           this.props.doUserUpdate(subscriber);
+
           // console.log(subscribers);
           // subscribers.push(subscriber);
 
@@ -202,6 +212,11 @@ class RoomDonJun extends Component {
           // this.setState({
           //   subscribers: subscribers,
           // });
+
+          // 조건 분기해줘서 데이터를 따로 저장해두고
+          // 모더레이터 라면  == 스타
+          // 따로 STATE 저장해두기
+          // 이외에는
         });
 
         // On every Stream destroyed...
@@ -263,6 +278,7 @@ class RoomDonJun extends Component {
               //   publisher: publisher,
               // });
               this.props.doUpdateMyInformation(publisher);
+              this.props.doMainStreamManagerInfo(publisher);
             })
             .catch(error => {
               console.log(
@@ -298,7 +314,8 @@ class RoomDonJun extends Component {
   }
 
   render() {
-    const { chattingList, subscribers, publisher } = this.props;
+    const { chattingList, subscribers, publisher, mainStreamManager } =
+      this.props;
     const mySessionId = this.state.mySessionId;
     const myUserName = this.state.myUserName;
 
@@ -360,7 +377,7 @@ class RoomDonJun extends Component {
           // <div className="stream-container col-md-6 col-xs-6">
           //   <UserVideoComponent streamManager={publisher} />
           // </div>
-          <MyScreen></MyScreen>
+          <UserOXGame></UserOXGame>
         ) : null}
       </BackgroundDiv>
     );
@@ -461,6 +478,9 @@ const mapStateToProps = state => ({
   // 입장한 유저들 정보
   subscribers: state.MeetingRoom.subscribers,
   publisher: state.MeetingRoom.publisher,
+  // 임시용 userid
+  userId: state.MeetingRoom.userId,
+  mainStreamManager: state.MeetingRoom.mainStreamManager,
 });
 
 const mapDispatchToProps = dispatch => {
@@ -470,6 +490,8 @@ const mapDispatchToProps = dispatch => {
     doUserUpdate: subscriber => dispatch(UserUpdate(subscriber)),
     doUpdateMyInformation: publisher =>
       dispatch(UpdateMyInformation(publisher)),
+    doMainStreamManagerInfo: mainStreamManager =>
+      dispatch(MainStreamManagerInfo(mainStreamManager)),
   };
 };
 

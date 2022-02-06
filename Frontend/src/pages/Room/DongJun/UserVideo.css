@@ -8,6 +8,12 @@ video {
   object-fit: cover;
 }
 
+.Star {
+  width: 80.541vw;
+  height: 64.5vh;
+  margin: 1% 2%;
+}
+
 .hiddenConsole > .son {
   display: none;
   position: relative;

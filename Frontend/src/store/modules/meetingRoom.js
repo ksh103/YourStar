@@ -2,6 +2,8 @@ const CHANGE_QNA_MODE = 'CHANGE_QNA_MODE';
 const CHATTING_LIST_PLUS = 'CHATTING_LIST_PLUS';
 const MEETINGROOM_USER_UPDATE = 'MEETINGROOM_USER_UPDATE';
 const PUBLISHER_INFO = 'PUBLISHER_INFO';
+const USER_INFO = 'USER_INFO';
+const UPDATE_MAINSTREMMANAGER = 'UPDATE_MAINSTREMMANAGER';
 
 // QnA 모드를 변경하기위한 action
 // 스타가 의 조작에 대한 action이라고 이해하면 된다.
@@ -40,6 +42,19 @@ export const UpdateMyInformation = publisher => {
   };
 };
 
+export const GetUserInfo = () => {
+  return {
+    type: USER_INFO,
+  };
+};
+
+export const MainStreamManagerInfo = mainStreamManager => {
+  return {
+    type: UPDATE_MAINSTREMMANAGER,
+    payload: mainStreamManager,
+  };
+};
+
 // 평소 컴포넌트에서 선언하던 state들!
 const initialState = {
   // 초기에는 시작 안한 상태!
@@ -47,6 +62,9 @@ const initialState = {
   chattingList: [],
   subscribers: [],
   publisher: undefined,
+  // 임시로 사용하는 유저아이디
+  userId: 1,
+  mainStreamManager: undefined,
 };
 
 const MeetingRoom = (state = initialState, action) => {
@@ -73,6 +91,17 @@ const MeetingRoom = (state = initialState, action) => {
       return {
         ...state,
         publisher: action.payload,
+      };
+    case USER_INFO:
+      console.log('유저정보를 가져옵니다.');
+      return {
+        ...state,
+      };
+    case UPDATE_MAINSTREMMANAGER:
+      console.log('메인스트리머 지정');
+      return {
+        ...state,
+        mainStreamManager: action.payload,
       };
     default:
       return state; // 기본 값 반환!
