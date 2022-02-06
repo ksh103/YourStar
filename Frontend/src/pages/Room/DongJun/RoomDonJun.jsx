@@ -5,15 +5,23 @@ import React, { Component } from 'react';
 import './App.css';
 import UserVideoComponent from './UserVideoComponent';
 import { connect } from 'react-redux';
+
+// action 호출
 import {
   ChattingAction,
   UserUpdate,
   UpdateMyInformation,
   MainStreamManagerInfo,
+  ScreenChange,
 } from '../../../store/modules/meetingRoom';
+// import changeList from '../../../store/modules/selectList';
+
+// 컴포넌트
 import MyScreen from '../../../components/room/CommonComponents/MainItems/MyScreens/MyScreen';
 import RoomComponent from './RoomComponent';
 import UserOXGame from '../../../components/room/Game/OXGame/UserOXGame';
+import { touchRippleClasses } from '@mui/material';
+
 const OPENVIDU_SERVER_URL = 'https://i6e204.p.ssafy.io:8443';
 const OPENVIDU_SERVER_SECRET = 'YOURSTAR';
 const BackgroundDiv = styled.div`
@@ -52,7 +60,6 @@ class RoomDonJun extends Component {
       myUserName: 'Participant' + Math.floor(Math.random() * 100),
       session: undefined,
       mainStreamManager: undefined,
-      // publisher: undefined,
       subscribers: [],
       messages: [],
       testInputValue: '',
@@ -130,6 +137,24 @@ class RoomDonJun extends Component {
     window.addEventListener('beforeunload', this.onbeforeunload);
     const { chattingList } = this.props;
     console.log(chattingList, '리스트');
+  }
+
+  componentDidUpdate(prevState) {
+    // state 변화를 감지하는곳
+    console.log(prevState.selectNum, '객체 변화가 감지되었다');
+    console.log(this.props.selectNum, '변화된 state');
+
+    // selectNum 에 대한 변화가 감지되었다면, 다른 참여자에게도 이러한 변화를 알려주어야 한다.
+    // 세션 정의하고 type을 정의하여 시그널을 보냄 --> 이제 on을 통한 다른 local에서의 변화 감지
+    const mySession = this.state.session;
+    if (prevState.selectNum !== this.props.selectNum) {
+      mySession.signal({
+        data: this.props.selectNum,
+        to: [],
+        type: 'screen',
+      });
+      // this.props.doScreenChange(this.props.selectNum);
+    }
   }
 
   componentWillUnmount() {
@@ -232,7 +257,7 @@ class RoomDonJun extends Component {
 
         mySession.on('signal:chat', event => {
           let chatdata = event.data.split(',');
-          // console.log(chatdata, '채팅데이터');
+          console.log(chatdata, '채팅데이터');
           if (chatdata[0] !== this.state.myUserName) {
             const inputValue = {
               userName: chatdata[0],
@@ -243,6 +268,20 @@ class RoomDonJun extends Component {
             this.props.doChattingAction(inputValue);
           }
         });
+
+        //변화감지
+        mySession.on('signal:screen', event => {
+          console.log(event, '변화에 대해서 다른 서버로부터 신호 감지');
+          // event.data ==> string 형태의 변화된 메뉴선택한 번호들!
+          let changeNum = parseInt(event.data);
+          console.log(changeNum, '숫자');
+          if (changeNum !== this.props.selectNum) {
+            console.log('여기는 들어왔음'); // 여기까지는 되는데;;;
+            this.props.doScreenChange(changeNum);
+          }
+          console.log(this.props.selectNum, '결과는?!');
+        });
+
         // --- 4) Connect to the session with a valid user token ---
 
         // 'getToken' method is simulating what your server-side should do.
@@ -328,12 +367,12 @@ class RoomDonJun extends Component {
         <div className="container">
           {this.state.session === undefined ? (
             <div id="join">
-              <div id="img-div">
+              {/* <div id="img-div">
                 <img
                   src="resources/images/openvidu_grey_bg_transp_cropped.png"
                   alt="OpenVidu logo"
                 />
-              </div>
+              </div> */}
               <div id="join-dialog" className="jumbotron vertical-center">
                 <h1> Join a video session </h1>
                 <form className="form-group" onSubmit={this.joinSession}>
@@ -370,15 +409,18 @@ class RoomDonJun extends Component {
                 </form>
               </div>
             </div>
-          ) : null}
+          ) : (
+            <div>
+              {publisher !== undefined ? (
+                // <div className="stream-container col-md-6 col-xs-6">
+                //   <UserVideoComponent streamManager={publisher} />
+                // </div>
+                <RoomComponent></RoomComponent>
+              ) : null}
+            </div>
+          )}
         </div>
         {/* 들어왔을 때 관리 */}
-        {publisher !== undefined ? (
-          // <div className="stream-container col-md-6 col-xs-6">
-          //   <UserVideoComponent streamManager={publisher} />
-          // </div>
-          <UserOXGame></UserOXGame>
-        ) : null}
       </BackgroundDiv>
     );
   }
@@ -481,9 +523,11 @@ const mapStateToProps = state => ({
   // 임시용 userid
   userId: state.MeetingRoom.userId,
   mainStreamManager: state.MeetingRoom.mainStreamManager,
+  selectNum: state.MeetingRoom.selectNum,
 });
 
 const mapDispatchToProps = dispatch => {
+  console.log(dispatch, '디스패치');
   return {
     // dispatch 가져오기
     doChattingAction: inputValue => dispatch(ChattingAction(inputValue)),
@@ -492,6 +536,7 @@ const mapDispatchToProps = dispatch => {
       dispatch(UpdateMyInformation(publisher)),
     doMainStreamManagerInfo: mainStreamManager =>
       dispatch(MainStreamManagerInfo(mainStreamManager)),
+    doScreenChange: selectNum => dispatch(ScreenChange(selectNum)),
   };
 };
 

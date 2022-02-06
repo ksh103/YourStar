@@ -4,6 +4,7 @@ const MEETINGROOM_USER_UPDATE = 'MEETINGROOM_USER_UPDATE';
 const PUBLISHER_INFO = 'PUBLISHER_INFO';
 const USER_INFO = 'USER_INFO';
 const UPDATE_MAINSTREMMANAGER = 'UPDATE_MAINSTREMMANAGER';
+const SCREEN_CHANGE = 'SCREEN_CHANGE';
 
 // QnA 모드를 변경하기위한 action
 // 스타가 의 조작에 대한 action이라고 이해하면 된다.
@@ -55,6 +56,15 @@ export const MainStreamManagerInfo = mainStreamManager => {
   };
 };
 
+// 화면 변경시키기 변경시키기
+export const ScreenChange = selectNum => {
+  console.log('액션수행');
+  return {
+    type: SCREEN_CHANGE,
+    payload: selectNum,
+  };
+};
+
 // 평소 컴포넌트에서 선언하던 state들!
 const initialState = {
   // 초기에는 시작 안한 상태!
@@ -65,6 +75,7 @@ const initialState = {
   // 임시로 사용하는 유저아이디
   userId: 1,
   mainStreamManager: undefined,
+  selectNum: 0,
 };
 
 const MeetingRoom = (state = initialState, action) => {
@@ -103,6 +114,12 @@ const MeetingRoom = (state = initialState, action) => {
         ...state,
         mainStreamManager: action.payload,
       };
+    case SCREEN_CHANGE:
+      return {
+        ...state,
+        selectNum: action.payload,
+      };
+
     default:
       return state; // 기본 값 반환!
   }

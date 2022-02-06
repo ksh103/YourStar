@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import Concert from '../../../components/room/Concert/Concert';
+import styled from 'styled-components';
 import Admin from '../../../components/room/Admin/Admin';
 import StarQnA from '../../../components/room/QnA/StarQnA';
 import StarRandom from '../../../components/room/Random/StarRandom';
@@ -7,9 +8,10 @@ import StarOXGame from '../../../components/room/Game/OXGame/StarOXGame';
 import StarConsonantGame from '../../../components/room/Game/ConsonantGame/StarConsonantGame';
 import OneonOneMeeting from '../../../components/room/OneonOneMeeting/1_1Meeting/OneonOneMeeting';
 import { useSelector } from 'react-redux';
-export default function RoomComponent() {
+
+export default function RoomEunSeong() {
   const { selectNum } = useSelector(state => ({
-    selectNum: state.selectmode.selectNum,
+    selectNum: state.MeetingRoom.selectNum,
   }));
   switch (selectNum) {
     case 0:
