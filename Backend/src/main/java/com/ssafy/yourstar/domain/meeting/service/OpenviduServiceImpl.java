@@ -1,29 +1,31 @@
 package com.ssafy.yourstar.domain.meeting.service;
 
 import com.ssafy.yourstar.domain.meeting.db.entity.Meeting;
+import com.ssafy.yourstar.domain.meeting.db.entity.MeetingFilePath;
+import com.ssafy.yourstar.domain.meeting.db.repository.MeetingFilePathRepository;
 import com.ssafy.yourstar.domain.meeting.db.repository.MeetingRepository;
+import com.ssafy.yourstar.domain.meeting.request.MeetingRecordingPostReq;
+import com.ssafy.yourstar.domain.member.db.repository.MemberRepository;
 import io.openvidu.java.client.*;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
-import java.util.Map;
-import java.util.concurrent.ConcurrentHashMap;
-
+@Slf4j
 @Service
 public class OpenviduServiceImpl implements OpenviduService{
     @Autowired
     MeetingRepository meetingRepository;
 
+    @Autowired
+    MeetingFilePathRepository meetingFilePathRepository;
+
+    @Autowired
+    MemberRepository memberRepository;
+
     // 오픈비두 객체 SDK
     private OpenVidu openVidu;
-
-    // 미팅룸 관리 { 미팅룸 id : 미팅룸 세션 }
-//    private Map<Integer, Session> mapSessions = new ConcurrentHashMap<>();
-//    // 미팅룸 <-> 사용자 { 미팅룸 id : { 참가자 토큰 : 참가자 역할 } }
-//    private Map<Integer, Map<String, OpenViduRole>> mapSessionNamesTokens = new ConcurrentHashMap<>();
-//    // 미팅룸 <-> 녹화
-//    private Map<String, Boolean> sessionRecordings = new ConcurrentHashMap<>();
 
     // 오픈비두 서버 관련 변수
     private String OPENVIDU_URL;
@@ -65,4 +67,35 @@ public class OpenviduServiceImpl implements OpenviduService{
         }
         return 2;   // 해당 미팅룸 존재하지 않는 경우
     }
+
+    @Override
+    public int recordingStart(MeetingRecordingPostReq meetingRecordingPostReq) {
+        Integer meetingId = meetingRecordingPostReq.getMeetingId();	// 미팅룸 id
+        if (meetingRepository.findById(meetingId).isPresent() && memberRepository.findById(meetingRecordingPostReq.getMemberId()).isPresent()){
+            RecordingProperties recordingProperties = new RecordingProperties.Builder().build();	// recording property
+
+            try {
+                // 녹화 시작
+                Recording recording = this.openVidu.startRecording(String.valueOf(meetingId), recordingProperties);
+
+                // DB에 저장하기
+                MeetingFilePath meetingFilePath = new MeetingFilePath();
+
+                meetingFilePath.setMeetingId(meetingId);
+                meetingFilePath.setMemberId(meetingRecordingPostReq.getMemberId());
+                meetingFilePath.setFileName(recording.getName() + "녹화");
+
+                meetingFilePath.setFileContentType("mp4");
+                meetingFilePath.setFileUrl(recording.getUrl());
+
+                meetingFilePathRepository.save(meetingFilePath);
+                return 0;
+            } catch (OpenViduJavaClientException | OpenViduHttpException e) {
+                return 1;
+            }
+        } else {
+            return 2;
+        }
+    }
+
 }

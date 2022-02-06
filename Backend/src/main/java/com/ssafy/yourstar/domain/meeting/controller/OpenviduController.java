@@ -1,9 +1,6 @@
 package com.ssafy.yourstar.domain.meeting.controller;
 
-import com.google.gson.JsonObject;
-import com.ssafy.yourstar.domain.meeting.request.MeetingExitPostReq;
-import com.ssafy.yourstar.domain.meeting.request.MeetingJoinPostReq;
-import com.ssafy.yourstar.domain.meeting.service.MeetingService;
+import com.ssafy.yourstar.domain.meeting.request.MeetingRecordingPostReq;
 import com.ssafy.yourstar.domain.meeting.service.OpenviduService;
 import com.ssafy.yourstar.global.model.response.BaseResponseBody;
 import io.openvidu.java.client.*;
@@ -51,13 +48,13 @@ public class OpenviduController {
 		this.openVidu = new OpenVidu(OPENVIDU_URL, SECRET);
 	}
 
-	@ApiOperation(value = "팬미팅 승인")
+	@ApiOperation(value = "팬미팅 승인 및 미팅룸 생성")
 	@GetMapping("/room-applicant/pending/{meetingId}")
 	public ResponseEntity<? extends BaseResponseBody> meetingPendingApprove(@ApiParam(value = "팬미팅 번호") @PathVariable int meetingId) throws URISyntaxException, OpenViduJavaClientException, OpenViduHttpException {
 		log.info("meetingPendingApprove - Call");
 
 		int returnCode = openviduService.meetingPendingApprove(meetingId);
-		
+
 		if (returnCode == 0) {	// 미팅룸 승인 및 세션 생성이 정상적으로 이루어짐
 			return ResponseEntity.status(200).body(BaseResponseBody.of(200, "Success"));
 		} else if (returnCode == 1){	// 미팅룸 승인 및 세션 생성이 이미 이루어진 상태
@@ -72,13 +69,43 @@ public class OpenviduController {
 		}
 	}
 
+	@ApiOperation(value = "녹화 시작")
+	@PostMapping(value = "/recording/start")
+	public ResponseEntity<?> recordingStart(@RequestBody MeetingRecordingPostReq meetingRecordingPostReq) {
+		int returnCode = openviduService.recordingStart(meetingRecordingPostReq);
+
+		if (returnCode == 0) {	// 녹화 시작 및 db에 정상적으로 저장됨
+			return ResponseEntity.status(200).body(BaseResponseBody.of(200, "Success"));
+		} else if (returnCode == 1){	// 녹화 시작 및 db 저장 실패
+			log.error("meetingPendingApprove - Failed to start recording and save DB");
+			return ResponseEntity.status(400).body(BaseResponseBody.of(400, "Failed to start recording and save DB"));
+		} else {	// 미팅 id 또는 멤버 id가 유효하지 않을 경우
+			log.error("meetingPendingApprove - This meetingId or memberId doesn't exist");
+			return ResponseEntity.status(400).body(BaseResponseBody.of(400, "This meetingId or memberId doesn't exist"));
+		}
+	}
+
+	// 녹화 중단
+	@RequestMapping(value = "/recording/stop", method = RequestMethod.POST)
+	public ResponseEntity<?> stopRecording(@RequestBody Map<String, Object> params) {
+		String recordingId = (String) params.get("recording");
+
+		System.out.println("Stoping recording | {recordingId}=" + recordingId);
+
+		try {
+			Recording recording = this.openVidu.stopRecording(recordingId);
+			this.sessionRecordings.remove(recording.getSessionId());
+			return new ResponseEntity<>(recording, HttpStatus.OK);
+		} catch (OpenViduJavaClientException | OpenViduHttpException e) {
+			return new ResponseEntity<>(e.getMessage(), HttpStatus.BAD_REQUEST);
+		}
+	}
+
+
 //	@ApiOperation(value = "미팅룸 참가")
-//	@PostMapping(value = "/meeting-join")
+//	@PostMapping(value = "/join")
 //	public ResponseEntity<JsonObject> MeetingJoin(@RequestBody MeetingJoinPostReq meetingJoinPostReq) throws OpenViduJavaClientException, OpenViduHttpException {
 //		log.info("MeetingJoin - Call");
-//
-//		// 참여할 미팅룸 id
-//		Integer meetingId = meetingJoinPostReq.getMeetingId();
 //
 //		// 역할 배정 (subcriber은 쓰지않음. (음성, 비디오 안되기때문))
 //		OpenViduRole role;
@@ -91,6 +118,7 @@ public class OpenviduController {
 //		}
 //
 //		// 연결 생성 (입장할 사람의 역할과 데이터 넣어줘서 생성)
+//		Connection connection = new Connection().getConnectionId();
 //		ConnectionProperties connectionProperties = new ConnectionProperties.Builder().type(ConnectionType.WEBRTC)
 //				.role(role).data("user_data").build();
 //
@@ -108,53 +136,53 @@ public class OpenviduController {
 //
 //		return new ResponseEntity<>(responseJson, HttpStatus.OK);
 //	}
+//
+//	@ApiOperation(value = "미팅룸 나가기")
+//	@PostMapping(value = "/meeting-exit")
+//	public ResponseEntity<? extends BaseResponseBody> MeetingExit(@RequestBody MeetingExitPostReq meetingExitPostReq) {
+//		Integer meetingId = meetingExitPostReq.getMeetingId();
+//		String token = meetingExitPostReq.getToken();
+//
+//		// 해당 미팅룸이 존재한다면
+//		if (this.mapSessions.get(meetingId) != null && this.mapSessionNamesTokens.get(meetingId) != null) {
+//			// 사용자가 미팅룸에 참가 중이라면 해당 토큰 삭제
+//			if (this.mapSessionNamesTokens.get(meetingId).remove(token) != null) {
+//				return ResponseEntity.status(200).body(BaseResponseBody.of(200, "Success"));
+//			} else {
+//				// 사용자가 미팅룸에 없으면(토큰 유효하지 않으면) 에러
+//				log.error("MeetingExit - TOKEN does not exist");
+//				return ResponseEntity.status(400).body(BaseResponseBody.of(400, "the TOKEN wasn't valid"));
+//			}
+//		} else {
+//			// 미팅룸이 존재하지 않는다면 에러
+//			log.error("MeetingExit - meetingId does not exist");
+//			return ResponseEntity.status(400).body(BaseResponseBody.of(400, "the meetingId wasn't valid"));
+//		}
+//	}
 
-	@ApiOperation(value = "미팅룸 나가기")
-	@PostMapping(value = "/meeting-exit")
-	public ResponseEntity<? extends BaseResponseBody> MeetingExit(@RequestBody MeetingExitPostReq meetingExitPostReq) {
-		Integer meetingId = meetingExitPostReq.getMeetingId();
-		String token = meetingExitPostReq.getToken();
-
-		// 해당 미팅룸이 존재한다면
-		if (this.mapSessions.get(meetingId) != null && this.mapSessionNamesTokens.get(meetingId) != null) {
-			// 사용자가 미팅룸에 참가 중이라면 해당 토큰 삭제
-			if (this.mapSessionNamesTokens.get(meetingId).remove(token) != null) {
-				return ResponseEntity.status(200).body(BaseResponseBody.of(200, "Success"));
-			} else {
-				// 사용자가 미팅룸에 없으면(토큰 유효하지 않으면) 에러
-				log.error("MeetingExit - TOKEN does not exist");
-				return ResponseEntity.status(400).body(BaseResponseBody.of(400, "the TOKEN wasn't valid"));
-			}
-		} else {
-			// 미팅룸이 존재하지 않는다면 에러
-			log.error("MeetingExit - meetingId does not exist");
-			return ResponseEntity.status(400).body(BaseResponseBody.of(400, "the meetingId wasn't valid"));
-		}
-	}
-
-	@ApiOperation(value = "미팅룸 삭제")
-	@DeleteMapping(value = "/{meetingId}")
-	public ResponseEntity<JsonObject> MeetingDelete(@RequestBody Map<String, Object> sessionName) throws Exception {
-
-		System.out.println("Closing session | {sessionName}=" + sessionName);
-
-		// Retrieve the param from BODY
-		String session = (String) sessionName.get("sessionName");
-
-		//	미팅룸 존재할경우
-		if (this.mapSessions.get(session) != null && this.mapSessionNamesTokens.get(session) != null) {
-			Session s = this.mapSessions.get(session);
-			s.close();
-			this.mapSessions.remove(session);
-			this.mapSessionNamesTokens.remove(session);
-			this.sessionRecordings.remove(s.getSessionId());
-			return new ResponseEntity<>(HttpStatus.OK);
-		} else {
-			// 미팅룸 존재하지 않을 경우
-			System.out.println("Problems in the app server: the SESSION does not exist");
-			return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
-		}
-	}
+//	@ApiOperation(value = "미팅룸 삭제")
+//	@DeleteMapping(value = "/{meetingId}")
+//	public ResponseEntity<JsonObject> MeetingDelete(@RequestBody Map<String, Object> sessionName) throws Exception {
+//
+//		System.out.println("Closing session | {sessionName}=" + sessionName);
+//
+//		// Retrieve the param from BODY
+//		String session = (String) sessionName.get("sessionName");
+//
+//		//	미팅룸 존재할경우
+//		if (this.mapSessions.get(session) != null && this.mapSessionNamesTokens.get(session) != null) {
+//			Session s = this.mapSessions.get(session);
+//			s.close();
+//			this.mapSessions.remove(session);
+//			this.mapSessionNamesTokens.remove(session);
+//			this.sessionRecordings.remove(s.getSessionId());
+//			return new ResponseEntity<>(HttpStatus.OK);
+//		} else {
+//			// 미팅룸 존재하지 않을 경우
+//			System.out.println("Problems in the app server: the SESSION does not exist");
+//			return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
+//		}
+//	}
 
 //	// 현재 미팅룸 정보 및 참가자 정보 반환
 //	@PostMapping(value = "/meetingDetail")
@@ -252,45 +280,6 @@ public class OpenviduController {
 //	/** Recording API **/
 //	/*******************/
 //
-//	// 녹화 시작
-//	@RequestMapping(value = "/recording/start", method = RequestMethod.POST)
-//	public ResponseEntity<?> startRecording(@RequestBody Map<String, Object> params) {
-//		String sessionId = (String) params.get("session");	// 미팅룸 세션 id
-//		// 자신 화면만 녹화 vs 전체 화면 녹화
-//		Recording.OutputMode outputMode = Recording.OutputMode.valueOf((String) params.get("outputMode"));
-//		boolean hasAudio = (boolean) params.get("hasAudio");	// 오디오 포함 하는지
-//		boolean hasVideo = (boolean) params.get("hasVideo");	// 비디오 포함 하는지
-//
-//		RecordingProperties properties = new RecordingProperties.Builder().outputMode(outputMode).hasAudio(hasAudio)
-//				.hasVideo(hasVideo).build();
-//
-//		System.out.println("Starting recording for session " + sessionId + " with properties {outputMode=" + outputMode
-//				+ ", hasAudio=" + hasAudio + ", hasVideo=" + hasVideo + "}");
-//
-//		try {
-//			Recording recording = this.openVidu.startRecording(sessionId, properties);
-//			this.sessionRecordings.put(sessionId, true);
-//			return new ResponseEntity<>(recording, HttpStatus.OK);
-//		} catch (OpenViduJavaClientException | OpenViduHttpException e) {
-//			return new ResponseEntity<>(e.getMessage(), HttpStatus.BAD_REQUEST);
-//		}
-//	}
-//
-//	// 녹화 중단
-//	@RequestMapping(value = "/recording/stop", method = RequestMethod.POST)
-//	public ResponseEntity<?> stopRecording(@RequestBody Map<String, Object> params) {
-//		String recordingId = (String) params.get("recording");
-//
-//		System.out.println("Stoping recording | {recordingId}=" + recordingId);
-//
-//		try {
-//			Recording recording = this.openVidu.stopRecording(recordingId);
-//			this.sessionRecordings.remove(recording.getSessionId());
-//			return new ResponseEntity<>(recording, HttpStatus.OK);
-//		} catch (OpenViduJavaClientException | OpenViduHttpException e) {
-//			return new ResponseEntity<>(e.getMessage(), HttpStatus.BAD_REQUEST);
-//		}
-//	}
 //
 //	// 녹화 삭제
 //	@RequestMapping(value = "/recording/delete", method = RequestMethod.DELETE)
