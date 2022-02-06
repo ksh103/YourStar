@@ -5,9 +5,12 @@ import React, { Component } from 'react';
 import './App.css';
 import UserVideoComponent from './UserVideoComponent';
 import { connect } from 'react-redux';
-import { ChattingAction, UserUpdate } from '../../../store/modules/meetingRoom';
+import {
+  ChattingAction,
+  UserUpdate,
+  UpdateMyInformation,
+} from '../../../store/modules/meetingRoom';
 import MyScreen from '../../../components/room/CommonComponents/MainItems/MyScreens/MyScreen';
-import UserOXGame from '../../../components/room/Game/OXGame/UserOXGame';
 
 const OPENVIDU_SERVER_URL = 'https://i6e204.p.ssafy.io:8443';
 const OPENVIDU_SERVER_SECRET = 'YOURSTAR';
@@ -47,7 +50,7 @@ class RoomDonJun extends Component {
       myUserName: 'Participant' + Math.floor(Math.random() * 100),
       session: undefined,
       mainStreamManager: undefined,
-      publisher: undefined,
+      // publisher: undefined,
       subscribers: [],
       messages: [],
       testInputValue: '',
@@ -255,10 +258,11 @@ class RoomDonJun extends Component {
               mySession.publish(publisher);
 
               // Set the main video in the page to display our webcam and store our Publisher
-              this.setState({
-                mainStreamManager: publisher,
-                publisher: publisher,
-              });
+              // this.setState({
+              //   mainStreamManager: publisher,
+              //   publisher: publisher,
+              // });
+              this.props.doUpdateMyInformation(publisher);
             })
             .catch(error => {
               console.log(
@@ -294,9 +298,10 @@ class RoomDonJun extends Component {
   }
 
   render() {
-    const { chattingList, subscribers } = this.props;
+    const { chattingList, subscribers, publisher } = this.props;
     const mySessionId = this.state.mySessionId;
     const myUserName = this.state.myUserName;
+
     // console.log(subscribers, '입장한유저들의정보');
 
     return (
@@ -350,7 +355,13 @@ class RoomDonJun extends Component {
             </div>
           ) : null}
         </div>
-        {this.state.session !== undefined ? <UserOXGame></UserOXGame> : null}
+        {/* 들어왔을 때 관리 */}
+        {publisher !== undefined ? (
+          // <div className="stream-container col-md-6 col-xs-6">
+          //   <UserVideoComponent streamManager={publisher} />
+          // </div>
+          <MyScreen></MyScreen>
+        ) : null}
       </BackgroundDiv>
     );
   }
@@ -449,6 +460,7 @@ const mapStateToProps = state => ({
   chattingList: state.MeetingRoom.chattingList,
   // 입장한 유저들 정보
   subscribers: state.MeetingRoom.subscribers,
+  publisher: state.MeetingRoom.publisher,
 });
 
 const mapDispatchToProps = dispatch => {
@@ -456,6 +468,8 @@ const mapDispatchToProps = dispatch => {
     // dispatch 가져오기
     doChattingAction: inputValue => dispatch(ChattingAction(inputValue)),
     doUserUpdate: subscriber => dispatch(UserUpdate(subscriber)),
+    doUpdateMyInformation: publisher =>
+      dispatch(UpdateMyInformation(publisher)),
   };
 };
 

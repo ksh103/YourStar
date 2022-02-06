@@ -1,6 +1,5 @@
 import React from 'react';
 import styled from 'styled-components';
-import OtherScreenAngle from './OtherScreenAngle';
 import { OtherPersonDiv } from '../Main.style';
 import { useSelector, useDispatch } from 'react-redux';
 import UserVideoComponent from '../../../../../pages/Room/DongJun/UserVideoComponent';

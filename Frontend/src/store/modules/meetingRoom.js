@@ -1,6 +1,7 @@
 const CHANGE_QNA_MODE = 'CHANGE_QNA_MODE';
 const CHATTING_LIST_PLUS = 'CHATTING_LIST_PLUS';
 const MEETINGROOM_USER_UPDATE = 'MEETINGROOM_USER_UPDATE';
+const PUBLISHER_INFO = 'PUBLISHER_INFO';
 
 // QnA 모드를 변경하기위한 action
 // 스타가 의 조작에 대한 action이라고 이해하면 된다.
@@ -29,12 +30,23 @@ export const UserUpdate = subscriber => {
   };
 };
 
+//내 정보에 대해서 업데이트 한다.
+// 미팅룸 컴포넌트에서 토큰을 통해 얻은 publisher 정보를 받고,
+// 이를 store에 저장시키기 위한 action
+export const UpdateMyInformation = publisher => {
+  return {
+    type: PUBLISHER_INFO,
+    payload: publisher,
+  };
+};
+
 // 평소 컴포넌트에서 선언하던 state들!
 const initialState = {
   // 초기에는 시작 안한 상태!
   QnAmode: 0,
   chattingList: [],
   subscribers: [],
+  publisher: undefined,
 };
 
 const MeetingRoom = (state = initialState, action) => {
@@ -45,17 +57,22 @@ const MeetingRoom = (state = initialState, action) => {
         QnAmode: action.payload,
       };
     case CHATTING_LIST_PLUS:
-      console.log('액션에따른 수행중');
-      console.log(action);
+      console.log('액션에따른 채팅 수행중');
+      console.log(action, '채팅에대해서 넘겨받은 payload');
       return {
         ...state,
         chattingList: [...state.chattingList, action.payload],
       };
     case MEETINGROOM_USER_UPDATE:
-      console.log('유저님 입장하십니다.');
       return {
         ...state,
         subscribers: [...state.subscribers, action.payload],
+      };
+    case PUBLISHER_INFO:
+      console.log('내 정보가 들어오고 있습니다');
+      return {
+        ...state,
+        publisher: action.payload,
       };
     default:
       return state; // 기본 값 반환!
