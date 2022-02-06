@@ -59,9 +59,7 @@ public class OpenviduServiceImpl implements OpenviduService{
                 meeting.setApprove(true);
                 meetingRepository.save(meeting);
                 return 0;
-            } catch (OpenViduJavaClientException e) {
-                return 3;
-            } catch (OpenViduHttpException e) {
+            } catch (OpenViduJavaClientException | OpenViduHttpException e) {
                 return 3;
             }
         }
@@ -69,7 +67,7 @@ public class OpenviduServiceImpl implements OpenviduService{
     }
 
     @Override
-    public int recordingStart(MeetingRecordingPostReq meetingRecordingPostReq) {
+    public String recordingStart(MeetingRecordingPostReq meetingRecordingPostReq) {
         Integer meetingId = meetingRecordingPostReq.getMeetingId();	// 미팅룸 id
         if (meetingRepository.findById(meetingId).isPresent() && memberRepository.findById(meetingRecordingPostReq.getMemberId()).isPresent()){
             RecordingProperties recordingProperties = new RecordingProperties.Builder().build();	// recording property
@@ -77,6 +75,8 @@ public class OpenviduServiceImpl implements OpenviduService{
             try {
                 // 녹화 시작
                 Recording recording = this.openVidu.startRecording(String.valueOf(meetingId), recordingProperties);
+                Thread.sleep(180);  // 3분 뒤에 녹화 중단
+                this.openVidu.stopRecording(recording.getId());
 
                 // DB에 저장하기
                 MeetingFilePath meetingFilePath = new MeetingFilePath();
@@ -87,15 +87,45 @@ public class OpenviduServiceImpl implements OpenviduService{
 
                 meetingFilePath.setFileContentType("mp4");
                 meetingFilePath.setFileUrl(recording.getUrl());
+                meetingFilePath.setRecordId(recording.getId());
 
                 meetingFilePathRepository.save(meetingFilePath);
+                return "0";
+            } catch (OpenViduJavaClientException | OpenViduHttpException | InterruptedException e) {
+                String error = e.getMessage();
+                if (error.equals("404")) {
+                    return "1"; // 세션이 없는 경우
+                } else if (error.equals("406")) {
+                    return "2"; // 세션에 연결된 참가자가 없는 경우
+                } else if (error.equals("409")) {
+                    return "3"; // 이미 녹화중
+                } else {
+                    return "4";
+                }
+            }
+        } else {
+            return "1"; // 미팅룸 id 또는 member id가 존재하지 않는 경우
+        }
+    }
+
+    @Override
+    public int recordingRemove(int fileId) {
+        if (meetingFilePathRepository.findById(fileId).isPresent()) {
+            try {
+                MeetingFilePath meetingFilePath = meetingFilePathRepository.findById(fileId).get();
+
+                if (meetingFilePath.getRecordId() != null) {    // 녹화 영상이라면
+                    // 오픈비두 서버에서 삭제
+                    this.openVidu.deleteRecording(meetingFilePath.getRecordId());
+                }
+                // DB에서 삭제
+                meetingFilePathRepository.deleteById(fileId);
                 return 0;
             } catch (OpenViduJavaClientException | OpenViduHttpException e) {
                 return 1;
             }
         } else {
-            return 2;
+            return 2;   // fileId가 존재하지 않는 경우
         }
     }
-
 }

@@ -49,4 +49,8 @@ public class MeetingFilePath {
     @CreationTimestamp
     @Column(name = "file_reg_dt")
     private LocalDateTime fileRegDt = LocalDateTime.now();
+
+    @ApiModelProperty(value = "openvidu record id")
+    @Column(name = "record_id")
+    private String recordId;
 }
