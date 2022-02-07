@@ -12,7 +12,7 @@ export default function ScheduleList() {
       dispatch(
         {
           type: APPROVED_MEETINGS_REQUEST,
-          data: { page: 1, size: 10 },
+          data: { page: 1, size: 100 },
         },
         [dispatch]
       );

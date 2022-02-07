@@ -1,5 +1,7 @@
 import styled from 'styled-components';
-import { blockColor } from '../../styles/variables';
+import { blockColor, device } from '../../styles/variables';
+import space from '../../assets/images/space.jpg';
+
 const MainSection = styled.div`
   color: ${blockColor};
   text-align: center;
@@ -23,4 +25,13 @@ const MainButton = styled.div`
     font-size: 1em;
   }
 `;
-export { MainSection, MainButton };
+const MainWrapper = styled.div`
+  background-image: url(${space});
+  position: relative;
+  min-height: 600px;
+  background-size: cover;
+  @media ${device.TabletPortrait} {
+    background: none;
+  }
+`;
+export { MainSection, MainButton, MainWrapper };

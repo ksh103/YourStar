@@ -1,7 +1,7 @@
 import React from 'react';
 import Universe from '../../components/Main/Universe';
 import MainPoster from '../../components/Main/MainPoster/MainPoster';
-import { MainButton, MainSection } from './Main.style';
+import { MainButton, MainSection, MainWrapper } from './Main.style';
 import Navbar from '../../components/Navbar/Navbar';
 import Footer from '../../components/Footer/Footer';
 import { Link } from 'react-router-dom';
@@ -20,7 +20,7 @@ export default function Main() {
   }
 
   return (
-    <>
+    <MainWrapper>
       <Navbar />
       {/* <Universe /> */}
       <MainPoster />
@@ -39,6 +39,6 @@ export default function Main() {
         </MainButton>
       </MainSection>
       <Footer />
-    </>
+    </MainWrapper>
   );
 }

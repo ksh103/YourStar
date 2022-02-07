@@ -13,9 +13,9 @@ const initialState = {
   approvedMeetingsLoading: false, // 승인된 미팅일정
   approvedMeetingsDone: false,
   approvedMeetingsError: null,
-  updateIsApproveLoading: false, // 팬미팅 승인 업데이트
-  updateIsApproveDone: false,
-  updateIsApproveError: null,
+  updateApproveLoading: false, // 팬미팅 승인 업데이트
+  updateApproveDone: false,
+  updateApproveError: null,
   warningMemberLoading: false, // 회원에서 경고주기
   warningMemberDone: false,
   warningMemberError: null,
@@ -42,9 +42,9 @@ export const APPROVED_MEETINGS_REQUEST = 'APPROVED_MEETINGS_REQUEST'; //  승인
 export const APPROVED_MEETINGS_SUCCESS = 'APPROVED_MEETINGS_SUCCESS';
 export const APPROVED_MEETINGS_FAILURE = 'APPROVED_MEETINGS_FAILURE';
 
-export const UPDATE_ISAPPROVE_REQUEST = 'UPDATE_ISAPPROVE_REQUEST'; // 팬미팅 승인하기
-export const UPDATE_ISAPPROVE_SUCCESS = 'UPDATE_ISAPPROVE_SUCCESS';
-export const UPDATE_ISAPPROVE_FAILURE = 'UPDATE_ISAPPROVE_FAILURE';
+export const UPDATE_APPROVE_REQUEST = 'UPDATE_APPROVE_REQUEST'; // 팬미팅 승인하기
+export const UPDATE_APPROVE_SUCCESS = 'UPDATE_APPROVE_SUCCESS';
+export const UPDATE_APPROVE_FAILURE = 'UPDATE_APPROVE_FAILURE';
 
 export const WARNING_MEMBER_REQUEST = 'WARNING_MEMBER_REQUEST'; // 팬에게 경고주기
 export const WARNING_MEMBER_SUCCESS = 'WARNING_MEMBER_SUCCESS';
@@ -61,6 +61,9 @@ export const UPDATE_MEETING_FAILURE = 'UPDATE_MEETING_FAILURE';
 export const DELETE_MEETING_REQUEST = 'DELETE_MEETING_REQUEST'; // 미팅 취소(스타)
 export const DELETE_MEETING_SUCCESS = 'DELETE_MEETING_SUCCESS';
 export const DELETE_MEETING_FAILURE = 'DELETE_MEETING_FAILURE';
+
+export const ADD_APPLICANT_MEMBER = 'ADD_APPLICANT_MEMBER';
+export const REMOVE_APPLICANT_MEMBER = 'REMOVE_APPLICANT_MEMBER';
 
 const reducer = (state = initialState, action) =>
   produce(state, draft => {
@@ -106,6 +109,23 @@ const reducer = (state = initialState, action) =>
       case APPROVED_MEETINGS_FAILURE:
         draft.approvedMeetingsLoading = false;
         draft.approvedMeetingsError = action.error;
+        break;
+      case UPDATE_APPROVE_REQUEST:
+        draft.updateApproveLoading = true;
+        draft.updateApproveDone = false;
+        draft.updateApproveError = null;
+        break;
+      case UPDATE_APPROVE_SUCCESS:
+        draft.updateApproveLoading = false;
+        draft.updateApproveDone = true;
+        let num = draft.totalMeetings.findIndex(m => m.id === action.data.id);
+        draft.totalMeetings[num] = action.data;
+        draft.approvedMeetings.push(action.data);
+        draft.meeting.approve = true;
+        break;
+      case UPDATE_APPROVE_FAILURE:
+        draft.updateApproveLoading = false;
+        draft.updateApproveError = action.error;
         break;
       case INSERT_MEETING_REQUEST:
         draft.insertMeetingLoading = true;
@@ -165,6 +185,14 @@ const reducer = (state = initialState, action) =>
       case DELETE_MEETING_FAILURE:
         draft.deleteMeetingLoading = false;
         draft.deleteMeetingError = action.error;
+        break;
+      case ADD_APPLICANT_MEMBER:
+        draft.meeting.applicantCnt++;
+        draft.meeting.isReserve = true;
+        break;
+      case REMOVE_APPLICANT_MEMBER:
+        draft.meeting.applicantCnt--;
+        draft.meeting.isReserve = false;
         break;
       default:
         break;

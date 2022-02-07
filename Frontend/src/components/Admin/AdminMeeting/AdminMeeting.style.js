@@ -1,20 +1,35 @@
 import styled from 'styled-components';
 import { device, pointColor } from '../../../styles/variables';
 
-const AdminMeetingApproveButton = styled.button`
+const AdminMeetingApproveButton = styled.div`
   background-color: ${props => (props.color === 0 ? 'lightpink' : 'lightblue')};
   width: 60px;
-  border-radius: 10px; ;
+  border-radius: 10px;
+  text-align: center;
 `;
 const AdminMeetingDetailFooter = styled.div`
   text-align: center;
-  button {
+  display: flex;
+  justify-content: center;
+  & > div {
     width: 100px;
     height: 40px;
-    background-color: ${props => (props.color === 0 ? pointColor : 'gray')};
+    ${props => {
+      if (props.color === '1') {
+        return { backgroundColor: 'lightgray', color: 'gray' };
+      } else {
+        return {
+          backgroundColor: pointColor,
+          color: 'white',
+          cursor: 'pointer',
+        };
+      }
+    }};
     border-radius: 10px;
-    color: white;
     margin: 10px;
+    align-items: center;
+    display: flex;
+    justify-content: center;
   }
 `;
 const AdminMeetindDetailHeader = styled.div`

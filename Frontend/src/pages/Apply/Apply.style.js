@@ -1,5 +1,5 @@
 import styled from 'styled-components';
-import { pointColor } from '../../styles/variables';
+import { device, pointColor } from '../../styles/variables';
 
 const Title = styled.div`
   font-size: 2.2vw;
@@ -46,5 +46,53 @@ const ApplyButton = styled.div`
     border-radius: 10px;
   }
 `;
-
-export { Title, UploadImage, InputData, ApplyButton };
+const Section1 = styled.div`
+  padding-left: 2vw;
+  margin: 0 auto;
+  color: black;
+  table {
+    width: 100%;
+    text-align: left;
+  }
+  td {
+    font-size: 1vw;
+    font-weight: bold;
+    padding-top: 2.4vh;
+  }
+  input {
+    width: 80%;
+    height: 3vh;
+  }
+  textarea {
+    width: 80%;
+    height: 15vh;
+  }
+  @media ${device.TabletPortrait} {
+    width: 100%;
+    border-radius: 0px;
+    table {
+      width: 100%;
+      text-align: left;
+    }
+    td {
+      font-size: 1.8vw;
+    }
+  }
+`;
+const ApplyHeadBlock = styled.div`
+  margin: 0 1.5em;
+  padding: 10px;
+  border-bottom: 2px solid gray;
+`;
+const Input = styled('input')({
+  display: 'none',
+});
+export {
+  Title,
+  UploadImage,
+  InputData,
+  ApplyButton,
+  Section1,
+  ApplyHeadBlock,
+  Input,
+};
