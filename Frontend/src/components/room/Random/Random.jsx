@@ -1,14 +1,16 @@
 import React from 'react';
-import styled from 'styled-components';
-import RandomChoiceMain from '../../../components/room/CommonComponents/MainItems/Game/RandomChoiceMain';
-import RandomStick from '../../../components/room/CommonComponents/BottomItems/RandomStick';
-import { BackgroundDiv } from '../styles/roomGlobal';
+import { useSelector } from 'react-redux';
+import StarRandom from './StarRandom';
+import UserRandom from './UserRandom';
 
 export default function Random() {
-  return (
-    <BackgroundDiv>
-      <RandomChoiceMain></RandomChoiceMain>
-      <RandomStick></RandomStick>
-    </BackgroundDiv>
-  );
+  const { userId } = useSelector(state => ({
+    userId: state.MeetingRoom.userId,
+  }));
+  // 일반유저 === 0 , 스타 1
+  if (userId === 1) {
+    return <StarRandom></StarRandom>;
+  } else {
+    return <UserRandom></UserRandom>;
+  }
 }

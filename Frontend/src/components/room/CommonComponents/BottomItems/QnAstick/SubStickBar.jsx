@@ -60,22 +60,23 @@ const UserInput = styled.input`
 // 4. 유저가 제출했을때의 상태 변경
 export default function SubStickBar() {
   const [QnAText, setQnAText] = useState('');
+  const userSubmitState = false;
 
   const valueChange = e => {
     console.log(e.target.value);
     setQnAText(e.target.value);
   };
   // qna가 시작되었는지 확인하기
-  const { QnAmode } = useSelector(state => ({
-    QnAmode: state.changeQnAmode.QnAmode,
-  }));
+  // const { QnAmode } = useSelector(state => ({
+  //   QnAmode: state.changeQnAmode.QnAmode,
+  // }));
 
-  const { userSubmitState } = useSelector(state => ({
-    userSubmitState: state.userCheck.userSubmitState,
-  }));
+  // const { userSubmitState } = useSelector(state => ({
+  //   userSubmitState: state.userCheck.userSubmitState,
+  // }));
 
   const { userId } = useSelector(state => ({
-    userId: state.userCheck.userId,
+    userId: state.MeetingRoom.userId,
   }));
 
   const dispatch = useDispatch();
@@ -83,7 +84,7 @@ export default function SubStickBar() {
   // 모드 변경
   const QnAChange = number => dispatch(changeQnAMode(number));
 
-  if (userId === 0) {
+  if (userId === 1) {
     return (
       <>
         <StickBarDiv>
@@ -102,7 +103,7 @@ export default function SubStickBar() {
     return (
       <>
         <StickBarUserDiv>
-          {QnAmode === 0 ? (
+          {userId === 1 ? (
             <StickBar>
               <GridDiv>
                 {userSubmitState === true ? (

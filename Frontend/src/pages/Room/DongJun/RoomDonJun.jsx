@@ -31,26 +31,6 @@ const BackgroundDiv = styled.div`
   color: 'white';
 `;
 
-const UserWrapper = styled.div`
-  display: flex;
-`;
-
-const MainScreen = styled.div`
-  position: absolute;
-  top: 50%;
-  left: 10%;
-`;
-
-const QuestionMyScreen = styled.div`
-  width: 14.843vw;
-  height: 22.47vh;
-  background-color: white;
-  border-radius: 3vw;
-  position: absolute;
-  top: 20%;
-  left: 40%;
-`;
-
 class RoomDonJun extends Component {
   constructor(props) {
     super(props);
@@ -488,6 +468,8 @@ class RoomDonJun extends Component {
   }
 
   createToken(sessionId) {
+    // 유저아이디 값 확인해서
+    // 스타면
     return new Promise((resolve, reject) => {
       var data = {};
       axios

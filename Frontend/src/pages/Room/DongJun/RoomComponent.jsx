@@ -1,12 +1,11 @@
 import React, { useState } from 'react';
 import Concert from '../../../components/room/Concert/Concert';
-import styled from 'styled-components';
-import Admin from '../../../components/room/Admin/Admin';
-import StarQnA from '../../../components/room/QnA/StarQnA';
-import StarRandom from '../../../components/room/Random/StarRandom';
-import StarOXGame from '../../../components/room/Game/OXGame/StarOXGame';
-import StarConsonantGame from '../../../components/room/Game/ConsonantGame/StarConsonantGame';
+import DefaultRoom from '../../../components/room/Admin/DefaultRoom';
+import ConsonantGame from '../../../components/room/Game/ConsonantGame/ConsonantGame';
 import OneonOneMeeting from '../../../components/room/OneonOneMeeting/1_1Meeting/OneonOneMeeting';
+import QnA from '../../../components/room/QnA/QnA';
+import Random from '../../../components/room/Random/Random';
+import OXGame from '../../../components/room/Game/OXGame/OXGame';
 import { useSelector } from 'react-redux';
 
 export default function RoomEunSeong() {
@@ -15,20 +14,20 @@ export default function RoomEunSeong() {
   }));
   switch (selectNum) {
     case 0:
-      return <Admin />;
+      return <DefaultRoom />;
     case 1:
       return <Concert />;
     case 2:
-      return <StarQnA />;
+      return <QnA />;
     case 3:
-      return <StarRandom />;
+      return <Random />;
     case 4:
-      return <StarOXGame />;
+      return <OXGame />;
     case 5:
-      return <StarConsonantGame />;
+      return <ConsonantGame />;
     case 6:
       return <OneonOneMeeting />;
     default:
-      return <Admin />;
+      return <DefaultRoom />;
   }
 }
