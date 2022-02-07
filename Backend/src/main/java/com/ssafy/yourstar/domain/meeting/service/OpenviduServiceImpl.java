@@ -83,7 +83,7 @@ public class OpenviduServiceImpl implements OpenviduService{
                 meetingFilePath.setMemberId(meetingRecordingPostReq.getMemberId());
                 meetingFilePath.setFileName(recording.getName() + "1대1 미팅");
 
-                meetingFilePath.setFileContentType("mp4");
+                meetingFilePath.setFileContentType("video/mp4");
                 meetingFilePath.setFileUrl(recording.getUrl());
                 meetingFilePath.setRecordId(recording.getId());
 
