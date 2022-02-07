@@ -8,6 +8,7 @@ import org.springframework.data.domain.Page;
 import java.util.List;
 
 public interface AdminService {
-    Page<Member> memberList(String code, int page, int size);
+    Page<Member> memberList(int code, int page, int size);
+    Page<Member> managerGroupList(int managerCode, int page, int size);
     List<NewAccountRes> managerRegister(ManagerRegisterPostReq managerRegister);
 }

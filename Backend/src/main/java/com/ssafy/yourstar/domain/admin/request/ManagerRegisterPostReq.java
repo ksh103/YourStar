@@ -12,6 +12,9 @@ public class ManagerRegisterPostReq {
     @ApiModelProperty(value = "소속사 이름(소문자, 띄어쓰기 X)", example = "smtown", required = true)
     String managerCodeName;
 
-    @ApiModelProperty(value = "필요한 계정 수", example = "3", required = true)
+    @ApiModelProperty(value = "필요한 스타 계정 수", example = "1", required = true)
+    int starAccountCnt;
+
+    @ApiModelProperty(value = "필요한 관계자 계정 수", example = "3", required = true)
     int accountCnt;
 }

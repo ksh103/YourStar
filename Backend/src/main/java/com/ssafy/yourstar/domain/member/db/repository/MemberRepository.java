@@ -18,4 +18,5 @@ public interface MemberRepository extends JpaRepository<Member, Integer> {
     Optional<Member> findMemberByMemberEmailLikeAndIsApproveTrue(String memberEmail);
 
     Page<Member> findAllByCode(int code, Pageable pageable); // 회원 전체 조회
+    Page<Member> findAllByManagerCode(int managerCode, Pageable pageable);
 }

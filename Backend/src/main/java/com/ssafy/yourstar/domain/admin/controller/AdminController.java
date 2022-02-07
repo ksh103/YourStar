@@ -30,10 +30,10 @@ public class AdminController {
 
     @ApiOperation(value = "가입 회원 정보 확인")
     @PreAuthorize("hasRole('ROLE_ADMIN')")
-    @GetMapping
+    @GetMapping("/member")
     public Page<Member> memberList(
             @ApiIgnore Authentication authentication,
-            @ApiParam(value = "회원 코드") @RequestParam(required = false, defaultValue = "0") String code,
+            @ApiParam(value = "회원 코드") @RequestParam(required = false, defaultValue = "0") int code,
             @ApiParam(value = "페이지 번호") @RequestParam int page, @ApiParam(value = "페이지당 게시글 개수") @RequestParam int size) {
         log.info("memberList - 호출");
         if (authentication == null) throw new ForbiddenException();
@@ -41,8 +41,18 @@ public class AdminController {
         return adminService.memberList(code, page, size);
     }
 
+    @ApiOperation(value = "소속사별 회원 정보 확인")
+    @GetMapping("/group")
+    public Page<Member> managerGroupList(
+            @ApiParam(value = "소속사 코드") @RequestParam int code,
+            @ApiParam(value = "페이지 번호") @RequestParam int page, @ApiParam(value = "페이지당 게시글 개수") @RequestParam int size) {
+        log.info("managerGroupList - 호출");
+
+        return adminService.managerGroupList(code, page, size);
+    }
+
     @ApiOperation(value = "관계자 계정 생성")
-    @PostMapping
+    @PostMapping("/create")
     public List<NewAccountRes> managerRegister(@RequestBody ManagerRegisterPostReq managerRegister) {
         log.info("managerRegister - 호출");
         return adminService.managerRegister(managerRegister);
