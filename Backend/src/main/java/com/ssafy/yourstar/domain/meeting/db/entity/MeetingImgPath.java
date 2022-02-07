@@ -22,12 +22,9 @@ public class MeetingImgPath {
     @Column(name = "file_id")
     private int fileId;
 
-//    @ApiModelProperty(value = "팬미팅 구분 번호", required = true)
-//    @Column(name = "meeting_id")
-//    private int meetingId;
-
+    @ApiModelProperty(value = "팬미팅 구분 번호", required = true)
     @OneToOne
-    @JoinColumn(name = "meetingId")
+    @JoinColumn(name = "meeting_id")
     @JsonBackReference
     private Meeting meetingId;
 
