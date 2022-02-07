@@ -23,7 +23,6 @@ const numberWithCommas = x => {
 };
 export default function ScheduleDetailRight() {
   const { meeting } = useSelector(state => state.meeting);
-
   return (
     <ScheduleDetailRightWrapper>
       {meeting && (
@@ -45,7 +44,9 @@ export default function ScheduleDetailRight() {
                 </tr>
                 <tr>
                   <td>인원</td>
-                  <td>현재 등록된 사람수/{meeting.cnt} 명</td>
+                  <td>
+                    {meeting.applicantCnt}/{meeting.cnt} 명
+                  </td>
                 </tr>
                 <tr>
                   <td>가격</td>

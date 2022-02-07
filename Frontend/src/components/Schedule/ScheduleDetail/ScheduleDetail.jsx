@@ -18,11 +18,12 @@ import { DETAIL_MEETING_REQUEST } from '../../../store/modules/meeting';
 export default function ScheduleDetail() {
   const dispatch = useDispatch();
   const { id } = useParams();
-  const { meeting, detailMeetingLoading } = useSelector(state => state.meeting);
+  const { meeting } = useSelector(state => state.meeting);
+  const memberId = 2;
   useEffect(() => {
     dispatch({
       type: DETAIL_MEETING_REQUEST,
-      data: id,
+      data: { memberId, meetingId: id },
     });
   }, [id, dispatch]);
 

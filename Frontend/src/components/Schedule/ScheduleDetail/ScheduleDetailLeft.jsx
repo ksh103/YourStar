@@ -7,19 +7,20 @@ import {
 import poster from '../../../assets/images/poster1.jpg';
 import { Link } from 'react-router-dom';
 import { useSelector } from 'react-redux';
-import { maxHeight } from '@mui/system';
 
 export default function ScheduleDetailLeft() {
   const { meeting } = useSelector(state => state.meeting);
+
   const showButton = () => {
     const now = new Date();
+    console.log(meeting.isReserve);
     if (new Date(meeting.endDate) < now)
       return (
         <ScheduleDetailButton>
           <div>종료</div>
         </ScheduleDetailButton>
       );
-    else if (new Date(meeting.startDate) <= now)
+    else if (new Date(meeting.startDate) <= now && meeting.isReserve)
       return (
         <ScheduleDetailButton color="2">
           <div>
@@ -27,7 +28,15 @@ export default function ScheduleDetailLeft() {
           </div>
         </ScheduleDetailButton>
       );
-    else if (new Date(meeting.openDate) <= now)
+    else if (new Date(meeting.openDate) <= now) {
+      if (meeting.isReserve)
+        return (
+          <ScheduleDetailButton color="1">
+            <div>
+              <Link to="/room">예매취소</Link>
+            </div>
+          </ScheduleDetailButton>
+        );
       return (
         <ScheduleDetailButton color="1">
           <div>
@@ -35,7 +44,13 @@ export default function ScheduleDetailLeft() {
           </div>
         </ScheduleDetailButton>
       );
-    else {
+    } else if (meeting.applicantCnt === meeting.cnt) {
+      return (
+        <ScheduleDetailButton>
+          <div>매진</div>
+        </ScheduleDetailButton>
+      );
+    } else {
       return (
         <ScheduleDetailButton>
           <div>준비중</div>
