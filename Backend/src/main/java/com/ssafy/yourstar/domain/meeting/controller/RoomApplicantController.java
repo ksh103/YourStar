@@ -67,7 +67,7 @@ public class RoomApplicantController {
             (@ApiParam(value = "팬미팅 번호") @PathVariable("meetingId") int meetingId) {
         log.info("meetingRemoveByStar - Call");
 
-        if (meetingService.meetingRemoveByStar(meetingId)) {
+        if (meetingService.meetingRemoveByStar(meetingId) == 1) {
             return ResponseEntity.status(200).body(BaseResponseBody.of(200, "Success"));
         } else {
             log.error("meetingRemoveByStar - This MeetingId doesn't exist");
