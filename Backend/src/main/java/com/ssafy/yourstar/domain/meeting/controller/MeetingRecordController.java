@@ -57,7 +57,7 @@ public class MeetingRecordController {
     }
 
     @ApiOperation(value = "추억 보관함 사진 개별 삭제")
-    @DeleteMapping("/fan-applicant/{fileId}")
+    @DeleteMapping("/record-img/{fileId}")
     public ResponseEntity<? extends BaseResponseBody> meetingRecordImgRemove(@ApiParam(value = "파일 구분 번호") @PathVariable(value = "fileId") int fileId) {
         log.info("meetingRecordImgRemove - Call");
 
@@ -71,4 +71,11 @@ public class MeetingRecordController {
 
     // 추억 보관함 기록 삭제 (전체)
 
+    @ApiOperation(value = "추억 보관함 사진 개별 삭제")
+    @DeleteMapping("/record-list")
+    public ResponseEntity<? extends BaseResponseBody> meetingRecordListRemove(@ApiParam(value = "팬미팅 구분 번호") @PathVariable(value = "meetingId") int meetingId) {
+        log.info("meetingRecordImgRemove - Call");
+
+        return null;
+    }
 }
