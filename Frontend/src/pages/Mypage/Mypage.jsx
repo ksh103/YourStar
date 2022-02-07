@@ -42,7 +42,7 @@ export default function Mypage() {
       }
       const myMeeting = totalMeetings.filter(
         // 스타 자신이 오픈한 팬 미팅 정보
-        meeting => meeting.managerCode === me.managerCode
+        meeting => meeting.code === me.managerCode
       );
       return myMeeting.map(item => <MypageCard data={item} key={item.id} />);
     } else if (menu === 1) {
