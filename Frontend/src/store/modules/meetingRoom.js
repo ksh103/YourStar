@@ -5,6 +5,8 @@ const PUBLISHER_INFO = 'PUBLISHER_INFO';
 const USER_INFO = 'USER_INFO';
 const UPDATE_MAINSTREMMANAGER = 'UPDATE_MAINSTREMMANAGER';
 const SCREEN_CHANGE = 'SCREEN_CHANGE';
+const USER_NICKNAME = 'USER_NICKNAME';
+const CHATTING_INPUT_CHANGE = 'CHATTING_INPUT_CHANGE';
 
 // QnA 모드를 변경하기위한 action
 // 스타가 의 조작에 대한 action이라고 이해하면 된다.
@@ -65,6 +67,20 @@ export const ScreenChange = selectNum => {
   };
 };
 
+// 변경시킬게 아니라서 생각해보니 필요가없나?  없네 ㅋㅋ''
+export const GetNikcName = () => {
+  return {
+    type: USER_NICKNAME,
+  };
+};
+
+export const ChattingInputChange = inputText => {
+  return {
+    type: CHATTING_INPUT_CHANGE,
+    payload: inputText,
+  };
+};
+
 // 평소 컴포넌트에서 선언하던 state들!
 const initialState = {
   // 초기에는 시작 안한 상태!
@@ -72,10 +88,13 @@ const initialState = {
   chattingList: [],
   subscribers: [],
   publisher: undefined,
-  // 임시로 사용하는 유저아이디
-  userId: 1,
   mainStreamManager: undefined,
   selectNum: 0,
+  // 임시로 사용하는 유저아이디
+  userId: 0,
+  // 임시로 사용하는 유저 닉네임
+  userNickName: '동주니에용',
+  testInput: '테스트용',
 };
 
 const MeetingRoom = (state = initialState, action) => {
@@ -119,7 +138,11 @@ const MeetingRoom = (state = initialState, action) => {
         ...state,
         selectNum: action.payload,
       };
-
+    case CHATTING_INPUT_CHANGE:
+      return {
+        ...state,
+        testInput: action.payload,
+      };
     default:
       return state; // 기본 값 반환!
   }

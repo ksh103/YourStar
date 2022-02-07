@@ -178,6 +178,7 @@ const ConcertChattingListBox = styled.div`
   margin-top: 2vh;
   background-color: black;
   color: white;
+  overflow-y: auto;
 `;
 
 export {

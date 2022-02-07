@@ -13,6 +13,7 @@ import {
   UpdateMyInformation,
   MainStreamManagerInfo,
   ScreenChange,
+  ChattingInputChange,
 } from '../../../store/modules/meetingRoom';
 // import changeList from '../../../store/modules/selectList';
 
@@ -121,8 +122,8 @@ class RoomDonJun extends Component {
 
   componentDidUpdate(prevState) {
     // state 변화를 감지하는곳
-    console.log(prevState.selectNum, '객체 변화가 감지되었다');
-    console.log(this.props.selectNum, '변화된 state');
+    console.log(prevState.chattingList, 'chattingList 변화가 감지되었다');
+    console.log(this.props.chattingList, '변화된 chattingList');
 
     // selectNum 에 대한 변화가 감지되었다면, 다른 참여자에게도 이러한 변화를 알려주어야 한다.
     // 세션 정의하고 type을 정의하여 시그널을 보냄 --> 이제 on을 통한 다른 local에서의 변화 감지
@@ -134,6 +135,16 @@ class RoomDonJun extends Component {
         type: 'screen',
       });
       // this.props.doScreenChange(this.props.selectNum);
+    }
+
+    if (prevState.chattingList !== this.props.chattingList) {
+      // 채팅내용의 리스트가 다르다면 갱신을 시켜주세요
+      // 스토어에 정보 받아오기 해보자
+      mySession.signal({
+        data: `${this.props.userNickName},${this.props.testInput}`,
+        to: [],
+        type: 'chat',
+      });
     }
   }
 
@@ -238,7 +249,7 @@ class RoomDonJun extends Component {
         mySession.on('signal:chat', event => {
           let chatdata = event.data.split(',');
           console.log(chatdata, '채팅데이터');
-          if (chatdata[0] !== this.state.myUserName) {
+          if (chatdata[0] !== this.props.userNickName) {
             const inputValue = {
               userName: chatdata[0],
               text: chatdata[1],
@@ -506,6 +517,8 @@ const mapStateToProps = state => ({
   userId: state.MeetingRoom.userId,
   mainStreamManager: state.MeetingRoom.mainStreamManager,
   selectNum: state.MeetingRoom.selectNum,
+  userNickName: state.MeetingRoom.userNickName,
+  testInput: state.MeetingRoom.testInput,
 });
 
 const mapDispatchToProps = dispatch => {
@@ -519,6 +532,8 @@ const mapDispatchToProps = dispatch => {
     doMainStreamManagerInfo: mainStreamManager =>
       dispatch(MainStreamManagerInfo(mainStreamManager)),
     doScreenChange: selectNum => dispatch(ScreenChange(selectNum)),
+    doChattingInputChange: testinput =>
+      dispatch(ChattingInputChange(testinput)),
   };
 };
 

@@ -7,6 +7,12 @@ import {
   ConcertChattingInputBox,
   ConcertChattingListBox,
 } from '../CommonComponents/RightSideItems/Chatting/Chatting.style';
+import { useSelector, useDispatch } from 'react-redux';
+import {
+  ChattingAction,
+  ChattingInputChange,
+} from '../../../store/modules/meetingRoom';
+
 // 포지션작업
 const BackgroundDiv = styled.div`
   width: 100%;
@@ -30,6 +36,38 @@ const ConcertDisplayBox = styled.div`
 `;
 
 export default function Concert() {
+  const [testInput, setTestinput] = React.useState('');
+
+  const { chattingList } = useSelector(state => ({
+    chattingList: state.MeetingRoom.chattingList,
+  }));
+
+  const dispatch = useDispatch();
+
+  const SubmitText = Input => dispatch(ChattingInputChange(Input));
+  const AppendChattingList = inputValue => dispatch(ChattingAction(inputValue));
+
+  const handleChatMessageChange = e => {
+    setTestinput(e.target.value);
+  };
+
+  const { userNickName } = useSelector(state => ({
+    userNickName: state.MeetingRoom.userNickName,
+  }));
+
+  const SendMessage = e => {
+    if (e.key === 'Enter') {
+      const inputValue = {
+        userName: userNickName,
+        text: testInput,
+        chatClass: 'messages__item--operator',
+      };
+      SubmitText(testInput);
+      AppendChattingList(inputValue);
+      setTestinput('');
+    }
+  };
+
   return (
     <BackgroundDiv>
       <ConcertWrapper>
@@ -37,8 +75,23 @@ export default function Concert() {
       </ConcertWrapper>
       <HalfSideDiv1>
         <ConcertChattingBox></ConcertChattingBox>
-        <ConcertChattingInputBox></ConcertChattingInputBox>
-        <ConcertChattingListBox></ConcertChattingListBox>
+        <ConcertChattingInputBox
+          onKeyPress={SendMessage}
+          value={testInput}
+          onChange={handleChatMessageChange}
+        ></ConcertChattingInputBox>
+        <ConcertChattingListBox>
+          {' '}
+          {chattingList.map((value, idx) => {
+            return (
+              <div key={idx + value.text}>
+                <p>
+                  {value.userName} : {value.text}
+                </p>
+              </div>
+            );
+          })}
+        </ConcertChattingListBox>
       </HalfSideDiv1>
       <EmoziBar></EmoziBar>
     </BackgroundDiv>
