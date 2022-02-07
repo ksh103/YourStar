@@ -2,11 +2,16 @@ import axios from 'axios';
 import { BASE_URL } from '../../../utils/contants';
 
 // 팬미팅 상세보기
-export async function MeetingDetailAPI(id) {
+export async function MeetingDetailAPI({ meetingId, memberId }) {
   const result = await axios
-    .get(`${BASE_URL}meetings/${id}`)
+    .get(`${BASE_URL}meetings/${meetingId}`)
     .then(res => res.data.meeting);
   console.log(result);
+  const applicant = await axios
+    .get(`${BASE_URL}meetings/fan-applicant/list/${meetingId}?page=1&size=100`)
+    .then(res => res.data.content);
+  const applicantCnt = applicant.length;
+  const isReserve = applicant.some(a => a.memberId === memberId);
   return {
     id: result.meetingId,
     code: result.managerCode,
@@ -18,13 +23,15 @@ export async function MeetingDetailAPI(id) {
     price: result.meetingPrice,
     description: result.meetingDescription,
     image: result.meetingImgPath,
+    applicantCnt,
+    isReserve,
   };
 }
 
 // 팬미팅 전체보기
 export async function MeetingAllListAPI({ page, size }) {
   const result = await axios
-    .get(`${BASE_URL}meetings/room-applicant?page=${page}&size=${size}`)
+    .get(`${BASE_URL}meetings/room-applicant?page=1&size=100`)
     .then(res => res.data.meetings.content);
   return result.map(data => {
     return {
@@ -53,13 +60,6 @@ export async function ApprovedMeetingListAPI({ page, size }) {
       image: data.meetingImgPath,
     };
   });
-}
-// 예정된 팬미팅 전체보기
-export async function UpcomingMeetingListAPI(page, size) {
-  const result = await axios.get(
-    `${BASE_URL}meetings/room-applicant/approve?page=${page}&size=${size}`
-  );
-  return result;
 }
 
 // 승인대기중인 팬미팅 전체보기
