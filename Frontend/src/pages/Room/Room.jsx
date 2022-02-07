@@ -13,7 +13,7 @@ import {
   MainStreamManagerInfo,
   ScreenChange,
   ChattingInputChange,
-} from '../../../store/modules/meetingRoom';
+} from '../../store/modules/meetingRoom';
 
 // 컴포넌트
 import RoomComponent from './RoomComponent';
@@ -58,9 +58,6 @@ class RoomDonJun extends Component {
   }
 
   componentDidUpdate(prevState) {
-    console.log(prevState.chattingList, 'chattingList 변화가 감지되었다');
-    console.log(this.props.chattingList, '변화된 chattingList');
-
     const mySession = this.state.session;
     if (prevState.selectNum !== this.props.selectNum) {
       mySession.signal({
