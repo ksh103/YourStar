@@ -1,6 +1,8 @@
 package com.ssafy.yourstar.domain.meeting.controller;
 
 import com.ssafy.yourstar.domain.meeting.db.entity.Meeting;
+import com.ssafy.yourstar.domain.meeting.db.entity.MeetingRecordImgPath;
+import com.ssafy.yourstar.domain.meeting.response.MeetingRecordImgDetailGetRes;
 import com.ssafy.yourstar.domain.meeting.response.MeetingRecordListGetRes;
 import com.ssafy.yourstar.domain.meeting.service.MeetingRecordService;
 import com.ssafy.yourstar.domain.meeting.service.MeetingService;
@@ -15,6 +17,8 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
+
+import java.util.List;
 
 @Api("추억 보관함 API")
 @Slf4j
@@ -39,7 +43,19 @@ public class MeetingRecordController {
     }
 
     // 추억 보관함 사진 다운로드
+    @ApiOperation(value = "추억 보관함 사진 다운로드")
+    @GetMapping("/record-list/{meetingId}/{memberId}")
+    public ResponseEntity<MeetingRecordImgDetailGetRes> meetingRecordImgDownload(@PathVariable(value = "meetingId") int meetingId, @PathVariable(value = "memberId") int memberId) {
+        log.info("meetingRecordImgDownload - Call");
 
+        List<MeetingRecordImgPath> meetingRecordImgPathList = meetingRecordService.meetingRecordImgDetail(meetingId, memberId);
+
+        if(meetingRecordImgPathList != null && !meetingRecordImgPathList.isEmpty()) {
+            return ResponseEntity.status(200).body(MeetingRecordImgDetailGetRes.of(200, "Success", meetingRecordImgPathList));
+        }else{
+            return ResponseEntity.status(204).body(MeetingRecordImgDetailGetRes.of(204, "No Contents", null));
+        }
+    }
     // 추억 보관함 사진 삭제
 
 }
