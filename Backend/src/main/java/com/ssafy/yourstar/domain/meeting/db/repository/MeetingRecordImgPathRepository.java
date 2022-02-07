@@ -12,4 +12,7 @@ public interface MeetingRecordImgPathRepository extends JpaRepository<MeetingRec
 
     @Query(value = "select m from MeetingRecordImgPath m where m.meetingId = :meetingId and m.memberId = :memberId")
     List<MeetingRecordImgPath> findAllByMeetingIdAndMemberId(int meetingId, int memberId);
+
+    @Query(value = "select fileId from MeetingRecordImgPath where fileId = :fileId")
+    List<String> meetingRecordImgFileUrl(int fileId);
 }

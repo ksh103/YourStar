@@ -10,6 +10,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
+import java.io.File;
 import java.util.List;
 
 @Service
@@ -42,5 +43,25 @@ public class MeetingRecordServiceImpl implements MeetingRecordService {
             return meetingRecordImgPathRepository.findAllByMeetingIdAndMemberId(meetingId, memberId);
         }
         return null;
+    }
+
+    @Override
+    public int meetingRecordImgRemove(int fileId) {
+        if(meetingRecordImgPathRepository.findById(fileId).isPresent()) {
+
+            List<String> recordImgFileUrl = meetingRecordImgPathRepository.meetingRecordImgFileUrl(fileId);
+
+            // 물리 파일 삭제
+            for(String fileUrl : recordImgFileUrl) {
+                File file = new File(uploadPath + File.separator, fileUrl);
+                if(file.exists()) {
+                    file.delete();
+                }
+            }
+            meetingRecordImgPathRepository.deleteById(fileId); // 팬미팅 삭제
+
+            return SUCCESS;
+        }
+        return FAIL;
     }
 }
