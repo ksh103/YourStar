@@ -13,6 +13,9 @@ const initialState = {
     gender: '',
     isLogin: '',
   },
+  menu: 1,
+  meetingDetailState: false, // 이미지 상세보기 modal 버튼
+
   myPageLoading: false, // 마이페이지 정보
   myPageDone: false,
   myPageError: false,
@@ -36,6 +39,15 @@ export const DELETE_MEMBER_REQUEST = 'DELETE_MEMBER_REQUEST';
 export const DELETE_MEMBER_SUCCESS = 'DELETE_MEMBER_SUCCESS';
 export const DELETE_MEMBER_FAILURE = 'DELETE_MEMBER_FAILURE';
 
+const SET_MEETING_DETAIL_STATE = 'SET_MEETING_DETAIL_STATE'; // 미팅 상세보기 MODAL창 활성화 action
+export const setMeetingDetailState = state => ({
+  type: SET_MEETING_DETAIL_STATE,
+  state,
+});
+
+const SET_MENU = 'SET_MENU';
+export const setMenu = menu => ({ type: SET_MENU, menu });
+
 const reducer = (state = initialState, action) =>
   produce(state, draft => {
     switch (action.type) {
@@ -47,7 +59,6 @@ const reducer = (state = initialState, action) =>
       case MY_PAGE_SUCCESS:
         draft.myPageLoading = false;
         draft.myPageDone = true;
-        console.log(action.data);
         draft.me.code = action.data.code;
         draft.me.memberId = action.data.memberId;
         draft.me.managerCode = action.data.managerCode;
@@ -89,6 +100,12 @@ const reducer = (state = initialState, action) =>
       case DELETE_MEMBER_FAILURE:
         draft.deleteMemberLoading = false;
         draft.deleteMemberError = action.error;
+        break;
+      case SET_MENU:
+        draft.menu = action.menu; // 마이페이지 메뉴 변경
+        break;
+      case SET_MEETING_DETAIL_STATE:
+        draft.meetingDetailState = action.state;
         break;
       default:
         break;

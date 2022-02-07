@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { Layout, Wrapper } from '../../../styles/variables';
-
+import dayjs from 'dayjs';
+import DaumPostcode from 'react-daum-postcode';
 import Navbar from '../../Navbar/Navbar';
 import Footer from '../../Footer/Footer';
 import {
@@ -18,8 +19,10 @@ import { useDispatch, useSelector } from 'react-redux';
 import {
   EMAIL_CHECK_REQUEST,
   NICK_CHECK_REQUEST,
+  setAddressButton,
   SIGN_UP_REQUEST,
 } from '../../../store/modules/member';
+import SearchAddrModal from '../../utils/modal/modalSearchAddr';
 
 export default function Signup() {
   const dispatch = useDispatch();
@@ -31,10 +34,20 @@ export default function Signup() {
   const [password, setPassword] = useState('');
   const [passwordCheck, setPasswordCheck] = useState('');
   const [nickName, setNickName] = useState('');
-  const [address, setAddress] = useState('');
-  const [birth, setBirth] = useState('19960817');
+  // const [address, setAddress] = useState(''); // 주소
   const [gender, setGender] = useState('');
-  const { emailCheckDone, nickCheckDone } = useSelector(state => state.member);
+
+  // useSelector
+  const { addressButton, address, emailCheckDone, nickCheckDone } = useSelector(
+    state => state.member
+  );
+
+  // 주소 검색 버튼
+  const addrButton = () => {
+    dispatch(setAddressButton(true)); // redux 주소창 open
+  };
+
+  // Handler function
   const onEmailHandler = e => {
     setEmail(e.target.value);
   };
@@ -53,35 +66,34 @@ export default function Signup() {
   const onNickNameHandler = e => {
     setNickName(e.target.value);
   };
-  const onAddressHandler = e => {
-    setAddress(e.target.value);
-  };
-  const onBirthHandler = e => {
-    setBirth(e.target.value);
-  };
   const onGenderHandler = e => {
     setGender(e.target.value);
   };
+
+  // 이메일 중복체크
   const emailCheckButton = () => {
     dispatch({
       type: EMAIL_CHECK_REQUEST,
       data: { email: email },
     });
   };
+
+  // 닉네임 중복체크
   const nickCheckButton = () => {
     dispatch({
       type: NICK_CHECK_REQUEST,
       data: { nickName: nickName },
     });
   };
+  // mui-datepick 생년월일 정규화
+  const BirthFormat = dayjs(value).format('YYYYMMDD');
 
+  // 회원가입 버튼
   const signUpButton = () => {
     // 유효성 검사
     if (email === '') {
       alert('이메일을 입력해주세요');
-    }
-    // 이메일 중복체크 유효성 검사 추가
-    else if (name === '') {
+    } else if (name === '') {
       alert('이름을 입력해주세요');
     } else if (phoneNumber === '') {
       alert('핸드폰 번호를 입력해주세요');
@@ -111,7 +123,7 @@ export default function Signup() {
           password: password,
           nickName: nickName,
           address: address,
-          birth: birth,
+          birth: BirthFormat,
           gender: gender,
         },
       });
@@ -120,6 +132,7 @@ export default function Signup() {
   return (
     <Layout>
       <Navbar />
+
       <Wrapper>
         <SignupBlock>
           <div id="scroll">
@@ -197,9 +210,16 @@ export default function Signup() {
                   type="text"
                   className="input check-input"
                   placeholder="Adress"
-                  onChange={onAddressHandler}
+                  value={address}
                 ></input>
-                <button className="check-button">검색</button>
+                <button
+                  className="check-button"
+                  onClick={() => {
+                    addrButton();
+                  }}
+                >
+                  검색
+                </button>
               </SignupContentRow>
               <SignupContentRow>
                 <FormControl sx={{ width: '320px', border: 'none' }}>
@@ -209,6 +229,8 @@ export default function Signup() {
                       onChange={newValue => {
                         setValue(newValue);
                       }}
+                      inputFormat={'yyyy-MM-dd'}
+                      mask={'____-__-__'}
                       renderInput={params => <TextField {...params} />}
                     />
                   </LocalizationProvider>
@@ -242,6 +264,7 @@ export default function Signup() {
               </SignupContentRow>
             </SignupContent>
           </div>
+          {addressButton && <SearchAddrModal />}
         </SignupBlock>
       </Wrapper>
       <Footer />
