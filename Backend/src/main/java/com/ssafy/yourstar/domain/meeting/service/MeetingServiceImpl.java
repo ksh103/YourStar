@@ -48,6 +48,9 @@ public class MeetingServiceImpl implements MeetingService {
     @Value("${app.fileupload.uploadPath}")
     private String uploadPath;
 
+    private static final int SUCCESS = 1;
+    private static final int FAIL = -1;
+
     @Override
     public int meetingApplyByStar(MeetingApplyByStarPostReq meetingApplyByStarPostReq, MultipartHttpServletRequest request) throws IOException {
         Meeting meeting = new Meeting();
@@ -105,10 +108,9 @@ public class MeetingServiceImpl implements MeetingService {
 
             meetingImgPathRepository.save(meetingImgPath);
 
-
-            return 1;
+            return SUCCESS;
         }
-        return 0;
+        return FAIL;
     }
 
     @Override
@@ -173,35 +175,30 @@ public class MeetingServiceImpl implements MeetingService {
                 meetingImgPathRepository.save(meetingImgPath);
                 meetingRepository.save(meeting);
 
-                return 1;
+                return SUCCESS;
             }
         }
-        return 0;
+        return FAIL;
     }
 
     @Override
-    public boolean meetingRemoveByStar(int meetingId) {
+    public int meetingRemoveByStar(int meetingId) {
         // 해당 팬미팅이 존재하면 삭제
         if (meetingRepository.findById(meetingId).isPresent()) {
+            int id = meetingRepository.findById(meetingId).get().getMeetingId();
 
-            // 물리 파일 삭제
-            try {
-                int id = meetingRepository.findById(meetingId).get().getMeetingId();
+            List<String> fileUrlList = meetingImgPathRepository.meetingImgFileUrl(id);
 
-                List<String> fileUrlList = meetingImgPathRepository.meetingImgFileUrl(id);
-
-                for(String fileUrl : fileUrlList) {
-                    File file = new File(uploadPath + File.separator, fileUrl);
-                    if(file.exists()) {
-                        file.delete();
-                    }
+            for(String fileUrl : fileUrlList) {
+                File file = new File(uploadPath + File.separator, fileUrl);
+                if(file.exists()) {
+                    file.delete();
                 }
-                meetingRepository.deleteById(meetingId); // 팬미팅 삭제
-                return true;
-            } catch (Exception e) {
-                return false;
             }
-        }else return false;
+            meetingRepository.deleteById(meetingId); // 팬미팅 삭제
+
+            return SUCCESS;
+        }else return FAIL;
     }
 
     @Override
@@ -217,7 +214,6 @@ public class MeetingServiceImpl implements MeetingService {
 
     @Override
     public Page<Meeting> meetingPendingList(Pageable pageable) {
-
         return meetingRepository.findAllByIsApproveFalse(pageable);
     }
 
