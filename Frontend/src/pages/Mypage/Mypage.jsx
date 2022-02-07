@@ -28,17 +28,22 @@ const data = [
   },
 ];
 export default function Mypage() {
-  const menu = 1;
+  const { menu, me } = useSelector(state => state.mypage);
+
   const content = () => {
-    if (menu === 1) {
+    if (me.code === 2) {
+      // 스타(오픈한 팬 미팅)
+      return data.map(item => <MypageCard data={item} key={item.id} />);
+    } else if (menu === 1) {
+      // 팬미팅 신청내역
       return data.map(item => <MypageCard data={item} key={item.id} />);
     } else if (menu === 2) {
-    } else if (menu === 3) {
+      // 추억보관함
+      return <div>추억보관함</div>;
     }
   };
 
   const dispatch = useDispatch();
-  // const { me, myPageDone } = useSelector(state => state.mypage);
 
   useEffect(() => {
     dispatch({

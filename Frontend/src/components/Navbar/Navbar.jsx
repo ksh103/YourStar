@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
 import {
   NavbarWrapper,
@@ -12,11 +12,26 @@ import logo from '../../assets/images/yourstar_logo.png';
 import Box from '@mui/material/Box';
 import Drawer from '@mui/material/Drawer';
 import List from '@mui/material/List';
-import ListItem from '@mui/material/ListItem';
 import NavbarSub from './NavbarSub';
 import { MdMenu, MdStar, MdPerson, MdManageAccounts } from 'react-icons/md';
+import { useSelector, useDispatch } from 'react-redux';
+import { MY_PAGE_REQUEST } from '../../store/modules/mypage';
+import { LOG_IN_SUCCESS } from '../../store/modules/member';
 export default function Navbar() {
-  const role = 3;
+  const dispatch = useDispatch();
+  const { logInDone } = useSelector(state => state.member);
+
+  useEffect(() => {
+    // 만약 토큰이 남아 있다면 or 새로고침 되었을 때 동작하도록 해야함
+    if (!logInDone && sessionStorage.length > 0) {
+      dispatch({
+        type: MY_PAGE_REQUEST,
+      });
+      dispatch({ type: LOG_IN_SUCCESS });
+    }
+  }, []);
+
+  const { me } = useSelector(state => state.mypage); // 0: 비로그인 ,3:사용자, 2: 스타 ,1:관리자
   const [open, setOpen] = useState(false);
   const toggleDrawer = open => event => {
     if (
@@ -35,16 +50,16 @@ export default function Navbar() {
     >
       <List>
         <DrawerListRow>
-          <p className="name">반갑습니다 지수민님</p>
+          <p className="name">반갑습니다 {me.name}님</p>
         </DrawerListRow>
-        {role === 2 && (
+        {me.code === 2 && (
           <DrawerListRow>
             <Link to="/apply" className="color">
               contact
             </Link>
           </DrawerListRow>
         )}
-        {role === 3 && (
+        {me.code === 1 && (
           <DrawerListRow>
             <Link to="/admin" className="color">
               management
@@ -63,7 +78,7 @@ export default function Navbar() {
           </Link>
         </DrawerListRow>
 
-        {role === 0 ? (
+        {me.code === 0 ? (
           <>
             <DrawerListRow>
               <Link to="/login" className="color">
@@ -108,9 +123,12 @@ export default function Navbar() {
             <img src={logo} alt="yourstar" />
           </Link>
         </CenterMenu>
-        <RightMenu>
-          <div id="name">지수민님</div>
-        </RightMenu>
+        {me.code !== 0 && (
+          <RightMenu>
+            <div id="name">{me.name}님</div>
+          </RightMenu>
+        )}
+        {me.code === 0 && <RightMenu />}
       </NavbarMain>
       <NavbarSub />
     </NavbarWrapper>

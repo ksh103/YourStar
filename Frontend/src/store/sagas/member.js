@@ -35,7 +35,7 @@ import {
   EMAIL_CHECK_REQUEST,
   EMAIL_CHECK_FAILURE,
   EMAIL_CHECK_SUCCESS,
-  GO_TO_HOME,
+  setAddress,
 } from '../modules/member';
 import { MY_PAGE_REQUEST } from '../modules/mypage';
 
@@ -46,7 +46,6 @@ function* loadLogin(action) {
     yield put({ type: LOG_IN_SUCCESS, data: result });
     sessionStorage.setItem('userToken', result.data.accessToken); // userToken 세션스토리지 저장
     yield put({ type: MY_PAGE_REQUEST, data: result.data.accessToken }); // mypage 정보 바로 조회
-    yield put({ type: GO_TO_HOME }); // 로그인 성공 후 메인페이지로 이동
   } catch (err) {
     console.log(err);
     alert(
@@ -82,6 +81,8 @@ function* loadSignup(action) {
     const result = yield call(SignupAPI, action.data);
     alert('이메일 인증 후 로그인 할 수 있습니다.');
     yield put({ type: SIGN_UP_SUCCESS, data: result });
+    yield call(setAddress, ''); // 왜 이 함수가 실행이 안될까?, 주소 저장 후 초기화 하는 함수
+    // 위에것이 실행이 안되면 회원가입 후 새로고침 후 로그인 창으로 이동 시켜줘야함.
   } catch (err) {
     yield put({ type: SIGN_UP_FAILURE });
   }
@@ -139,16 +140,6 @@ function* watchLoadFindPw() {
   yield takeLatest(FIND_PW_REQUEST, loadFindPw);
 }
 
-// 메인 페이지 이동
-function* goToHomeSaga() {
-  console.log('히스토리 푸쉬');
-  const history = yield getContext('history');
-  history.push('/');
-}
-function* watchLoadgoToHomeSaga() {
-  yield takeLatest(GO_TO_HOME, goToHomeSaga);
-}
-
 export default function* memberSaga() {
   yield all([
     fork(watchLoadLogin),
@@ -157,6 +148,5 @@ export default function* memberSaga() {
     fork(watchLoadFindPw),
     fork(watchLoadEmailCheck),
     fork(watchLoadNickCheck),
-    fork(watchLoadgoToHomeSaga),
   ]);
 }

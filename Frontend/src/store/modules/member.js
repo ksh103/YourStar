@@ -18,6 +18,8 @@ const initialState = {
   findPwLoading: false, // 비밀번호 시도중
   findPwDone: false,
   findPwError: null,
+  address: '',
+  addressButton: false, // 주소 modal 버튼
 };
 
 export const LOG_IN_REQUEST = 'LOG_IN_REQUEST';
@@ -44,7 +46,13 @@ export const FIND_PW_REQUEST = 'FIND_PW_REQUEST';
 export const FIND_PW_SUCCESS = 'FIND_PW_SUCCESS';
 export const FIND_PW_FAILURE = 'FIND_PW_FAILURE';
 
-export const GO_TO_HOME = 'GO_TO_HOME';
+const SET_ADDRESS_BUTTON = 'SET_ADDRESS_BUTTON';
+export const setAddressButton = state => ({
+  type: SET_ADDRESS_BUTTON,
+  state,
+});
+const SET_ADDRESS = 'SET_ADDRESS';
+export const setAddress = address => ({ type: SET_ADDRESS, address });
 
 const reducer = (state = initialState, action) =>
   produce(state, draft => {
@@ -56,7 +64,6 @@ const reducer = (state = initialState, action) =>
         break;
       case LOG_IN_SUCCESS:
         draft.logInLoading = false;
-        draft.me = action.data;
         draft.logInDone = true;
         break;
       case LOG_IN_FAILURE:
@@ -129,6 +136,12 @@ const reducer = (state = initialState, action) =>
       case FIND_PW_FAILURE:
         draft.findPwLoading = false;
         draft.findPwError = action.error;
+        break;
+      case SET_ADDRESS:
+        draft.address = action.address;
+        break;
+      case SET_ADDRESS_BUTTON:
+        draft.addressButton = action.state;
         break;
       default:
         break;

@@ -13,21 +13,33 @@ import {
   SignupContent,
   SignupContentRow,
 } from '../../Memeber/Signup/Signup.style';
-import { NICK_CHECK_REQUEST } from '../../../store/modules/member';
+import {
+  NICK_CHECK_REQUEST,
+  setAddressButton,
+} from '../../../store/modules/member';
 import { useDispatch, useSelector } from 'react-redux';
 import {
   DELETE_MEMBER_REQUEST,
   UPDATE_MEMBER_REQUEST,
 } from '../../../store/modules/mypage';
+import SearchAddrModal from '../../utils/modal/modalSearchAddr';
+
 export default function MypageDetail() {
   const dispatch = useDispatch();
   const [phoneNumber, setPhoneNumber] = useState('');
   const [password, setPassword] = useState('');
   const [passwordCheck, setPasswordCheck] = useState('');
   const [nickName, setNickName] = useState('');
-  const [address, setAddress] = useState('');
-  const { nickCheckDone } = useSelector(state => state.member);
+  const { addressButton, address, nickCheckDone } = useSelector(
+    state => state.member
+  );
   const { me } = useSelector(state => state.mypage);
+
+  // 주소 검색 버튼
+  const addrButton = () => {
+    dispatch(setAddressButton(true)); // redux 주소창 open
+  };
+
   const onPhoneNumberHandler = e => {
     setPhoneNumber(e.target.value);
   };
@@ -39,9 +51,6 @@ export default function MypageDetail() {
   };
   const onNickNameHandler = e => {
     setNickName(e.target.value);
-  };
-  const onAddressHandler = e => {
-    setAddress(e.target.value);
   };
 
   const nickCheckButton = () => {
@@ -152,9 +161,16 @@ export default function MypageDetail() {
                     type="text"
                     className="input check-input"
                     placeholder="Adress"
-                    onChange={onAddressHandler}
+                    value={address}
                   ></input>
-                  <button className="check-button">검색</button>
+                  <button
+                    className="check-button"
+                    onClick={() => {
+                      addrButton();
+                    }}
+                  >
+                    검색
+                  </button>
                 </SignupContentRow>
 
                 <SignupContentRow>
@@ -178,6 +194,7 @@ export default function MypageDetail() {
               </SignupContent>
             </MypageDetailContent>
           </MypageDetailWrapper>
+          {addressButton && <SearchAddrModal />}
         </Block>
       </Wrapper>
       <Footer />
