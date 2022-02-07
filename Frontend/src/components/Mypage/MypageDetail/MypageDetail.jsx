@@ -120,7 +120,7 @@ export default function MypageDetail() {
                   <input
                     type="text"
                     className="input"
-                    placeholder="Phone Number"
+                    placeholder={me.phone}
                     onChange={onPhoneNumberHandler}
                   ></input>
                 </SignupContentRow>
@@ -144,7 +144,7 @@ export default function MypageDetail() {
                   <input
                     type="text"
                     className="input check-input"
-                    placeholder="NickName"
+                    placeholder={me.nick}
                     onChange={onNickNameHandler}
                   ></input>
                   <button
@@ -160,7 +160,7 @@ export default function MypageDetail() {
                   <input
                     type="text"
                     className="input check-input"
-                    placeholder="Adress"
+                    placeholder={me.address}
                     value={address}
                   ></input>
                   <button

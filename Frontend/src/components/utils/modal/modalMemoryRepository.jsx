@@ -32,7 +32,7 @@ export default function BasicModal(props) {
       data: { meetingId: props.data.id },
     });
   }, []);
-
+  console.log(props);
   // useSelector
   const { meetingDetailState } = useSelector(state => state.mypage);
   const { meetingApplyList } = useSelector(state => state.meetingList);
@@ -76,7 +76,7 @@ export default function BasicModal(props) {
             component="h2"
             style={{ textAlign: 'center' }}
           >
-            {props.data.name} 미팅 상세정보
+            {props.data.meetingName} 에서의 추억
           </Typography>
           <Typography id="modal-modal-description" sx={{ mt: 2 }}>
             <Grid container>
@@ -92,7 +92,7 @@ export default function BasicModal(props) {
                       setToggle(0);
                     }}
                   >
-                    미팅 참여 인원
+                    스타 싸인
                   </div>
                 ) : (
                   <div
@@ -101,7 +101,7 @@ export default function BasicModal(props) {
                       setToggle(0);
                     }}
                   >
-                    미팅 참여 인원
+                    스타 싸인
                   </div>
                 )}
               </Grid>
@@ -117,7 +117,7 @@ export default function BasicModal(props) {
                       setToggle(1);
                     }}
                   >
-                    미팅 게임 내역
+                    녹화 영상
                   </div>
                 ) : (
                   <div
@@ -126,14 +126,14 @@ export default function BasicModal(props) {
                       setToggle(1);
                     }}
                   >
-                    미팅 게임 내역
+                    녹화 영상
                   </div>
                 )}
               </Grid>
             </Grid>
             <br />
-            {toggle === 0 && <div>{FanList}</div>}
-            {toggle === 1 && <div>미팅 게임 내역 출력 할 예정</div>}
+            {toggle === 0 && <div>스타 싸인 사진 api 받아오기</div>}
+            {toggle === 1 && <div>녹화 영상 api 받아오기</div>}
           </Typography>
         </Box>
       </Modal>

@@ -2,7 +2,7 @@ import { all, fork, put, takeLatest, call } from 'redux-saga/effects';
 import {
   FanApplicantAPI,
   CancelFanApplicantAPI,
-  SelectApplicantListAPI,
+  FanApplicantListAPI,
 } from '../apis/Main/fan-applicant';
 import {
   INSERT_FANMEETING_REQUEST,
@@ -15,6 +15,10 @@ import {
   DELETE_FANMEETING_SUCCESS,
   DELETE_FANMEETING_FAILURE,
 } from '../modules/fan';
+import {
+  ADD_APPLICANT_MEMBER,
+  REMOVE_APPLICANT_MEMBER,
+} from '../modules/meeting';
 
 function* insertFanMeeting(action) {
   try {
@@ -22,6 +26,9 @@ function* insertFanMeeting(action) {
     yield put({
       type: INSERT_FANMEETING_SUCCESS,
       data: result,
+    });
+    yield put({
+      type: ADD_APPLICANT_MEMBER,
     });
   } catch (err) {
     yield put({
@@ -31,7 +38,7 @@ function* insertFanMeeting(action) {
 }
 function* selectFanMeeting(action) {
   try {
-    const result = yield call(SelectApplicantListAPI, action.data);
+    const result = yield call(FanApplicantListAPI, action.data);
     yield put({
       type: SELECT_FANMEETING_SUCCESS,
       data: result,
@@ -48,6 +55,9 @@ function* deleteFanMeeting(action) {
     yield put({
       type: DELETE_FANMEETING_SUCCESS,
       data: result,
+    });
+    yield put({
+      type: REMOVE_APPLICANT_MEMBER,
     });
   } catch (err) {
     yield put({

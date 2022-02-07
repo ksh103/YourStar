@@ -47,7 +47,6 @@ function* loadLogin(action) {
     sessionStorage.setItem('userToken', result.data.accessToken); // userToken 세션스토리지 저장
     yield put({ type: MY_PAGE_REQUEST, data: result.data.accessToken }); // mypage 정보 바로 조회
   } catch (err) {
-    console.log(err);
     alert(
       '아이디 또는 비밀번호가 일치하지 않거나, 이메일 인증 후 로그인 시도 바랍니다.'
     ); // 유효성 검사
@@ -94,7 +93,6 @@ function* watchLoadSignup() {
 
 // 이메일 중복체크 처리
 function* loadEmailCheck(action) {
-  console.log(action);
   try {
     const result = yield call(EmailCheckAPI, action.data);
     alert('사용할 수 있는 이메일 입니다.');

@@ -7,49 +7,56 @@ import MypageProfile from '../../components/Mypage/MypageProfile';
 import MypageMenu from '../../components/Mypage/MypageMenu';
 import MypageCard from '../../components/Mypage/MypageCard';
 import Grid from '@mui/material/Grid';
-import { MY_PAGE_REQUEST } from '../../store/modules/mypage';
 import { useDispatch, useSelector } from 'react-redux';
-const data = [
-  {
-    id: 1,
-    name: '김다미 팬미팅1',
-  },
-  {
-    id: 2,
-    name: '김다미 팬미팅1',
-  },
-  {
-    id: 3,
-    name: '김다미 팬미팅1',
-  },
-  {
-    id: 4,
-    name: '김다미 팬미팅1',
-  },
-];
+import { TOTAL_MEETINGS_REQUEST } from '../../store/modules/meeting';
+import { SELECT_FANMEETING_REQUEST } from '../../store/modules/fan';
+
 export default function Mypage() {
+  const dispatch = useDispatch();
+  const { totalMeetings, totalMeetingsDone, totalMeetingsLoading } =
+    useSelector(state => state.meeting);
+  const { selectFanMeetingDone, applicant } = useSelector(state => state.fan);
   const { menu, me } = useSelector(state => state.mypage);
+
+  useEffect(() => {
+    if (!selectFanMeetingDone) {
+      dispatch({
+        type: SELECT_FANMEETING_REQUEST,
+        data: { memberId: me.memberId, page: 1, size: 100 },
+      });
+    }
+  }, [dispatch, me, selectFanMeetingDone]);
 
   const content = () => {
     if (me.code === 2) {
       // 스타(오픈한 팬 미팅)
-      return data.map(item => <MypageCard data={item} key={item.id} />);
+      if (!totalMeetingsDone && !totalMeetingsLoading) {
+        // 전체 미팅 내역 받아오기
+        dispatch(
+          {
+            type: TOTAL_MEETINGS_REQUEST,
+            data: { page: 1, size: 100 },
+          },
+          [dispatch]
+        );
+      }
+      const myMeeting = totalMeetings.filter(
+        // 스타 자신이 오픈한 팬 미팅 정보
+        meeting => meeting.managerCode === me.managerCode
+      );
+      return myMeeting.map(item => <MypageCard data={item} key={item.id} />);
     } else if (menu === 1) {
-      // 팬미팅 신청내역
-      return data.map(item => <MypageCard data={item} key={item.id} />);
+      // 나의 팬미팅
+      return applicant.map(item => (
+        <MypageCard data={item} key={item.meetingId} />
+      ));
     } else if (menu === 2) {
       // 추억보관함
-      return <div>추억보관함</div>;
+      return applicant.map(item => (
+        <MypageCard data={item} key={item.meetingId} />
+      ));
     }
   };
-
-  const dispatch = useDispatch();
-
-  useEffect(() => {
-    dispatch({
-      type: MY_PAGE_REQUEST,
-    });
-  }, [dispatch]);
 
   return (
     <Layout>

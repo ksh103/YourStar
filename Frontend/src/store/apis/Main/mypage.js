@@ -4,7 +4,6 @@ import { BASE_URL } from '../../../utils/contants';
 // 자신의 정보 조회
 // !!!!!!!!header에 토큰 정보 담아줘야함!!!!!!!!!!!!!!
 export async function MypageAPI() {
-  console.log(sessionStorage.getItem('userToken'));
   const result = await axios.get(`${BASE_URL}members`, {
     headers: {
       Authorization: sessionStorage.getItem('userToken'),
