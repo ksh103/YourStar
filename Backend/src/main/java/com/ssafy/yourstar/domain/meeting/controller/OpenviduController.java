@@ -68,8 +68,8 @@ public class OpenviduController {
 		}
 	}
 
-	@ApiOperation(value = "추억보관함의 녹화 및 캡쳐 삭제")
-	@DeleteMapping(value = "/videos/{fileId}")
+	@ApiOperation(value = "추억보관함의 녹화 삭제")
+	@DeleteMapping(value = "/record-video/{fileId}")
 	public ResponseEntity<? extends BaseResponseBody> fileRemove(@PathVariable int fileId) {
 		log.info("recordingRemove - Call");
 
