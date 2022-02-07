@@ -13,7 +13,7 @@ const initialState = {
     gender: '',
     isLogin: '',
   },
-  menu: 1,
+  menu: 1, // 1. 나의 팬미팅 2. 추억 보관함
   meetingDetailState: false, // 이미지 상세보기 modal 버튼
 
   myPageLoading: false, // 마이페이지 정보
