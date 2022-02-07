@@ -1,6 +1,5 @@
 package com.ssafy.yourstar.global.config;
 
-import io.swagger.annotations.Api;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import springfox.documentation.builders.ApiInfoBuilder;
@@ -53,6 +52,6 @@ public class SwaggerConfig {
                 .termsOfServiceUrl("https://edu.ssafy.com")
                 .contact(new Contact("SSAFY", "https://edu.ssafy.com", "ssafy@ssafy.com"))
                 .license("SSAFY License")
-                .licenseUrl("ssafy@ssafy.com").version("1.0").build();
+                .licenseUrl("ssafy@ssafy.com").version("1.2").build();
     }
 }

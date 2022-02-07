@@ -14,6 +14,8 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartHttpServletRequest;
 
+import java.io.IOException;
+
 @Api("미팅룸 관계자 관련 API")
 @Slf4j
 @RestController
@@ -29,8 +31,16 @@ public class RoomApplicantController {
         log.info("meetingApplyByStar - Call");
         log.info(meetingApplyByStarPostReq.toString());
 
-        meetingService.meetingApplyByStar(meetingApplyByStarPostReq, request);
-        return ResponseEntity.status(201).body(BaseResponseBody.of(201, "Success"));
+        try {
+            if (meetingService.meetingApplyByStar(meetingApplyByStarPostReq, request) == 1) {
+                return ResponseEntity.status(201).body(BaseResponseBody.of(201, "Success"));
+            } else {
+                return ResponseEntity.status(400).body(BaseResponseBody.of(400, "Failed"));
+            }
+        } catch (IOException e) {
+            log.error(e.getMessage());
+            return ResponseEntity.status(400).body(BaseResponseBody.of(400, "Failed"));
+        }
     }
 
     @ApiOperation(value = "스타가 팬미팅 수정")
@@ -39,9 +49,16 @@ public class RoomApplicantController {
             (@RequestPart(value = "meetingModify") Meeting meeting, MultipartHttpServletRequest request) {
         log.info("meetingModifyByStar - Call");
 
-        meetingService.meetingModifyByStar(meeting, request);
-
-        return ResponseEntity.status(201).body(BaseResponseBody.of(201, "Success"));
+        try {
+            if (meetingService.meetingModifyByStar(meeting, request) == 1) {
+                return ResponseEntity.status(201).body(BaseResponseBody.of(201, "Success"));
+            } else {
+                return ResponseEntity.status(400).body(BaseResponseBody.of(400, "Failed"));
+            }
+        } catch (IOException e) {
+            log.error(e.getMessage());
+            return ResponseEntity.status(400).body(BaseResponseBody.of(400, "Failed"));
+        }
     }
 
     @ApiOperation(value = "스타가 신청한 팬미팅 취소")

@@ -10,8 +10,8 @@ import com.ssafy.yourstar.domain.meeting.db.repository.MeetingRepository;
 import com.ssafy.yourstar.domain.meeting.db.repository.MeetingRepositorySpp;
 import com.ssafy.yourstar.domain.meeting.request.MeetingApplyByStarPostReq;
 import com.ssafy.yourstar.domain.meeting.request.MeetingApplyByUserPostReq;
-import com.ssafy.yourstar.domain.meeting.response.MeetingGetRes;
 import com.ssafy.yourstar.domain.member.db.entity.Member;
+import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.io.FilenameUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
@@ -21,11 +21,13 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.multipart.MultipartHttpServletRequest;
 
+import javax.swing.filechooser.FileSystemView;
 import java.io.File;
 import java.io.IOException;
 import java.util.List;
 import java.util.UUID;
 
+@Slf4j
 @Service
 public class MeetingServiceImpl implements MeetingService {
     @Autowired
@@ -47,7 +49,7 @@ public class MeetingServiceImpl implements MeetingService {
     private String uploadPath;
 
     @Override
-    public MeetingGetRes meetingApplyByStar(MeetingApplyByStarPostReq meetingApplyByStarPostReq, MultipartHttpServletRequest request) {
+    public int meetingApplyByStar(MeetingApplyByStarPostReq meetingApplyByStarPostReq, MultipartHttpServletRequest request) throws IOException {
         Meeting meeting = new Meeting();
 
         meeting.setManagerCode(meetingApplyByStarPostReq.getManagerCode());
@@ -62,16 +64,85 @@ public class MeetingServiceImpl implements MeetingService {
 
         meetingRepository.save(meeting);
 
-        try {
-            List<MultipartFile> fileList = request.getFiles("file");
-            File uploadDir = new File(uploadPath + File.separator + uploadFolder);
+        List<MultipartFile> fileList = request.getFiles("file");
+        String rootPath = FileSystemView.getFileSystemView().getHomeDirectory().toString();
+        File uploadDir = new File(uploadPath + File.separator + uploadFolder);
+        log.warn("FilePath : " + uploadDir.getPath());
 
-            // upload 폴더 존재하지 않으면 생성
-            if (!uploadDir.exists()) uploadDir.mkdir();
+        // upload 폴더 존재하지 않으면 생성
+        if (!uploadDir.exists()) uploadDir.mkdir();
+
+        for (MultipartFile part : fileList) {
+
+            int meetingId = meeting.getMeetingId();
+
+            String fileName = part.getOriginalFilename();
+
+            // 보안을 위해 이미지 파일명 난수로 변환
+            UUID uuid = UUID.randomUUID();
+
+            // 파일 확장자 추출
+            String extension = FilenameUtils.getExtension(fileName);
+
+            // 난수로 지정한 파일명 + 확장자
+            String savingFileName = uuid + "." + extension;
+
+            File destFile = new File(uploadPath + File.separator, uploadFolder + File.separator + savingFileName);
+            log.warn("destFile : " + destFile.getPath());
+
+            // 파일 저장
+            part.transferTo(destFile);
+
+            // 파일 정보 DB에 저장
+            MeetingImgPath meetingImgPath = new MeetingImgPath();
+            meetingImgPath.setMeetingId(meeting);
+            meetingImgPath.setFileName(fileName);
+            meetingImgPath.setFileSize(part.getSize());
+            meetingImgPath.setFileContentType(part.getContentType());
+
+            String meetingFileUrl = "/" + uploadFolder + "/" + savingFileName;
+            meetingImgPath.setFileUrl(meetingFileUrl);
+
+            meetingImgPathRepository.save(meetingImgPath);
+
+
+            return 1;
+        }
+        return 0;
+    }
+
+    @Override
+    public int meetingModifyByStar(Meeting meeting, MultipartHttpServletRequest request) throws IOException {
+        // 해당 팬미팅이 존재하면 수정
+        if (meetingRepository.findById(meeting.getMeetingId()).isPresent()) {
+
+            int meetingId = meetingRepository.findById(meeting.getMeetingId()).get().getMeetingId();
+
+            List<MultipartFile> fileList = request.getFiles("file");
+
+            // 파일 경로 찾기
+            File uploadDir = new File(uploadPath + File.separator + uploadFolder);
+            if(!uploadDir.exists()) uploadDir.mkdir();
+
+            // 물리 파일 삭제 (다중 파일 첨부 고려)
+            List<String> fileUrlList = meetingImgPathRepository.meetingImgFileUrl(meetingId);
+
+            for (String fileUrl : fileUrlList) {
+                File file = new File(uploadPath + File.separator, fileUrl);
+                if(file.exists()) {
+                    file.delete();
+                }
+            }
+
+            // 다중 파일 업로드를 위해 List로 FileId를 받음
+            List<Integer> fileIdList = meetingImgPathRepository.findFileIdBymeetingId(meetingId);
+
+            for (int fileId : fileIdList) {
+                // 기존 이미지 첨부 파일 DB 삭제
+                meetingImgPathRepository.deleteById(fileId);
+            }
 
             for (MultipartFile part : fileList) {
-
-                int meetingId = meeting.getMeetingId();
 
                 String fileName = part.getOriginalFilename();
 
@@ -99,82 +170,13 @@ public class MeetingServiceImpl implements MeetingService {
                 String meetingFileUrl = "/" + uploadFolder + "/" + savingFileName;
                 meetingImgPath.setFileUrl(meetingFileUrl);
 
-                return MeetingGetRes.of(200, "Success", meetingImgPathRepository.save(meetingImgPath));
+                meetingImgPathRepository.save(meetingImgPath);
+                meetingRepository.save(meeting);
+
+                return 1;
             }
-        } catch (IOException e) {
-            e.printStackTrace();
         }
-        return null;
-    }
-
-    @Override
-    public MeetingGetRes meetingModifyByStar(Meeting meeting, MultipartHttpServletRequest request) {
-        // 해당 팬미팅이 존재하면 수정
-        if (meetingRepository.findById(meeting.getMeetingId()).isPresent()) {
-
-            meetingRepository.save(meeting);
-
-            try{
-                int meetingId = meetingRepository.findById(meeting.getMeetingId()).get().getMeetingId();
-
-                List<MultipartFile> fileList = request.getFiles("file");
-
-                // 파일 경로 찾기
-                File uploadDir = new File(uploadPath + File.separator + uploadFolder);
-                if(!uploadDir.exists()) uploadDir.mkdir();
-
-                // 물리 파일 삭제 (다중 파일 첨부 고려)
-                List<String> fileUrlList = meetingImgPathRepository.meetingImgFileUrl(meetingId);
-
-                for (String fileUrl : fileUrlList) {
-                    File file = new File(uploadPath + File.separator, fileUrl);
-                    if(file.exists()) {
-                        file.delete();
-                    }
-                }
-
-                // 다중 파일 업로드를 위해 List로 FileId를 받음
-                List<Integer> fileIdList = meetingImgPathRepository.findFileIdBymeetingId(meetingId);
-
-                for (int fileId : fileIdList) {
-                    // 기존 이미지 첨부 파일 DB 삭제
-                    meetingImgPathRepository.deleteById(fileId);
-                }
-                
-                for (MultipartFile part : fileList) {
-
-                    String fileName = part.getOriginalFilename();
-
-                    // 보안을 위해 이미지 파일명 난수로 변환
-                    UUID uuid = UUID.randomUUID();
-
-                    // 파일 확장자 추출
-                    String extension = FilenameUtils.getExtension(fileName);
-
-                    // 난수로 지정한 파일명 + 확장자
-                    String savingFileName = uuid + "." + extension;
-
-                    File destFile = new File(uploadPath + File.separator, uploadFolder + File.separator + savingFileName);
-
-                    // 파일 저장
-                    part.transferTo(destFile);
-
-                    // 파일 정보 DB에 저장
-                    MeetingImgPath meetingImgPath = new MeetingImgPath();
-                    meetingImgPath.setMeetingId(meeting);
-                    meetingImgPath.setFileName(fileName);
-                    meetingImgPath.setFileSize(part.getSize());
-                    meetingImgPath.setFileContentType(part.getContentType());
-
-                    String meetingFileUrl = "/" + uploadFolder + "/" + savingFileName;
-                    meetingImgPath.setFileUrl(meetingFileUrl);
-
-                    return MeetingGetRes.of(200, "Success", meetingImgPathRepository.save(meetingImgPath));
-                }
-            }catch (IOException e){
-                e.printStackTrace();
-            }
-        } return MeetingGetRes.of(400, "This MeetingId doesn't exist", null);
+        return 0;
     }
 
     @Override
