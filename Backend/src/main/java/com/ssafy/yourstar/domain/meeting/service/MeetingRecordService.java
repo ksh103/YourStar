@@ -11,4 +11,5 @@ public interface MeetingRecordService {
 
     Page<Meeting> meetingRecordList(int memberId, Pageable pageable);
     List<MeetingRecordImgPath> meetingRecordImgDetail(int meetingId, int memberId);
+    int meetingRecordImgRemove(int fileId);
 }
