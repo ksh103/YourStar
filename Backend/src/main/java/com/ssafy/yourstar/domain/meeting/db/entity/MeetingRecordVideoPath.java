@@ -12,9 +12,9 @@ import java.time.LocalDateTime;
 @Entity
 @Getter
 @Setter
-@Table(name = "meeting_file_path")
+@Table(name = "meeting_record_video_path")
 @ApiModel(value = "팬미팅 녹화 및 스크린샷(추억보관함)")
-public class MeetingFilePath {
+public class MeetingRecordVideoPath {
     @ApiModelProperty(value = "파일 구분 번호")
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -33,14 +33,6 @@ public class MeetingFilePath {
     @Column(name = "file_name")
     private String fileName;
 
-    @ApiModelProperty(value = "파일 크기", required = true)
-    @Column(name = "file_size")
-    private Long fileSize;
-
-    @ApiModelProperty(value = "파일 확장자명", required = true)
-    @Column(name = "file_content_type")
-    private String fileContentType;
-
     @ApiModelProperty(value = "파일이 저장된 주소", required = true)
     @Column(name = "file_url")
     private String fileUrl;
@@ -51,6 +43,6 @@ public class MeetingFilePath {
     private LocalDateTime fileRegDt = LocalDateTime.now();
 
     @ApiModelProperty(value = "openvidu record id")
-    @Column(name = "record_id")
-    private String recordId;
+    @Column(name = "recording_id")
+    private String recordingId;
 }

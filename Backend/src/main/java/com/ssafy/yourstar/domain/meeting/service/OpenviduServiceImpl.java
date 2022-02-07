@@ -1,8 +1,8 @@
 package com.ssafy.yourstar.domain.meeting.service;
 
 import com.ssafy.yourstar.domain.meeting.db.entity.Meeting;
-import com.ssafy.yourstar.domain.meeting.db.entity.MeetingFilePath;
-import com.ssafy.yourstar.domain.meeting.db.repository.MeetingFilePathRepository;
+import com.ssafy.yourstar.domain.meeting.db.entity.MeetingRecordVideoPath;
+import com.ssafy.yourstar.domain.meeting.db.repository.MeetingRecordVideoPathRepository;
 import com.ssafy.yourstar.domain.meeting.db.repository.MeetingRepository;
 import com.ssafy.yourstar.domain.meeting.request.MeetingRecordingPostReq;
 import com.ssafy.yourstar.domain.member.db.repository.MemberRepository;
@@ -19,7 +19,7 @@ public class OpenviduServiceImpl implements OpenviduService{
     MeetingRepository meetingRepository;
 
     @Autowired
-    MeetingFilePathRepository meetingFilePathRepository;
+    MeetingRecordVideoPathRepository meetingRecordVideoPathRepository;
 
     @Autowired
     MemberRepository memberRepository;
@@ -77,17 +77,17 @@ public class OpenviduServiceImpl implements OpenviduService{
                 Recording recording = this.openVidu.stopRecording(meetingRecordingPostReq.getRecordId());   // 녹화 중단
 
                 // DB에 저장하기
-                MeetingFilePath meetingFilePath = new MeetingFilePath();
+                MeetingRecordVideoPath meetingRecordVideoPath = new MeetingRecordVideoPath();
 
-                meetingFilePath.setMeetingId(meetingId);
-                meetingFilePath.setMemberId(meetingRecordingPostReq.getMemberId());
-                meetingFilePath.setFileName(recording.getName() + "1대1 미팅");
+                meetingRecordVideoPath.setMeetingId(meetingId);
+                meetingRecordVideoPath.setMemberId(meetingRecordingPostReq.getMemberId());
+                Meeting meeting = meetingRepository.findById(meetingId).get();
+                meetingRecordVideoPath.setFileName(meeting.getMeetingName() + " 1대1 미팅");
 
-                meetingFilePath.setFileContentType("mp4");
-                meetingFilePath.setFileUrl(recording.getUrl());
-                meetingFilePath.setRecordId(recording.getId());
+                meetingRecordVideoPath.setFileUrl(recording.getUrl());  // openvidu 녹화 url
+                meetingRecordVideoPath.setRecordingId(recording.getId());  // openvidu server의 녹화 id
 
-                meetingFilePathRepository.save(meetingFilePath);
+                meetingRecordVideoPathRepository.save(meetingRecordVideoPath);
                 return "0";
             } catch (OpenViduJavaClientException | OpenViduHttpException e) {
                 String error = e.getMessage();
@@ -106,16 +106,15 @@ public class OpenviduServiceImpl implements OpenviduService{
 
     @Override
     public int fileRemove(int fileId) {
-        if (meetingFilePathRepository.findById(fileId).isPresent()) {
+        if (meetingRecordVideoPathRepository.findById(fileId).isPresent()) {
             try {
-                MeetingFilePath meetingFilePath = meetingFilePathRepository.findById(fileId).get();
-
-                if (meetingFilePath.getRecordId() != null) {    // 녹화 영상이라면
-                    // 오픈비두 서버에서 삭제
-                    this.openVidu.deleteRecording(meetingFilePath.getRecordId());
-                }
+                MeetingRecordVideoPath meetingFilePath = meetingRecordVideoPathRepository.findById(fileId).get();
                 // DB에서 삭제
-                meetingFilePathRepository.deleteById(fileId);
+                meetingRecordVideoPathRepository.deleteById(fileId);
+
+                // 오픈비두 서버에서 삭제
+                this.openVidu.deleteRecording(meetingFilePath.getRecordingId());
+
                 return 0;
             } catch (OpenViduJavaClientException | OpenViduHttpException e) {
                 return 1;
