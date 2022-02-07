@@ -48,13 +48,15 @@ public class OpenviduServiceImpl implements OpenviduService{
                 return 1;
             }
             // 녹화 설정 - 녹화 제목 팬미팅 이름으로 만들어지도록 설정
-            RecordingProperties recordingProperties = new RecordingProperties.Builder().name(meeting.getMeetingName()).build();
-            // 세션 설정 - 세션 이름(원래 랜덤)을 미팅룸id으로 변경, 위에서 만든 녹화 설정으로 세션 설정하기
-            SessionProperties sessionProperties = new SessionProperties.Builder().customSessionId(String.valueOf(meetingId)).defaultRecordingProperties(recordingProperties).build();
-
+//            RecordingProperties recordingProperties = new RecordingProperties.Builder().name(meeting.getMeetingName()).build();
+            // 메인 세션 설정 - 세션 이름(원래 랜덤)을 미팅룸id으로 변경, 위에서 만든 녹화 설정으로 세션 설정하기
+            SessionProperties mainSessionProperties = new SessionProperties.Builder().customSessionId(String.valueOf(meetingId)).build();
+            // 1대1 세션 설정
+            SessionProperties onebyoneSessionProperties = new SessionProperties.Builder().customSessionId(String.valueOf(meetingId)+"-onebyone").build();
             // 세션 만들기
             try {
-                this.openVidu.createSession(sessionProperties);
+                this.openVidu.createSession(mainSessionProperties);
+                this.openVidu.createSession(onebyoneSessionProperties);
                 // 승인 상태로 변경 후 저장
                 meeting.setApprove(true);
                 meetingRepository.save(meeting);
@@ -67,23 +69,19 @@ public class OpenviduServiceImpl implements OpenviduService{
     }
 
     @Override
-    public String recordingStart(MeetingRecordingPostReq meetingRecordingPostReq) {
+    public String meetingRecording(MeetingRecordingPostReq meetingRecordingPostReq) {
         Integer meetingId = meetingRecordingPostReq.getMeetingId();	// 미팅룸 id
         if (meetingRepository.findById(meetingId).isPresent() && memberRepository.findById(meetingRecordingPostReq.getMemberId()).isPresent()){
-            RecordingProperties recordingProperties = new RecordingProperties.Builder().build();	// recording property
 
             try {
-                // 녹화 시작
-                Recording recording = this.openVidu.startRecording(String.valueOf(meetingId), recordingProperties);
-                Thread.sleep(180);  // 3분 뒤에 녹화 중단
-                this.openVidu.stopRecording(recording.getId());
+                Recording recording = this.openVidu.stopRecording(meetingRecordingPostReq.getRecordId());   // 녹화 중단
 
                 // DB에 저장하기
                 MeetingFilePath meetingFilePath = new MeetingFilePath();
 
                 meetingFilePath.setMeetingId(meetingId);
                 meetingFilePath.setMemberId(meetingRecordingPostReq.getMemberId());
-                meetingFilePath.setFileName(recording.getName() + "녹화");
+                meetingFilePath.setFileName(recording.getName() + "1대1 미팅");
 
                 meetingFilePath.setFileContentType("mp4");
                 meetingFilePath.setFileUrl(recording.getUrl());
@@ -91,14 +89,12 @@ public class OpenviduServiceImpl implements OpenviduService{
 
                 meetingFilePathRepository.save(meetingFilePath);
                 return "0";
-            } catch (OpenViduJavaClientException | OpenViduHttpException | InterruptedException e) {
+            } catch (OpenViduJavaClientException | OpenViduHttpException e) {
                 String error = e.getMessage();
                 if (error.equals("404")) {
-                    return "1"; // 세션이 없는 경우
+                    return "2"; // recordingId 없는 경우
                 } else if (error.equals("406")) {
-                    return "2"; // 세션에 연결된 참가자가 없는 경우
-                } else if (error.equals("409")) {
-                    return "3"; // 이미 녹화중
+                    return "3"; // recording이 "starting" 상태. "started"가 될때까지 기다리기
                 } else {
                     return "4";
                 }
@@ -109,7 +105,7 @@ public class OpenviduServiceImpl implements OpenviduService{
     }
 
     @Override
-    public int recordingRemove(int fileId) {
+    public int fileRemove(int fileId) {
         if (meetingFilePathRepository.findById(fileId).isPresent()) {
             try {
                 MeetingFilePath meetingFilePath = meetingFilePathRepository.findById(fileId).get();

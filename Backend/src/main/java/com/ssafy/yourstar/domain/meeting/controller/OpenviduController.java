@@ -45,43 +45,43 @@ public class OpenviduController {
 		}
 	}
 
-	@ApiOperation(value = "녹화 시작")
-	@PostMapping(value = "/recording/start")
-	public ResponseEntity<? extends BaseResponseBody> recordingStart(@RequestBody MeetingRecordingPostReq meetingRecordingPostReq) {
+	@ApiOperation(value = "녹화 중단")
+	@PostMapping(value = "/recording")
+	public ResponseEntity<? extends BaseResponseBody> meetingRecording(@RequestBody MeetingRecordingPostReq meetingRecordingPostReq) {
 		log.info("recordingStart - Call");
-		String recordId = openviduService.recordingStart(meetingRecordingPostReq);
+		String recordId = openviduService.meetingRecording(meetingRecordingPostReq);
 
 		if (recordId.equals("1")) { // 미팅 id 또는 멤버 id가 유효하지 않을 경우
-			log.error("recordingStart - This meetingId or memberId doesn't exist");
+			log.error("meetingRecording - This meetingId or memberId doesn't exist");
 			return ResponseEntity.status(400).body(BaseResponseBody.of(400, "This meetingId or memberId doesn't exist."));
-		} else if (recordId.equals("2")){	 // 세션에 연결된 참가자가 없는 경우
-			log.error("recordingStart - There are no participants connected to the session.");
-			return ResponseEntity.status(406).body(BaseResponseBody.of(406, "There are no participants connected to the session."));
-		} else if (recordId.equals("3")) {     // 이미 녹화중인 경우
-			log.error("recordingStart - It's already being recorded.");
-			return ResponseEntity.status(409).body(BaseResponseBody.of(409, "It's already being recorded."));
-		} else if (recordId.equals("4")) {	// build 또는 설정 문제
-			log.error("recordingStart - Problem with build or settings.");
-			return ResponseEntity.status(500).body(BaseResponseBody.of(500, "Problem with build or settings."));
-		} else {	// 녹화 시작, 중단 및 db에 정상적으로 저장됨
+		} else if (recordId.equals("2")){	 // recordingId가 유효하지 않은 경우
+			log.error("meetingRecording - This recordId or memberId doesn't exist.");
+			return ResponseEntity.status(406).body(BaseResponseBody.of(406, "This recordId or memberId doesn't exist."));
+		} else if (recordId.equals("3")) {    // recording이 "starting" 상태. "started"가 될때까지 기다리기
+			log.error("meetingRecording - Recording has starting status. Wait until started status before stopping the recording");
+			return ResponseEntity.status(409).body(BaseResponseBody.of(409, "Recording has starting status. Wait until started status before stopping the recording"));
+		} else if (recordId.equals("4")) {	// 설정 문제
+			log.error("meetingRecording - Problem with settings.");
+			return ResponseEntity.status(500).body(BaseResponseBody.of(500, "Problem with settings."));
+		} else {	// 녹화 중단 및 db에 정상적으로 저장됨
 			return ResponseEntity.status(200).body(BaseResponseBody.of(200, "Success"));
 		}
 	}
 
-	@ApiOperation(value = "녹화 삭제")
-	@DeleteMapping(value = "/recording/{fileId}")
-	public ResponseEntity<? extends BaseResponseBody> recordingRemove(@PathVariable int fileId) {
+	@ApiOperation(value = "추억보관함의 녹화 및 캡쳐 삭제")
+	@DeleteMapping(value = "/files/{fileId}")
+	public ResponseEntity<? extends BaseResponseBody> fileRemove(@PathVariable int fileId) {
 		log.info("recordingRemove - Call");
 
-		Integer returnCode = openviduService.recordingRemove(fileId);
+		Integer returnCode = openviduService.fileRemove(fileId);
 
-		if (returnCode == 0) {	// 녹화 삭제가 정상적으로 이루어짐
+		if (returnCode == 0) {	// 녹화 또는 이미지 삭제가 정상적으로 이루어짐
 			return ResponseEntity.status(200).body(BaseResponseBody.of(200, "Success"));
 		} else if (returnCode == 1){	// 녹화 삭제 실패한 경우
-			log.error("recordingRemove - Failed to delete recording");
+			log.error("fileRemove - Failed to delete recording");
 			return ResponseEntity.status(400).body(BaseResponseBody.of(400, "Failed to delete recording"));
 		} else {	// fileId가 존재하지 않는 경우
-			log.error("recordingRemove - This fileId doesn't exist");
+			log.error("fileRemove - This fileId doesn't exist");
 			return ResponseEntity.status(400).body(BaseResponseBody.of(400, "This fileId doesn't exist"));
 		}
 	}

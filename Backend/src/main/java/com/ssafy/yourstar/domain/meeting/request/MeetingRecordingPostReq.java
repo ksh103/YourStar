@@ -14,4 +14,7 @@ public class MeetingRecordingPostReq {
 
     @ApiModelProperty(value = "회원 번호", required = true, example = "23")
     int memberId;
+
+    @ApiModelProperty(value = "openvidu record id", required = true, example = "36-4")
+    String recordId;
 }
