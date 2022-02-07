@@ -26,8 +26,12 @@ public class ManagerGroup {
     String managerCodeName;
 
     @Column(name = "manager_account_cnt")
-    @ApiModelProperty(value = "발급된 계정의 개수")
+    @ApiModelProperty(value = "발급된 관계자 계정의 개수")
     int managerAccountCnt;
+
+    @Column(name = "manager_star_account_cnt")
+    @ApiModelProperty(value = "발급된 스타 계정의 개수")
+    int managerStarAccountCnt;
 
     @OneToMany(mappedBy = "managerGroup", cascade = CascadeType.ALL)
     private List<Member> memberList = new ArrayList<>();
