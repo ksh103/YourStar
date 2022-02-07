@@ -19,13 +19,13 @@ export default function ScheduleDetail() {
   const dispatch = useDispatch();
   const { id } = useParams();
   const { meeting } = useSelector(state => state.meeting);
-  const memberId = 2;
+  const { me } = useSelector(state => state.mypage);
   useEffect(() => {
     dispatch({
       type: DETAIL_MEETING_REQUEST,
-      data: { memberId, meetingId: id },
+      data: { memberId: me.memberId, meetingId: id },
     });
-  }, [id, dispatch]);
+  }, [id, dispatch, me]);
 
   return (
     <Layout>

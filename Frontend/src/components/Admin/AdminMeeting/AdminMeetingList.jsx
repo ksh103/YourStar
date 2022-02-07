@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import { Link } from 'react-router-dom';
 
 import Table from '@mui/material/Table';
@@ -8,26 +8,23 @@ import TableContainer from '@mui/material/TableContainer';
 import TableHead from '@mui/material/TableHead';
 import TableRow from '@mui/material/TableRow';
 import { AdminMeetingApproveButton } from './AdminMeeting.style';
-
-function createData(name, calories, fat, carbs, protein) {
-  return { name, calories, fat, carbs, protein };
-}
-const rows = [
-  createData(1, 123, '김다미1', '2022-01-11 12:00:00', 1),
-  createData(2, 123, '김다미1', '2022-01-11 12:00:00', 0),
-  createData(3, 123, '김다미1', '2022-01-11 12:00:00', 0),
-  createData(4, 123, '김다미1', '2022-01-11 12:00:00', 0),
-  createData(5, 123, '김다미1', '2022-01-11 12:00:00', 0),
-  createData(6, 123, '김다미1', '2022-01-11 12:00:00', 0),
-  createData(7, 123, '김다미1', '2022-01-11 12:00:00', 0),
-  createData(8, 123, '김다미1', '2022-01-11 12:00:00', 0),
-  createData(9, 123, '김다미1', '2022-01-11 12:00:00', 0),
-  createData(10, 123, '김다미1', '2022-01-11 12:00:00', 0),
-  createData(11, 123, '김다미1', '2022-01-11 12:00:00', 0),
-  createData(12, 123, '김다미1', '2022-01-11 12:00:00', 0),
-];
+import { useDispatch, useSelector } from 'react-redux';
+import { TOTAL_MEETINGS_REQUEST } from '../../../store/modules/meeting';
 
 export default function AdminMeetingList() {
+  const dispatch = useDispatch();
+  const { totalMeetings, totalMeetingsDone } = useSelector(
+    state => state.meeting
+  );
+  useEffect(() => {
+    if (!totalMeetingsDone) {
+      dispatch({
+        type: TOTAL_MEETINGS_REQUEST,
+        data: { page: 1, size: 10 },
+      });
+    }
+  }, [totalMeetingsDone, dispatch]);
+
   return (
     <TableContainer>
       <Table aria-label="simple table">
@@ -41,21 +38,19 @@ export default function AdminMeetingList() {
           </TableRow>
         </TableHead>
         <TableBody>
-          {rows.map(row => (
+          {totalMeetings.map(row => (
             <TableRow
-              key={row.name}
+              key={row.id}
               sx={{ '&:last-child td, &:last-child th': { border: 0 } }}
             >
               <TableCell component="th" scope="row">
-                {row.name}
+                <Link to={`/admin/${row.id}`}>{row.id}</Link>
               </TableCell>
+              <TableCell>{row.code}</TableCell>
+              <TableCell>{row.name}</TableCell>
+              <TableCell>{row.startDate}</TableCell>
               <TableCell>
-                <Link to={`/admin/${row.name}`}>{row.calories}</Link>
-              </TableCell>
-              <TableCell>{row.fat}</TableCell>
-              <TableCell>{row.carbs}</TableCell>
-              <TableCell>
-                {row.protein === 0 ? (
+                {!row.approve ? (
                   <AdminMeetingApproveButton color={0}>
                     대기
                   </AdminMeetingApproveButton>

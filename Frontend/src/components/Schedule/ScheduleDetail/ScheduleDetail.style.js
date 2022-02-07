@@ -100,6 +100,12 @@ const ScheduleDetailButton = styled.div`
         };
       } else if (props.color === '2') {
         return {
+          backgroundColor: 'lightpink',
+          color: 'white',
+          cursor: 'pointer',
+        };
+      } else if (props.color === '3') {
+        return {
           backgroundColor: pointColor,
           color: 'white',
           cursor: 'pointer',

@@ -22,7 +22,7 @@ const ScheduleCardImage = styled.div`
     height: 100%;
     object-fit: cover;
     &:hover {
-      transform: scale(1.2);
+      transform: scale(1.1);
       transition: 0.5s;
     }
   }

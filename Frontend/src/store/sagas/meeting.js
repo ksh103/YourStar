@@ -20,9 +20,9 @@ import {
   APPROVED_MEETINGS_REQUEST,
   APPROVED_MEETINGS_SUCCESS,
   APPROVED_MEETINGS_FAILURE,
-  UPDATE_ISAPPROVE_REQUEST,
-  UPDATE_ISAPPROVE_SUCCESS,
-  UPDATE_ISAPPROVE_FAILURE,
+  UPDATE_APPROVE_REQUEST,
+  UPDATE_APPROVE_SUCCESS,
+  UPDATE_APPROVE_FAILURE,
   WARNING_MEMBER_REQUEST,
   WARNING_MEMBER_SUCCESS,
   WARNING_MEMBER_FAILURE,
@@ -76,16 +76,16 @@ function* approvedMeetings(action) {
     });
   }
 }
-function* updateIsApprove(action) {
+function* updateApprove(action) {
   try {
     const result = yield call(PendingMeetingAPI, action.data);
     yield put({
-      type: UPDATE_ISAPPROVE_SUCCESS,
+      type: UPDATE_APPROVE_SUCCESS,
       data: result,
     });
   } catch (err) {
     yield put({
-      type: UPDATE_ISAPPROVE_FAILURE,
+      type: UPDATE_APPROVE_FAILURE,
     });
   }
 }
@@ -151,8 +151,8 @@ function* watchTotalMeetings() {
 function* watchAprovedMeetings() {
   yield takeLatest(APPROVED_MEETINGS_REQUEST, approvedMeetings);
 }
-function* watchUpdateIsApprove() {
-  yield takeLatest(UPDATE_ISAPPROVE_REQUEST, updateIsApprove);
+function* watchUpdateApprove() {
+  yield takeLatest(UPDATE_APPROVE_REQUEST, updateApprove);
 }
 function* watchWarningMember() {
   yield takeLatest(WARNING_MEMBER_REQUEST, warningMember);
@@ -172,7 +172,7 @@ export default function* meetingSaga() {
     fork(watchDetailMeeting),
     fork(watchTotalMeetings),
     fork(watchAprovedMeetings),
-    fork(watchUpdateIsApprove),
+    fork(watchUpdateApprove),
     fork(watchWarningMember),
     fork(watchInsertMeeting),
     fork(watchUpdateMeeting),

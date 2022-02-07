@@ -6,7 +6,6 @@ export async function MeetingDetailAPI({ meetingId, memberId }) {
   const result = await axios
     .get(`${BASE_URL}meetings/${meetingId}`)
     .then(res => res.data.meeting);
-  console.log(result);
   const applicant = await axios
     .get(`${BASE_URL}meetings/fan-applicant/list/${meetingId}?page=1&size=100`)
     .then(res => res.data.content);
@@ -15,6 +14,7 @@ export async function MeetingDetailAPI({ meetingId, memberId }) {
   return {
     id: result.meetingId,
     code: result.managerCode,
+    codeName: result.managerGroup.managerCodeName,
     name: result.meetingName,
     openDate: result.meetingOpenDate,
     startDate: result.meetingStartDate,
@@ -23,6 +23,7 @@ export async function MeetingDetailAPI({ meetingId, memberId }) {
     price: result.meetingPrice,
     description: result.meetingDescription,
     image: result.meetingImgPath,
+    approve: result.approve,
     applicantCnt,
     isReserve,
   };
@@ -36,6 +37,7 @@ export async function MeetingAllListAPI({ page, size }) {
   return result.map(data => {
     return {
       id: data.meetingId,
+      code: data.managerCode,
       name: data.meetingName,
       startDate: data.meetingStartDate,
       endDate: data.meetingEndDate,
@@ -53,6 +55,7 @@ export async function ApprovedMeetingListAPI({ page, size }) {
   return result.map(data => {
     return {
       id: data.meetingId,
+      code: data.managerCode,
       name: data.meetingName,
       startDate: data.meetingStartDate,
       endDate: data.meetingEndDate,
@@ -71,11 +74,19 @@ export async function PendingMeetingListAPI(page, size) {
 }
 
 // 팬미팅 승인
-export async function PendingMeetingAPI(meetingId) {
-  const result = await axios.get(
-    `${BASE_URL}meetings/room-applicant/pending/${meetingId}`
-  );
-  return result;
+export async function PendingMeetingAPI(meeting) {
+  await axios
+    .get(`${BASE_URL}meetings/room-applicant/pending/${meeting.id}`)
+    .then(res => console.log(res));
+  return {
+    id: meeting.id,
+    code: meeting.code,
+    name: meeting.name,
+    startDate: meeting.startDate,
+    endDate: meeting.endDate,
+    approve: true,
+    image: meeting.image,
+  };
 }
 
 // 팬미팅에 참여한 팬의 경고 횟수 확인
