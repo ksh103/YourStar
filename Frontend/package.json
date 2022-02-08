@@ -1,5 +1,5 @@
 {
-  "proxy": "https://i6e204.p.ssafy.io/api",
+  "proxy": "https://kapi.kakao.com",
   "name": "react-test",
   "version": "0.1.0",
   "private": true,

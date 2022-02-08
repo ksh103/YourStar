@@ -1,5 +1,6 @@
 import React from 'react';
 import { BrowserRouter, Route, Switch } from 'react-router-dom';
+import PrivateRoute from './utils/PrivateRoute';
 import {
   Admin,
   Apply,
@@ -62,10 +63,7 @@ function App() {
           <Route exact path="/find/password">
             <FindPassword />
           </Route>
-
-          <Route exact path="/room">
-            <Room />
-          </Route>
+          <Route exact component={Room} path="/room/:id" />
           <Route path="/mypage/:id">
             <MypageDetail />
           </Route>
