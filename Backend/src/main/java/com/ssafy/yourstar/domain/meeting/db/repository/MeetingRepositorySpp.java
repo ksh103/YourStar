@@ -2,10 +2,7 @@ package com.ssafy.yourstar.domain.meeting.db.repository;
 
 import com.querydsl.core.QueryResults;
 import com.querydsl.jpa.impl.JPAQueryFactory;
-import com.ssafy.yourstar.domain.meeting.db.entity.Meeting;
-import com.ssafy.yourstar.domain.meeting.db.entity.QApplicant;
-import com.ssafy.yourstar.domain.meeting.db.entity.QMeeting;
-import com.ssafy.yourstar.domain.meeting.db.entity.QMeetingImgPath;
+import com.ssafy.yourstar.domain.meeting.db.entity.*;
 import com.ssafy.yourstar.domain.member.db.entity.Member;
 import com.ssafy.yourstar.domain.member.db.entity.QMember;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -21,7 +18,9 @@ public class MeetingRepositorySpp {
     QApplicant qApplicant = QApplicant.applicant;
     QMeeting qMeeting = QMeeting.meeting;
     QMember qMember = QMember.member;
-    QMeetingImgPath qMeetingImgPath = QMeetingImgPath.meetingImgPath;
+
+    QMeetingRecordImgPath qMeetingRecordImgPath = QMeetingRecordImgPath.meetingRecordImgPath;
+    QMeetingRecordVideoPath qMeetingRecordVideoPath = QMeetingRecordVideoPath.meetingRecordVideoPath;
 
     public Page<Meeting> findAllApplyMeetingByMemberId(int memberId, Pageable pageable) {
         QueryResults<Meeting> list = jpaQueryFactory.select(qMeeting).from(qMeeting)

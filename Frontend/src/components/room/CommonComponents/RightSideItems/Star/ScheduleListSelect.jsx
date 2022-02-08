@@ -2,8 +2,8 @@ import React, { useState } from 'react';
 import { HalfSideDiv1, SmallBox } from '../Chatting/Chatting.style';
 import styled from 'styled-components';
 import { useSelector, useDispatch } from 'react-redux';
-import { changeList } from '../../../../../store/modules/selectList';
-
+// import { changeList } from '../../../../../store/modules/selectList';
+import { ScreenChange } from '../../../../../store/modules/meetingRoom';
 const ScheduleListWrapper = styled.div`
   /* border: solid red; */
   border-radius: 1vw;
@@ -27,6 +27,7 @@ const ScheduleListBox = styled.div`
   display: flex;
   justify-content: center;
   align-items: center;
+  color: white;
 `;
 
 const List = [
@@ -46,7 +47,7 @@ export default function ScheduleListSelect() {
 
   const dispatch = useDispatch();
 
-  const SetSelect = selectNum => dispatch(changeList(selectNum));
+  const SetSelect = selectNum => dispatch(ScreenChange(selectNum));
 
   return (
     <>

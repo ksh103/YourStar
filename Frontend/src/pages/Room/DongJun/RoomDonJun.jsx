@@ -5,7 +5,23 @@ import React, { Component } from 'react';
 import './App.css';
 import UserVideoComponent from './UserVideoComponent';
 import { connect } from 'react-redux';
-import { ChattingAction } from '../../../store/modules/meetingRoom';
+
+// action 호출
+import {
+  ChattingAction,
+  UserUpdate,
+  UpdateMyInformation,
+  MainStreamManagerInfo,
+  ScreenChange,
+  ChattingInputChange,
+} from '../../../store/modules/meetingRoom';
+// import changeList from '../../../store/modules/selectList';
+
+// 컴포넌트
+import MyScreen from '../../../components/room/CommonComponents/MainItems/MyScreens/MyScreen';
+import RoomComponent from './RoomComponent';
+import UserOXGame from '../../../components/room/Game/OXGame/UserOXGame';
+import { touchRippleClasses } from '@mui/material';
 
 const OPENVIDU_SERVER_URL = 'https://i6e204.p.ssafy.io:8443';
 const OPENVIDU_SERVER_SECRET = 'YOURSTAR';
@@ -25,7 +41,6 @@ class RoomDonJun extends Component {
       myUserName: 'Participant' + Math.floor(Math.random() * 100),
       session: undefined,
       mainStreamManager: undefined,
-      publisher: undefined,
       subscribers: [],
       messages: [],
       testInputValue: '',
@@ -41,6 +56,10 @@ class RoomDonJun extends Component {
     this.sendmessageByClick = this.sendmessageByClick.bind(this);
     this.handleChatMessageChange = this.handleChatMessageChange.bind(this);
     this.sendmessageByEnter = this.sendmessageByEnter.bind(this);
+  }
+
+  changeScreen(e) {
+    console.log(e);
   }
 
   handleChatMessageChange(e) {
@@ -101,6 +120,34 @@ class RoomDonJun extends Component {
     console.log(chattingList, '리스트');
   }
 
+  componentDidUpdate(prevState) {
+    // state 변화를 감지하는곳
+    console.log(prevState.chattingList, 'chattingList 변화가 감지되었다');
+    console.log(this.props.chattingList, '변화된 chattingList');
+
+    // selectNum 에 대한 변화가 감지되었다면, 다른 참여자에게도 이러한 변화를 알려주어야 한다.
+    // 세션 정의하고 type을 정의하여 시그널을 보냄 --> 이제 on을 통한 다른 local에서의 변화 감지
+    const mySession = this.state.session;
+    if (prevState.selectNum !== this.props.selectNum) {
+      mySession.signal({
+        data: this.props.selectNum,
+        to: [],
+        type: 'screen',
+      });
+      // this.props.doScreenChange(this.props.selectNum);
+    }
+
+    if (prevState.chattingList !== this.props.chattingList) {
+      // 채팅내용의 리스트가 다르다면 갱신을 시켜주세요
+      // 스토어에 정보 받아오기 해보자
+      mySession.signal({
+        data: `${this.props.userNickName},${this.props.testInput}`,
+        to: [],
+        type: 'chat',
+      });
+    }
+  }
+
   componentWillUnmount() {
     window.removeEventListener('beforeunload', this.onbeforeunload);
   }
@@ -122,7 +169,10 @@ class RoomDonJun extends Component {
   }
 
   handleMainVideoStream(stream) {
+    console.log(stream, '스트림');
+    console.log(this.state.mainStreamManager, '메인스트림 매니저 ');
     if (this.state.mainStreamManager !== stream) {
+      console.log(stream, '스트림');
       this.setState({
         mainStreamManager: stream,
       });
@@ -158,16 +208,31 @@ class RoomDonJun extends Component {
 
         // On every new Stream received...
         mySession.on('streamCreated', event => {
+          // const { subscribers } = this.props;
           // Subscribe to the Stream to receive it. Second parameter is undefined
           // so OpenVidu doesn't create an HTML video by its own
           var subscriber = mySession.subscribe(event.stream, undefined);
-          var subscribers = this.state.subscribers;
-          subscribers.push(subscriber);
+          // var subscribers = this.state.subscribers;
+          // console.log('입장하셨네요! 액션으로 가주세요!');
+          console.log(
+            subscriber.stream.session.connection.role,
+            '서브스크라이버'
+          );
+          this.props.doUserUpdate(subscriber);
+
+          // console.log(subscribers);
+          // subscribers.push(subscriber);
 
           // Update the state with the new subscribers
-          this.setState({
-            subscribers: subscribers,
-          });
+          // 입장한 사람들을 업데이트 해주는 구간
+          // this.setState({
+          //   subscribers: subscribers,
+          // });
+
+          // 조건 분기해줘서 데이터를 따로 저장해두고
+          // 모더레이터 라면  == 스타
+          // 따로 STATE 저장해두기
+          // 이외에는
         });
 
         // On every Stream destroyed...
@@ -184,26 +249,30 @@ class RoomDonJun extends Component {
         mySession.on('signal:chat', event => {
           let chatdata = event.data.split(',');
           console.log(chatdata, '채팅데이터');
-          if (chatdata[0] !== this.state.myUserName) {
-            // this.setState({
-            //   messages: [
-            //     ...this.state.messages,
-            //     {
-            //       userName: chatdata[0],
-            //       text: chatdata[1],
-            //       chatClass: 'messages__item--visitor',
-            //     },
-            //   ],
-            // });
+          if (chatdata[0] !== this.props.userNickName) {
             const inputValue = {
               userName: chatdata[0],
               text: chatdata[1],
               chatClass: 'messages__item--operator',
             };
-            console.log(this.state.testInputValue, '세션온');
+            // console.log(this.state.testInputValue, '세션온');
             this.props.doChattingAction(inputValue);
           }
         });
+
+        //변화감지
+        mySession.on('signal:screen', event => {
+          console.log(event, '변화에 대해서 다른 서버로부터 신호 감지');
+          // event.data ==> string 형태의 변화된 메뉴선택한 번호들!
+          let changeNum = parseInt(event.data);
+          console.log(changeNum, '숫자');
+          if (changeNum !== this.props.selectNum) {
+            console.log('여기는 들어왔음'); // 여기까지는 되는데;;;
+            this.props.doScreenChange(changeNum);
+          }
+          console.log(this.props.selectNum, '결과는?!');
+        });
+
         // --- 4) Connect to the session with a valid user token ---
 
         // 'getToken' method is simulating what your server-side should do.
@@ -234,10 +303,12 @@ class RoomDonJun extends Component {
               mySession.publish(publisher);
 
               // Set the main video in the page to display our webcam and store our Publisher
-              this.setState({
-                mainStreamManager: publisher,
-                publisher: publisher,
-              });
+              // this.setState({
+              //   mainStreamManager: publisher,
+              //   publisher: publisher,
+              // });
+              this.props.doUpdateMyInformation(publisher);
+              this.props.doMainStreamManagerInfo(publisher);
             })
             .catch(error => {
               console.log(
@@ -264,18 +335,22 @@ class RoomDonJun extends Component {
     this.OV = null;
     this.setState({
       session: undefined,
-      subscribers: [],
+      subscribers: [], // 다른 참여자들의 정보
       mySessionId: 'SessionA',
       myUserName: 'Participant' + Math.floor(Math.random() * 100),
-      mainStreamManager: undefined,
-      publisher: undefined,
+      mainStreamManager: undefined, // 이게 스타로 바뀌어야하고
+      publisher: undefined, // 이건 내 화면임
     });
   }
 
   render() {
-    const { chattingList } = this.props;
+    const { chattingList, subscribers, publisher, mainStreamManager } =
+      this.props;
     const mySessionId = this.state.mySessionId;
     const myUserName = this.state.myUserName;
+
+    // console.log(subscribers, '입장한유저들의정보');
+
     return (
       <BackgroundDiv>
         {/* 컴포넌트는 들고왔을 때 잘 작동함 */}
@@ -283,12 +358,12 @@ class RoomDonJun extends Component {
         <div className="container">
           {this.state.session === undefined ? (
             <div id="join">
-              <div id="img-div">
+              {/* <div id="img-div">
                 <img
                   src="resources/images/openvidu_grey_bg_transp_cropped.png"
                   alt="OpenVidu logo"
                 />
-              </div>
+              </div> */}
               <div id="join-dialog" className="jumbotron vertical-center">
                 <h1> Join a video session </h1>
                 <form className="form-group" onSubmit={this.joinSession}>
@@ -325,79 +400,18 @@ class RoomDonJun extends Component {
                 </form>
               </div>
             </div>
-          ) : null}
-
-          {this.state.session !== undefined ? (
-            <div id="session">
-              <div
-                style={{
-                  backgroundColor: 'black',
-                  width: '500px',
-                  height: '500px',
-                  color: 'white',
-                }}
-              >
-                <p>messages</p>
-
-                {chattingList.map((value, idx) => {
-                  return (
-                    <div key={idx + value.text}>
-                      <p>{value.text}</p>
-                    </div>
-                  );
-                })}
-              </div>
-              <div id="session-header">
-                <h1 id="session-title">{mySessionId}</h1>
-                <h1>안녕하세요</h1>
-                <input
-                  type="text"
-                  onChange={this.handleChatMessageChange}
-                  value={this.state.testInputValue}
-                  onKeyPress={this.sendmessageByEnter}
-                />
-                <p onClick={this.sendmessageByClick}>제출하기</p>
-
-                <input
-                  className="btn btn-large btn-danger"
-                  type="button"
-                  id="buttonLeaveSession"
-                  onClick={this.leaveSession}
-                  value="Leave session"
-                />
-              </div>
-
-              {this.state.mainStreamManager !== undefined ? (
-                <div id="main-video" className="col-md-6">
-                  <UserVideoComponent
-                    streamManager={this.state.mainStreamManager}
-                  />
-                </div>
+          ) : (
+            <div>
+              {publisher !== undefined ? (
+                // <div className="stream-container col-md-6 col-xs-6">
+                //   <UserVideoComponent streamManager={publisher} />
+                // </div>
+                <RoomComponent></RoomComponent>
               ) : null}
-              <div id="video-container" className="col-md-6">
-                {this.state.publisher !== undefined ? (
-                  <div
-                    className="stream-container col-md-6 col-xs-6"
-                    onClick={() =>
-                      this.handleMainVideoStream(this.state.publisher)
-                    }
-                  >
-                    <UserVideoComponent streamManager={this.state.publisher} />
-                  </div>
-                ) : null}
-                {this.state.subscribers.map((sub, i) => (
-                  <div
-                    key={i}
-                    className="stream-container col-md-6 col-xs-6"
-                    onClick={() => this.handleMainVideoStream(sub)}
-                  >
-                    <UserVideoComponent streamManager={sub} />
-                  </div>
-                ))}
-              </div>
             </div>
-          ) : null}
+          )}
         </div>
+        {/* 들어왔을 때 관리 */}
       </BackgroundDiv>
     );
   }
@@ -465,6 +479,8 @@ class RoomDonJun extends Component {
   }
 
   createToken(sessionId) {
+    // 유저아이디 값 확인해서
+    // 스타면
     return new Promise((resolve, reject) => {
       var data = {};
       axios
@@ -492,13 +508,32 @@ class RoomDonJun extends Component {
 }
 
 const mapStateToProps = state => ({
+  // 채팅내용
   chattingList: state.MeetingRoom.chattingList,
+  // 입장한 유저들 정보
+  subscribers: state.MeetingRoom.subscribers,
+  publisher: state.MeetingRoom.publisher,
+  // 임시용 userid
+  userId: state.MeetingRoom.userId,
+  mainStreamManager: state.MeetingRoom.mainStreamManager,
+  selectNum: state.MeetingRoom.selectNum,
+  userNickName: state.MeetingRoom.userNickName,
+  testInput: state.MeetingRoom.testInput,
 });
 
 const mapDispatchToProps = dispatch => {
+  console.log(dispatch, '디스패치');
   return {
     // dispatch 가져오기
     doChattingAction: inputValue => dispatch(ChattingAction(inputValue)),
+    doUserUpdate: subscriber => dispatch(UserUpdate(subscriber)),
+    doUpdateMyInformation: publisher =>
+      dispatch(UpdateMyInformation(publisher)),
+    doMainStreamManagerInfo: mainStreamManager =>
+      dispatch(MainStreamManagerInfo(mainStreamManager)),
+    doScreenChange: selectNum => dispatch(ScreenChange(selectNum)),
+    doChattingInputChange: testinput =>
+      dispatch(ChattingInputChange(testinput)),
   };
 };
 

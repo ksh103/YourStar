@@ -1,7 +1,8 @@
 import React from 'react';
 import styled from 'styled-components';
 import { MainDiv } from '../Main.style';
-
+import StarVideoComponent from '../../../../../pages/Room/DongJun/StarVideoComponent';
+import { useSelector, useDispatch } from 'react-redux';
 const OXuserSc = styled.div`
   position: relative;
   width: 83.541vw;
@@ -12,9 +13,16 @@ const OXuserSc = styled.div`
 `;
 
 export default function OXUserScreen() {
+  const { mainStreamManager } = useSelector(state => ({
+    mainStreamManager: state.MeetingRoom.mainStreamManager,
+  }));
   return (
-    <MainDiv>
-      <OXuserSc></OXuserSc>
+    <MainDiv className="아따쥑이네">
+      <OXuserSc>
+        {mainStreamManager && (
+          <StarVideoComponent streamManager={mainStreamManager} />
+        )}
+      </OXuserSc>
     </MainDiv>
   );
 }
