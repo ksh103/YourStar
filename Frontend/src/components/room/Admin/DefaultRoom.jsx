@@ -1,17 +1,14 @@
 import React from 'react';
-import AdminGrid from './AdminGrid';
 import Admin from './Admin';
 import UserBasic from '../UserBasic/UserBasic';
 import { useSelector } from 'react-redux';
 
 export default function DefaultRoom() {
-  const { userId } = useSelector(state => ({
-    userId: state.MeetingRoom.userId,
-  }));
-  // 일반유저 === 0 , 스타 1
-  if (userId === 1) {
-    return <Admin></Admin>;
-  } else {
+  const { me } = useSelector(state => state.mypage);
+  // 일반유저 === 3 나머지
+  if (me.code === 3) {
     return <UserBasic></UserBasic>;
+  } else {
+    return <Admin></Admin>;
   }
 }
