@@ -13,6 +13,7 @@ import {
   MainStreamManagerInfo,
   ScreenChange,
   ChattingInputChange,
+  changeQnAMode,
 } from '../../store/modules/meetingRoom';
 
 // 컴포넌트
@@ -50,6 +51,7 @@ class Room extends Component {
   }
 
   componentDidUpdate(prevState) {
+    const QnAmode = this.props.QnAmode;
     const mySession = this.state.session;
     if (prevState.selectNum !== this.props.selectNum) {
       mySession.signal({
@@ -59,11 +61,19 @@ class Room extends Component {
       });
     }
 
-    if (prevState.chattingList !== this.props.chattingList) {
+    if (prevState.testInput !== this.props.testInput) {
       mySession.signal({
         data: `${this.props.me.nick},${this.props.testInput}`,
         to: [],
         type: 'chat',
+      });
+    }
+
+    if (prevState.QnAmode !== this.props.QnAmode) {
+      mySession.signal({
+        data: this.props.QnAmode,
+        to: [],
+        type: 'QnAmode',
       });
     }
   }
@@ -146,6 +156,14 @@ class Room extends Component {
           }
         });
 
+        mySession.on('signal:QnAmode', event => {
+          console.log('qna모드 변경신호받음');
+          const Mode = event.data;
+          if (Mode !== this.props.QnAmode) {
+            this.props.dochangeQnAMode(Mode);
+          }
+        });
+
         // 세션과 연결하는 부분
         this.getToken().then(token => {
           mySession
@@ -202,7 +220,7 @@ class Room extends Component {
 
   render() {
     const { publisher } = this.props;
-
+    console.log('렌더링중!');
     return (
       <BackgroundDiv>
         {/* 컴포넌트는 들고왔을 때 잘 작동함 */}
@@ -284,6 +302,8 @@ class Room extends Component {
   createToken(sessionId) {
     return new Promise((resolve, reject) => {
       var data = {};
+      if (this.state.me.code === 4) data.role = 'MODERATOR';
+      else if (this.state.me.code === 2) data.role = 'SUBSCRIBER';
       axios
         .post(
           OPENVIDU_SERVER_URL +
@@ -321,6 +341,7 @@ const mapStateToProps = state => ({
   userNickName: state.MeetingRoom.userNickName,
   testInput: state.MeetingRoom.testInput,
   me: state.mypage.me,
+  QnAmode: state.MeetingRoom.QnAmode,
 });
 
 const mapDispatchToProps = dispatch => {
@@ -335,6 +356,7 @@ const mapDispatchToProps = dispatch => {
     doScreenChange: selectNum => dispatch(ScreenChange(selectNum)),
     doChattingInputChange: testinput =>
       dispatch(ChattingInputChange(testinput)),
+    dochangeQnAMode: QnAmode => dispatch(changeQnAMode(QnAmode)),
   };
 };
 

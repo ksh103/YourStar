@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import styled from 'styled-components';
 import QuestionMainScreen from '../CommonComponents/MainItems/Game/QuestionMainScreen';
 import SubStickBar from '../CommonComponents/BottomItems/QnAstick/SubStickBar';
