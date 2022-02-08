@@ -68,14 +68,4 @@ public class MeetingRecordController {
             return ResponseEntity.status(400).body(BaseResponseBody.of(400, "This FileId doesn't exist"));
         }
     }
-
-    // 추억 보관함 기록 삭제 (전체)
-
-    @ApiOperation(value = "추억 보관함 사진 개별 삭제")
-    @DeleteMapping("/record-list")
-    public ResponseEntity<? extends BaseResponseBody> meetingRecordListRemove(@ApiParam(value = "팬미팅 구분 번호") @PathVariable(value = "meetingId") int meetingId) {
-        log.info("meetingRecordImgRemove - Call");
-
-        return null;
-    }
 }
