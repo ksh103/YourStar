@@ -27,14 +27,12 @@ export default function LongChatting() {
     setTestinput(e.target.value);
   };
 
-  const { userNickName } = useSelector(state => ({
-    userNickName: state.MeetingRoom.userNickName,
-  }));
+  const { me } = useSelector(state => state.mypage);
 
   const SendMessage = e => {
     if (e.key === 'Enter') {
       const inputValue = {
-        userName: userNickName,
+        userName: me.nick,
         text: testInput,
         chatClass: 'messages__item--operator',
       };
