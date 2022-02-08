@@ -10,14 +10,14 @@ import java.util.List;
 
 @Getter
 @Setter
-@ApiModel(value = "MeetingGameResultListGetRes", description = "팬미팅 게임 우승 내역 정보")
-public class MeetingGameResultListGetRes extends BaseResponseBody {
+@ApiModel(value = "MeetingGameResultListByStarGetRes", description = "팬미팅 게임 우승 내역(관계자)")
+public class MeetingGameResultListByStarGetRes extends BaseResponseBody {
     
     @ApiModelProperty(value = "팬미팅 게임 정보")
     List<String> list;
 
-    public static MeetingGameResultListGetRes of(Integer statusCode, String message, List<String> list) {
-        MeetingGameResultListGetRes res = new MeetingGameResultListGetRes();
+    public static MeetingGameResultListByStarGetRes of(Integer statusCode, String message, List<String> list) {
+        MeetingGameResultListByStarGetRes res = new MeetingGameResultListByStarGetRes();
         res.setStatusCode(statusCode);
         res.setMessage(message);
         res.setList(list);

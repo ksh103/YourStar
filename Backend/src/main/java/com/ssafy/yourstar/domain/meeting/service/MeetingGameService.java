@@ -6,5 +6,7 @@ import java.util.List;
 
 public interface MeetingGameService {
     List<MeetingGame> meetingGameList(int meetingId);
-    List<String> meetingGameResultList(int memberId);
+    List<String> meetingGameResultListByUser(int memberId);
+    List<String> meetingGameResultListByStar(int meetingId);
+
 }

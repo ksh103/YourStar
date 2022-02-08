@@ -23,7 +23,12 @@ public class MeetingGameServiceImpl implements MeetingGameService {
     }
 
     @Override
-    public List<String> meetingGameResultList(int memberId) {
+    public List<String> meetingGameResultListByUser(int memberId) {
         return meetingGameRepository.fintMeetingResultListByMemberId(memberId);
+    }
+
+    @Override
+    public List<String> meetingGameResultListByStar(int meetingId) {
+        return meetingGameRepository.fintMeetingResultListByMeetingId(meetingId);
     }
 }
