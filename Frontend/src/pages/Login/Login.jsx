@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { Layout, Wrapper } from '../../styles/variables';
 import Navbar from '../../components/Navbar/Navbar';
 import Footer from '../../components/Footer/Footer';
@@ -20,6 +20,13 @@ export default function Login() {
   const [pw, SetPw] = useState('');
   const { logInDone } = useSelector(state => state.member);
 
+  useEffect(() => {
+    // 로그인 처리 되었을 때 main으로 이동
+    if (logInDone) {
+      history.push('/');
+    }
+  }, [logInDone, history]);
+
   const LoginButton = () => {
     if (id === '') {
       alert('아이디를 입력하세요');
@@ -31,12 +38,6 @@ export default function Login() {
         data: { id: id, pw: pw },
       });
       // done 일 때 메인으로 이동하기, 어떤 값으로 이동하냐?
-      console.log(logInDone);
-      if (logInDone === true) {
-        history.push('/');
-        console.log('hello');
-      }
-      console.log(logInDone);
     }
   };
 
@@ -77,8 +78,14 @@ export default function Login() {
             <LoginContentRow>
               <div id="footer">
                 <p>아직 회원이 아니신가요?</p>
-                <Link to="/signup">회원가입</Link>
-                <Link to="/find/password">비밀번호 찾기</Link>
+                <br />
+                <Link to="/signup" style={{ color: 'gray' }}>
+                  회원가입
+                </Link>
+                &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;
+                <Link to="/find/password" style={{ color: 'gray' }}>
+                  비밀번호 찾기
+                </Link>
               </div>
             </LoginContentRow>
           </LoginContent>

@@ -1,7 +1,6 @@
 import React, { useState } from 'react';
 import { Layout, Wrapper } from '../../../styles/variables';
 import dayjs from 'dayjs';
-import DaumPostcode from 'react-daum-postcode';
 import Navbar from '../../Navbar/Navbar';
 import Footer from '../../Footer/Footer';
 import {
@@ -23,9 +22,12 @@ import {
   SIGN_UP_REQUEST,
 } from '../../../store/modules/member';
 import SearchAddrModal from '../../utils/modal/modalSearchAddr';
+import { useEffect } from 'react';
+import { useHistory } from 'react-router';
 
 export default function Signup() {
   const dispatch = useDispatch();
+  const history = useHistory();
 
   const [value, setValue] = useState(null);
   const [email, setEmail] = useState('');
@@ -38,9 +40,8 @@ export default function Signup() {
   const [gender, setGender] = useState('');
 
   // useSelector
-  const { addressButton, address, emailCheckDone, nickCheckDone } = useSelector(
-    state => state.member
-  );
+  const { addressButton, address, emailCheckDone, nickCheckDone, signUpDone } =
+    useSelector(state => state.member);
 
   // 주소 검색 버튼
   const addrButton = () => {
@@ -129,6 +130,12 @@ export default function Signup() {
       });
     }
   };
+
+  useEffect(() => {
+    if (signUpDone) {
+      history.push('/login');
+    }
+  }, [signUpDone, history]);
   return (
     <Layout>
       <Navbar />

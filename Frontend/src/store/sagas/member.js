@@ -128,6 +128,9 @@ function* loadFindPw(action) {
   try {
     const result = yield call(ResetPasswordAPI, action.data);
     yield put({ type: FIND_PW_SUCCESS, data: result });
+    alert(
+      '이메일로 임시 비밀번호가 전송되었습니다. 로그인 후 비밀번호 변경 바랍니다.'
+    );
   } catch (err) {
     alert('이메일 또는 이름이 일치하지 않습니다.');
     yield put({ type: FIND_PW_FAILURE });

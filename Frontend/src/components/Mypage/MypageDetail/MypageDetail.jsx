@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { Block, Layout, Wrapper } from '../../../styles/variables';
 import Footer from '../../Footer/Footer';
 import Navbar from '../../Navbar/Navbar';
@@ -23,17 +23,21 @@ import {
   UPDATE_MEMBER_REQUEST,
 } from '../../../store/modules/mypage';
 import SearchAddrModal from '../../utils/modal/modalSearchAddr';
+import { useHistory } from 'react-router';
 
 export default function MypageDetail() {
   const dispatch = useDispatch();
-  const [phoneNumber, setPhoneNumber] = useState('');
+  const history = useHistory();
+
+  const { me, updateMemberDone } = useSelector(state => state.mypage);
+  const [phoneNumber, setPhoneNumber] = useState(me.phone);
   const [password, setPassword] = useState('');
   const [passwordCheck, setPasswordCheck] = useState('');
-  const [nickName, setNickName] = useState('');
+  const [nickName, setNickName] = useState(me.nick);
+
   const { addressButton, address, nickCheckDone } = useSelector(
     state => state.member
   );
-  const { me } = useSelector(state => state.mypage);
 
   // 주소 검색 버튼
   const addrButton = () => {
@@ -100,6 +104,11 @@ export default function MypageDetail() {
     }
   };
 
+  useEffect(() => {
+    if (updateMemberDone) {
+      history.push('/mypage');
+    }
+  }, [updateMemberDone, history]);
   return (
     <Layout>
       <Navbar />
