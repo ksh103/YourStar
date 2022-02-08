@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 
-export default class OpenViduVideoComponent extends Component {
+export default class StarOpenViduVideoComponent extends Component {
   constructor(props) {
     super(props);
     this.videoRef = React.createRef();
@@ -20,6 +20,6 @@ export default class OpenViduVideoComponent extends Component {
 
   render() {
     // 여기에 video가 비디오 사이즈를 조절해준다
-    return <video autoPlay={true} ref={this.videoRef} />;
+    return <video className="Star" autoPlay={true} ref={this.videoRef} />;
   }
 }
