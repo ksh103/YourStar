@@ -3,7 +3,7 @@ package com.ssafy.yourstar.domain.meeting.service;
 import com.ssafy.yourstar.domain.meeting.db.entity.Meeting;
 import com.ssafy.yourstar.domain.meeting.db.entity.MeetingRecordImgPath;
 import com.ssafy.yourstar.domain.meeting.db.repository.MeetingRecordImgPathRepository;
-import com.ssafy.yourstar.domain.meeting.db.repository.MeetingRecordRepositorySpp;
+import com.ssafy.yourstar.domain.meeting.db.repository.MeetingRepositorySpp;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.domain.Page;
@@ -20,7 +20,7 @@ public class MeetingRecordServiceImpl implements MeetingRecordService {
     MeetingRecordImgPathRepository meetingRecordImgPathRepository;
 
     @Autowired
-    MeetingRecordRepositorySpp meetingRecordRepositorySpp;
+    MeetingRepositorySpp meetingRepositorySpp;
 
     @Value("${app.fileupload.recordDir}")
     private String recordFolder;
@@ -33,7 +33,7 @@ public class MeetingRecordServiceImpl implements MeetingRecordService {
 
     @Override
     public Page<Meeting> meetingRecordList(int memberId, Pageable pageable) {
-        return meetingRecordRepositorySpp.findMeetingRecordListByMemberId(memberId, pageable);
+        return meetingRepositorySpp.findMeetingRecordListByMemberId(memberId, pageable);
     }
 
     @Override

@@ -22,6 +22,8 @@ public class MeetingRepositorySpp {
     QMeetingRecordImgPath qMeetingRecordImgPath = QMeetingRecordImgPath.meetingRecordImgPath;
     QMeetingRecordVideoPath qMeetingRecordVideoPath = QMeetingRecordVideoPath.meetingRecordVideoPath;
 
+    QMeetingGame qMeetingGame = QMeetingGame.meetingGame;
+
     public Page<Meeting> findAllApplyMeetingByMemberId(int memberId, Pageable pageable) {
         QueryResults<Meeting> list = jpaQueryFactory.select(qMeeting).from(qMeeting)
                 .leftJoin(qApplicant).on(qApplicant.meetingId.eq(qMeeting.meetingId))
@@ -36,6 +38,18 @@ public class MeetingRepositorySpp {
         QueryResults<Member> list = jpaQueryFactory.select(qMember).from(qMember)
                 .leftJoin(qApplicant).on(qMember.memberId.eq(qApplicant.memberId))
                 .where(qApplicant.meetingId.eq(meetingId))
+                .offset(pageable.getOffset())
+                .limit(pageable.getPageSize()).fetchResults();
+
+        return new PageImpl<>(list.getResults(), pageable, list.getTotal());
+    }
+
+    // 추억보관함 목록
+    public Page<Meeting> findMeetingRecordListByMemberId(int memberId, Pageable pageable) {
+        QueryResults<Meeting> list = jpaQueryFactory.select(qMeeting).from(qMeeting)
+                .leftJoin(qMeetingRecordImgPath).on(qMeetingRecordImgPath.meetingId.eq(qMeeting.meetingId))
+                .leftJoin(qMeetingRecordVideoPath).on(qMeetingRecordVideoPath.meetingId.eq(qMeeting.meetingId))
+                .where((qMeetingRecordImgPath.memberId.eq(memberId).or(qMeetingRecordVideoPath.memberId.eq(memberId))))
                 .offset(pageable.getOffset())
                 .limit(pageable.getPageSize()).fetchResults();
 
