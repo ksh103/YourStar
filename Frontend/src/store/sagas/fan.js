@@ -17,15 +17,20 @@ import {
 } from '../modules/fan';
 import {
   ADD_APPLICANT_MEMBER,
+  DETAIL_MEETING_REQUEST,
   REMOVE_APPLICANT_MEMBER,
 } from '../modules/meeting';
 
 function* insertFanMeeting(action) {
   try {
+    console.log(action);
     const result = yield call(FanApplicantAPI, action.data);
     yield put({
+      type: DETAIL_MEETING_REQUEST,
+      data: action.data,
+    });
+    yield put({
       type: INSERT_FANMEETING_SUCCESS,
-      data: result,
     });
     yield put({
       type: ADD_APPLICANT_MEMBER,
