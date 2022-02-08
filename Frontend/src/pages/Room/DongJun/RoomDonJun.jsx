@@ -508,6 +508,7 @@ class RoomDonJun extends Component {
 }
 
 const mapStateToProps = state => ({
+  state: state.mypage.me,
   // 채팅내용
   chattingList: state.MeetingRoom.chattingList,
   // 입장한 유저들 정보
