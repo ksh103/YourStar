@@ -17,7 +17,6 @@ export default function LongChatting() {
   const { chattingList } = useSelector(state => ({
     chattingList: state.MeetingRoom.chattingList,
   }));
-
   const dispatch = useDispatch();
 
   const SubmitText = Input => dispatch(ChattingInputChange(Input));
@@ -26,6 +25,10 @@ export default function LongChatting() {
   const handleChatMessageChange = e => {
     setTestinput(e.target.value);
   };
+
+  const { storeSession } = useSelector(state => ({
+    storeSession: state.MeetingRoom.storeSession,
+  }));
 
   const { me } = useSelector(state => state.mypage);
 
@@ -36,12 +39,16 @@ export default function LongChatting() {
         text: testInput,
         chatClass: 'messages__item--operator',
       };
+      storeSession.signal({
+        data: `${me.nick},${testInput}`,
+        to: [],
+        type: 'chat',
+      });
       SubmitText(testInput);
       AppendChattingList(inputValue);
       setTestinput('');
     }
   };
-
   return (
     <>
       <HalfSideDiv1>

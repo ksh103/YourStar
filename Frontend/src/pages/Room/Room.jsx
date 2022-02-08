@@ -14,6 +14,7 @@ import {
   ScreenChange,
   ChattingInputChange,
   changeQnAMode,
+  SetMySession,
 } from '../../store/modules/meetingRoom';
 
 // 컴포넌트
@@ -61,13 +62,13 @@ class Room extends Component {
       });
     }
 
-    if (prevState.testInput !== this.props.testInput) {
-      mySession.signal({
-        data: `${this.props.me.nick},${this.props.testInput}`,
-        to: [],
-        type: 'chat',
-      });
-    }
+    // if (prevState.testInput !== this.props.testInput) {
+    //   mySession.signal({
+    //     data: `${this.props.me.nick},${this.props.testInput}`,
+    //     to: [],
+    //     type: 'chat',
+    //   });
+    // }
 
     if (prevState.QnAmode !== this.props.QnAmode) {
       mySession.signal({
@@ -99,15 +100,14 @@ class Room extends Component {
 
   joinSession() {
     this.OV = new OpenVidu(); // Openvidu 객체 생성
-
-    // 세션 진입
     this.setState(
       {
         session: this.OV.initSession(),
       },
       () => {
         var mySession = this.state.session;
-
+        // 스토어로 저장을 해봐라.
+        this.props.doSetMySession(mySession);
         // 현재 미팅룸에 들어온 사용자 확인
         mySession.on('streamCreated', event => {
           var subscriber = mySession.subscribe(event.stream, undefined); // 들어온 사용자의 정보
@@ -357,6 +357,7 @@ const mapDispatchToProps = dispatch => {
     doChattingInputChange: testinput =>
       dispatch(ChattingInputChange(testinput)),
     dochangeQnAMode: QnAmode => dispatch(changeQnAMode(QnAmode)),
+    doSetMySession: storeSession => dispatch(SetMySession(storeSession)),
   };
 };
 

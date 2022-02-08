@@ -41,7 +41,6 @@ export default function Concert() {
   const { chattingList } = useSelector(state => ({
     chattingList: state.MeetingRoom.chattingList,
   }));
-
   const dispatch = useDispatch();
 
   const SubmitText = Input => dispatch(ChattingInputChange(Input));
@@ -51,17 +50,24 @@ export default function Concert() {
     setTestinput(e.target.value);
   };
 
-  const { userNickName } = useSelector(state => ({
-    userNickName: state.MeetingRoom.userNickName,
+  const { storeSession } = useSelector(state => ({
+    storeSession: state.MeetingRoom.storeSession,
   }));
+
+  const { me } = useSelector(state => state.mypage);
 
   const SendMessage = e => {
     if (e.key === 'Enter') {
       const inputValue = {
-        userName: userNickName,
+        userName: me.nick,
         text: testInput,
         chatClass: 'messages__item--operator',
       };
+      storeSession.signal({
+        data: `${me.nick},${testInput}`,
+        to: [],
+        type: 'chat',
+      });
       SubmitText(testInput);
       AppendChattingList(inputValue);
       setTestinput('');
@@ -81,7 +87,6 @@ export default function Concert() {
           onChange={handleChatMessageChange}
         ></ConcertChattingInputBox>
         <ConcertChattingListBox>
-          {' '}
           {chattingList.map((value, idx) => {
             return (
               <div key={idx + value.text}>
