@@ -15,6 +15,7 @@ import {
   ChattingInputChange,
   changeQnAMode,
   SetMySession,
+  emoziListAdd,
 } from '../../store/modules/meetingRoom';
 
 // 컴포넌트
@@ -161,6 +162,13 @@ class Room extends Component {
           const Mode = event.data;
           if (Mode !== this.props.QnAmode) {
             this.props.dochangeQnAMode(Mode);
+          }
+        });
+
+        mySession.on('signal:emozi', event => {
+          let emozidata = event.data.split(',');
+          if (emozidata[0] !== this.props.me.nick) {
+            this.props.doemoziListAdd(emozidata[1]);
           }
         });
 
@@ -358,6 +366,7 @@ const mapDispatchToProps = dispatch => {
       dispatch(ChattingInputChange(testinput)),
     dochangeQnAMode: QnAmode => dispatch(changeQnAMode(QnAmode)),
     doSetMySession: storeSession => dispatch(SetMySession(storeSession)),
+    doemoziListAdd: emozi => dispatch(emoziListAdd(emozi)),
   };
 };
 

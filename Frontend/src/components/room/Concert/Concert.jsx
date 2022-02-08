@@ -27,6 +27,7 @@ const ConcertWrapper = styled.div`
 `;
 
 const ConcertDisplayBox = styled.div`
+  position: absolute;
   /* border: solid red; */
   border-radius: 1vw;
   height: 75vh;
@@ -35,9 +36,22 @@ const ConcertDisplayBox = styled.div`
   box-shadow: 0.306vh 0.306vh gray;
 `;
 
+const EmoziBox = styled.div`
+  position: absolute;
+  /* border: solid red; */
+  border-radius: 1vw;
+  height: 75vh;
+  width: 20vw;
+  background-color: rgba(255, 255, 255, 0);
+  z-index: 1;
+  // box-shadow: 0.306vh 0.306vh gray;
+`;
+
 export default function Concert() {
   const [testInput, setTestinput] = React.useState('');
-
+  const { emoziList } = useSelector(state => ({
+    emoziList: state.MeetingRoom.emoziList,
+  }));
   const { chattingList } = useSelector(state => ({
     chattingList: state.MeetingRoom.chattingList,
   }));
@@ -78,6 +92,15 @@ export default function Concert() {
     <BackgroundDiv>
       <ConcertWrapper>
         <ConcertDisplayBox></ConcertDisplayBox>
+        <EmoziBox>
+          {emoziList.map((emozi, idx) => {
+            return (
+              <div key={idx + emozi}>
+                <p>{emozi}</p>
+              </div>
+            );
+          })}
+        </EmoziBox>
       </ConcertWrapper>
       <HalfSideDiv1>
         <ConcertChattingBox></ConcertChattingBox>
