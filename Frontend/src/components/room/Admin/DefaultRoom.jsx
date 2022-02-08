@@ -1,16 +1,17 @@
 import React from 'react';
+import AdminGrid from './AdminGrid';
+import Admin from './Admin';
+import UserBasic from '../UserBasic/UserBasic';
 import { useSelector } from 'react-redux';
-import StarOXGame from './StarOXGame';
-import UserOXGame from './UserOXGame';
 
-export default function OXGame() {
+export default function DefaultRoom() {
   const { userId } = useSelector(state => ({
     userId: state.MeetingRoom.userId,
   }));
   // 일반유저 === 0 , 스타 1
   if (userId === 1) {
-    return <StarOXGame></StarOXGame>;
+    return <Admin></Admin>;
   } else {
-    return <UserOXGame></UserOXGame>;
+    return <UserBasic></UserBasic>;
   }
 }

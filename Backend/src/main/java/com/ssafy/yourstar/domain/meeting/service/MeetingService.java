@@ -14,7 +14,7 @@ import java.io.IOException;
 public interface MeetingService {
     int meetingApplyByStar(MeetingApplyByStarPostReq meetingApplyByStarPostReq, MultipartHttpServletRequest request) throws IOException;
     int meetingModifyByStar(Meeting meeting, MultipartHttpServletRequest request) throws IOException;
-    boolean meetingRemoveByStar(int meetingId);
+    int meetingRemoveByStar(int meetingId);
     Page<Meeting> meetingList(Pageable pageable);
     Page<Meeting> meetingPendingList(Pageable pageable);
     Page<Meeting> meetingApproveList(Pageable pageable);

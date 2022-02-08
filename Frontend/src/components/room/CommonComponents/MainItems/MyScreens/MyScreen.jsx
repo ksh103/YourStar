@@ -1,7 +1,8 @@
 import React from 'react';
 import styled from 'styled-components';
-import MyScreenAngle from './MyScreenAngle';
 import { MyScreenDiv } from '../Main.style';
+import { useSelector, useDispatch } from 'react-redux';
+import UserVideoComponent from '../../../../../pages/Room/DongJun/UserVideoComponent';
 
 const QuestionMyScreen = styled.div`
   width: 14.843vw;
@@ -12,10 +13,14 @@ const QuestionMyScreen = styled.div`
 `;
 
 export default function MyScreen() {
+  const { publisher } = useSelector(state => ({
+    publisher: state.MeetingRoom.publisher,
+  }));
+
   return (
     <MyScreenDiv>
       <QuestionMyScreen>
-        <MyScreenAngle></MyScreenAngle>
+        {publisher && <UserVideoComponent streamManager={publisher} />}
       </QuestionMyScreen>
     </MyScreenDiv>
   );

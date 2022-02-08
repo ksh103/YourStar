@@ -1,7 +1,9 @@
 import React from 'react';
 import styled from 'styled-components';
-import OtherScreenAngle from './OtherScreenAngle';
 import { OtherPersonDiv } from '../Main.style';
+import { useSelector, useDispatch } from 'react-redux';
+import UserVideoComponent from '../../../../../pages/Room/DongJun/UserVideoComponent';
+
 const OtherPersonSc = styled.div`
   max-width: 65.041vw;
   width: 65.041vw;
@@ -12,32 +14,30 @@ const OtherPersonSc = styled.div`
   overflow-x: auto;
   white-space: nowrap;
   margin: 0 0;
-`;
-
-const PerScPosition = styled.div`
-  position: relative;
-  top: 4.5%;
-  left: 3%;
+  display: Flex;
+  direction: row;
+  align-items: center;
+  justify-content: flex-start;
 `;
 
 export default function OtherPersonScreen() {
+  const { subscribers } = useSelector(state => ({
+    subscribers: state.MeetingRoom.subscribers,
+  }));
+
   return (
     <OtherPersonDiv>
       <OtherPersonSc>
-        <PerScPosition>
-          <OtherScreenAngle></OtherScreenAngle>
-          <OtherScreenAngle></OtherScreenAngle>
-          <OtherScreenAngle></OtherScreenAngle>
-          <OtherScreenAngle></OtherScreenAngle>
-          <OtherScreenAngle></OtherScreenAngle>
-          <OtherScreenAngle></OtherScreenAngle>
-          <OtherScreenAngle></OtherScreenAngle>
-          <OtherScreenAngle></OtherScreenAngle>
-          <OtherScreenAngle></OtherScreenAngle>
-          <OtherScreenAngle></OtherScreenAngle>
-          <OtherScreenAngle></OtherScreenAngle>
-          <OtherScreenAngle></OtherScreenAngle>
-        </PerScPosition>
+        {subscribers &&
+          subscribers.map((sub, i) => (
+            <div
+              // className="stream-container col-md-6 col-xs-6"
+              key={i}
+              onClick={() => this.handleMainVideoStream(sub)}
+            >
+              <UserVideoComponent streamManager={sub} />
+            </div>
+          ))}
       </OtherPersonSc>
     </OtherPersonDiv>
   );
