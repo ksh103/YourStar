@@ -23,6 +23,7 @@ import {
   RoomSohyun,
 } from './pages/index';
 import GlobalStyle from './styles/global';
+import Pay from './components/Pay/Pay';
 
 function App() {
   return (
@@ -63,6 +64,7 @@ function App() {
           <Route exact path="/find/password">
             <FindPassword />
           </Route>
+          <Route exact component={Pay} path="/pay" />
           <Route exact component={Room} path="/room/:id" />
           <Route path="/mypage/:id">
             <MypageDetail />

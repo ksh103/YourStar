@@ -4,6 +4,7 @@ import { BASE_URL } from '../../../utils/contants';
 
 // 팬이 팬미팅 신청
 export async function FanApplicantAPI({ meetingId, memberId }) {
+  console.log(meetingId, memberId);
   const result = await axios.post(`${BASE_URL}meetings/fan-applicant`, {
     meetingId: meetingId,
     memberId: memberId,
