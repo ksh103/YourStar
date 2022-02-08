@@ -9,6 +9,8 @@ const USER_NICKNAME = 'USER_NICKNAME';
 const CHATTING_INPUT_CHANGE = 'CHATTING_INPUT_CHANGE';
 const ADD_QNA_LIST = 'ADD_QNA_LIST';
 const MY_SESSION_DEFIND = 'MY_SESSION_DEFIND';
+const EMOZI_LIST_ADD = 'EMOZI_LIST_ADD';
+
 // QnA 모드를 변경하기위한 action
 // 스타가 의 조작에 대한 action이라고 이해하면 된다.
 // 0일 경우 qna start
@@ -95,6 +97,13 @@ export const SetMySession = session => {
   };
 };
 
+export const emoziListAdd = emozi => {
+  return {
+    type: EMOZI_LIST_ADD,
+    payload: emozi,
+  };
+};
+
 // 평소 컴포넌트에서 선언하던 state들!
 const initialState = {
   // 초기에는 시작 안한 상태!
@@ -111,6 +120,7 @@ const initialState = {
   testInput: '테스트용',
   // 세션정보
   storeSession: undefined,
+  emoziList: [],
 };
 
 const MeetingRoom = (state = initialState, action) => {
@@ -165,6 +175,11 @@ const MeetingRoom = (state = initialState, action) => {
       return {
         ...state,
         storeSession: action.payload,
+      };
+    case EMOZI_LIST_ADD:
+      return {
+        ...state,
+        emoziList: [...state.emoziList, action.payload],
       };
     default:
       return state; // 기본 값 반환!
