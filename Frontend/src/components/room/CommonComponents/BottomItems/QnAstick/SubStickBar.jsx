@@ -4,6 +4,7 @@ import { useSelector, useDispatch } from 'react-redux';
 import {
   changeQnAMode,
   ChattingAction,
+  changeQnAtoggle,
 } from '../../../../../store/modules/meetingRoom';
 
 // dispatch action 사용하기! 이때는 넘겨주는 값이 있어야합니다.
@@ -61,7 +62,6 @@ const UserInput = styled.input`
 export default function SubStickBar() {
   // QnA 입력을 위한것
   const [QnAText, setQnAText] = useState('');
-  const userSubmitState = false;
 
   const valueChange = e => {
     console.log(e.target.value);
@@ -72,17 +72,32 @@ export default function SubStickBar() {
     QnAmode: state.MeetingRoom.QnAmode,
   }));
 
-  // const { userSubmitState } = useSelector(state => ({
-  //   userSubmitState: state.userCheck.userSubmitState,
-  // }));
+  const { StarQnAtoggle } = useSelector(state => ({
+    StarQnAtoggle: state.MeetingRoom.StarQnAtoggle,
+  }));
 
   const { me } = useSelector(state => state.mypage);
+
+  const { storeSession } = useSelector(state => ({
+    storeSession: state.MeetingRoom.storeSession,
+  }));
   const dispatch = useDispatch();
 
   // 모드 변경
-  const QnAChange = number => dispatch(changeQnAMode(number));
+  const QnAChange = str => {
+    storeSession.signal({
+      data: `${me.nick},${str}`,
+      to: [],
+      type: 'QnAmode',
+    });
+    dispatch(changeQnAMode(str));
+  };
   // 유저 id에 따라서 바꾸어준다
   // 스타라면?
+  const toggleChange = () => {
+    dispatch(changeQnAtoggle());
+  };
+
   if (me.code !== 3) {
     return (
       <>
@@ -92,7 +107,9 @@ export default function SubStickBar() {
               {/* 여기를 스토어로 바꿔주기 */}
               <InnerDiv onClick={() => QnAChange('start')}>Q&A 시작</InnerDiv>|
               <InnerDiv onClick={() => QnAChange('end')}>Q&A 종료</InnerDiv>|
-              <InnerDiv onClick={() => QnAChange('list')}>Q&A 리스트</InnerDiv>
+              <InnerDiv onClick={() => toggleChange(StarQnAtoggle)}>
+                Q&A 리스트
+              </InnerDiv>
             </GridDiv>
           </StickBar>
         </StickBarDiv>

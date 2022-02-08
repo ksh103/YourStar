@@ -71,13 +71,13 @@ class Room extends Component {
     //   });
     // }
 
-    if (prevState.QnAmode !== this.props.QnAmode) {
-      mySession.signal({
-        data: this.props.QnAmode,
-        to: [],
-        type: 'QnAmode',
-      });
-    }
+    // if (prevState.QnAmode !== this.props.QnAmode) {
+    //   mySession.signal({
+    //     data: this.props.QnAmode,
+    //     to: [],
+    //     type: 'QnAmode',
+    //   });
+    // }
   }
 
   componentWillUnmount() {
