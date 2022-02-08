@@ -46,7 +46,7 @@ export default function ScheduleDetailLeft() {
         return (
           <ScheduleDetailButton color="3">
             <div>
-              <Link to="/room">입장하기</Link>
+              <Link to={`/room/${meeting.id}`}>입장하기</Link>
             </div>
           </ScheduleDetailButton>
         );
@@ -94,20 +94,6 @@ export default function ScheduleDetailLeft() {
         <img src={poster} alt="postesr" />
       </ScheduleDetailImage>
       {showButton()}
-      {/* {meeting.applicantCnt === meeting.cnt && (
-        <ScheduleDetailButton>
-          <div>매진</div>
-        </ScheduleDetailButton>
-      )}
-      {meeting.isReserve ? (
-        <ScheduleDetailButton color="1">
-          <div onClick={cancelMeeting}>예매취소</div>
-        </ScheduleDetailButton>
-      ) : (
-        <ScheduleDetailButton color="1">
-          <div onClick={reserveMeeting}>예매하기</div>
-        </ScheduleDetailButton>
-      )} */}
     </ScheduleDetailLeftWrapper>
   );
 }
