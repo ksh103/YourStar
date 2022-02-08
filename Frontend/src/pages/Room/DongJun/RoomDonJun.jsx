@@ -14,6 +14,7 @@ import {
   MainStreamManagerInfo,
   ScreenChange,
   ChattingInputChange,
+  changeQnAMode,
 } from '../../../store/modules/meetingRoom';
 // import changeList from '../../../store/modules/selectList';
 
@@ -146,6 +147,14 @@ class RoomDonJun extends Component {
         type: 'chat',
       });
     }
+
+    if (prevState.QnAmode !== this.props.QnAmode) {
+      mySession.signal({
+        data: this.props.QnAmode,
+        to: [],
+        type: 'QnAmode',
+      });
+    }
   }
 
   componentWillUnmount() {
@@ -271,6 +280,14 @@ class RoomDonJun extends Component {
             this.props.doScreenChange(changeNum);
           }
           console.log(this.props.selectNum, '결과는?!');
+        });
+
+        mySession.on('signal:QnAmode', event => {
+          console.log('qna모드 변경신호받음');
+          const Mode = event.data;
+          if (Mode !== this.props.QnAmode) {
+            this.props.dochangeQnAMode(Mode);
+          }
         });
 
         // --- 4) Connect to the session with a valid user token ---
@@ -508,6 +525,7 @@ class RoomDonJun extends Component {
 }
 
 const mapStateToProps = state => ({
+  state: state.mypage.me,
   // 채팅내용
   chattingList: state.MeetingRoom.chattingList,
   // 입장한 유저들 정보
@@ -519,6 +537,7 @@ const mapStateToProps = state => ({
   selectNum: state.MeetingRoom.selectNum,
   userNickName: state.MeetingRoom.userNickName,
   testInput: state.MeetingRoom.testInput,
+  QnAmode: state.MeetingRoom.QnAmode,
 });
 
 const mapDispatchToProps = dispatch => {
@@ -534,6 +553,7 @@ const mapDispatchToProps = dispatch => {
     doScreenChange: selectNum => dispatch(ScreenChange(selectNum)),
     doChattingInputChange: testinput =>
       dispatch(ChattingInputChange(testinput)),
+    dochangeQnAMode: QnAmode => dispatch(changeQnAMode(QnAmode)),
   };
 };
 

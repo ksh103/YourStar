@@ -7,16 +7,16 @@ const UPDATE_MAINSTREMMANAGER = 'UPDATE_MAINSTREMMANAGER';
 const SCREEN_CHANGE = 'SCREEN_CHANGE';
 const USER_NICKNAME = 'USER_NICKNAME';
 const CHATTING_INPUT_CHANGE = 'CHATTING_INPUT_CHANGE';
-
+const ADD_QNA_LIST = 'ADD_QNA_LIST';
 // QnA 모드를 변경하기위한 action
 // 스타가 의 조작에 대한 action이라고 이해하면 된다.
 // 0일 경우 qna start
 // 1일 경우 qna 종료
 // 2일 경우 qna 리스트 불러오기에 관한 조작이다.
-export const changeQnAMode = number => {
+export const changeQnAMode = qnaAction => {
   return {
     type: CHANGE_QNA_MODE,
-    payload: Number(number),
+    payload: qnaAction,
   };
 };
 
@@ -81,10 +81,18 @@ export const ChattingInputChange = inputText => {
   };
 };
 
+export const AddQnaList = text => {
+  return {
+    type: ADD_QNA_LIST,
+    payload: text,
+  };
+};
+
 // 평소 컴포넌트에서 선언하던 state들!
 const initialState = {
   // 초기에는 시작 안한 상태!
-  QnAmode: 0,
+  QnAmode: 'ready',
+  QnAList: [],
   chattingList: [],
   subscribers: [],
   publisher: undefined,
@@ -93,7 +101,6 @@ const initialState = {
   // 임시로 사용하는 유저아이디
   userId: 0,
   // 임시로 사용하는 유저 닉네임
-  userNickName: '동주니에용',
   testInput: '테스트용',
 };
 
@@ -142,6 +149,11 @@ const MeetingRoom = (state = initialState, action) => {
       return {
         ...state,
         testInput: action.payload,
+      };
+    case ADD_QNA_LIST:
+      return {
+        ...state,
+        QnAList: [...state.QnAList, action.payload],
       };
     default:
       return state; // 기본 값 반환!

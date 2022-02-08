@@ -59,6 +59,7 @@ const UserInput = styled.input`
 // 3. 유저의 경우 입력창에 대한 정보처리 --> 리스트 형식으로의 입력, 유저정보에 따라 달라지게
 // 4. 유저가 제출했을때의 상태 변경
 export default function SubStickBar() {
+  // QnA 입력을 위한것
   const [QnAText, setQnAText] = useState('');
   const userSubmitState = false;
 
@@ -67,9 +68,9 @@ export default function SubStickBar() {
     setQnAText(e.target.value);
   };
   // qna가 시작되었는지 확인하기
-  // const { QnAmode } = useSelector(state => ({
-  //   QnAmode: state.changeQnAmode.QnAmode,
-  // }));
+  const { QnAmode } = useSelector(state => ({
+    QnAmode: state.changeQnAmode.QnAmode,
+  }));
 
   // const { userSubmitState } = useSelector(state => ({
   //   userSubmitState: state.userCheck.userSubmitState,
@@ -83,64 +84,103 @@ export default function SubStickBar() {
 
   // 모드 변경
   const QnAChange = number => dispatch(changeQnAMode(number));
-
+  // 유저 id에 따라서 바꾸어준다
+  // 스타라면?
   if (userId === 1) {
     return (
       <>
         <StickBarDiv>
           <StickBar>
             <GridDiv>
-              <InnerDiv onClick={() => QnAChange(0)}>Q&A 시작</InnerDiv>|
-              <InnerDiv onClick={() => QnAChange(1)}>Q&A 종료</InnerDiv>|
-              <InnerDiv onClick={() => QnAChange(2)}>Q&A 리스트</InnerDiv>
+              {/* 여기를 스토어로 바꿔주기 */}
+              <InnerDiv onClick={() => QnAChange('start')}>Q&A 시작</InnerDiv>|
+              <InnerDiv onClick={() => QnAChange('end')}>Q&A 종료</InnerDiv>|
+              <InnerDiv onClick={() => QnAChange('list')}>Q&A 리스트</InnerDiv>
             </GridDiv>
           </StickBar>
         </StickBarDiv>
         {/* 유저ui 확인 */}
       </>
     );
-  } else {
-    return (
-      <>
-        <StickBarUserDiv>
-          {userId === 1 ? (
-            <StickBar>
-              <GridDiv>
-                {userSubmitState === true ? (
-                  <>
-                    <div style={{ color: 'black' }}>
-                      기다리시면 채택된 질문이 나옵니다.
-                    </div>
-                    <button>다시 작성하기</button>
-                  </>
-                ) : (
-                  <>
-                    <h2>Q.</h2>
-                    <form>
-                      <UserInput
-                        value={QnAText}
-                        onChange={valueChange}
-                      ></UserInput>
-                      <button>제출하기</button>
-                    </form>
-                  </>
-                )}
-              </GridDiv>
-            </StickBar>
-          ) : (
+  }
+  // 유저라면?
+  else {
+    if (QnAmode === 'ready') {
+      <StickBarDiv>
+        <StickBar>
+          <GridDiv>
             <>
-              <StickBar>
-                <GridDiv>
-                  <div style={{ color: 'black' }}>
-                    QnA입력이 종료되었습니다. 기다리시면 채댁된 질문이 나옵니다.
-                  </div>
-                  <button>다시 작성하기</button>
-                </GridDiv>
-              </StickBar>
+              <div style={{ color: 'black' }}>
+                스타가 시작하기를 눌리면 입력창이 나타납니다.
+              </div>
             </>
-          )}
-        </StickBarUserDiv>
-      </>
-    );
+          </GridDiv>
+        </StickBar>
+      </StickBarDiv>;
+    } else if (QnAmode === 'start') {
+      <>
+        <h2>Q.</h2>
+        <form>
+          <UserInput value={QnAText} onChange={valueChange}></UserInput>
+          <button>제출하기</button>
+        </form>
+      </>;
+    } else if (QnAmode === 'end') {
+      <StickBarDiv>
+        <StickBar>
+          <GridDiv>
+            <>
+              <div style={{ color: 'black' }}>
+                기다리시면 채택된 질문이 나옵니다.
+              </div>
+              <button>다시 작성하기</button>
+            </>
+          </GridDiv>
+        </StickBar>
+      </StickBarDiv>;
+    }
+
+    // return (
+    //   <>
+    //     <StickBarUserDiv>
+    //       {userId === 1 ? (
+    //         <StickBar>
+    //           <GridDiv>
+    //             {userSubmitState === true ? (
+    //               <>
+    //                 <div style={{ color: 'black' }}>
+    //                   기다리시면 채택된 질문이 나옵니다.
+    //                 </div>
+    //                 <button>다시 작성하기</button>
+    //               </>
+    //             ) : (
+    //               <>
+    //                 <h2>Q.</h2>
+    //                 <form>
+    //                   <UserInput
+    //                     value={QnAText}
+    //                     onChange={valueChange}
+    //                   ></UserInput>
+    //                   <button>제출하기</button>
+    //                 </form>
+    //               </>
+    //             )}
+    //           </GridDiv>
+    //         </StickBar>
+    //       ) : (
+    //         <>
+    //           <StickBar>
+    //             <GridDiv>
+    //               <div style={{ color: 'black' }}>
+    //                 QnA입력이 종료되었습니다. 기다리시면 채댁된 질문이 나옵니다.
+    //               </div>
+    //               <button>다시 작성하기</button>
+    //             </GridDiv>
+    //           </StickBar>
+    //         </>
+    //       )}
+    //     </StickBarUserDiv>
+    //   </>
+    // );
   }
 }
