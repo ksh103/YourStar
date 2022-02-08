@@ -31,7 +31,7 @@ export default function Navbar() {
     }
   }, []);
 
-  const { me } = useSelector(state => state.mypage); // 0: 비로그인 ,3:사용자, 2: 스타 ,1:관리자
+  const { me } = useSelector(state => state.mypage); // 0: 비로그인, 4: 스타, 3:사용자, 2: 관계자 ,1:관리자
   const [open, setOpen] = useState(false);
   const toggleDrawer = open => event => {
     if (
@@ -52,7 +52,7 @@ export default function Navbar() {
         <DrawerListRow>
           <p className="name">반갑습니다 {me.name}님</p>
         </DrawerListRow>
-        {me.code === 2 && (
+        {(me.code === 2 || me.code === 4) && (
           <DrawerListRow>
             <Link to="/apply" className="color">
               contact

@@ -5,7 +5,7 @@ import { useSelector, useDispatch } from 'react-redux';
 import { LOG_OUT_REQUEST } from '../../store/modules/member';
 
 export default function NavbarSub() {
-  const { me } = useSelector(state => state.mypage); // 0: 비로그인 ,3:사용자, 2: 스타 ,1:관리자
+  const { me } = useSelector(state => state.mypage); // 0: 비로그인 ,4: 스타, 3:사용자, 2: 매니저 ,1:관리자
   const dispatch = useDispatch();
 
   const LogoutButton = () => {
@@ -15,7 +15,7 @@ export default function NavbarSub() {
     <NavbarSubBlock>
       <SubMenu>
         <ul>
-          {me.code === 2 && (
+          {(me.code === 2 || me.code === 4) && (
             <li>
               <Link to="/apply">Contact</Link>
             </li>

@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { Layout, Wrapper } from '../../../styles/variables';
 import Footer from '../../Footer/Footer';
 import Navbar from '../../Navbar/Navbar';
@@ -8,14 +8,16 @@ import {
   FindPwContentRow,
   FindPwHeader,
 } from './FindPassword.style';
-import { useDispatch } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import { FIND_PW_REQUEST } from '../../../store/modules/member';
+import { useHistory } from 'react-router';
 
 export default function FindPassword() {
   const [name, setName] = useState('');
   const [email, setEmail] = useState('');
 
   const dispatch = useDispatch();
+  const history = useHistory();
 
   const findPwButton = () => {
     if (name === '') {
@@ -29,6 +31,13 @@ export default function FindPassword() {
       });
     }
   };
+  const { findPwDone } = useSelector(state => state.member);
+
+  useEffect(() => {
+    if (findPwDone) {
+      history.push('/login');
+    }
+  }, [findPwDone, history]);
   return (
     <Layout>
       <Navbar />

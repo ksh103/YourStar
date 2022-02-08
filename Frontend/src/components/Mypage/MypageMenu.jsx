@@ -2,7 +2,6 @@ import React from 'react';
 import { MypageMenuWrapper } from './Mypage.style';
 import { useDispatch, useSelector } from 'react-redux';
 import { setMenu } from '../../store/modules/mypage';
-import { primaryColor } from '../../styles/variables';
 export default function MypageMenu() {
   const dispatch = useDispatch();
   const { me, menu } = useSelector(state => state.mypage);

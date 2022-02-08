@@ -22,21 +22,20 @@ const style = {
   overflow: 'auto',
 };
 
-export default function BasicModal(props) {
+export default function BasicModal({ meeting }) {
   const dispatch = useDispatch();
   const handleClose = () => dispatch(setMeetingDetailState(false)); // modal창 밖을 클릭했을 때 off
   useEffect(() => {
     // 미팅 참여인원 불러오기
     dispatch({
       type: MEETING_APPLY_REQUEST,
-      data: { meetingId: props.data.id },
+      data: { meetingId: meeting.id },
     });
   }, []);
-
   // useSelector
   const { meetingDetailState } = useSelector(state => state.mypage);
   const { meetingApplyList } = useSelector(state => state.meetingList);
-  let cnt = 0;
+  let cnt = 0; // 회원번호 index
   const FanList = meetingApplyList.map((list, index) => {
     cnt += 1;
     return (
@@ -76,7 +75,7 @@ export default function BasicModal(props) {
             component="h2"
             style={{ textAlign: 'center' }}
           >
-            {props.data.name} 미팅 상세정보
+            {meeting.name} 미팅 상세정보
           </Typography>
           <Typography id="modal-modal-description" sx={{ mt: 2 }}>
             <Grid container>

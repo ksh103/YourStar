@@ -5,7 +5,9 @@ import { Block, Layout, Wrapper } from '../../styles/variables';
 import { MypageContent, MypageHeader, MypageWrapper } from './Mypage.style';
 import MypageProfile from '../../components/Mypage/MypageProfile';
 import MypageMenu from '../../components/Mypage/MypageMenu';
-import MypageCard from '../../components/Mypage/MypageCard';
+import RepositoryMypageCard from '../../components/Mypage/RepositoryMypageCard';
+import StarMypageCard from '../../components/Mypage/StarMypageCard';
+import UserMypageCard from '../../components/Mypage/UserMypageCard';
 import Grid from '@mui/material/Grid';
 import { useDispatch, useSelector } from 'react-redux';
 import { TOTAL_MEETINGS_REQUEST } from '../../store/modules/meeting';
@@ -44,16 +46,18 @@ export default function Mypage() {
         // 스타 자신이 오픈한 팬 미팅 정보
         meeting => meeting.code === me.managerCode
       );
-      return myMeeting.map(item => <MypageCard data={item} key={item.id} />);
+      return myMeeting.map(meeting => (
+        <StarMypageCard meeting={meeting} key={meeting.meetingId} />
+      ));
     } else if (menu === 1) {
       // 나의 팬미팅
-      return applicant.map(item => (
-        <MypageCard data={item} key={item.meetingId} />
+      return applicant.map(meeting => (
+        <UserMypageCard meeting={meeting} key={meeting.meetingId} />
       ));
     } else if (menu === 2) {
       // 추억보관함
-      return applicant.map(item => (
-        <MypageCard data={item} key={item.meetingId} />
+      return applicant.map(meeting => (
+        <RepositoryMypageCard meeting={meeting} key={meeting.meetingId} />
       ));
     }
   };

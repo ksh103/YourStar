@@ -15,6 +15,8 @@ const initialState = {
   },
   menu: 1, // 1. 나의 팬미팅 2. 추억 보관함
   meetingDetailState: false, // 이미지 상세보기 modal 버튼
+  meetingRepositoryState: false, // 추억보관함 상세보기 modal 버튼
+  nowId: 0, // 마이페이지 현재 선택 포스터 아이디
 
   myPageLoading: false, // 마이페이지 정보
   myPageDone: false,
@@ -45,8 +47,17 @@ export const setMeetingDetailState = state => ({
   state,
 });
 
+const SET_MEETING_REPOSITORY_STATE = 'SET_MEETING_REPOSITORY_STATE'; // 추억보관함 MODAL창 활성화 action
+export const setMeetingRepositoryState = state => ({
+  type: SET_MEETING_REPOSITORY_STATE,
+  state,
+});
+
 const SET_MENU = 'SET_MENU';
 export const setMenu = menu => ({ type: SET_MENU, menu });
+
+const SET_NOW_ID = 'SET_NOW_ID';
+export const setNowId = nowId => ({ type: SET_NOW_ID, nowId });
 
 const reducer = (state = initialState, action) =>
   produce(state, draft => {
@@ -104,8 +115,14 @@ const reducer = (state = initialState, action) =>
       case SET_MENU:
         draft.menu = action.menu; // 마이페이지 메뉴 변경
         break;
+      case SET_NOW_ID:
+        draft.nowId = action.nowId; // 현재 선택 포스터
+        break;
       case SET_MEETING_DETAIL_STATE:
         draft.meetingDetailState = action.state;
+        break;
+      case SET_MEETING_REPOSITORY_STATE:
+        draft.meetingRepositoryState = action.state;
         break;
       default:
         break;
