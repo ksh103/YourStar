@@ -46,9 +46,6 @@ class RoomDonJun extends Component {
     this.handleChangeUserName = this.handleChangeUserName.bind(this);
     this.handleMainVideoStream = this.handleMainVideoStream.bind(this);
     this.onbeforeunload = this.onbeforeunload.bind(this);
-    this.sendmessageByClick = this.sendmessageByClick.bind(this);
-    this.handleChatMessageChange = this.handleChatMessageChange.bind(this);
-    this.sendmessageByEnter = this.sendmessageByEnter.bind(this);
   }
 
   componentDidMount() {
