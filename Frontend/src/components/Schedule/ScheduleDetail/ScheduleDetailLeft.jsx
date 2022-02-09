@@ -9,7 +9,7 @@ import { Link, useHistory } from 'react-router-dom';
 import { useSelector, useDispatch } from 'react-redux';
 import { DELETE_FANMEETING_REQUEST } from '../../../store/modules/fan';
 import axios from 'axios';
-import { KAKAO_ADMIN_KEY } from '../../../utils/dev';
+import { KAKAO_ADMIN_KEY } from '../../utils/dev';
 export default function ScheduleDetailLeft() {
   const { meeting } = useSelector(state => state.meeting);
   const { me } = useSelector(state => state.mypage);

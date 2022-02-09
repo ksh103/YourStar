@@ -1,6 +1,6 @@
 import React from 'react';
 import styled from 'styled-components';
-import DefaultUserScreen from '../../CommonComponents/MainItems/DefaultUserScreen';
+import DefaultStarScreen from '../../CommonComponents/MainItems/DefaultStarScreen';
 import MyScreen from '../../CommonComponents/MainItems/MyScreens/MyScreen';
 import OtherPersonScreen from '../../CommonComponents/MainItems/OtherScreen/OtherPersonScreen';
 import ConsonantAllRank from '../../CommonComponents/RightSideItems/Game/ConsonantGame/ConsonantAllRank';
@@ -15,7 +15,7 @@ const BackgroundDiv = styled.div`
 export default function UserConsonantGameStart() {
   return (
     <BackgroundDiv>
-      <DefaultUserScreen></DefaultUserScreen>
+      <DefaultStarScreen></DefaultStarScreen>
       <ConsonantAllRank></ConsonantAllRank>
       <ConsonantUserInput></ConsonantUserInput>
       <MyScreen></MyScreen>
