@@ -13,6 +13,9 @@ import {
   MainStreamManagerInfo,
   ScreenChange,
   ChattingInputChange,
+  changeQnAMode,
+  SetMySession,
+  emoziListAdd,
 } from '../../../store/modules/meetingRoom';
 
 // 컴포넌트
@@ -58,14 +61,6 @@ class RoomYoungWon extends Component {
         type: 'screen',
       });
     }
-
-    if (prevState.chattingList !== this.props.chattingList) {
-      mySession.signal({
-        data: `${this.props.me.nick},${this.props.testInput}`,
-        to: [],
-        type: 'chat',
-      });
-    }
   }
 
   componentWillUnmount() {
@@ -97,6 +92,7 @@ class RoomYoungWon extends Component {
       },
       () => {
         var mySession = this.state.session;
+        this.props.doSetMySession(mySession);
 
         // 현재 미팅룸에 들어온 사용자 확인
         mySession.on('streamCreated', event => {
@@ -143,6 +139,21 @@ class RoomYoungWon extends Component {
 
           if (changeNum !== this.props.selectNum) {
             this.props.doScreenChange(changeNum);
+          }
+        });
+
+        mySession.on('signal:QnAmode', event => {
+          console.log('qna모드 변경신호받음');
+          const Mode = event.data;
+          if (Mode !== this.props.QnAmode) {
+            this.props.dochangeQnAMode(Mode);
+          }
+        });
+
+        mySession.on('signal:emozi', event => {
+          let emozidata = event.data.split(',');
+          if (emozidata[0] !== this.props.me.nick) {
+            this.props.doemoziListAdd(emozidata[1]);
           }
         });
 
@@ -284,6 +295,8 @@ class RoomYoungWon extends Component {
   createToken(sessionId) {
     return new Promise((resolve, reject) => {
       var data = {};
+      if (this.state.me.code === 4) data.role = 'MODERATOR';
+      else if (this.state.me.code === 2) data.role = 'SUBSCRIBER';
       axios
         .post(
           OPENVIDU_SERVER_URL +
@@ -321,6 +334,7 @@ const mapStateToProps = state => ({
   userNickName: state.MeetingRoom.userNickName,
   testInput: state.MeetingRoom.testInput,
   me: state.mypage.me,
+  QnAmode: state.MeetingRoom.QnAmode,
 });
 
 const mapDispatchToProps = dispatch => {
@@ -335,6 +349,9 @@ const mapDispatchToProps = dispatch => {
     doScreenChange: selectNum => dispatch(ScreenChange(selectNum)),
     doChattingInputChange: testinput =>
       dispatch(ChattingInputChange(testinput)),
+    dochangeQnAMode: QnAmode => dispatch(changeQnAMode(QnAmode)),
+    doSetMySession: storeSession => dispatch(SetMySession(storeSession)),
+    doemoziListAdd: emozi => dispatch(emoziListAdd(emozi)),
   };
 };
 
