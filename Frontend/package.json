@@ -9,6 +9,8 @@
     "@mui/lab": "^5.0.0-alpha.65",
     "@mui/material": "^5.3.0",
     "@mui/styles": "^5.3.0",
+    "@teachablemachine/pose": "^0.8.6",
+    "@tensorflow/tfjs": "^3.13.0",
     "@testing-library/jest-dom": "^5.16.1",
     "@testing-library/react": "^12.1.2",
     "@testing-library/user-event": "^13.5.0",
