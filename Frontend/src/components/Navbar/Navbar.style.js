@@ -1,70 +1,103 @@
 import styled from 'styled-components';
-import { device } from '../../styles/variables';
+import { device, pointColor } from '../../styles/variables';
 
 const NavbarMain = styled.div`
+  height: 50%;
   display: flex;
-  margin: 20px;
   @media ${device.TabletPortrait} {
-    margin: 15px;
+    height: 100%;
   }
 `;
 const LeftMenu = styled.div`
-  width: 100%;
-  display: none;
+  opacity: 0;
   font-size: 30px;
-  text-align: left;
+  display: flex;
+  align-items: center;
+
+  color: white;
   @media ${device.TabletPortrait} {
-    display: block;
+    opacity: 1;
+  }
+  width: 30%;
+  #drawer {
+    margin-left: 0.8em;
   }
 `;
 const CenterMenu = styled.div`
-  margin-top: 5px;
-  text-align: center;
+  display: flex;
+  justify-content: center;
+  align-items: center;
   img {
-    width: 230px;
+    margin-top: 10px;
+    width: 200px;
   }
   @media ${device.TabletPortrait} {
     img {
-      width: 180px;
+      margin-top: 5px;
+      width: 140px;
     }
   }
+  width: 50%;
 `;
 const RightMenu = styled.div`
-  width: 100%;
   font-size: 17px;
-  text-align: right;
-  display: block;
+  display: flex;
+  align-items: center;
+  justify-content: right;
   font-size: 20px;
-  margin: 5px;
+  opacity: 1;
+  color: white;
   @media ${device.TabletPortrait} {
-    display: none;
+    opacity: 0;
+  }
+  width: 30%;
+  #name {
+    margin-right: 20px;
   }
 `;
 const NavbarSubBlock = styled.div`
   display: flex;
   justify-content: center;
-  visibility: hidden;
+  opacity: 0;
   @media ${device.TabletPortrait} {
     display: none;
   }
+  height: 40%;
 `;
 const SubMenu = styled.div`
   display: flex;
   justify-content: space-between;
+  align-items: center;
   ul li {
+    color: white;
     margin: 0 20px;
     text-align: center;
     float: left;
   }
 `;
 const NavbarWrapper = styled.div`
-  padding-bottom: 30px;
   &:hover ${NavbarSubBlock} {
-    visibility: visible;
+    opacity: 1;
     transition: 0.5s;
   }
+  height: 12vh;
   @media ${device.TabletPortrait} {
-    padding-bottom: 0px;
+    height: 10vh;
+  }
+`;
+
+const DrawerListRow = styled.div`
+  font-size: 20px;
+  text-align: center;
+  padding: 10px;
+  .name {
+    font-weight: bold;
+  }
+  .color {
+    &:hover {
+      color: ${pointColor};
+      font-weight: bold;
+    }
   }
 `;
 
@@ -76,4 +109,5 @@ export {
   RightMenu,
   NavbarSubBlock,
   SubMenu,
+  DrawerListRow,
 };

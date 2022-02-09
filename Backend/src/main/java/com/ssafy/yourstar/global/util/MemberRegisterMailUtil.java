@@ -22,7 +22,7 @@ public class MemberRegisterMailUtil {
         msg += "안녕하세요.<br />";
         msg += "Your Start에 가입해 주셔서 진심으로 감사드립니다.<br />";
         msg += "아래 <b style=\"color: #212121;\">'메일 인증'</b> 버튼을 클릭하여 회원가입을 완료해 주세요.<br />\n" + "감사합니다.\n" + "</p>";
-        msg += "<a style=\"color: #FFF; text-decoration: none; text-align: center;\" href=\"http://localhost:8080/api/members/register/approve/" + memberEmail +
+        msg += "<a style=\"color: #FFF; text-decoration: none; text-align: center;\" href=\"https://i6e204.p.ssafy.io/api/members/register/approve/" + memberEmail +
                 "\" target=\"_blank\"><p style=\"display: inline-block; width: 210px; height: 45px; margin: 30px 5px 40px; background: #212121; line-height: 45px; vertical-align: middle; font-size: 16px;\">메일 인증</p></a>\n" + "</div>";
 
         try {

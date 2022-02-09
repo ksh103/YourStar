@@ -1,218 +1,59 @@
-import React from 'react';
-import { Block } from '../../styles/variables.js';
-import Grid from '@mui/material/Grid';
+import React, { useEffect } from 'react';
+import { Block, blockColor, Layout, Wrapper } from '../../styles/variables.js';
+import Navbar from '../../components/Navbar/Navbar.jsx';
+import { FAQContent, FAQContentRow, FAQHeader } from './FAQ.style.js';
 import Accordion from '@mui/material/Accordion';
 import AccordionDetails from '@mui/material/AccordionDetails';
 import AccordionSummary from '@mui/material/AccordionSummary';
-// import Typography from '@mui/material/Typography';
-// import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
-
-export function customAccordion() {
-  return (
-    <Accordion>
-      <AccordionSummary
-        // expandIcon={<ExpandMoreIcon />}
-        aria-controls="panel1bh-content"
-        id="panel1bh-header"
-      >
-        <p>General settings</p>
-        <p Typography>I am an accordion</p>
-      </AccordionSummary>
-      <AccordionDetails>
-        <p>
-          Nulla facilisi. Phasellus sollicitudin nulla et quam mattis feugiat.
-          Aliquam eget maximus est, id dignissim quam.
-        </p>
-      </AccordionDetails>
-    </Accordion>
-  );
-}
+import { MdExpandMore } from 'react-icons/md';
+import Footer from '../../components/Footer/Footer.jsx';
+import { LOAD_FAQS_REQUEST } from '../../store/modules/faq';
+import { useDispatch, useSelector } from 'react-redux';
 
 export default function FAQ() {
+  const dispatch = useDispatch();
+  const { faqs, loadFaqsDone } = useSelector(state => state.faq);
+  useEffect(() => {
+    dispatch({
+      type: LOAD_FAQS_REQUEST,
+      data: { page: 1, size: 10 },
+    });
+  }, [dispatch]);
+  const FAQDate = () => {
+    return faqs.map(faq => (
+      <FAQContentRow key={faq.id}>
+        <Accordion>
+          <AccordionSummary
+            expandIcon={<MdExpandMore />}
+            sx={{ fontSize: '1.1em' }}
+          >
+            <div>{faq.faqTitle}</div>
+          </AccordionSummary>
+          <AccordionDetails sx={{ borderTop: `2px solid ${blockColor}` }}>
+            <div>{faq.faqContent}</div>
+          </AccordionDetails>
+        </Accordion>
+      </FAQContentRow>
+    ));
+  };
   return (
-    <Block>
-      <h1 style={{ color: 'black', paddingTop: '50px', paddingBottom: '50px' }}>
-        자주 묻는 질문
-      </h1>
-
-      <Grid sx={{ width: '80%', marginX: 'auto' }}>
-        <Accordion>
-          <AccordionSummary
-            // expandIcon={<ExpandMoreIcon />}
-            aria-controls="panel1bh-content"
-            id="panel1bh-header"
-          >
-            <p>General settings</p>
-            <p Typography>I am an accordion</p>
-          </AccordionSummary>
-          <AccordionDetails>
-            <p>
-              Nulla facilisi. Phasellus sollicitudin nulla et quam mattis
-              feugiat. Aliquam eget maximus est, id dignissim quam.
-            </p>
-          </AccordionDetails>
-        </Accordion>
-        <Accordion>
-          <AccordionSummary
-            // expandIcon={<ExpandMoreIcon />}
-            aria-controls="panel1bh-content"
-            id="panel1bh-header"
-          >
-            <p>General settings</p>
-            <p Typography>I am an accordion</p>
-          </AccordionSummary>
-          <AccordionDetails>
-            <p>
-              Nulla facilisi. Phasellus sollicitudin nulla et quam mattis
-              feugiat. Aliquam eget maximus est, id dignissim quam.
-            </p>
-          </AccordionDetails>
-        </Accordion>
-        <Accordion>
-          <AccordionSummary
-            // expandIcon={<ExpandMoreIcon />}
-            aria-controls="panel1bh-content"
-            id="panel1bh-header"
-          >
-            <p>General settings</p>
-            <p Typography>I am an accordion</p>
-          </AccordionSummary>
-          <AccordionDetails>
-            <p>
-              Nulla facilisi. Phasellus sollicitudin nulla et quam mattis
-              feugiat. Aliquam eget maximus est, id dignissim quam.
-            </p>
-          </AccordionDetails>
-        </Accordion>
-        <Accordion>
-          <AccordionSummary
-            // expandIcon={<ExpandMoreIcon />}
-            aria-controls="panel1bh-content"
-            id="panel1bh-header"
-          >
-            <p>General settings</p>
-            <p Typography>I am an accordion</p>
-          </AccordionSummary>
-          <AccordionDetails>
-            <p>
-              Nulla facilisi. Phasellus sollicitudin nulla et quam mattis
-              feugiat. Aliquam eget maximus est, id dignissim quam.
-            </p>
-          </AccordionDetails>
-        </Accordion>
-        <Accordion>
-          <AccordionSummary
-            // expandIcon={<ExpandMoreIcon />}
-            aria-controls="panel1bh-content"
-            id="panel1bh-header"
-          >
-            <p>General settings</p>
-            <p Typography>I am an accordion</p>
-          </AccordionSummary>
-          <AccordionDetails>
-            <p>
-              Nulla facilisi. Phasellus sollicitudin nulla et quam mattis
-              feugiat. Aliquam eget maximus est, id dignissim quam.
-            </p>
-          </AccordionDetails>
-        </Accordion>
-        <Accordion>
-          <AccordionSummary
-            // expandIcon={<ExpandMoreIcon />}
-            aria-controls="panel1bh-content"
-            id="panel1bh-header"
-          >
-            <p>General settings</p>
-            <p Typography>I am an accordion</p>
-          </AccordionSummary>
-          <AccordionDetails>
-            <p>
-              Nulla facilisi. Phasellus sollicitudin nulla et quam mattis
-              feugiat. Aliquam eget maximus est, id dignissim quam.
-            </p>
-          </AccordionDetails>
-        </Accordion>
-        <Accordion>
-          <AccordionSummary
-            // expandIcon={<ExpandMoreIcon />}
-            aria-controls="panel1bh-content"
-            id="panel1bh-header"
-          >
-            <p>General settings</p>
-            <p Typography>I am an accordion</p>
-          </AccordionSummary>
-          <AccordionDetails>
-            <p>
-              Nulla facilisi. Phasellus sollicitudin nulla et quam mattis
-              feugiat. Aliquam eget maximus est, id dignissim quam.
-            </p>
-          </AccordionDetails>
-        </Accordion>
-        <Accordion>
-          <AccordionSummary
-            // expandIcon={<ExpandMoreIcon />}
-            aria-controls="panel1bh-content"
-            id="panel1bh-header"
-          >
-            <p>General settings</p>
-            <p Typography>I am an accordion</p>
-          </AccordionSummary>
-          <AccordionDetails>
-            <p>
-              Nulla facilisi. Phasellus sollicitudin nulla et quam mattis
-              feugiat. Aliquam eget maximus est, id dignissim quam.
-            </p>
-          </AccordionDetails>
-        </Accordion>
-        <Accordion>
-          <AccordionSummary
-            // expandIcon={<ExpandMoreIcon />}
-            aria-controls="panel1bh-content"
-            id="panel1bh-header"
-          >
-            <p>General settings</p>
-            <p Typography>I am an accordion</p>
-          </AccordionSummary>
-          <AccordionDetails>
-            <p>
-              Nulla facilisi. Phasellus sollicitudin nulla et quam mattis
-              feugiat. Aliquam eget maximus est, id dignissim quam.
-            </p>
-          </AccordionDetails>
-        </Accordion>
-        <Accordion>
-          <AccordionSummary
-            // expandIcon={<ExpandMoreIcon />}
-            aria-controls="panel1bh-content"
-            id="panel1bh-header"
-          >
-            <p style={{ marginY: '20px' }}>aaGeneral settings</p>
-            <p>I am an accordion</p>
-          </AccordionSummary>
-          <AccordionDetails>
-            <p>
-              Nulla facilisi. Phasellus sollicitudin nulla et quam mattis
-              feugiat. Aliquam eget maximus est, id dignissim quam.
-            </p>
-          </AccordionDetails>
-        </Accordion>
-        <Accordion>
-          <AccordionSummary
-            // expandIcon={<ExpandMoreIcon />}
-            aria-controls="panel1bh-content"
-            id="panel1bh-header"
-          >
-            <p>General settings</p>
-            <p Typography>I am an accordion</p>
-          </AccordionSummary>
-          <AccordionDetails>
-            <p>
-              Nulla facilisi. Phasellus sollicitudin nulla et quam mattis
-              feugiat. Aliquam eget maximus est, id dignissim quam.
-            </p>
-          </AccordionDetails>
-        </Accordion>
-      </Grid>
-    </Block>
+    <Layout>
+      <Navbar />
+      <Wrapper>
+        <Block>
+          {loadFaqsDone && (
+            <>
+              <FAQHeader>자주 묻는 질문</FAQHeader>
+              <FAQContent>
+                <div id="faq">
+                  <div id="faq2">{FAQDate()}</div>
+                </div>
+              </FAQContent>
+            </>
+          )}
+        </Block>
+      </Wrapper>
+      <Footer />
+    </Layout>
   );
 }

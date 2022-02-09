@@ -10,7 +10,7 @@ import javax.persistence.*;
 @Getter
 @Setter
 @Entity
-@ApiModel(value = "자주 묻는 질문")
+@ApiModel(value = "Faq", description = "자주 묻는 질문")
 @Table(name = "faq")
 public class Faq {
     @ApiModelProperty(value = "FAQ 구분 번호")

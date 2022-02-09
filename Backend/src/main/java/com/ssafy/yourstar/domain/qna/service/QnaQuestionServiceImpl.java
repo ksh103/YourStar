@@ -1,23 +1,18 @@
 package com.ssafy.yourstar.domain.qna.service;
 
-import com.ssafy.yourstar.domain.member.db.entity.Member;
 import com.ssafy.yourstar.domain.member.db.repository.MemberRepository;
 import com.ssafy.yourstar.domain.qna.db.entity.QnaQuestion;
 import com.ssafy.yourstar.domain.qna.db.repository.QnaQuestionRepository;
-import com.ssafy.yourstar.domain.qna.request.QnaListGetReq;
 import com.ssafy.yourstar.domain.qna.request.QnaQuestionModifyPutReq;
 import com.ssafy.yourstar.domain.qna.request.QnaQuestionRegisterPostReq;
-import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
-import java.util.List;
 
 @Service
-@Slf4j
 public class QnaQuestionServiceImpl implements QnaQuestionService {
 
     @Autowired
@@ -32,18 +27,22 @@ public class QnaQuestionServiceImpl implements QnaQuestionService {
 
         qnaQuestion.setQuestionTitle(qnaQuestionRegister.getQuestionTitle());
         qnaQuestion.setQuestionContent(qnaQuestionRegister.getQuestionContent());
-
-        // 질문과 사용자 매핑하기
-        Member member = memberRepository.findById(qnaQuestionRegister.getMemberId()).get();
-        qnaQuestion.setMember(member);
+        qnaQuestion.setMemberId(qnaQuestionRegister.getMemberId());
 
         return qnaQuestionRepository.save(qnaQuestion);
     }
 
     @Override
-    public Page<QnaQuestion> qnaList(QnaListGetReq qnaList, int page, int size) {
+    public Page<QnaQuestion> qnaList(int page, int size) {
         PageRequest pageRequest = PageRequest.of(page - 1, size, Sort.by("questionId").descending());
-        Page<QnaQuestion> qna = qnaQuestionRepository.findAllByMember_MemberId(qnaList.getMemberId(), pageRequest);
+        Page<QnaQuestion> qna = qnaQuestionRepository.findAll(pageRequest);
+        return qna;
+    }
+
+    @Override
+    public Page<QnaQuestion> qnaListByMemberId(int memberId, int page, int size) {
+        PageRequest pageRequest = PageRequest.of(page - 1, size, Sort.by("questionId").descending());
+        Page<QnaQuestion> qna = qnaQuestionRepository.findAllByMemberId(memberId, pageRequest);
         return qna;
     }
 

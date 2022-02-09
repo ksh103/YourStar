@@ -1,44 +1,97 @@
-import React from 'react';
-import Grid from '@mui/material/Grid';
-import { createTheme, ThemeProvider } from '@mui/material/styles';
-import { LoginSignupBlock } from '../Login/Login.style';
+import React, { useEffect, useState } from 'react';
+import { Layout, Wrapper } from '../../styles/variables';
+import Navbar from '../../components/Navbar/Navbar';
+import Footer from '../../components/Footer/Footer';
+import {
+  LoginBlock,
+  LoginContent,
+  LoginContentRow,
+  LoginHeader,
+} from './Login.style';
+import { LOG_IN_REQUEST } from '../../store/modules/member';
+import { Link, useHistory } from 'react-router-dom';
+import { useDispatch, useSelector } from 'react-redux';
 
-import { FiveGrid, SevenGrid, LoginGrid } from '../Login/DividGrid';
-
-const theme = createTheme({
-  palette: {
-    primary: {
-      // Purple and green play nicely together.
-      main: '#e57373',
-    },
-    secondary: {
-      // This is green.A700 as hex.
-      main: '#11cb5f',
-    },
-  },
-});
-
-// import Box from '@mui/material/Box';
-// import { innerDiv } from './Login.style';
-// import FormHelperText from '@mui/material/FormHelperText';
-// import Visibility from '@mui/icons-material/Visibility';
-// import VisibilityOff from '@mui/icons-material/VisibilityOff';
 export default function Login() {
-  const [values, setValues] = React.useState({
-    amount: '',
-    password: '',
-    weight: '',
-    weightRange: '',
-    showPassword: false,
-  });
+  const dispatch = useDispatch();
+  const history = useHistory();
 
-  const handleChange = prop => event => {
-    setValues({ ...values, [prop]: event.target.value });
+  const [id, SetId] = useState('');
+  const [pw, SetPw] = useState('');
+  const { logInDone } = useSelector(state => state.member);
+
+  useEffect(() => {
+    // 로그인 처리 되었을 때 main으로 이동
+    if (logInDone) {
+      history.push('/');
+    }
+  }, [logInDone, history]);
+
+  const LoginButton = () => {
+    if (id === '') {
+      alert('아이디를 입력하세요');
+    } else if (pw === '') {
+      alert('패스워드를 입력하세요');
+    } else {
+      dispatch({
+        type: LOG_IN_REQUEST,
+        data: { id: id, pw: pw },
+      });
+      // done 일 때 메인으로 이동하기, 어떤 값으로 이동하냐?
+    }
   };
 
   return (
-    <LoginSignupBlock>
-      <LoginGrid></LoginGrid>
-    </LoginSignupBlock>
+    <Layout>
+      <Navbar />
+      <Wrapper>
+        <LoginBlock>
+          <LoginHeader>
+            <div id="title">LOGIN</div>
+            <div id="word">당신의 스타를 만나보세요!</div>
+          </LoginHeader>
+          <LoginContent>
+            <LoginContentRow>
+              <input
+                id="id"
+                type="text"
+                placeholder="id"
+                onChange={e => {
+                  SetId(e.target.value);
+                }}
+              />
+            </LoginContentRow>
+            <LoginContentRow>
+              <input
+                type="password"
+                placeholder="password"
+                onChange={e => {
+                  SetPw(e.target.value);
+                }}
+              />
+            </LoginContentRow>
+            <LoginContentRow>
+              <button id="login-button" onClick={() => LoginButton()}>
+                로그인
+              </button>
+            </LoginContentRow>
+            <LoginContentRow>
+              <div id="footer">
+                <p>아직 회원이 아니신가요?</p>
+                <br />
+                <Link to="/signup" style={{ color: 'gray' }}>
+                  회원가입
+                </Link>
+                &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;
+                <Link to="/find/password" style={{ color: 'gray' }}>
+                  비밀번호 찾기
+                </Link>
+              </div>
+            </LoginContentRow>
+          </LoginContent>
+        </LoginBlock>
+      </Wrapper>
+      <Footer />
+    </Layout>
   );
 }

@@ -1,7 +1,6 @@
 import React from 'react';
 import { BrowserRouter, Route, Switch } from 'react-router-dom';
-import Navbar from './components/Navbar/Navbar';
-import Footer from './components/Footer/Footer';
+import PrivateRoute from './utils/PrivateRoute';
 import {
   Admin,
   Apply,
@@ -11,50 +10,84 @@ import {
   Room,
   Schedule,
   Signup,
-  Detail,
+  ScheduleDetail,
+  FindPassword,
+  RoomDongJun,
+  RoomEunSeong,
+  RoomSumin,
+  AdminMeetingDetail,
+  Login,
+  MypageDetail,
+  RoomJisul,
+  RoomYoungWon,
+  RoomSohyun,
 } from './pages/index';
-import Login from './pages/Login/Login';
 import GlobalStyle from './styles/global';
+import Pay from './components/Pay/Pay';
 
 function App() {
   return (
     <>
       <GlobalStyle />
       <BrowserRouter>
-        <Navbar />
         <Switch>
           <Route exact path="/">
             <Main />
           </Route>
-          <Route path="/login">
+          <Route exact path="/login">
             <Login />
           </Route>
-          <Route path="/signup">
+          <Route exact path="/signup">
             <Signup />
           </Route>
-          <Route path="/faq">
+          <Route exact path="/faq">
             <FAQ />
           </Route>
-          <Route path="/apply">
+          <Route exact path="/apply">
             <Apply />
           </Route>
-          <Route path="/admin">
+          <Route exact path="/admin/:id">
+            <AdminMeetingDetail />
+          </Route>
+          <Route exact path="/admin">
             <Admin />
           </Route>
-          <Route path="/schedule">
+          <Route exact path="/schedule/:id">
+            <ScheduleDetail />
+          </Route>
+          <Route exact path="/schedule">
             <Schedule />
           </Route>
-          <Route path="/mypage">
+          <Route exact path="/mypage">
             <Mypage />
           </Route>
-          <Route path="/room/:id">
-            <Room />
+          <Route exact path="/find/password">
+            <FindPassword />
           </Route>
-          <Route path="/detail/:id">
-            <Detail />
+          <Route exact component={Pay} path="/pay" />
+          <Route exact component={Room} path="/room/:id" />
+          <Route path="/mypage/:id">
+            <MypageDetail />
+          </Route>
+          <Route path="/DongJun">
+            <RoomDongJun />
+          </Route>
+          <Route path="/EunSeong">
+            <RoomEunSeong />
+          </Route>
+          <Route path="/Sumin">
+            <RoomSumin />
+          </Route>
+          <Route path="/Sohyun">
+            <RoomSohyun />
+          </Route>
+          <Route path="/YoungWon">
+            <RoomYoungWon />
+          </Route>
+          <Route path="/Jisul">
+            <RoomJisul />
           </Route>
         </Switch>
-        <Footer />
       </BrowserRouter>
     </>
   );

@@ -4,10 +4,9 @@ import com.ssafy.yourstar.domain.faq.db.entity.Faq;
 import com.ssafy.yourstar.domain.faq.db.repository.FaqRepository;
 import com.ssafy.yourstar.domain.faq.request.FaqRegisterPostReq;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.domain.Sort;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
-
-import java.util.List;
 
 @Service
 public class FaqServiceImpl implements FaqService{
@@ -26,8 +25,9 @@ public class FaqServiceImpl implements FaqService{
     }
 
     @Override
-    public List<Faq> faqList() {
-        return faqRepository.findAll(Sort.by("noticeId").descending());
+    public Page<Faq> faqList(int page, int size) {
+        PageRequest pageRequest = PageRequest.of(page - 1, size);
+        return faqRepository.findAll(pageRequest);
     }
 
     @Override

@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import moment from 'moment';
 import {
   SchduleCalendarWrapper,
@@ -9,18 +9,23 @@ import {
 } from './ScheduleCalendar.style';
 import { MdChevronLeft, MdChevronRight } from 'react-icons/md';
 import ScheduleCalendarDay from './ScheduleCalendarDay';
+import { useDispatch, useSelector } from 'react-redux';
+import { TOTAL_MEETINGS_REQUEST } from '../../../store/modules/meeting';
 
-const meeting = [
-  {
-    id: 1,
-    name: '김다미 팬미팅1',
-    meeting_start_date: '2022-01-30 14:00:00',
-  },
-];
-const dd = new Date(meeting[0].meeting_start_date);
-console.log(dd);
 export default function ScheduleCalendar() {
+  const dispatch = useDispatch();
+  const { totalMeetings, totalMeetingsDone, totalMeetingsLoading } =
+    useSelector(state => state.meeting);
   const [date, setDate] = useState(moment());
+  useEffect(() => {
+    if (!totalMeetingsDone && !totalMeetingsLoading) {
+      dispatch({
+        type: TOTAL_MEETINGS_REQUEST,
+        data: { page: 1, size: 10 },
+      });
+    }
+  }, [dispatch, totalMeetingsDone, totalMeetingsLoading]);
+
   const movePrevMonth = () => {
     setDate(date.clone().subtract(1, 'month'));
   };
@@ -49,7 +54,6 @@ export default function ScheduleCalendar() {
                 .week(w)
                 .startOf('week')
                 .add(n + i, 'day');
-
               // 오늘이 current와 같다면우선 ' 선택'으로 두자
               let isToday =
                 moment().format('YYYYMMDD') === current.format('YYYYMMDD')
@@ -60,11 +64,18 @@ export default function ScheduleCalendar() {
               let isGrayed =
                 current.format('MM') !== date.format('MM') ? 'grayed' : '';
 
+              const schedule = totalMeetings.filter(
+                meeting =>
+                  meeting.approve &&
+                  current.format('YYYY-MM-DD') ===
+                    meeting.startDate.slice(0, 10)
+              );
               return (
                 <ScheduleCalendarDay
                   className={`${isToday} ${isGrayed}`}
                   key={i}
                   date={current.format('D')}
+                  meetings={schedule}
                 />
               );
             })}
@@ -90,7 +101,7 @@ export default function ScheduleCalendar() {
           <Dow>FRI</Dow>
           <Dow color="#4b87ff">SAT</Dow>
         </Weekend>
-        {generate()}
+        {totalMeetingsDone && generate()}
       </DateContainer>
     </SchduleCalendarWrapper>
   );

@@ -13,7 +13,7 @@ import java.time.LocalDateTime;
 @Getter
 @Setter
 @Entity
-@ApiModel(value = "공지사항")
+@ApiModel(value = "Notice", description = "공지사항")
 @Table(name = "notice")
 public class Notice {
     @ApiModelProperty(value = "공지사항 구분 번호")

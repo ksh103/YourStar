@@ -1,17 +1,30 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import ScheduleCard from './ScheduleCard';
-const datas = [
-  { id: 1, poster: '사진', title: '김다미1 팬미팅', date: '2022/02/02 2pm' },
-  { id: 2, poster: '사진', title: '김다미2 팬미팅', date: '2022/02/02 2pm' },
-  { id: 3, poster: '사진', title: '김다미3 팬미팅', date: '2022/02/02 2pm' },
-  { id: 4, poster: '사진', title: '김다미4 팬미팅', date: '2022/02/02 2pm' },
-];
+import { useDispatch, useSelector } from 'react-redux';
+import { APPROVED_MEETINGS_REQUEST } from '../../../store/modules/meeting';
+
 export default function ScheduleList() {
+  const dispatch = useDispatch();
+  const { approvedMeetings, approvedMeetingsDone, approvedMeetingsLoading } =
+    useSelector(state => state.meeting);
+  useEffect(() => {
+    if (!approvedMeetingsDone && !approvedMeetingsLoading) {
+      dispatch(
+        {
+          type: APPROVED_MEETINGS_REQUEST,
+          data: { page: 1, size: 100 },
+        },
+        [dispatch]
+      );
+    }
+  });
+
   return (
     <>
-      {datas.map(item => (
-        <ScheduleCard key={item.id} data={item} />
-      ))}
+      {approvedMeetingsDone &&
+        approvedMeetings.map(meeting => (
+          <ScheduleCard key={meeting.id} meeting={meeting} />
+        ))}
     </>
   );
 }

@@ -12,9 +12,9 @@ import lombok.Setter;
 @Setter
 @ApiModel("BaseResponseBody")
 public class BaseResponseBody {
-	@ApiModelProperty(name="응답 메시지", example = "정상")
+	@ApiModelProperty(value = "응답 메시지", example = "정상")
 	String message = null;
-	@ApiModelProperty(name="응답 코드", example = "200")
+	@ApiModelProperty(value = "응답 코드", example = "200")
 	Integer statusCode = null;
 	
 	public BaseResponseBody() {}

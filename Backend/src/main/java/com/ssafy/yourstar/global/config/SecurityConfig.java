@@ -1,7 +1,7 @@
 package com.ssafy.yourstar.global.config;
 
 import com.ssafy.yourstar.global.auth.JwtAuthenticationFilter;
-import com.ssafy.yourstar.global.auth.MemberDetaillService;
+import com.ssafy.yourstar.global.auth.MemberDetailService;
 import com.ssafy.yourstar.domain.member.service.MemberService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
@@ -21,10 +21,10 @@ import org.springframework.security.crypto.password.PasswordEncoder;
  */
 @Configuration
 @EnableWebSecurity
-@EnableGlobalMethodSecurity(prePostEnabled = true)
+@EnableGlobalMethodSecurity(prePostEnabled = true, securedEnabled = true)
 public class SecurityConfig extends WebSecurityConfigurerAdapter {
     @Autowired
-    private MemberDetaillService memberDetaillService;
+    private MemberDetailService memberDetailService;
 
     @Autowired
     private MemberService memberService;
@@ -41,7 +41,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
     DaoAuthenticationProvider authenticationProvider() {
         DaoAuthenticationProvider daoAuthenticationProvider = new DaoAuthenticationProvider();
         daoAuthenticationProvider.setPasswordEncoder(passwordEncoder());
-        daoAuthenticationProvider.setUserDetailsService(this.memberDetaillService);
+        daoAuthenticationProvider.setUserDetailsService(this.memberDetailService);
         return daoAuthenticationProvider;
     }
 
@@ -59,18 +59,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .and()
                 .addFilter(new JwtAuthenticationFilter(authenticationManager(), memberService)) //HTTP 요청에 JWT 토큰 인증 필터를 거치도록 필터를 추가
                 .authorizeRequests()
-                .antMatchers("/api/v3**", "/health", "/swagger-ui.html", "/swagger*/**", "/swagger-resources/**", "/webjars/**", "/v3/api-docs", "/api/**", "/api/members", "/api/members/login").permitAll()
-    	        	    .anyRequest().authenticated().and().cors();
+                .antMatchers("/api/v3**", "/health", "/swagger-ui.html", "/swagger*/**", "/swagger-resources/**", "/webjars/**", "/v3/api-docs", "/api/**").permitAll()
+                    .anyRequest().authenticated().and().cors();
     }
-
-//    @Override
-//    public void configure(WebSecurity web) throws Exception {
-//        web.ignoring()
-//                .antMatchers(
-//                        "/v3/**",
-//                        "/webjars/**",
-//                        "/swagger**",
-//                        "swagger-resources/**"
-//                );
-//    }
 }

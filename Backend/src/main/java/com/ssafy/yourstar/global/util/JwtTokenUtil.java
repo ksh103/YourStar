@@ -6,6 +6,7 @@ import com.auth0.jwt.algorithms.Algorithm;
 import com.auth0.jwt.exceptions.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.stereotype.Component;
 
 import java.time.Instant;
@@ -22,13 +23,13 @@ public class JwtTokenUtil {
     public static final String TOKEN_PREFIX = "Bearer";
     public static final String HEADER_STRING = "Authorization";
     public static final String ISSUER = "ssafy.com";
-    
+
     @Autowired
-	public JwtTokenUtil(@Value("${jwt.secret}") String secretKey, @Value("${jwt.expiration}") Integer expirationTime) {
+	public JwtTokenUtil(@Value("${jwt.secret}") String secretKey, @Value("${jwt.expiration}") Integer expirationTime, UserDetailsService userDetailsService) {
 		this.secretKey = secretKey;
 		this.expirationTime = expirationTime;
-	}
-    
+    }
+
 	public void setExpirationTime() {
     		//JwtTokenUtil.expirationTime = Integer.parseInt(expirationTime);
     		JwtTokenUtil.expirationTime = expirationTime;
@@ -40,17 +41,14 @@ public class JwtTokenUtil {
                 .withIssuer(ISSUER)
                 .build();
     }
-    
-    public static String getMemberLoginToken(String memberEmail, int code, String memberNick, Boolean isLogin ) {
-    		Date expires = JwtTokenUtil.getTokenExpiration(expirationTime);
+
+    public static String getMemberLoginToken(String memberEmail) {
+        Date expires = JwtTokenUtil.getTokenExpiration(expirationTime);
         return JWT.create()
-                .withClaim("memberEmail", memberEmail)
-                .withClaim("code", code)
-                .withClaim("memberNick", memberNick)
-                .withClaim("isLogin", isLogin)
-//                .withExpiresAt(expires)
-//                .withIssuer(ISSUER)
-//                .withIssuedAt(Date.from(LocalDateTime.now().atZone(ZoneId.systemDefault()).toInstant()))
+                .withSubject(memberEmail)
+                .withExpiresAt(expires)
+                .withIssuer(ISSUER)
+                .withIssuedAt(Date.from(LocalDateTime.now().atZone(ZoneId.systemDefault()).toInstant()))
                 .sign(Algorithm.HMAC512(secretKey.getBytes()));
     }
 

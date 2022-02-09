@@ -1,5 +1,6 @@
 package com.ssafy.yourstar.domain.meeting.db.entity;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.Getter;
@@ -22,8 +23,10 @@ public class MeetingImgPath {
     private int fileId;
 
     @ApiModelProperty(value = "팬미팅 구분 번호", required = true)
-    @Column(name = "meeting_id")
-    private int meetingId;
+    @OneToOne
+    @JoinColumn(name = "meeting_id")
+    @JsonBackReference
+    private Meeting meetingId;
 
     @ApiModelProperty(value = "파일명", required = true)
     @Column(name = "file_name")
@@ -31,7 +34,7 @@ public class MeetingImgPath {
 
     @ApiModelProperty(value = "파일 크기", required = true)
     @Column(name = "file_size")
-    private int fileSize;
+    private Long fileSize;
 
     @ApiModelProperty(value = "파일 확장자명", required = true)
     @Column(name = "file_content_type")

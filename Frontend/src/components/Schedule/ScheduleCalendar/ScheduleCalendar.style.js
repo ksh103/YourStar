@@ -1,5 +1,9 @@
 import styled from 'styled-components';
-import { pointColor } from '../../../styles/variables';
+import {
+  blockColor,
+  pointColor,
+  scheduleColor,
+} from '../../../styles/variables';
 const SchduleCalendarWrapper = styled.div`
   width: 100%;
   height: 100%;
@@ -7,11 +11,12 @@ const SchduleCalendarWrapper = styled.div`
 `;
 
 const Header = styled.div`
-  height: 7vh;
+  color: black;
+  height: 7%;
   display: flex;
   justify-content: center;
   align-items: center;
-  font-size: 20px;
+  font-size: 22px;
 
   & > span {
     margin: 0 50px;
@@ -36,7 +41,7 @@ const Dow = styled.div`
   width: 100%;
   height: 35px;
   text-align: center;
-  font-size: 17px;
+  font-size: 15px;
   font-weight: bold;
   color: ${props => (props.color ? props.color : 'black')};
   border-bottom: 1px solid gray;
@@ -50,6 +55,8 @@ const DayBlock = styled.div`
   flex-direction: column;
   flex-wrap: nowrap;
   overflow: hidden;
+  color: black;
+  font-size: 0.8em;
   &.grayed {
     color: gray;
   }
@@ -68,15 +75,19 @@ const DayBlock = styled.div`
 `;
 
 const PlanButton = styled.span`
+  background-color: ${props =>
+    props.color === -1 ? 'lightgray' : scheduleColor[props.color % 6]};
   text-align: center;
-  font-size: 15px;
+  font-size: 14px;
+  font-weight: bold;
   overflow: hidden;
   text-overflow: ellipsis;
   white-space: nowrap;
   height: 20px;
   width: 100%;
-  border-radius: 7px;
-  color: white;
+  border-radius: 15px;
+  color: black;
+
   cursor: pointer;
 `;
 export {

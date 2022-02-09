@@ -5,8 +5,8 @@ import com.ssafy.yourstar.domain.meeting.db.entity.ApplicantID;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
-import java.util.Optional;
-
 @Repository
 public interface ApplicantRepository extends JpaRepository<Applicant, ApplicantID> {
+    // joinColumn 을 사용했을 때
+//    Page<Applicant> findAllByMemberId(int memberId, Pageable pageable);
 }
