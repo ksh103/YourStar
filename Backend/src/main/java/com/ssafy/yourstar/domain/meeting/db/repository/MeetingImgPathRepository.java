@@ -16,4 +16,6 @@ public interface MeetingImgPathRepository extends JpaRepository<MeetingImgPath, 
 
     @Query(value = "SELECT fileId FROM MeetingImgPath WHERE meetingId = :meetingId")
     List<Integer> findFileIdBymeetingId(@Param("meetingId") int meetingId);
+
+    MeetingImgPath findMeetingImgPathByFileId(int fileId);
 }

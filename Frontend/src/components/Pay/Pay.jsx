@@ -7,7 +7,7 @@ import Footer from '../Footer/Footer';
 import { INSERT_FANMEETING_REQUEST } from '../../store/modules/fan';
 import { Link } from 'react-router-dom';
 import { PayWrapper, PayBlock } from './Pay.style';
-import { KAKAO_ADMIN_KEY } from '../../utils/dev';
+import { KAKAO_ADMIN_KEY } from '../utils/dev';
 
 export default function Pay(props) {
   const { me, myPageDone } = useSelector(state => state.mypage);
