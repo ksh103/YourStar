@@ -1,7 +1,8 @@
 import React from 'react';
 import styled from 'styled-components';
-
+import StarVideoComponent from '../../../../pages/Room/StarVideoComponent';
 import { MainDiv } from './Main.style';
+import { useSelector } from 'react-redux';
 
 const StarScreen = styled.div`
   overflow: auto;
@@ -14,9 +15,16 @@ const StarScreen = styled.div`
 `;
 
 export default function DefaultUserScreen() {
+  const { mainStreamManager } = useSelector(state => ({
+    mainStreamManager: state.MeetingRoom.mainStreamManager,
+  }));
   return (
     <MainDiv>
-      <StarScreen></StarScreen>
+      <StarScreen>
+        {mainStreamManager && (
+          <StarVideoComponent streamManager={mainStreamManager} />
+        )}
+      </StarScreen>
     </MainDiv>
   );
 }

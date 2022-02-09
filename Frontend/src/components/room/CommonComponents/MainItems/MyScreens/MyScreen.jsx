@@ -1,7 +1,7 @@
 import React from 'react';
 import styled from 'styled-components';
 import { MyScreenDiv } from '../Main.style';
-import { useSelector, useDispatch } from 'react-redux';
+import { useSelector } from 'react-redux';
 import UserVideoComponent from '../../../../../pages/Room/DongJun/UserVideoComponent';
 
 const QuestionMyScreen = styled.div`

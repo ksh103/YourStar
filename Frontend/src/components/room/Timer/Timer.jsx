@@ -1,10 +1,14 @@
 import React, { useEffect, useRef, useState } from 'react';
+import { useDispatch } from 'react-redux';
+import { PlusIndex } from '../../../store/modules/meetingRoom';
 
 export default function Timer() {
-  const [min, setMin] = useState(3);
-  const [sec, setSec] = useState(0);
-  const time = useRef(180);
+  const [min, setMin] = useState(0);
+  const [sec, setSec] = useState(10);
+  const time = useRef(10);
   const timerId = useRef(null);
+
+  const dispatch = useDispatch();
 
   useEffect(() => {
     timerId.current = setInterval(() => {
@@ -16,13 +20,12 @@ export default function Timer() {
     return () => clearInterval(timerId.current);
   }, []);
   useEffect(() => {
-    // 만약 타임 아웃이 발생했을 경우
-    if (time.current <= 0) {
-      alert('타임아웃');
-      clearInterval(timerId.current);
-      // dispatch event
+    // 시간 종료시 마다 새로운 사람을 데려오기
+    if (time.current < 0) {
+      time.current = 10;
+      dispatch(PlusIndex());
     }
-  }, [sec]);
+  }, [sec, dispatch]);
 
   return (
     <div className="timer">

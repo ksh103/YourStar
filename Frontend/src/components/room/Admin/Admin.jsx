@@ -1,6 +1,6 @@
 import React from 'react';
 import styled from 'styled-components';
-import DefaultUserScreen from '../CommonComponents/MainItems/DefaultUserScreen';
+import DefaultStarScreen from '../CommonComponents/MainItems/DefaultStarScreen';
 import LongStick from '../CommonComponents/BottomItems/LongStick';
 import ScheduleListSelect from '../CommonComponents/RightSideItems/Star/ScheduleListSelect';
 import SmallChatting from '../CommonComponents/RightSideItems/Chatting/SmallChatting';
@@ -14,7 +14,7 @@ const BackgroundDiv = styled.div`
 export default function Admin() {
   return (
     <BackgroundDiv>
-      <DefaultUserScreen></DefaultUserScreen>
+      <DefaultStarScreen></DefaultStarScreen>
       <ScheduleListSelect></ScheduleListSelect>
       <SmallChatting></SmallChatting>
       <LongStick></LongStick>
