@@ -30,11 +30,11 @@ export default function AdminMeetingList() {
       <Table aria-label="simple table">
         <TableHead>
           <TableRow>
-            <TableCell>미팅번호</TableCell>
-            <TableCell>멤버코드</TableCell>
-            <TableCell>미팅제목</TableCell>
-            <TableCell>미팅날짜</TableCell>
-            <TableCell>승인상태</TableCell>
+            <TableCell sx={{ fontSize: '1.2rem' }}>미팅번호</TableCell>
+            <TableCell sx={{ fontSize: '1.2rem' }}>멤버코드</TableCell>
+            <TableCell sx={{ fontSize: '1.2rem' }}>미팅제목</TableCell>
+            <TableCell sx={{ fontSize: '1.2rem' }}>미팅날짜</TableCell>
+            <TableCell sx={{ fontSize: '1.2rem' }}>승인상태</TableCell>
           </TableRow>
         </TableHead>
         <TableBody>
@@ -43,13 +43,13 @@ export default function AdminMeetingList() {
               key={row.id}
               sx={{ '&:last-child td, &:last-child th': { border: 0 } }}
             >
-              <TableCell component="th" scope="row">
+              <TableCell component="th" scope="row" sx={{ fontSize: '1.2rem' }}>
                 <Link to={`/admin/${row.id}`}>{row.id}</Link>
               </TableCell>
-              <TableCell>{row.code}</TableCell>
-              <TableCell>{row.name}</TableCell>
-              <TableCell>{row.startDate}</TableCell>
-              <TableCell>
+              <TableCell sx={{ fontSize: '1.2rem' }}>{row.code}</TableCell>
+              <TableCell sx={{ fontSize: '1.2rem' }}>{row.name}</TableCell>
+              <TableCell sx={{ fontSize: '1.2rem' }}>{row.startDate}</TableCell>
+              <TableCell sx={{ fontSize: '1.2rem' }}>
                 {!row.approve ? (
                   <AdminMeetingApproveButton color={0}>
                     대기
