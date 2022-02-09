@@ -12,6 +12,8 @@ const ADD_QNA_LIST = 'ADD_QNA_LIST';
 const MY_SESSION_DEFIND = 'MY_SESSION_DEFIND';
 const EMOZI_LIST_ADD = 'EMOZI_LIST_ADD';
 const QNA_TOGGLE_CHANGE = 'QNA_TOGGLE_CHANGE';
+const SIGNAL_OX = 'SIGNAL_OX';
+const OX_GAME_COUNT = 'OX_GAME_COUNT';
 
 // QnA 모드를 변경하기위한 action
 // 스타가 의 조작에 대한 action이라고 이해하면 된다.
@@ -121,6 +123,19 @@ export const changeQnAtoggle = toggle => {
   };
 };
 
+export const signalOX = signal => {
+  return {
+    type: SIGNAL_OX,
+    payload: signal,
+  };
+};
+
+export const oxGameRound = () => {
+  return {
+    type: OX_GAME_COUNT,
+  };
+};
+
 // 평소 컴포넌트에서 선언하던 state들!
 const initialState = {
   // 초기에는 시작 안한 상태!
@@ -139,6 +154,8 @@ const initialState = {
   storeSession: undefined,
   emoziList: [],
   StarQnAtoggle: false,
+  OXsignal: null,
+  OXgameCount: 0,
 };
 
 const MeetingRoom = (state = initialState, action) => {
@@ -206,6 +223,12 @@ const MeetingRoom = (state = initialState, action) => {
       return {
         ...state,
         StarQnAtoggle: !action.payload,
+      };
+    case OX_GAME_COUNT:
+      const prevCount = state.OXgameCount;
+      return {
+        ...state,
+        OXgameCount: prevCount + 1,
       };
     default:
       return state; // 기본 값 반환!

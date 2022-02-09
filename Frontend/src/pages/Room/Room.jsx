@@ -17,6 +17,8 @@ import {
   SetMySession,
   emoziListAdd,
   AddQnaList,
+  oxGameRound,
+  signalOX,
 } from '../../store/modules/meetingRoom';
 
 // 컴포넌트
@@ -183,6 +185,16 @@ class Room extends Component {
             this.props.doAddQnaList(inputValue);
           }
         });
+
+        if (this.props.userCode === 3) {
+          mySession.on('signal:OX', event => {
+            let OXdata = event.data.split(',');
+            if (OXdata[0] !== this.props.OXgameCount) {
+              this.props.doSignalOX(OXdata[1]);
+              this.props.doOXGameRound();
+            }
+          });
+        }
 
         // 세션과 연결하는 부분
         this.getToken().then(token => {
@@ -362,6 +374,9 @@ const mapStateToProps = state => ({
   testInput: state.MeetingRoom.testInput,
   me: state.mypage.me,
   QnAmode: state.MeetingRoom.QnAmode,
+  OXsignal: state.MeetingRoom.OXsignal,
+  OXgameCount: state.MeetingRoom.OXgameCount,
+  userCode: state.mypage.me.code,
 });
 
 const mapDispatchToProps = dispatch => {
@@ -380,6 +395,8 @@ const mapDispatchToProps = dispatch => {
     doSetMySession: storeSession => dispatch(SetMySession(storeSession)),
     doemoziListAdd: emozi => dispatch(emoziListAdd(emozi)),
     doAddQnaList: QnAText => dispatch(AddQnaList(QnAText)),
+    doSignalOX: signal => dispatch(signalOX(signal)),
+    doOXGameRound: () => dispatch(oxGameRound()),
   };
 };
 
