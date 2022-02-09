@@ -15,6 +15,7 @@ import {
   DELETE_MEMBER_REQUEST,
   DELETE_MEMBER_FAILURE,
 } from '../modules/mypage';
+import swal from 'sweetalert';
 
 // 마이페이지 회원정보 조회
 function* loadMyPage(action) {
@@ -43,7 +44,10 @@ function* loadUpdateUser(action) {
       type: UPDATE_MEMBER_SUCCESS,
       data: result,
     });
-    alert('수정이 완료되었습니다.');
+    swal('수정이 완료되었습니다.', '    ', 'success', {
+      buttons: false,
+      timer: 1800,
+    });
   } catch (err) {
     yield put({
       type: UPDATE_MEMBER_FAILURE,

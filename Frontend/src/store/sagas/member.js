@@ -35,10 +35,9 @@ import {
   EMAIL_CHECK_REQUEST,
   EMAIL_CHECK_FAILURE,
   EMAIL_CHECK_SUCCESS,
-  setAddress,
 } from '../modules/member';
 import { MY_PAGE_REQUEST } from '../modules/mypage';
-
+import swal from 'sweetalert';
 // 로그인 처리
 function* loadLogin(action) {
   try {
@@ -46,10 +45,20 @@ function* loadLogin(action) {
     yield put({ type: LOG_IN_SUCCESS, data: result });
     sessionStorage.setItem('userToken', result.data.accessToken); // userToken 세션스토리지 저장
     yield put({ type: MY_PAGE_REQUEST, data: result.data.accessToken }); // mypage 정보 바로 조회
+    swal('로그인 성공', '  ', 'success', {
+      buttons: false,
+      timer: 1800,
+    });
   } catch (err) {
-    alert(
-      '아이디 또는 비밀번호가 일치하지 않거나, 이메일 인증 후 로그인 시도 바랍니다.'
-    ); // 유효성 검사
+    swal(
+      '로그인 실패',
+      '아이디 또는 비밀번호가 일치하지 않거나, 이메일 인증 후 로그인 시도 바랍니다.',
+      'error',
+      {
+        buttons: false,
+        timer: 2500,
+      }
+    );
     yield put({ type: LOG_IN_FAILURE });
   }
 }
@@ -78,10 +87,8 @@ function* watchLoadLogout() {
 function* loadSignup(action) {
   try {
     const result = yield call(SignupAPI, action.data);
-    alert('이메일 인증 후 로그인 할 수 있습니다.');
     yield put({ type: SIGN_UP_SUCCESS, data: result });
-    yield call(setAddress, ''); // 왜 이 함수가 실행이 안될까?, 주소 저장 후 초기화 하는 함수
-    // 위에것이 실행이 안되면 회원가입 후 새로고침 후 로그인 창으로 이동 시켜줘야함.
+    swal('회원가입 성공', '이메일 인증 후 로그인 할 수 있습니다.', 'success');
   } catch (err) {
     yield put({ type: SIGN_UP_FAILURE });
   }
@@ -128,8 +135,10 @@ function* loadFindPw(action) {
   try {
     const result = yield call(ResetPasswordAPI, action.data);
     yield put({ type: FIND_PW_SUCCESS, data: result });
-    alert(
-      '이메일로 임시 비밀번호가 전송되었습니다. 로그인 후 비밀번호 변경 바랍니다.'
+    swal(
+      '',
+      '이메일로 임시 비밀번호가 전송되었습니다. 로그인 후 비밀번호 변경 바랍니다.',
+      'success'
     );
   } catch (err) {
     alert('이메일 또는 이름이 일치하지 않습니다.');
