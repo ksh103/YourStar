@@ -55,7 +55,7 @@ public class MeetingController {
 
         log.info("meetingPendingList - Call");
 
-        Page<Meeting> meetingPage = meetingService.meetingPendingList(PageRequest.of(page - 1, size));
+        Page<Meeting> meetingPage = meetingService.meetingPendingList(PageRequest.of(page - 1, size, Sort.by(Sort.Direction.DESC, "meetingRegDt")));
 
         return ResponseEntity.status(200).body(MeetingListGetRes.of(200, "Success", meetingPage));
     }
