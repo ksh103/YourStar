@@ -5,6 +5,7 @@ import MyScreen from '../CommonComponents/MainItems/MyScreens/MyScreen';
 import OtherPersonScreen from '../CommonComponents/MainItems/OtherScreen/OtherPersonScreen';
 import ScheduleListSelect from '../CommonComponents/RightSideItems/Star/ScheduleListSelect';
 import SmallChatting from '../CommonComponents/RightSideItems/Chatting/SmallChatting';
+import { useSelector } from 'react-redux';
 // 포지션작업
 const BackgroundDiv = styled.div`
   width: 100%;

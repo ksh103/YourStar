@@ -105,10 +105,10 @@ export const emoziListAdd = emozi => {
   };
 };
 
-export const changeQnAtoggle = tf => {
+export const changeQnAtoggle = toggle => {
   return {
     type: QNA_TOGGLE_CHANGE,
-    payload: tf,
+    payload: toggle,
   };
 };
 

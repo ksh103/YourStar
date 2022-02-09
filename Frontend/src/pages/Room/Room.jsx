@@ -16,6 +16,7 @@ import {
   changeQnAMode,
   SetMySession,
   emoziListAdd,
+  AddQnaList,
 } from '../../store/modules/meetingRoom';
 
 // 컴포넌트
@@ -53,7 +54,6 @@ class Room extends Component {
   }
 
   componentDidUpdate(prevState) {
-    const QnAmode = this.props.QnAmode;
     const mySession = this.state.session;
     if (prevState.selectNum !== this.props.selectNum) {
       mySession.signal({
@@ -159,7 +159,8 @@ class Room extends Component {
 
         mySession.on('signal:QnAmode', event => {
           console.log('qna모드 변경신호받음');
-          const Mode = event.data;
+          let Modedata = event.data.split(',');
+          const Mode = Modedata[1];
           if (Mode !== this.props.QnAmode) {
             this.props.dochangeQnAMode(Mode);
           }
@@ -169,6 +170,17 @@ class Room extends Component {
           let emozidata = event.data.split(',');
           if (emozidata[0] !== this.props.me.nick) {
             this.props.doemoziListAdd(emozidata[1]);
+          }
+        });
+
+        mySession.on('signal:UserQnA', event => {
+          let QnAdata = event.data.split(',');
+          if (QnAdata[0] !== this.props.me.nick) {
+            const inputValue = {
+              userName: QnAdata[0],
+              text: QnAdata[1],
+            };
+            this.props.doAddQnaList(inputValue);
           }
         });
 
@@ -367,6 +379,7 @@ const mapDispatchToProps = dispatch => {
     dochangeQnAMode: QnAmode => dispatch(changeQnAMode(QnAmode)),
     doSetMySession: storeSession => dispatch(SetMySession(storeSession)),
     doemoziListAdd: emozi => dispatch(emoziListAdd(emozi)),
+    doAddQnaList: QnAText => dispatch(AddQnaList(QnAText)),
   };
 };
 
