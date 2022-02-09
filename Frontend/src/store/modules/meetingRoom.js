@@ -1,6 +1,7 @@
 const CHANGE_QNA_MODE = 'CHANGE_QNA_MODE';
 const CHATTING_LIST_PLUS = 'CHATTING_LIST_PLUS';
 const MEETINGROOM_USER_UPDATE = 'MEETINGROOM_USER_UPDATE';
+const MEETINGROOM_USER_DELETE = 'MEETINGROOM_USER_DELETE'; // 영원 추가 ============================================================
 const PUBLISHER_INFO = 'PUBLISHER_INFO';
 const USER_INFO = 'USER_INFO';
 const UPDATE_MAINSTREMMANAGER = 'UPDATE_MAINSTREMMANAGER';
@@ -36,6 +37,14 @@ export const UserUpdate = subscriber => {
   return {
     type: MEETINGROOM_USER_UPDATE,
     payload: subscriber,
+  };
+};
+
+// 영원 추가 =========================================================================================
+export const UserDelete = subscribers => {
+  return {
+    type: MEETINGROOM_USER_DELETE,
+    payload: subscribers,
   };
 };
 
@@ -148,6 +157,11 @@ const MeetingRoom = (state = initialState, action) => {
       return {
         ...state,
         subscribers: [...state.subscribers, action.payload],
+      };
+    case MEETINGROOM_USER_DELETE: // 영원 추가 ==============================================================================
+      return {
+        ...state,
+        subscribers: action.payload,
       };
     case PUBLISHER_INFO:
       return {

@@ -16,6 +16,9 @@ import {
   changeQnAMode,
   SetMySession,
   emoziListAdd,
+
+  // 추가
+  UserDelete,
 } from '../../../store/modules/meetingRoom';
 
 // 컴포넌트
@@ -72,13 +75,11 @@ class RoomYoungWon extends Component {
   }
 
   deleteSubscriber(streamManager) {
-    let subscribers = this.state.subscribers;
+    let subscribers = this.props.subscribers;
     let index = subscribers.indexOf(streamManager, 0);
     if (index > -1) {
       subscribers.splice(index, 1);
-      this.setState({
-        subscribers: subscribers,
-      });
+      this.props.doDeleteSubscriber(subscribers);
     }
   }
 
@@ -352,6 +353,9 @@ const mapDispatchToProps = dispatch => {
     dochangeQnAMode: QnAmode => dispatch(changeQnAMode(QnAmode)),
     doSetMySession: storeSession => dispatch(SetMySession(storeSession)),
     doemoziListAdd: emozi => dispatch(emoziListAdd(emozi)),
+
+    // 추가
+    doDeleteSubscriber: subscribers => dispatch(UserDelete(subscribers)),
   };
 };
 
