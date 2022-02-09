@@ -8,3 +8,10 @@ export async function MeetingApplyListAPI(data) {
   );
   return result;
 }
+
+export async function MeetingGameListAPI({ meetingId }) {
+  const result = await axios.get(
+    `${BASE_URL}meetings/game-result/admin/${meetingId}`
+  );
+  return result;
+}

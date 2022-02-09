@@ -13,6 +13,8 @@ const MY_SESSION_DEFIND = 'MY_SESSION_DEFIND';
 const EMOZI_LIST_ADD = 'EMOZI_LIST_ADD';
 const QNA_TOGGLE_CHANGE = 'QNA_TOGGLE_CHANGE';
 
+const PLUS_INDEX = 'PLUS_INDEX';
+
 // QnA 모드를 변경하기위한 action
 // 스타가 의 조작에 대한 action이라고 이해하면 된다.
 // 0일 경우 qna start
@@ -45,6 +47,12 @@ export const UserDelete = subscribers => {
   return {
     type: MEETINGROOM_USER_DELETE,
     payload: subscribers,
+  };
+};
+
+export const PlusIndex = () => {
+  return {
+    type: PLUS_INDEX,
   };
 };
 
@@ -139,6 +147,7 @@ const initialState = {
   storeSession: undefined,
   emoziList: [],
   StarQnAtoggle: false,
+  index: -1,
 };
 
 const MeetingRoom = (state = initialState, action) => {
@@ -162,6 +171,11 @@ const MeetingRoom = (state = initialState, action) => {
       return {
         ...state,
         subscribers: action.payload,
+      };
+    case PLUS_INDEX:
+      return {
+        ...state,
+        index: state.index + 1,
       };
     case PUBLISHER_INFO:
       return {

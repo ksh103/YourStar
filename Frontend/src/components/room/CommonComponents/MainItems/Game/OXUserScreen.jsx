@@ -1,8 +1,9 @@
 import React from 'react';
 import styled from 'styled-components';
 import { MainDiv } from '../Main.style';
-import StarVideoComponent from '../../../../../pages/Room/DongJun/StarVideoComponent';
-import { useSelector, useDispatch } from 'react-redux';
+import StarVideoComponent from '../../../../../pages/Room/StarVideoComponent';
+import { useSelector } from 'react-redux';
+
 const OXuserSc = styled.div`
   position: relative;
   width: 83.541vw;

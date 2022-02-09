@@ -5,8 +5,6 @@ import Modal from '@mui/material/Modal';
 import { useDispatch, useSelector } from 'react-redux';
 import { setMeetingRepositoryState } from '../../../store/modules/mypage';
 import { Grid } from '@mui/material';
-import { useEffect } from 'react';
-import { MEETING_APPLY_REQUEST } from '../../../store/modules/meetingList';
 
 const style = {
   position: 'absolute',
@@ -44,9 +42,9 @@ export default function BasicModal({ meeting }) {
             id="modal-modal-title"
             variant="h6"
             component="h2"
-            style={{ textAlign: 'center' }}
+            style={{ textAlign: 'center', fontSize: '30px' }}
           >
-            {meeting.meetingName} 에서의 추억
+            {meeting.meetingName} 에서의 추억💕
           </Typography>
           <Typography id="modal-modal-description" sx={{ mt: 2 }}>
             <Grid container>
@@ -57,6 +55,7 @@ export default function BasicModal({ meeting }) {
                       textAlign: 'center',
                       cursor: 'pointer',
                       color: 'red',
+                      fontSize: '20px',
                     }}
                     onClick={() => {
                       setToggle(0);
@@ -82,6 +81,7 @@ export default function BasicModal({ meeting }) {
                       textAlign: 'center',
                       cursor: 'pointer',
                       color: 'red',
+                      fontSize: '20px',
                     }}
                     onClick={() => {
                       setToggle(1);

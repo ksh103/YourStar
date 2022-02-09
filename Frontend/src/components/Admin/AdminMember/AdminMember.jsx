@@ -16,11 +16,6 @@ export default function AdminMember() {
   const [starCnt, setStarCnt] = useState('');
   const { createdAccount } = useSelector(state => state.admin);
 
-  useEffect(() => {
-    if (createdAccount.length > 0) {
-    }
-  }, []); // 첫 시작 시 createdAccount에 값이 있으면 초기화
-
   const createManager = () => {
     if (name === '') {
       alert('소속사 이름을 입력해주세요');
@@ -39,6 +34,7 @@ export default function AdminMember() {
       });
     }
   };
+  console.log(createdAccount);
   const accountList = createdAccount.map(account => (
     <div>
       ID: {account.email} / PW: {account.password}

@@ -1,10 +1,16 @@
 import React from 'react';
-import SelfCam from './SelfCam';
 import Header from './Header';
 import { StarSelfCamBox, UserSelfCamBox } from './OneonOneMeeting.style';
+import StarVideoComponent from '../../../../pages/Room/StarVideoComponent';
+import UserVideoComponent from '../../../../pages/Room/UserVideoComponent';
 import Grid from '@mui/material/Grid';
+import { useSelector } from 'react-redux';
 
-export default function OneonOneMeeting() {
+export default function OneonOneMeetingStar() {
+  const { mainStreamManager, publisher } = useSelector(state => ({
+    mainStreamManager: state.MeetingRoom.mainStreamManager,
+    publisher: state.MeetingRoom.publisher,
+  }));
   return (
     <>
       <div>
@@ -12,12 +18,14 @@ export default function OneonOneMeeting() {
         <Grid container>
           <Grid xs={6}>
             <StarSelfCamBox>
-              <SelfCam></SelfCam>
+              {mainStreamManager && (
+                <StarVideoComponent streamManager={mainStreamManager} />
+              )}
             </StarSelfCamBox>
           </Grid>
           <Grid xs={6}>
             <UserSelfCamBox>
-              <SelfCam></SelfCam>
+              {publisher && <UserVideoComponent streamManager={publisher} />}
             </UserSelfCamBox>
           </Grid>
         </Grid>
