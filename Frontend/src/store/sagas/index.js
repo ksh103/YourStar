@@ -5,6 +5,7 @@ import meeting from './meeting';
 import member from './member';
 import meetingList from './meetingList';
 import fan from './fan';
+import admin from './admin';
 
 export default function* rootSaga() {
   yield all([
@@ -14,5 +15,6 @@ export default function* rootSaga() {
     fork(member),
     fork(meetingList),
     fork(fan),
+    fork(admin),
   ]);
 }

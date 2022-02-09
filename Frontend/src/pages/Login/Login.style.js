@@ -73,14 +73,14 @@ const LoginHeader = styled.div`
     justify-content: center;
     align-items: center;
     height: 80%;
-    font-size: 2em;
+    font-size: 50px;
     font-weight: bold;
     color: ${pointColor};
   }
   #word {
     text-align: center;
     height: 20%;
-    font-size: 15px;
+    font-size: 20px;
     color: black;
   }
 `;
@@ -89,7 +89,9 @@ const LoginContent = styled.div`
   height: 50%;
 `;
 const LoginContentRow = styled.div`
+  font-size: 15px;
   input {
+    font-size: 18px;
     display: block;
     width: 280px;
     height: 50px;
@@ -100,6 +102,7 @@ const LoginContentRow = styled.div`
     border-radius: 4px;
   }
   #login-button {
+    font-size: 15px;
     display: block;
     width: 320px;
     height: 50px;

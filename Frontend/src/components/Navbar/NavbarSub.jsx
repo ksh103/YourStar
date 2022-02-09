@@ -55,7 +55,6 @@ export default function NavbarSub() {
               </li>
             </>
           )}
-          <li></li>
         </ul>
       </SubMenu>
     </NavbarSubBlock>

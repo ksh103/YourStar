@@ -61,7 +61,7 @@ export const Layout = styled.div`
   }
 `;
 export const Wrapper = styled.div`
-  height: 78%;
+  height: 70%;
   @media ${device.TabletPortrait} {
     height: 80%;
   }
