@@ -27,6 +27,10 @@ export default function StarQnAListScreen() {
     StarQnAtoggle: state.MeetingRoom.StarQnAtoggle,
   }));
 
+  const { QnAList } = useSelector(state => ({
+    QnAList: state.MeetingRoom.QnAList,
+  }));
+
   const dispatch = useDispatch();
 
   const toggleChange = tf => {
@@ -36,27 +40,18 @@ export default function StarQnAListScreen() {
   return (
     <MainDiv>
       <StarScreen>
-        <button onClick={StarQnAtoggle => toggleChange(StarQnAtoggle)}>
+        <button onClick={() => toggleChange(StarQnAtoggle)}>
           다시 작은화면
         </button>
         <PerScPosition>
-          <OtherScreenAngle></OtherScreenAngle>
-          <OtherScreenAngle></OtherScreenAngle>
-          <OtherScreenAngle></OtherScreenAngle>
-          <OtherScreenAngle></OtherScreenAngle>
-          <OtherScreenAngle></OtherScreenAngle>
-          <OtherScreenAngle></OtherScreenAngle>
-          <OtherScreenAngle></OtherScreenAngle>
-          <OtherScreenAngle></OtherScreenAngle>
-          <OtherScreenAngle></OtherScreenAngle>
-          <OtherScreenAngle></OtherScreenAngle>
-          <OtherScreenAngle></OtherScreenAngle>
-          <OtherScreenAngle></OtherScreenAngle>
-          <OtherScreenAngle></OtherScreenAngle>
-          <OtherScreenAngle></OtherScreenAngle>
-          <OtherScreenAngle></OtherScreenAngle>
-          <OtherScreenAngle></OtherScreenAngle>
-          <OtherScreenAngle></OtherScreenAngle>
+          {QnAList.map((value, idx) => {
+            console.log(value, 'qna리스트 벨류');
+            return (
+              <OtherScreenAngle key={idx + value.text}>
+                {value}
+              </OtherScreenAngle>
+            );
+          })}
         </PerScPosition>
       </StarScreen>
     </MainDiv>

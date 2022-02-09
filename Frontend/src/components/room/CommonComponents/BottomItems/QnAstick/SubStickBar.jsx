@@ -5,6 +5,7 @@ import {
   changeQnAMode,
   ChattingAction,
   changeQnAtoggle,
+  AddQnaList,
 } from '../../../../../store/modules/meetingRoom';
 
 // dispatch action 사용하기! 이때는 넘겨주는 값이 있어야합니다.
@@ -98,6 +99,36 @@ export default function SubStickBar() {
     dispatch(changeQnAtoggle());
   };
 
+  const UserQnAMessageByEnter = e => {
+    if (e.key === 'Enter') {
+      const QnAValue = {
+        userName: me.nick,
+        text: QnAText,
+      };
+      storeSession.signal({
+        data: `${me.nick},${QnAText}`,
+        to: [],
+        type: 'UserQnA',
+      });
+      dispatch(AddQnaList(QnAValue));
+      setQnAText('');
+    }
+  };
+
+  const UserQnAMessageByClick = e => {
+    const QnAValue = {
+      userName: me.nick,
+      text: QnAText,
+    };
+    storeSession.signal({
+      data: `${me.nick},${QnAText}`,
+      to: [],
+      type: 'UserQnA',
+    });
+    dispatch(AddQnaList(QnAValue));
+    setQnAText('');
+  };
+
   if (me.code !== 3) {
     return (
       <>
@@ -139,9 +170,9 @@ export default function SubStickBar() {
           <StickBar>
             <GridDiv>
               <h2>Q.</h2>
-              <form>
+              <form onKeyPress={UserQnAMessageByEnter}>
                 <UserInput value={QnAText} onChange={valueChange}></UserInput>
-                <button>제출하기</button>
+                <button onClick={UserQnAMessageByClick}>제출하기</button>
               </form>
             </GridDiv>
           </StickBar>
