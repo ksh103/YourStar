@@ -19,6 +19,7 @@ import {
   AddQnaList,
   oxGameRound,
   signalOX,
+  UserDelete,
 } from '../../store/modules/meetingRoom';
 
 // 컴포넌트
@@ -39,7 +40,7 @@ class Room extends Component {
     var pathname = props.location.pathname;
 
     this.state = {
-      mySessionId: pathname.substr(6), // 넘어온 미팅룸 ID 입력
+      mySessionId: '1', // 넘어온 미팅룸 ID 입력
       session: undefined,
       me: this.props.me, // Store에 저장된 내 정보 입력
     };
@@ -91,13 +92,11 @@ class Room extends Component {
   }
 
   deleteSubscriber(streamManager) {
-    let subscribers = this.state.subscribers;
+    let subscribers = this.props.subscribers;
     let index = subscribers.indexOf(streamManager, 0);
     if (index > -1) {
       subscribers.splice(index, 1);
-      this.setState({
-        subscribers: subscribers,
-      });
+      this.props.doDeleteSubscriber(subscribers);
     }
   }
 
@@ -220,7 +219,9 @@ class Room extends Component {
               // 세션에 내 비디오 및 마이크 정보 푸시
               mySession.publish(publisher);
 
-              this.props.doUpdateMyInformation(publisher); // 내 화면 보기 설정
+              if (this.props.me.code === 4)
+                this.props.doMainStreamManagerInfo(publisher);
+              else this.props.doUpdateMyInformation(publisher); // 내 화면 보기 설정
             })
             .catch(error => {
               console.log(
@@ -251,8 +252,6 @@ class Room extends Component {
   }
 
   render() {
-    const { publisher } = this.props;
-    console.log('렌더링중!');
     return (
       <BackgroundDiv>
         {/* 컴포넌트는 들고왔을 때 잘 작동함 */}
@@ -261,7 +260,7 @@ class Room extends Component {
             <div>Loading</div>
           ) : (
             <div>
-              {publisher !== undefined ? <RoomComponent></RoomComponent> : null}
+              <RoomComponent></RoomComponent>
             </div>
           )}
         </div>
@@ -397,6 +396,7 @@ const mapDispatchToProps = dispatch => {
     doAddQnaList: QnAText => dispatch(AddQnaList(QnAText)),
     doSignalOX: signal => dispatch(signalOX(signal)),
     doOXGameRound: () => dispatch(oxGameRound()),
+    doDeleteSubscriber: subscribers => dispatch(UserDelete(subscribers)),
   };
 };
 
