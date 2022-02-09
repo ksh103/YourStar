@@ -12,9 +12,9 @@ const GlobalStyle = createGlobalStyle`
     width: 100%;    
     height: 100vh;
     background-size: cover;  
-    font-family: 'MinSans-Medium';
-
-// 고딕
+    font-family: 'MinSans-Medium';  // 전역 폰트
+ 
+// 고딕 
 @font-face {
     font-family: 'MinSans-Medium';
     src: url('https://cdn.jsdelivr.net/gh/projectnoonnu/noonfonts_2201-2@1.0/MinSans-Medium.woff') format('woff');

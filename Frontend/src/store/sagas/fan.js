@@ -20,6 +20,7 @@ import {
   DETAIL_MEETING_REQUEST,
   REMOVE_APPLICANT_MEMBER,
 } from '../modules/meeting';
+import swal from 'sweetalert';
 
 function* insertFanMeeting(action) {
   try {
@@ -60,6 +61,10 @@ function* deleteFanMeeting(action) {
     yield put({
       type: DELETE_FANMEETING_SUCCESS,
       data: result,
+    });
+    swal('', '정상적으로 예매가 취소되었습니다.', 'success', {
+      buttons: false,
+      timer: 1800,
     });
     yield put({
       type: REMOVE_APPLICANT_MEMBER,
