@@ -30,17 +30,15 @@ export default function Mypage() {
   }, [dispatch, me, selectFanMeetingDone]);
 
   const content = () => {
+    const now = new Date();
     if (me.code === 2) {
       // 스타(오픈한 팬 미팅)
       if (!totalMeetingsDone && !totalMeetingsLoading) {
         // 전체 미팅 내역 받아오기
-        dispatch(
-          {
-            type: TOTAL_MEETINGS_REQUEST,
-            data: { page: 1, size: 100 },
-          },
-          [dispatch]
-        );
+        dispatch({
+          type: TOTAL_MEETINGS_REQUEST,
+          data: { page: 1, size: 50 },
+        });
       }
       const myMeeting = totalMeetings.filter(
         // 스타 자신이 오픈한 팬 미팅 정보
@@ -51,14 +49,22 @@ export default function Mypage() {
       ));
     } else if (menu === 1) {
       // 나의 팬미팅
-      return applicant.map(meeting => (
-        <UserMypageCard meeting={meeting} key={meeting.meetingId} />
-      ));
+      return applicant.map(meeting =>
+        new Date(meeting.meetingEndDate) > now ? (
+          <UserMypageCard meeting={meeting} key={meeting.meetingId} />
+        ) : (
+          <></>
+        )
+      );
     } else if (menu === 2) {
       // 추억보관함
-      return applicant.map(meeting => (
-        <RepositoryMypageCard meeting={meeting} key={meeting.meetingId} />
-      ));
+      return applicant.map(meeting =>
+        new Date(meeting.meetingEndDate) <= now ? (
+          <RepositoryMypageCard meeting={meeting} key={meeting.meetingId} />
+        ) : (
+          <></>
+        )
+      );
     }
   };
 

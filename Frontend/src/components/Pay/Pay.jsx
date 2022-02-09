@@ -14,11 +14,12 @@ export default function Pay(props) {
   const { meeting } = useSelector(state => state.meeting);
   const dispatch = useDispatch();
   const meetingId = window.localStorage.getItem('meetingId');
+  const tid = window.localStorage.getItem('tid');
   useEffect(() => {
     const state = {
       params: {
         cid: 'TC0ONETIME',
-        tid: window.localStorage.getItem('tid'),
+        tid: tid,
         partner_order_id: 'partner_order_id',
         partner_user_id: 'partner_user_id',
         pg_token: props.location.search.split('=')[1],
@@ -37,17 +38,24 @@ export default function Pay(props) {
         params,
       }).then(response => {
         // 결제 승인에 대한 응답 출력
-        console.log(response);
-        console.log(me.memberId);
         if (response.status === 200) {
           dispatch({
             type: INSERT_FANMEETING_REQUEST,
             data: { meetingId: meetingId, memberId: me.memberId },
           });
         }
+        window.localStorage.removeItem('tid');
+        window.localStorage.removeItem('meetingId');
       });
     }
-  }, [dispatch, myPageDone, me.memberId, meetingId, props.location.search]);
+  }, [
+    dispatch,
+    myPageDone,
+    me.memberId,
+    meetingId,
+    props.location.search,
+    tid,
+  ]);
 
   return (
     <Layout>
