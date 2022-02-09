@@ -135,7 +135,6 @@ const reducer = (state = initialState, action) =>
       case INSERT_MEETING_SUCCESS:
         draft.insertMeetingLoading = false;
         draft.insertMeetingDone = true;
-        draft.totalMeetings.push(action.data);
         break;
       case INSERT_MEETING_FAILURE:
         draft.insertMeetingLoading = false;
