@@ -23,11 +23,8 @@ const initialState = {
 
 /* 리듀서 선언 */
 export default function selectmode(state = initialState, action) {
-  console.log('리듀서 실행');
-  console.log(action);
   switch (action.type) {
     case CHANGE_LIST:
-      console.log(action.payload, '리듀서에도 들어왔습니다.');
       return { ...state, selectNum: action.payload };
     default:
       return state;
