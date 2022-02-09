@@ -1,0 +1,97 @@
+@keyframes fadeInUp {
+    0% {
+        opacity: 0;
+        transform: translate3d(0, 100%, 0);
+    }
+    to {
+        opacity: 1;
+        transform: translateZ(0);
+    }
+}
+
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+        transform: translateY(20px);
+    }
+
+    to {
+        opacity: 3;
+        transform: none;
+    }
+}
+
+
+.test_obj {
+    position: relative;
+    /* animation: fadeInUp 1s; */
+    animation: fadeIn 0.5s ease-in-out;
+}
+
+.btn-13 {
+    background: rgb(251,33,117);
+    width: 100px;
+    height: 100px;
+}
+
+.btn-13:active {
+    background: rgb(251,33,117);
+    /* width: 95px;
+    height: 95px; */
+    -webkit-transform:scale(0.9,0.9);
+    -moz-transform:scale(0.9,0.9);
+    -ms-transform:scale(0.9,0.9);
+    -o-transform:scale(0.9,0.9);
+    transform:scale(0.9,0.9);
+  
+}
+
+
+.btn-12:active {
+    box-shadow: 1px 1px 0 rgba(12, 12, 12, 0.5);
+    position: relative;
+    top:2px;
+}
+.btn-12 {
+    background: rgb(251,33,117);
+    width: 100px;
+    height: 100px;
+    box-shadow: 1px 4px 0 rgba(243, 240, 240, 0.966);
+    margin-left: 10px;
+}
+
+
+
+
+.btn-11 {
+    border: none;
+    background: rgb(251,33,117);
+    width: 100px;
+    height: 100px;
+    margin-left: 10px;
+  }
+  .btn-11:before {
+      position: absolute;
+      content: '';
+      display: inline-block;
+      top: -180px;
+      left: 0;
+      width: 30px;
+      height: 100%;
+      background-color: #fff;
+      animation: shiny-btn1 3s ease-in-out infinite;
+  }
+  .btn-11:active{
+    box-shadow:  4px 4px 6px 0 rgba(255,255,255,.3),
+                -4px -4px 6px 0 rgba(116, 125, 136, .2), 
+      inset -4px -4px 6px 0 rgba(255,255,255,.2),
+      inset 4px 4px 6px 0 rgba(0, 0, 0, .2);
+  }
+  
+  
+  @-webkit-keyframes shiny-btn1 {
+      0% { -webkit-transform: scale(0) rotate(45deg); opacity: 0; }
+      80% { -webkit-transform: scale(0) rotate(45deg); opacity: 0.5; }
+      81% { -webkit-transform: scale(4) rotate(45deg); opacity: 1; }
+      100% { -webkit-transform: scale(50) rotate(45deg); opacity: 0; }
+  }

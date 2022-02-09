@@ -6,6 +6,13 @@ import './App.css';
 import UserVideoComponent from './UserVideoComponent';
 import { connect } from 'react-redux';
 import { ChattingAction } from '../../../store/modules/meetingRoom';
+import './test.css';
+import { BsFillMicFill, BsFillMicMuteFill, BsFillCameraVideoFill, BsFillCameraVideoOffFill } from 'react-icons/bs';
+import { MdScreenShare, MdStopScreenShare} from 'react-icons/md';
+
+import sound from '../../../assets/images/MP_Tiny Button Push.mp3'
+import UserModel from './models/user-model';
+var localUser = new UserModel();
 
 const OPENVIDU_SERVER_URL = 'https://i6e204.p.ssafy.io:8443';
 const OPENVIDU_SERVER_SECRET = 'YOURSTAR';
@@ -29,6 +36,11 @@ class RoomJisul extends Component {
       subscribers: [],
       messages: [],
       testInputValue: '',
+      // 기본 마이크, 비디오
+      audioState: true,
+      videoState: true,
+      // 화면 공유 
+      screenShareState: false,
     };
     // 여기는 컴포넌트 내부에서 쓰이는 내용들에대한 bind 처리
     // 새로운 message를 보낸다 or 세션참여 or 종료와같은 기능들을 정의해놓은곳
@@ -41,6 +53,20 @@ class RoomJisul extends Component {
     this.sendmessageByClick = this.sendmessageByClick.bind(this);
     this.handleChatMessageChange = this.handleChatMessageChange.bind(this);
     this.sendmessageByEnter = this.sendmessageByEnter.bind(this);
+
+    this.screenShare = this.screenShare.bind(this);
+    this.stopScreenShare = this.stopScreenShare.bind(this);
+  }
+
+  // 효과음 
+  play() { 
+    var audio = document.getElementById('audio_play'); 
+    if (audio.paused) { 
+        audio.play(); 
+    }else{ 
+        audio.pause(); 
+        audio.currentTime = 0 
+    } 
   }
 
   handleChatMessageChange(e) {
@@ -161,6 +187,8 @@ class RoomJisul extends Component {
           // Subscribe to the Stream to receive it. Second parameter is undefined
           // so OpenVidu doesn't create an HTML video by its own
           var subscriber = mySession.subscribe(event.stream, undefined);
+          console.log('----------------')
+          console.log(event.stream)
           var subscribers = this.state.subscribers;
           subscribers.push(subscriber);
 
@@ -237,6 +265,7 @@ class RoomJisul extends Component {
               this.setState({
                 mainStreamManager: publisher,
                 publisher: publisher,
+                connectId: this.state.session.connection.connectionId,
               });
             })
             .catch(error => {
@@ -272,6 +301,86 @@ class RoomJisul extends Component {
     });
   }
 
+  
+  screenShare() {
+    const videoSource = navigator.userAgent.indexOf('Firefox') !== -1 ? 'window' : 'screen';
+    const publisher = this.OV.initPublisher(
+      undefined,
+        {
+            videoSource: videoSource,
+            publishAudio: true,
+            publishVideo: true,
+            mirror: false,
+        },
+        (error) => {
+            if (error && error.name === 'SCREEN_EXTENSION_NOT_INSTALLED') {
+                this.setState({ showExtensionDialog: true });
+            } else if (error && error.name === 'SCREEN_SHARING_NOT_SUPPORTED') {
+                alert('Your browser does not support screen sharing');
+            } else if (error && error.name === 'SCREEN_EXTENSION_DISABLED') {
+                alert('You need to enable screen sharing extension');
+            } else if (error && error.name === 'SCREEN_CAPTURE_DENIED') {
+                alert('You need to choose a window or application to share');
+            }
+        },
+    );
+
+    publisher.once('accessAllowed', () => {
+        this.state.session.unpublish(this.state.publisher); // 송출하고 있는거 중단 (안하면 에러)
+        // localUser.setStreamManager(publisher);
+        this.state.session.publish(publisher).then(() => {  // 송출하기 
+            // You can send a signal with Session.signal method to warn other participants
+     
+            // localUser.setScreenShareActive(true);
+            // this.setState({
+            //   screenSharestate: true,
+            // });
+            // this.state.session.signal(signalOptions);
+            this.setState({ 
+              publisher: publisher,
+              screenShareState: true
+            });
+        });
+    });
+    // publisher.on('streamPlaying', () => {
+    //     // this.updateLayout();
+    //     publisher.videos[0].video.parentElement.classList.remove('custom-class');
+    // });
+}
+
+stopScreenShare() {
+    this.state.session.unpublish(this.state.publisher);
+    let publisher = this.OV.initPublisher(undefined, {
+      audioSource: undefined, // The source of audio. If undefined default microphone
+      videoSource: undefined, // The source of video. If undefined default webcam
+      publishAudio: true, // Whether you want to start publishing with your audio unmuted or not
+      publishVideo: true, // Whether you want to start publishing with your video enabled or not
+      resolution: '640x480', // The resolution of your video
+      frameRate: 30, // The frame rate of your video
+      insertMode: 'APPEND', // How the video is inserted in the target element 'video-container'
+      mirror: false, // Whether to mirror your local video or not
+    });
+
+    // --- 6) Publish your stream ---
+
+    this.state.session.publish(publisher);
+
+    // Set the main video in the page to display our webcam and store our Publisher
+    this.setState({
+      publisher: publisher,
+      screenShareState: false,
+    });
+    // this.connectWebCam();
+  //   var publisher = this.OV.initPublisherAsync({
+  //     videoSource: "screen"
+  // }).then(publisher => {
+  //     publisher.stream.getMediaStream().getVideoTracks()[0].addEventListener('ended', () => {
+  //         console.log('User pressed the "Stop sharing" button');
+  //     });
+  //   });
+}
+
+
   render() {
     const { chattingList } = this.props;
     const mySessionId = this.state.mySessionId;
@@ -280,9 +389,13 @@ class RoomJisul extends Component {
       <BackgroundDiv>
         {/* 컴포넌트는 들고왔을 때 잘 작동함 */}
 
-        <div className="container">
+        <div className="container test_obj">
           {this.state.session === undefined ? (
             <div id="join">
+              <audio id='audio_play' src={sound}></audio> 
+              <button className='btn-13' onClick={this.play}></button>
+              <button className='btn-12'></button>
+              <button className='btn-11'></button>
               <div id="img-div">
                 <img
                   src="resources/images/openvidu_grey_bg_transp_cropped.png"
@@ -366,7 +479,6 @@ class RoomJisul extends Component {
                   value="Leave session"
                 />
               </div>
-
               {this.state.mainStreamManager !== undefined ? (
                 <div id="main-video" className="col-md-6">
                   <UserVideoComponent
@@ -395,6 +507,80 @@ class RoomJisul extends Component {
                   </div>
                 ))}
               </div>
+              <div>
+              {/* <ToolbarComponent
+                    sessionId={mySessionId}
+                    user={localUser}
+                    showNotification={this.state.messageReceived}
+                    camStatusChanged={this.camStatusChanged}
+                    micStatusChanged={this.micStatusChanged}
+                    screenShare={this.screenShare}
+                    stopScreenShare={this.stopScreenShare}
+                    toggleFullscreen={this.toggleFullscreen}
+                    switchCamera={this.switchCamera}
+                    leaveSession={this.leaveSession}
+                    toggleChat={this.toggleChat}
+                /> */}
+                </div>
+                <div>
+              {this.state.audioState ? (
+                <BsFillMicFill
+                  size="24"
+                  color='#FFFFFF'
+                  onClick={() => {
+                    this.state.publisher.publishAudio(!this.state.audioState);
+                    this.setState({ audioState: !this.state.audioState });
+                  }}
+                />
+              ) : (
+                <BsFillMicMuteFill
+                  size="24"
+                  color='#FFFFFF'
+                  onClick={() => {
+                    this.state.publisher.publishAudio(!this.state.audioState);
+                    this.setState({ audioState: !this.state.audioState });
+                  }}
+                />
+              )}
+              {this.state.videoState ? (
+                <BsFillCameraVideoFill
+                  size="24"
+                  color='#FFFFFF'
+                  onClick={() => {
+                    this.state.publisher.publishVideo(!this.state.videoState);
+                    this.setState({ videoState: !this.state.videoState });
+                  }}
+                />
+              ) : (
+                <BsFillCameraVideoOffFill
+                  size="24"
+                  color='#FFFFFF'
+                  onClick={() => {
+                    this.state.publisher.publishVideo(!this.state.videoState);
+                    this.setState({ videoState: !this.state.videoState });
+                  }}
+                />
+              )}
+               {this.state.screenShareState ? (
+                <MdStopScreenShare
+                  size="24"
+                  color='#FFFFFF'
+                  onClick={() => {
+                    this.stopScreenShare();
+                    this.setState({ screenShareState: !this.state.screenShareState });
+                  }}
+                />
+              ) : (
+                <MdScreenShare
+                  size="24"
+                  color='#FFFFFF'
+                  onClick={() => {
+                    this.screenShare();
+                    this.setState({ screenShareState: !this.state.screenShareState });
+                  }}
+                />
+              )}
+            </div>
             </div>
           ) : null}
         </div>
