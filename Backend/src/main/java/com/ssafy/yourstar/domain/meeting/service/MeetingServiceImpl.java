@@ -292,4 +292,12 @@ public class MeetingServiceImpl implements MeetingService {
             return false;
         }
     }
+
+    @Override
+    public String getMeetingImgPath(int fileId) {
+        MeetingImgPath meetingImgPath = meetingImgPathRepository.findMeetingImgPathByFileId(fileId);
+        String path = uploadPath + meetingImgPath.getFileUrl();
+        log.warn("Get Image Path : " + path);
+        return path;
+    }
 }
