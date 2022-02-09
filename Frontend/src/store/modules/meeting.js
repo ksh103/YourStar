@@ -3,7 +3,6 @@ const initialState = {
   meeting: {},
   totalMeetings: [],
   approvedMeetings: [],
-
   detailMeetingLoading: false, // 미팅 상세정보
   detailMeetingDone: false,
   detailMeetingError: null,

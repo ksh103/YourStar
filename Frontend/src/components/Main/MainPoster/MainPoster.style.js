@@ -17,6 +17,7 @@ const MainPosterCard = styled.div`
       width: 60vw;
       height: 60vw;
     }
+    background-color: gray;
   }
 `;
 export { MainPosterWrapper, MainPosterCard };

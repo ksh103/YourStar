@@ -5,8 +5,9 @@ const ApplyButton = styled.div`
   margin-right: 3vw;
   text-align: center;
   button {
-    width: 100px;
-    height: 40px;
+    width: 160px;
+    height: 60px;
+    font-size: 20px;
     color: white;
     background-color: ${pointColor};
     border-radius: 10px;
@@ -21,7 +22,7 @@ const ApplyWrapper = styled.div`
   @media ${device.TabletPortrait} {
     margin: 0;
   }
-  & > div {
+  .apply {
     width: 70%;
     @media ${device.TabletPortrait} {
       width: 100%;
@@ -39,13 +40,13 @@ const ApplyWrapper = styled.div`
     border-radius: 10px;
   }
   .button {
-    padding: 20px;
+    padding: 30px;
   }
   input,
   textarea {
-    font-size: 15px;
+    font-size: 20px;
+    width: 80%;
     padding: 5px;
-    width: 100%;
   }
 `;
 

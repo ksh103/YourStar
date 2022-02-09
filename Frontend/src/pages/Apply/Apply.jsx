@@ -15,10 +15,10 @@ export default function Apply() {
   const dispatch = useDispatch();
   const { me } = useSelector(state => state.mypage);
   const { insertMeetingDone } = useSelector(state => state.meeting);
-  const [cnt, setCnt] = useState(null);
+  const [cnt, setCnt] = useState(0);
   const [description, setDescription] = useState('');
   const [name, setName] = useState('');
-  const [price, setPrice] = useState(null);
+  const [price, setPrice] = useState(0);
   const [openDate, setOpenDate] = useState('');
   const [startDate, setStartDate] = useState('');
   const [endDate, setEndDate] = useState('');
@@ -27,6 +27,7 @@ export default function Apply() {
 
   useEffect(() => {
     if (insertMeetingDone) {
+      console.log('초기화 해줘 ㅠ');
       setName('');
       setDescription('');
       setCnt(null);
@@ -103,73 +104,108 @@ export default function Apply() {
       <Wrapper>
         <Block>
           <ApplyWrapper>
-            <div>
+            <div className="apply">
               <div className="title">미팅 신청</div>
               <div className="content">
                 <TableContainer>
                   <Table>
                     <TableBody>
                       <TableRow>
-                        <TableCell>미팅이름</TableCell>
+                        <TableCell
+                          sx={{ fontSize: '1.5rem', fontWeight: 'bold' }}
+                        >
+                          미팅이름
+                        </TableCell>
                         <TableCell>
                           <input
                             type="text"
+                            value={name}
                             placeholder="미팅이름을 입력하세요"
                             onChange={onNameHandler}
                           />
                         </TableCell>
                       </TableRow>
                       <TableRow>
-                        <TableCell>예매날짜</TableCell>
+                        <TableCell
+                          sx={{ fontSize: '1.5rem', fontWeight: 'bold' }}
+                        >
+                          예매날짜
+                        </TableCell>
                         <TableCell>
                           <input
                             type={'datetime-local'}
                             onChange={onOpenDateHandler}
+                            value={openDate}
                           />
                         </TableCell>
                       </TableRow>
                       <TableRow>
-                        <TableCell>시작시간</TableCell>
+                        <TableCell
+                          sx={{ fontSize: '1.5rem', fontWeight: 'bold' }}
+                        >
+                          시작시간
+                        </TableCell>
                         <TableCell>
                           <input
                             type={'datetime-local'}
                             onChange={onStartDateHandler}
+                            value={startDate}
                           />
                         </TableCell>
                       </TableRow>
                       <TableRow>
-                        <TableCell>종료시간</TableCell>
+                        <TableCell
+                          sx={{ fontSize: '1.5rem', fontWeight: 'bold' }}
+                        >
+                          종료시간
+                        </TableCell>
                         <TableCell>
                           <input
                             type={'datetime-local'}
                             onChange={onEndDateHandler}
+                            value={endDate}
                           />
                         </TableCell>
                       </TableRow>
                       <TableRow>
-                        <TableCell>인원수</TableCell>
+                        <TableCell
+                          sx={{ fontSize: '1.5rem', fontWeight: 'bold' }}
+                        >
+                          인원수
+                        </TableCell>
                         <TableCell>
                           <input
                             type={'number'}
                             placeholder="인원수를 입력하세요"
                             onChange={onCntHandler}
+                            value={cnt}
                           />
                         </TableCell>
                       </TableRow>
                       <TableRow>
-                        <TableCell>가격</TableCell>
+                        <TableCell
+                          sx={{ fontSize: '1.5rem', fontWeight: 'bold' }}
+                        >
+                          가격
+                        </TableCell>
                         <TableCell>
                           <input
                             type={'number'}
+                            value={price}
                             placeholder="가격을 입력하세요"
                             onChange={onPriceHandler}
                           />
                         </TableCell>
                       </TableRow>
                       <TableRow>
-                        <TableCell>설명</TableCell>
+                        <TableCell
+                          sx={{ fontSize: '1.5rem', fontWeight: 'bold' }}
+                        >
+                          설명
+                        </TableCell>
                         <TableCell>
                           <textarea
+                            value={description}
                             placeholder="팬미팅 상세 내용을 작성해주세요"
                             onChange={onDescriptionHandler}
                             rows="4"
@@ -177,7 +213,11 @@ export default function Apply() {
                         </TableCell>
                       </TableRow>
                       <TableRow>
-                        <TableCell>이미지</TableCell>
+                        <TableCell
+                          sx={{ fontSize: '1.5rem', fontWeight: 'bold' }}
+                        >
+                          이미지
+                        </TableCell>
                         <TableCell>
                           <input
                             type="file"

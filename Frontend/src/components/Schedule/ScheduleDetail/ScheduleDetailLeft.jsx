@@ -10,8 +10,9 @@ import { useSelector, useDispatch } from 'react-redux';
 import { DELETE_FANMEETING_REQUEST } from '../../../store/modules/fan';
 import axios from 'axios';
 import { KAKAO_ADMIN_KEY } from '../../../utils/dev';
+import { IMAGE_URL } from '../../../utils/contants';
 export default function ScheduleDetailLeft() {
-  const { meeting } = useSelector(state => state.meeting);
+  const { meeting, detailMeetingDone } = useSelector(state => state.meeting);
   const { me } = useSelector(state => state.mypage);
   const history = useHistory();
   const dispatch = useDispatch();
@@ -119,11 +120,14 @@ export default function ScheduleDetailLeft() {
       );
     }
   };
-
   return (
     <ScheduleDetailLeftWrapper>
       <ScheduleDetailImage>
-        <img src={poster} alt="postesr" />
+        {detailMeetingDone && meeting && meeting.image === null ? (
+          <img src={'/images/noimg.gif'} alt="noimage" />
+        ) : (
+          <img src={`${IMAGE_URL}${meeting.image}`} alt={meeting.image} />
+        )}
       </ScheduleDetailImage>
       {showButton()}
     </ScheduleDetailLeftWrapper>

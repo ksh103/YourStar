@@ -69,7 +69,7 @@ const ScheduleDetailRightWrapper = styled.div`
 const ScheduleDetailImage = styled.div`
   text-align: center;
   img {
-    max-width: 300px;
+    max-width: 270px;
     max-height: 50vh;
     width: 100%;
     object-fit: contain;
