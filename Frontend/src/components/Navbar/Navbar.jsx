@@ -123,11 +123,7 @@ export default function Navbar() {
             <img src={logo} alt="yourstar" />
           </Link>
         </CenterMenu>
-        {me.code !== 0 && (
-          <RightMenu>
-            <div id="name">{me.name}님</div>
-          </RightMenu>
-        )}
+        {me.code !== 0 && <RightMenu></RightMenu>}
         {me.code === 0 && <RightMenu />}
       </NavbarMain>
       <NavbarSub />

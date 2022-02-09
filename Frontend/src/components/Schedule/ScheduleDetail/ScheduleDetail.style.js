@@ -12,14 +12,15 @@ const ScheduleDetailHeader = styled.div`
   height: 13%;
 `;
 const ScheduleDetailTitle = styled.div`
-  margin: 0 1.5em;
+  margin: 0 1em;
   height: 100%;
   border-bottom: 2px solid gray;
   display: flex;
   align-items: center;
+  font-size: 25px;
   #meeting-icon {
     cursor: pointer;
-    font-size: 30px;
+    font-size: 40px;
     &:hover {
       color: ${pointColor};
     }
@@ -79,6 +80,7 @@ const ScheduleDetailButton = styled.div`
   display: flex;
   justify-content: center;
   align-items: center;
+  font-size: 20px;
   div {
     color: white;
     max-width: 250px;
@@ -118,10 +120,12 @@ const ScheduleDetailButton = styled.div`
 `;
 const ScheduleDetail1 = styled.div`
   margin: 1.5em;
+  font-size: 25px;
 `;
 const ScheduleDetail2 = styled.div`
   margin: 1.5em;
   padding: 1.5em 0;
+  font-size: 25px;
 
   border-top: 1.5px solid gray;
 `;

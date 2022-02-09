@@ -3,7 +3,7 @@ import { blockColor, device, pointColor } from '../../../styles/variables';
 
 const SignupBlock = styled.div`
   width: 60vh;
-  height: 78vh;
+  height: 70vh;
   background-color: ${blockColor};
   border-radius: 10px;
   @media ${device.TabletPortrait} {
@@ -24,18 +24,18 @@ const SignupBlock = styled.div`
 const SignupHeader = styled.div`
   height: 20%;
   #title {
+    font-size: 50px;
     display: flex;
     justify-content: center;
     align-items: center;
-    height: 80%;
-    font-size: 2em;
+    height: 75%;
     font-weight: bold;
     color: ${pointColor};
   }
   #word {
     text-align: center;
     color: black;
-    font-size: 15px;
+    font-size: 20px;
   }
 `;
 const SignupContent = styled.div`
@@ -46,6 +46,7 @@ const SignupContentRow = styled.div`
   justify-content: center;
   margin: 0.6em 0;
   .input {
+    font-size: 18px;
     display: block;
     width: 280px;
     height: 50px;
@@ -56,10 +57,13 @@ const SignupContentRow = styled.div`
     border-radius: 4px;
   }
   .check-input {
+    font-size: 18px;
     width: 200px;
     margin: 0;
   }
   .check-button {
+    font-size: 15px;
+    font-weight: bold;
     height: 50px;
     width: 60px;
     border-radius: 4px;
@@ -68,6 +72,7 @@ const SignupContentRow = styled.div`
     background-color: ${pointColor};
   }
   .signup-button {
+    font-size: 15px;
     display: block;
     width: 320px;
     height: 50px;

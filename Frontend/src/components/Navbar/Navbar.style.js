@@ -10,7 +10,7 @@ const NavbarMain = styled.div`
 `;
 const LeftMenu = styled.div`
   opacity: 0;
-  font-size: 30px;
+  font-size: 40px;
   display: flex;
   align-items: center;
 
@@ -28,13 +28,13 @@ const CenterMenu = styled.div`
   justify-content: center;
   align-items: center;
   img {
-    margin-top: 10px;
-    width: 200px;
+    margin-top: 20px;
+    width: 450px;
   }
   @media ${device.TabletPortrait} {
     img {
       margin-top: 5px;
-      width: 140px;
+      width: 300px;
     }
   }
   width: 50%;
@@ -65,12 +65,13 @@ const NavbarSubBlock = styled.div`
   height: 40%;
 `;
 const SubMenu = styled.div`
+  font-size: 25px;
   display: flex;
-  justify-content: space-between;
+  /* justify-content: space-between; */
   align-items: center;
   ul li {
     color: white;
-    margin: 0 20px;
+    margin: 20px;
     text-align: center;
     float: left;
   }
@@ -80,7 +81,7 @@ const NavbarWrapper = styled.div`
     opacity: 1;
     transition: 0.5s;
   }
-  height: 12vh;
+  height: 20vh;
   @media ${device.TabletPortrait} {
     height: 10vh;
   }

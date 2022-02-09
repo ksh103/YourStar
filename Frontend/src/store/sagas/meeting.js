@@ -107,7 +107,10 @@ function* insertMeeting(action) {
     const result = yield call(InsertMeetingAPI, action.data);
     yield put({
       type: INSERT_MEETING_SUCCESS,
-      data: result,
+    });
+    yield put({
+      type: TOTAL_MEETINGS_REQUEST,
+      data: { page: 1, size: 100 },
     });
   } catch (err) {
     yield put({
