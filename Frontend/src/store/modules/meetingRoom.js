@@ -16,6 +16,8 @@ const SIGNAL_OX = 'SIGNAL_OX';
 const OX_GAME_COUNT = 'OX_GAME_COUNT';
 
 const PLUS_INDEX = 'PLUS_INDEX';
+const CHOSONANT_QUIZ = 'CHOSONANT_QUIZ';
+const PUBLISHER_AUDIO_CHANGE = 'PUBLISHER_AUDIO_CHANGE';
 
 // QnA 모드를 변경하기위한 action
 // 스타가 의 조작에 대한 action이라고 이해하면 된다.
@@ -144,6 +146,20 @@ export const oxGameRound = () => {
   };
 };
 
+export const choQuiz = text => {
+  return {
+    type: CHOSONANT_QUIZ,
+    payload: text,
+  };
+};
+
+export const audioChange = fe => {
+  return {
+    type: PUBLISHER_AUDIO_CHANGE,
+    payload: fe,
+  };
+};
+
 // 평소 컴포넌트에서 선언하던 state들!
 const initialState = {
   // 초기에는 시작 안한 상태!
@@ -165,6 +181,7 @@ const initialState = {
   OXsignal: null,
   OXgameCount: 0,
   index: -1,
+  chosonantQuiz: null,
 };
 
 const MeetingRoom = (state = initialState, action) => {
@@ -244,6 +261,20 @@ const MeetingRoom = (state = initialState, action) => {
         ...state,
         OXgameCount: prevCount + 1,
       };
+    case CHOSONANT_QUIZ:
+      return {
+        ...state,
+        chosonantQuiz: action.payload,
+      };
+    // case PUBLISHER_AUDIO_CHANGE:
+    //   console.log(
+    //     state.publisher.properties.publishAudio,
+    //     '리듀서에서의 퍼블리셔'
+    //   );
+    //   const audiostate = state.publisher.properties.publishAudio;
+    //   return {
+    //     ...state,
+    //   };
     default:
       return state; // 기본 값 반환!
   }

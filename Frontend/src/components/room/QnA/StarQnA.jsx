@@ -20,12 +20,6 @@ export default function StarQnA() {
     StarQnAtoggle: state.MeetingRoom.StarQnAtoggle,
   }));
 
-  const dispatch = useDispatch();
-
-  const toggleChange = tf => {
-    dispatch(changeQnAtoggle(tf));
-  };
-
   return (
     <BackgroundDiv>
       {StarQnAtoggle === true ? (

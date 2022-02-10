@@ -5,13 +5,20 @@ import {
   SmallChattingInputBox,
   SmallChattingListBox,
 } from '../../Chatting/Chatting.style';
+import { useSelector, useDispatch } from 'react-redux';
 
 export default function ConsonantUserInput() {
+  const { chosonantQuiz, storeSession } = useSelector(state => ({
+    chosonantQuiz: state.MeetingRoom.chosonantQuiz,
+    storeSession: state.MeetingRoom.storeSession,
+  }));
   return (
     <>
       <HalfSideDiv2>
         <SmallBox>유저 입력창</SmallBox>
-        <SmallChattingListBox> ㄱ ㅎ ㅇ ㄹ ㄴ</SmallChattingListBox>
+        <SmallChattingListBox>
+          {chosonantQuiz && chosonantQuiz}
+        </SmallChattingListBox>
         <SmallChattingInputBox></SmallChattingInputBox>
       </HalfSideDiv2>
     </>

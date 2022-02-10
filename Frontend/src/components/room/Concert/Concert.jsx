@@ -11,7 +11,9 @@ import { useSelector, useDispatch } from 'react-redux';
 import {
   ChattingAction,
   ChattingInputChange,
+  ScreenChange,
 } from '../../../store/modules/meetingRoom';
+import StarVideoComponent from '../../../pages/Room/StarVideoComponent';
 
 // 포지션작업
 const BackgroundDiv = styled.div`
@@ -49,17 +51,19 @@ const EmoziBox = styled.div`
 
 export default function Concert() {
   const [testInput, setTestinput] = React.useState('');
-  const { emoziList } = useSelector(state => ({
-    emoziList: state.MeetingRoom.emoziList,
-  }));
-  const { chattingList } = useSelector(state => ({
+
+  const { chattingList, mainStreamManager, emoziList } = useSelector(state => ({
     chattingList: state.MeetingRoom.chattingList,
+    emoziList: state.MeetingRoom.emoziList,
+    mainStreamManager: state.MeetingRoom.mainStreamManager,
   }));
+
   const dispatch = useDispatch();
 
   const SubmitText = Input => dispatch(ChattingInputChange(Input));
   const AppendChattingList = inputValue => dispatch(ChattingAction(inputValue));
 
+  const SetSelect = selectNum => dispatch(ScreenChange(selectNum));
   const handleChatMessageChange = e => {
     setTestinput(e.target.value);
   };
@@ -91,7 +95,11 @@ export default function Concert() {
   return (
     <BackgroundDiv>
       <ConcertWrapper>
-        <ConcertDisplayBox></ConcertDisplayBox>
+        <ConcertDisplayBox>
+          {mainStreamManager && (
+            <StarVideoComponent streamManager={mainStreamManager} />
+          )}
+        </ConcertDisplayBox>
         <EmoziBox>
           {emoziList.map((emozi, idx) => {
             return (
@@ -122,6 +130,7 @@ export default function Concert() {
         </ConcertChattingListBox>
       </HalfSideDiv1>
       <EmoziBar></EmoziBar>
+      <button onClick={() => SetSelect(0)}>홈으로</button>
     </BackgroundDiv>
   );
 }

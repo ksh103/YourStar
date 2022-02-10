@@ -20,6 +20,8 @@ import {
   oxGameRound,
   signalOX,
   UserDelete,
+  choQuiz,
+  audioChange,
 } from '../../store/modules/meetingRoom';
 
 // 컴포넌트
@@ -65,22 +67,6 @@ class Room extends Component {
         type: 'screen',
       });
     }
-
-    // if (prevState.testInput !== this.props.testInput) {
-    //   mySession.signal({
-    //     data: `${this.props.me.nick},${this.props.testInput}`,
-    //     to: [],
-    //     type: 'chat',
-    //   });
-    // }
-
-    // if (prevState.QnAmode !== this.props.QnAmode) {
-    //   mySession.signal({
-    //     data: this.props.QnAmode,
-    //     to: [],
-    //     type: 'QnAmode',
-    //   });
-    // }
   }
 
   componentWillUnmount() {
@@ -161,9 +147,10 @@ class Room extends Component {
         mySession.on('signal:QnAmode', event => {
           console.log('qna모드 변경신호받음');
           let Modedata = event.data.split(',');
-          const Mode = Modedata[1];
-          if (Mode !== this.props.QnAmode) {
-            this.props.dochangeQnAMode(Mode);
+          const QAmode = Modedata[1];
+          console.log(QAmode);
+          if (QAmode !== this.props.QnAmode) {
+            this.props.dochangeQnAMode(QAmode);
           }
         });
 
@@ -194,6 +181,27 @@ class Room extends Component {
             }
           });
         }
+
+        if (this.props.userCode === 3) {
+          mySession.on('signal:Cho', event => {
+            let chodata = event.data.split(',');
+            if (chodata[0] !== this.props.chosonantQuiz) {
+              this.props.dochosonantQuiz(chodata[1]);
+            }
+          });
+        }
+
+        mySession.on('signal:mic', event => {
+          console.log(event, '받음');
+          console.log(this.props.publisher, ' 퍼블리셔');
+          if (this.props.publisher.properties.publishAudio === false) {
+            const publisher = this.props.publisher.publishAudio(false);
+            this.props.doMainStreamManagerInfo(publisher);
+          } else {
+            const publisher = this.props.publisher.publishAudio(true);
+            this.props.doMainStreamManagerInfo(publisher);
+          }
+        });
 
         // 세션과 연결하는 부분
         this.getToken().then(token => {
@@ -376,10 +384,10 @@ const mapStateToProps = state => ({
   OXsignal: state.MeetingRoom.OXsignal,
   OXgameCount: state.MeetingRoom.OXgameCount,
   userCode: state.mypage.me.code,
+  chosonantQuiz: state.MeetingRoom.chosonantQuiz,
 });
 
 const mapDispatchToProps = dispatch => {
-  console.log(dispatch, '디스패치');
   return {
     doChattingAction: inputValue => dispatch(ChattingAction(inputValue)),
     doUserUpdate: subscriber => dispatch(UserUpdate(subscriber)),
@@ -397,6 +405,8 @@ const mapDispatchToProps = dispatch => {
     doSignalOX: signal => dispatch(signalOX(signal)),
     doOXGameRound: () => dispatch(oxGameRound()),
     doDeleteSubscriber: subscribers => dispatch(UserDelete(subscribers)),
+    dochosonantQuiz: text => dispatch(choQuiz(text)),
+    doaudioChange: () => dispatch(audioChange()),
   };
 };
 

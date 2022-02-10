@@ -3,6 +3,7 @@ import styled from 'styled-components';
 import { OtherPersonDiv } from '../Main.style';
 import { useSelector, useDispatch } from 'react-redux';
 import UserVideoComponent from '../../../../../pages/Room/DongJun/UserVideoComponent';
+import ConsonantAllRank from '../../RightSideItems/Game/ConsonantGame/ConsonantAllRank';
 
 const OtherPersonSc = styled.div`
   max-width: 65.041vw;
@@ -21,10 +22,20 @@ const OtherPersonSc = styled.div`
 `;
 
 export default function OtherPersonScreen() {
-  const { subscribers } = useSelector(state => ({
+  const { subscribers, storeSession } = useSelector(state => ({
     subscribers: state.MeetingRoom.subscribers,
+    storeSession: state.MeetingRoom.storeSession,
   }));
 
+  // const forceMicOff = sub => {
+  //   console.log(sub.stream.connection.connectionId, '커넥션id');
+  //   const connectionId = sub.stream.connection.connectionId;
+  //   storeSession.signal({
+  //     data: 'off your mic',
+  //     to: [connectionId],
+  //     type: 'mic',
+  //   });
+  // };
   return (
     <OtherPersonDiv>
       <OtherPersonSc>
@@ -33,7 +44,6 @@ export default function OtherPersonScreen() {
             <div
               // className="stream-container col-md-6 col-xs-6"
               key={i}
-              onClick={() => this.handleMainVideoStream(sub)}
             >
               <UserVideoComponent streamManager={sub} />
             </div>
