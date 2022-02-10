@@ -22,6 +22,7 @@ import {
   UserDelete,
   choQuiz,
   audioChange,
+  UpdateOneByOne,
 } from '../../store/modules/meetingRoom';
 
 // 컴포넌트
@@ -42,14 +43,10 @@ class Room extends Component {
     var pathname = props.location.pathname;
 
     this.state = {
-      mySessionId: '1', // 넘어온 미팅룸 ID 입력
+      mySessionId: pathname.substr(6), // 넘어온 미팅룸 ID 입력
       session: undefined,
       me: this.props.me, // Store에 저장된 내 정보 입력
     };
-
-    this.joinSession = this.joinSession.bind(this);
-    this.leaveSession = this.leaveSession.bind(this);
-    this.onbeforeunload = this.onbeforeunload.bind(this);
   }
 
   componentDidMount() {
@@ -59,13 +56,12 @@ class Room extends Component {
   }
 
   componentDidUpdate(prevState) {
-    const mySession = this.state.session;
     if (prevState.selectNum !== this.props.selectNum) {
-      mySession.signal({
-        data: this.props.selectNum,
-        to: [],
-        type: 'screen',
-      });
+      if (this.props.selectNum === 6) {
+        if (this.state.me.code !== 3) {
+          this.starJoinOnebyOne();
+        }
+      }
     }
   }
 
@@ -74,7 +70,7 @@ class Room extends Component {
   }
 
   onbeforeunload(event) {
-    this.leaveSession();
+    // this.leaveSession();
   }
 
   deleteSubscriber(streamManager) {
@@ -87,7 +83,10 @@ class Room extends Component {
   }
 
   joinSession() {
+    console.log('====== JOINSESSION ======');
     this.OV = new OpenVidu(); // Openvidu 객체 생성
+
+    // 세션 진입
     this.setState(
       {
         session: this.OV.initSession(),
@@ -100,12 +99,17 @@ class Room extends Component {
         mySession.on('streamCreated', event => {
           var subscriber = mySession.subscribe(event.stream, undefined); // 들어온 사용자의 정보
           var subInfo = JSON.parse(subscriber.stream.connection.data);
-
-          // 스타가 들어왔으면 메인 화면으로, 아니면 일반 화면으로 보냄
-          if (subInfo.memberCode === 4) {
-            this.props.doMainStreamManagerInfo(subscriber);
-          } else if (subInfo.memberCode === 3) {
-            this.props.doUserUpdate(subscriber);
+          if (subInfo.memberInfo !== undefined) {
+            console.log('===== 불러오기 성공 ======');
+            this.props.doUpdateOneByOne(subscriber);
+          } else {
+            // 스타가 들어왔으면 메인 화면으로, 아니면 일반 화면으로 보냄
+            if (subInfo.memberCode === 4) {
+              this.props.doMainStreamManagerInfo(subscriber);
+            } else if (subInfo.memberCode === 3) {
+              console.log('=====사용자 입장=====');
+              this.props.doUserUpdate(subscriber);
+            }
           }
         });
 
@@ -113,7 +117,7 @@ class Room extends Component {
         mySession.on('streamDestroyed', event => {
           // store에서도 제거해줘야함 !!!!! 아직 안함
           // Remove the stream from 'subscribers' array
-          this.deleteSubscriber(event.stream.streamManager);
+          // this.deleteSubscriber(event.stream.streamManager);
         });
 
         // Exception 처리
@@ -137,8 +141,8 @@ class Room extends Component {
         //변화감지
         mySession.on('signal:screen', event => {
           // event.data ==> string 형태의 변화된 메뉴선택한 번호들!
+          // 일반 유저가 변화를 감지하는 부분          let changeNum = parseInt(event.data);
           let changeNum = parseInt(event.data);
-
           if (changeNum !== this.props.selectNum) {
             this.props.doScreenChange(changeNum);
           }
@@ -158,6 +162,27 @@ class Room extends Component {
           let emozidata = event.data.split(',');
           if (emozidata[0] !== this.props.me.nick) {
             this.props.doemoziListAdd(emozidata[1]);
+          }
+        });
+        mySession.on('signal:one', event => {
+          // 일반 유저가 1대1 미팅 참여 요구받음
+          let changeNum = parseInt(event.data);
+          if (changeNum !== this.props.selectNum) {
+            this.props.doScreenChange(changeNum);
+            this.userJoinOnebyOne();
+          }
+        });
+
+        mySession.on('signal:oneback', event => {
+          // 일반 유저가 1대1 미팅 퇴장 요구 받음
+          console.log('너 퇴장해 !!!');
+          let changeNum = parseInt(event.data);
+          if (changeNum !== this.props.selectNum) {
+            if (this.state.me.code === 3) {
+              this.props.doScreenChange(changeNum);
+              mySession.disconnect();
+              this.joinSession();
+            }
           }
         });
 
@@ -204,7 +229,7 @@ class Room extends Component {
         });
 
         // 세션과 연결하는 부분
-        this.getToken().then(token => {
+        this.getToken(this.state.mySessionId).then(token => {
           mySession
             .connect(token, {
               // 추가로 넘겨주고 싶은 데이터가 있으면 여기에 추가
@@ -241,6 +266,97 @@ class Room extends Component {
         });
       }
     );
+  }
+
+  starJoinOnebyOne() {
+    const mySession = this.state.session;
+    mySession.disconnect();
+
+    // // 세션과 연결을 끊고 Store에 다른 사람들의 비디오도 초기화 해줌
+    // var empty = [];
+    // this.props.doDeleteSubscriber(empty);
+
+    // 1대1 미팅룸으로 입장
+    var onebyoneSessionId = this.state.mySessionId + '-onebyone';
+    console.log('1대1 세션 입장 ', onebyoneSessionId);
+    this.getToken(onebyoneSessionId).then(token => {
+      mySession
+        .connect(token, {
+          // 추가로 넘겨주고 싶은 데이터가 있으면 여기에 추가
+          clientData: this.state.me.nick,
+          memberCode: this.state.me.code,
+        })
+        .then(() => {
+          // 연결 후에 내 정보를 담기
+          let publisher = this.OV.initPublisher(undefined, {
+            audioSource: undefined, // The source of audio. If undefined default microphone
+            videoSource: undefined, // The source of video. If undefined default webcam
+            publishAudio: true, // Whether you want to start publishing with your audio unmuted or not
+            publishVideo: true, // Whether you want to start publishing with your video enabled or not
+            resolution: '640x480', // The resolution of your video
+            frameRate: 30, // The frame rate of your video
+            insertMode: 'APPEND', // How the video is inserted in the target element 'video-container'
+            mirror: false, // Whether to mirror your local video or not
+          });
+
+          // 세션에 내 비디오 및 마이크 정보 푸시
+          mySession.publish(publisher);
+          this.props.doMainStreamManagerInfo(publisher);
+        })
+        .catch(error => {
+          console.log(
+            'There was an error connecting to the session:',
+            error.code,
+            error.message
+          );
+        });
+    });
+  }
+
+  userJoinOnebyOne() {
+    const mySession = this.state.session;
+    mySession.disconnect();
+
+    // // 세션과 연결을 끊고 Store에 다른 사람들의 비디오도 초기화 해줌
+    // var empty = [];
+    // this.props.doDeleteSubscriber(empty);
+
+    // 1대1 미팅룸으로 입장
+    var onebyoneSessionId = this.state.mySessionId + '-onebyone';
+    console.log('1대1 세션 입장 ', onebyoneSessionId);
+    this.getToken(onebyoneSessionId).then(token => {
+      mySession
+        .connect(token, {
+          // 추가로 넘겨주고 싶은 데이터가 있으면 여기에 추가
+          clientData: this.state.me.nick,
+          memberCode: this.state.me.code,
+          memberInfo: 'one',
+        })
+        .then(() => {
+          // 연결 후에 내 정보를 담기
+          let publisher = this.OV.initPublisher(undefined, {
+            audioSource: undefined, // The source of audio. If undefined default microphone
+            videoSource: undefined, // The source of video. If undefined default webcam
+            publishAudio: true, // Whether you want to start publishing with your audio unmuted or not
+            publishVideo: true, // Whether you want to start publishing with your video enabled or not
+            resolution: '640x480', // The resolution of your video
+            frameRate: 30, // The frame rate of your video
+            insertMode: 'APPEND', // How the video is inserted in the target element 'video-container'
+            mirror: false, // Whether to mirror your local video or not
+          });
+
+          // 세션에 내 비디오 및 마이크 정보 푸시
+          mySession.publish(publisher);
+          this.props.doUpdateMyInformation(publisher);
+        })
+        .catch(error => {
+          console.log(
+            'There was an error connecting to the session:',
+            error.code,
+            error.message
+          );
+        });
+    });
   }
 
   leaveSession() {
@@ -288,15 +404,16 @@ class Room extends Component {
    *   3) The Connection.token must be consumed in Session.connect() method
    */
 
-  getToken() {
-    return this.createSession(this.state.mySessionId).then(sessionId =>
+  getToken(curSessionId) {
+    console.log('===== 세션 연결 중 : ', curSessionId);
+    return this.createSession(curSessionId).then(sessionId =>
       this.createToken(sessionId)
     );
   }
 
-  createSession(sessionId) {
+  createSession(curSessionId) {
     return new Promise((resolve, reject) => {
-      var data = JSON.stringify({ customSessionId: sessionId });
+      var data = JSON.stringify({ customSessionId: curSessionId });
       axios
         .post(OPENVIDU_SERVER_URL + '/openvidu/api/sessions', data, {
           headers: {
@@ -312,7 +429,7 @@ class Room extends Component {
         .catch(response => {
           var error = Object.assign({}, response);
           if (error?.response?.status === 409) {
-            resolve(sessionId);
+            resolve(curSessionId);
           } else {
             console.log(error);
             console.warn(
@@ -407,6 +524,7 @@ const mapDispatchToProps = dispatch => {
     doDeleteSubscriber: subscribers => dispatch(UserDelete(subscribers)),
     dochosonantQuiz: text => dispatch(choQuiz(text)),
     doaudioChange: () => dispatch(audioChange()),
+    doUpdateOneByOne: stream => dispatch(UpdateOneByOne(stream)),
   };
 };
 
