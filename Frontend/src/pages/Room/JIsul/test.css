@@ -4,6 +4,12 @@
     margin: 10px;
 }
 
+.speaking {
+    border-color: green;
+    border-radius: 5px;
+    background-color: rebeccapurple;
+}
+
 
 @keyframes fadeInUp {
     0% {

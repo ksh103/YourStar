@@ -8,6 +8,7 @@ import { connect } from 'react-redux';
 import { ChattingAction } from '../../../store/modules/meetingRoom';
 import './test.css'
 import { BsFillMicFill, BsFillMicMuteFill, BsFillCameraVideoFill, BsFillCameraVideoOffFill } from 'react-icons/bs';
+import sound from '../../../assets/images/MP_Tiny Button Push.mp3'
 const OPENVIDU_SERVER_URL = 'https://i6e204.p.ssafy.io:8443';
 const OPENVIDU_SERVER_SECRET = 'YOURSTAR';
 const BackgroundDiv = styled.div`
@@ -35,6 +36,7 @@ class RoomJisul extends Component {
       videoState: false,
       // 화면 공유 
       screenShareState: false,
+      isSpeaking: false,
     };
     // 여기는 컴포넌트 내부에서 쓰이는 내용들에대한 bind 처리
     // 새로운 message를 보낸다 or 세션참여 or 종료와같은 기능들을 정의해놓은곳
@@ -231,6 +233,14 @@ class RoomJisul extends Component {
               videoState: event.data
             });
           });
+
+          mySession.on('publisherStartSpeaking', event => {
+            this.isSpeaking(true)
+          })
+        
+          mySession.on('publisherStopSpeaking', event => {
+            this.isSpeaking(false)
+          })
      
 
         mySession.on('signal:userChanged', (event) => {
@@ -272,7 +282,8 @@ class RoomJisul extends Component {
         //   // }
         // });
 
-       
+
+
         mySession.on('signal:chat', event => {
           let chatdata = event.data.split(',');
           console.log(chatdata, '채팅데이터');
@@ -313,7 +324,7 @@ class RoomJisul extends Component {
               let publisher = this.OV.initPublisher(undefined, {
                 audioSource: undefined, // The source of audio. If undefined default microphone
                 videoSource: undefined, // The source of video. If undefined default webcam
-                publishAudio: false, // Whether you want to start publishing with your audio unmuted or not
+                publishAudio: true, // Whether you want to start publishing with your audio unmuted or not
                 publishVideo: true, // Whether you want to start publishing with your video enabled or not
                 resolution: '640x480', // The resolution of your video
                 frameRate: 30, // The frame rate of your video
@@ -546,7 +557,23 @@ forceVideoControll(connection) {
     );
 }
 
+play() { 
+  var audio = document.getElementById('audio_play'); 
+  if (audio.paused) { 
+      audio.play(); 
+  }else{ 
+      audio.pause(); 
+      audio.currentTime = 0 
+  } 
+}
 
+isSpeaking(isSpeaking) {
+  console.log('isSpeaking : ', isSpeaking)
+  this.setState({
+    isSpeaking: isSpeaking
+  })
+  return isSpeaking
+}
 
 
   render() {
@@ -560,6 +587,8 @@ forceVideoControll(connection) {
         <div className="container">
           {this.state.session === undefined ? (
             <div id="join">
+                      <audio id='audio_play' src={sound}></audio> 
+        <button className='btn-13' onClick={this.play}></button>
               <div id="img-div">
                 <img
                   src="resources/images/openvidu_grey_bg_transp_cropped.png"
@@ -654,11 +683,13 @@ forceVideoControll(connection) {
               <div id="video-container" className="col-md-6">
                 {this.state.publisher !== undefined ? (
                   <div
-                    className="stream-container col-md-6 col-xs-6"
+                    className="stream-container col-md-6 col-xs-6 fs"
                     onClick={() =>
                       this.handleMainVideoStream(this.state.publisher)
                     }
+                    style={this.state.isSpeaking ? {backgroundColor: 'green'} : {backgroundColor: 'red'}}
                   >
+                    {/* className={ this.isSpeaking ? "speaking" : ""} */}
                     <UserVideoComponent streamManager={this.state.publisher}/>
                   </div>
                 ) : null}
@@ -666,7 +697,7 @@ forceVideoControll(connection) {
                   <div>
                   <div
                     key={i}
-                    className="stream-container col-md-6 col-xs-6"d
+                    className="stream-container col-md-6 col-xs-6"
                     // onClick={() => this.forceDisconnect(sub.stream.connection)}
                   >
                     <UserVideoComponent streamManager={sub}/>
