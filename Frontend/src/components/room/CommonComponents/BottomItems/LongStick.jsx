@@ -32,15 +32,6 @@ export default function LongStick() {
     storeSession: state.MeetingRoom.storeSession,
   }));
 
-  const forceMicOff = sub => {
-    console.log(sub.stream.connection.connectionId, '커넥션id');
-    const connectionId = sub.stream.connection.connectionId;
-    storeSession.signal({
-      data: 'off your mic',
-      to: [connectionId],
-      type: 'mic',
-    });
-  };
 
   return (
     <OtherPersonDiv>
@@ -50,7 +41,7 @@ export default function LongStick() {
             <div
               // className="stream-container col-md-6 col-xs-6"
               key={i}
-              onClick={() => forceMicOff(sub)}
+              
             >
               <UserVideoComponent streamManager={sub} />
             </div>

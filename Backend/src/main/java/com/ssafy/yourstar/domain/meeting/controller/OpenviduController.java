@@ -55,8 +55,8 @@ public class OpenviduController {
 			log.error("meetingRecording - This meetingId or memberId doesn't exist");
 			return ResponseEntity.status(400).body(BaseResponseBody.of(400, "This meetingId or memberId doesn't exist."));
 		} else if (recordId.equals("2")){	 // recordingId가 유효하지 않은 경우
-			log.error("meetingRecording - This recordId or memberId doesn't exist.");
-			return ResponseEntity.status(406).body(BaseResponseBody.of(406, "This recordId or memberId doesn't exist."));
+			log.error("meetingRecording - This recordId doesn't exist.");
+			return ResponseEntity.status(406).body(BaseResponseBody.of(406, "This recordId doesn't exist."));
 		} else if (recordId.equals("3")) {    // recording이 "starting" 상태. "started"가 될때까지 기다리기
 			log.error("meetingRecording - Recording has starting status. Wait until started status before stopping the recording");
 			return ResponseEntity.status(409).body(BaseResponseBody.of(409, "Recording has starting status. Wait until started status before stopping the recording"));
