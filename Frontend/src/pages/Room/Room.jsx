@@ -115,9 +115,7 @@ class Room extends Component {
 
         // 현재 미팅룸에서 퇴장한 사용자 확인
         mySession.on('streamDestroyed', event => {
-          // store에서도 제거해줘야함 !!!!! 아직 안함
-          // Remove the stream from 'subscribers' array
-          // this.deleteSubscriber(event.stream.streamManager);
+          this.deleteSubscriber(event.stream.streamManager);
         });
 
         // Exception 처리
@@ -144,12 +142,13 @@ class Room extends Component {
           // 일반 유저가 변화를 감지하는 부분          let changeNum = parseInt(event.data);
           let changeNum = parseInt(event.data);
           if (changeNum !== this.props.selectNum) {
-            this.props.doScreenChange(changeNum);
+            if (changeNum !== 6) {
+              this.props.doScreenChange(changeNum);
+            }
           }
         });
 
         mySession.on('signal:QnAmode', event => {
-          console.log('qna모드 변경신호받음');
           let Modedata = event.data.split(',');
           const QAmode = Modedata[1];
           console.log(QAmode);
@@ -175,7 +174,6 @@ class Room extends Component {
 
         mySession.on('signal:oneback', event => {
           // 일반 유저가 1대1 미팅 퇴장 요구 받음
-          console.log('너 퇴장해 !!!');
           let changeNum = parseInt(event.data);
           if (changeNum !== this.props.selectNum) {
             if (this.state.me.code === 3) {
@@ -216,18 +214,21 @@ class Room extends Component {
           });
         }
 
-        mySession.on('signal:mic', event => {
-          console.log(event, '받음');
-          console.log(this.props.publisher, ' 퍼블리셔');
-          if (this.props.publisher.properties.publishAudio === false) {
-            const publisher = this.props.publisher.publishAudio(false);
-            this.props.doMainStreamManagerInfo(publisher);
-          } else {
-            const publisher = this.props.publisher.publishAudio(true);
-            this.props.doMainStreamManagerInfo(publisher);
-          }
+        mySession.on('signal:audio', event => {
+          console.log('audioaudioaudio', event.data, '로 바꿔줘 !!!!!!!!!!1');
+          this.publisher.publishAudio(event.data);
+          this.setState({ 
+            audioState: event.data
+          });
         });
-
+  
+        mySession.on('signal:video', event => {
+            console.log('video', event.data, '로 바꿔줘 !!!!!!!!!!1');
+            this.publisher.publishVideo(event.data);
+            this.setState({ 
+              videoState: event.data
+            });
+          });
         // 세션과 연결하는 부분
         this.getToken(this.state.mySessionId).then(token => {
           mySession
@@ -238,16 +239,30 @@ class Room extends Component {
             })
             .then(() => {
               // 연결 후에 내 정보를 담기
-              let publisher = this.OV.initPublisher(undefined, {
-                audioSource: undefined, // The source of audio. If undefined default microphone
-                videoSource: undefined, // The source of video. If undefined default webcam
-                publishAudio: true, // Whether you want to start publishing with your audio unmuted or not
-                publishVideo: true, // Whether you want to start publishing with your video enabled or not
-                resolution: '640x480', // The resolution of your video
-                frameRate: 30, // The frame rate of your video
-                insertMode: 'APPEND', // How the video is inserted in the target element 'video-container'
-                mirror: false, // Whether to mirror your local video or not
-              });
+              let publisher;
+              if (this.state.me.code === 3) {
+                publisher = this.OV.initPublisher(undefined, {
+                  audioSource: undefined, // The source of audio. If undefined default microphone
+                  videoSource: undefined, // The source of video. If undefined default webcam
+                  publishAudio: false, // Whether you want to start publishing with your audio unmuted or not
+                  publishVideo: true, // Whether you want to start publishing with your video enabled or not
+                  resolution: '640x480', // The resolution of your video
+                  frameRate: 30, // The frame rate of your video
+                  insertMode: 'APPEND', // How the video is inserted in the target element 'video-container'
+                  mirror: false, // Whether to mirror your local video or not
+                });
+              } else {
+                publisher = this.OV.initPublisher(undefined, {
+                  audioSource: undefined, // The source of audio. If undefined default microphone
+                  videoSource: undefined, // The source of video. If undefined default webcam
+                  publishAudio: true, // Whether you want to start publishing with your audio unmuted or not
+                  publishVideo: true, // Whether you want to start publishing with your video enabled or not
+                  resolution: '640x480', // The resolution of your video
+                  frameRate: 30, // The frame rate of your video
+                  insertMode: 'APPEND', // How the video is inserted in the target element 'video-container'
+                  mirror: false, // Whether to mirror your local video or not
+                });
+              }
 
               // 세션에 내 비디오 및 마이크 정보 푸시
               mySession.publish(publisher);
