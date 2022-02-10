@@ -15,9 +15,6 @@ import {
 export default function SmallChatting() {
   const [testInput, setTestinput] = React.useState('');
 
-  const { chattingList } = useSelector(state => ({
-    chattingList: state.MeetingRoom.chattingList,
-  }));
   const dispatch = useDispatch();
 
   const SubmitText = Input => dispatch(ChattingInputChange(Input));
@@ -27,9 +24,9 @@ export default function SmallChatting() {
     setTestinput(e.target.value);
   };
 
-  const { storeSession } = useSelector(state => ({
-    storeSession: state.MeetingRoom.storeSession,
-  }));
+  const { storeSession, backgroundColor, chattingList } = useSelector(
+    state => state.MeetingRoom
+  );
 
   const { me } = useSelector(state => state.mypage);
 
@@ -70,6 +67,7 @@ export default function SmallChatting() {
             onKeyPress={SendMessage}
             value={testInput}
             onChange={handleChatMessageChange}
+            color={backgroundColor} // redux에서 받아온 color를 input styled에 넣어주기
           ></SmallChattingInputBox>
         </SmallBox>
       </HalfSideDiv2>

@@ -14,10 +14,6 @@ import {
 export default function LongChatting() {
   const [testInput, setTestinput] = React.useState('');
 
-  const { chattingList, storeSession } = useSelector(state => ({
-    chattingList: state.MeetingRoom.chattingList,
-    storeSession: state.MeetingRoom.storeSession,
-  }));
   const dispatch = useDispatch();
 
   const SubmitText = Input => dispatch(ChattingInputChange(Input));
@@ -26,6 +22,10 @@ export default function LongChatting() {
   const handleChatMessageChange = e => {
     setTestinput(e.target.value);
   };
+
+  const { storeSession, backgroundColor, chattingList } = useSelector(
+    state => state.MeetingRoom
+  );
 
   const { me } = useSelector(state => state.mypage);
 
@@ -65,6 +65,7 @@ export default function LongChatting() {
             onKeyPress={SendMessage}
             value={testInput}
             onChange={handleChatMessageChange}
+            color={backgroundColor} // redux에서 받아온 color를 input styled에 넣어주기
           ></LongChattingInputBox>
         </LongChattingBox>
       </HalfSideDiv1>

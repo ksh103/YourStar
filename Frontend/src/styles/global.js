@@ -1,5 +1,10 @@
 import { createGlobalStyle } from 'styled-components';
 import space from '../assets/images/space.jpg';
+import { connect } from 'react-redux';
+
+const mapStateToProps = state => {
+  return state;
+};
 
 const GlobalStyle = createGlobalStyle`
   body {
@@ -8,7 +13,8 @@ const GlobalStyle = createGlobalStyle`
     box-sizing: border-box;
     margin: 0;
     padding: 0;
-    background-color: black;
+    background-color: ${props =>
+      props.MeetingRoom.backgroundColor}; // redux에 있는 color 값 받아와서 저장
     width: 100%;    
     height: 100vh;
     background-size: cover;  
@@ -43,4 +49,7 @@ const GlobalStyle = createGlobalStyle`
     list-style: none;
   }
 `;
-export default GlobalStyle;
+
+export default connect(mapStateToProps)(GlobalStyle);
+
+// export default GlobalStyle;

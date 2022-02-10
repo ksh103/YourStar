@@ -24,6 +24,7 @@ const reducer = (state = initialState, action) =>
         break;
       case CREATE_MANAGER_FAILURE:
         draft.createManagerLoading = false;
+        draft.createManagerDone = false;
         // draft.createManagerError = action.error;
         break;
       default:
