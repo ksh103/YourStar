@@ -3,10 +3,16 @@ import './UserVideo.css';
 import {
   UserDelete,
 } from '../../store/modules/meetingRoom';
+import {
+  WARNING_MEMBER_REQUEST
+} from '../../store/modules/meeting';
 
 import { connect } from 'react-redux';
 import OpenViduVideoComponent from './OvVideo';
+
 import { BsFillMicFill, BsFillMicMuteFill, BsFillCameraVideoFill, BsFillCameraVideoOffFill } from 'react-icons/bs';
+import { RiAlarmWarningLine } from 'react-icons/ri';
+import { WarningCount } from '../../store/apis/Main/meeting';
 
 class UserVideoComponent extends Component {
   constructor(props) {
@@ -57,6 +63,21 @@ class UserVideoComponent extends Component {
           }
       });
       this.props.doUpdateSubscriber(remoteUsers);
+  }
+
+  warning(connection) {
+  
+    console.log('connection 정보', connection);
+    // const sessionId = connection.session.sessionId
+    // this.props.doWarningCount({
+    //   type: WARNING_MEMBER_REQUEST,
+    //   data: {memberId : this.props.me.memberId , meetingId : sessionId}
+    // })
+    this.props.storeSession.signal({ // 해당 사용자에게 경고주기 
+      data: "",
+      to: [connection],
+      type: "warning"
+    })
   }
 
   render() {
@@ -111,6 +132,13 @@ class UserVideoComponent extends Component {
                   }}
                 />
               )}
+              <RiAlarmWarningLine
+                size="24"
+                color='#00000'
+                onClick={() => {
+                  this.warning(this.props.streamManager.stream.connection);
+                }}
+              />
             </div>
           </div> : null} 
           {this.props.streamManager !== undefined ? (
@@ -127,11 +155,13 @@ const mapStateToProps = state => ({
   publisher: state.MeetingRoom.publisher,
   subscribers: state.MeetingRoom.subscribers,
   me: state.mypage.me,
+  meetingId : state.meeting.meeting.id
 });
 
 const mapDispatchToProps = dispatch => {
   return {
     doUpdateSubscriber: subscribers => dispatch(UserDelete(subscribers)),
+    doWarningCount : data => dispatch(WarningCount(data))
   };
 };
 export default connect(mapStateToProps, mapDispatchToProps)(UserVideoComponent);

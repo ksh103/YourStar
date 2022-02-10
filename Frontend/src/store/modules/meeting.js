@@ -126,6 +126,22 @@ const reducer = (state = initialState, action) =>
         draft.updateApproveLoading = false;
         draft.updateApproveError = action.error;
         break;
+
+        case WARNING_MEMBER_REQUEST:
+          draft.warningMemberLoading = true;
+          draft.insertMeetingDone = false;
+          draft.warningMemberError = null;
+          break;
+        case  WARNING_MEMBER_SUCCESS:
+          draft.warningMemberLoading = false;
+          draft.warningMemberDone = true;
+          console.log(action);
+          break;
+        case  WARNING_MEMBER_FAILURE:
+          draft.warningMemberLoading = false;
+          draft.warningMemberError = action.error;
+          break;
+
       case INSERT_MEETING_REQUEST:
         draft.insertMeetingLoading = true;
         draft.insertMeetingDone = false;

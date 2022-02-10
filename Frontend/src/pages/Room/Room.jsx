@@ -24,9 +24,13 @@ import {
   audioChange,
   UpdateOneByOne,
 } from '../../store/modules/meetingRoom';
-
+import { WarningCount } from '../../store/apis/Main/meeting';
 // 컴포넌트
 import RoomComponent from './RoomComponent';
+
+import {
+  WARNING_MEMBER_REQUEST
+} from '../../store/modules/meeting';
 
 const OPENVIDU_SERVER_URL = 'https://i6e204.p.ssafy.io:8443';
 const OPENVIDU_SERVER_SECRET = 'YOURSTAR';
@@ -231,6 +235,14 @@ class Room extends Component {
               this.props.publisher.publishVideo(false);
             }
         });
+
+        mySession.on('signal:warning', event => {
+          console.log('======경고정보수신======')
+          this.props.doWarningCount({
+            type: WARNING_MEMBER_REQUEST,
+            data: {memberId : this.props.me.memberId , meetingId : this.state.session.sessionId}
+          })
+        })
 
         // 세션과 연결하는 부분
         this.getToken(this.state.mySessionId).then(token => {
@@ -520,6 +532,7 @@ const mapStateToProps = state => ({
   OXgameCount: state.MeetingRoom.OXgameCount,
   userCode: state.mypage.me.code,
   chosonantQuiz: state.MeetingRoom.chosonantQuiz,
+  meetingId : state.meeting.meeting.id
 });
 
 const mapDispatchToProps = dispatch => {
@@ -543,6 +556,7 @@ const mapDispatchToProps = dispatch => {
     dochosonantQuiz: text => dispatch(choQuiz(text)),
     doaudioChange: () => dispatch(audioChange()),
     doUpdateOneByOne: stream => dispatch(UpdateOneByOne(stream)),
+    doWarningCount : data => dispatch(WarningCount(data))
   };
 };
 
