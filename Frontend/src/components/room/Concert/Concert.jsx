@@ -82,13 +82,6 @@ const EmoziEffect = styled.div`
 export default function Concert() {
   const [testInput, setTestinput] = React.useState('');
 
-
-  const { chattingList, mainStreamManager, emoziList } = useSelector(state => ({
-    chattingList: state.MeetingRoom.chattingList,
-    emoziList: state.MeetingRoom.emoziList,
-    mainStreamManager: state.MeetingRoom.mainStreamManager,
-  }));
-
   const dispatch = useDispatch();
 
   const SubmitText = Input => dispatch(ChattingInputChange(Input));
@@ -99,8 +92,13 @@ export default function Concert() {
     setTestinput(e.target.value);
   };
 
-  const { storeSession, backgroundColor, chattingList, emoziList } =
-    useSelector(state => state.MeetingRoom);
+  const {
+    storeSession,
+    backgroundColor,
+    chattingList,
+    emoziList,
+    mainStreamManager,
+  } = useSelector(state => state.MeetingRoom);
 
   const { me } = useSelector(state => state.mypage);
 
