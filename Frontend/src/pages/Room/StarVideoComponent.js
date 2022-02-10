@@ -11,7 +11,6 @@ export default class StarVideoComponent extends Component {
   }
 
   render() {
-    console.log(this.props.streamManager, '매니텨');
     return (
       <div className="hiddenConsole">
         {/* <div className="son">
