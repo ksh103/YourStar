@@ -39,14 +39,10 @@ class RoomYoungWon extends Component {
     // var pathname = props.location.pathname;
 
     this.state = {
-      mySessionId: '1', //pathname.substr(6), // 넘어온 미팅룸 ID 입력
+      mySessionId: '89', //pathname.substr(6), // 넘어온 미팅룸 ID 입력
       session: undefined,
       me: this.props.me, // Store에 저장된 내 정보 입력
     };
-
-    this.joinSession = this.joinSession.bind(this);
-    this.leaveSession = this.leaveSession.bind(this);
-    this.onbeforeunload = this.onbeforeunload.bind(this);
   }
 
   componentDidMount() {
@@ -57,12 +53,20 @@ class RoomYoungWon extends Component {
 
   componentDidUpdate(prevState) {
     const mySession = this.state.session;
+
     if (prevState.selectNum !== this.props.selectNum) {
-      mySession.signal({
-        data: this.props.selectNum,
-        to: [],
-        type: 'screen',
-      });
+      // 스타가 1대1 미팅룸 입장
+      if (this.props.selectNum === 6) {
+        if (this.state.me.code !== 3) {
+          this.starJoinOnebyOne();
+        }
+      } else {
+        mySession.signal({
+          data: this.props.selectNum,
+          to: [],
+          type: 'screen',
+        });
+      }
     }
   }
 
@@ -84,6 +88,7 @@ class RoomYoungWon extends Component {
   }
 
   joinSession() {
+    console.log('====== JOINSESSION ======');
     this.OV = new OpenVidu(); // Openvidu 객체 생성
 
     // 세션 진입
@@ -136,8 +141,9 @@ class RoomYoungWon extends Component {
         //변화감지
         mySession.on('signal:screen', event => {
           // event.data ==> string 형태의 변화된 메뉴선택한 번호들!
-          let changeNum = parseInt(event.data);
 
+          // 일반 유저가 변화를 감지하는 부분
+          let changeNum = parseInt(event.data);
           if (changeNum !== this.props.selectNum) {
             this.props.doScreenChange(changeNum);
           }
@@ -158,8 +164,17 @@ class RoomYoungWon extends Component {
           }
         });
 
+        mySession.on('signal:one', event => {
+          // 일반 유저가 1대1 미팅 참여 요구받음
+          let changeNum = parseInt(event.data);
+          if (changeNum !== this.props.selectNum) {
+            this.props.doScreenChange(changeNum);
+            this.userJoinOnebyOne();
+          }
+        });
+
         // 세션과 연결하는 부분
-        this.getToken().then(token => {
+        this.getToken(this.state.mySessionId).then(token => {
           mySession
             .connect(token, {
               // 추가로 넘겨주고 싶은 데이터가 있으면 여기에 추가
@@ -196,6 +211,96 @@ class RoomYoungWon extends Component {
         });
       }
     );
+  }
+
+  starJoinOnebyOne() {
+    const mySession = this.state.session;
+    mySession.disconnect();
+
+    // 세션과 연결을 끊고 Store에 다른 사람들의 비디오도 초기화 해줌
+    var empty = [];
+    this.props.doDeleteSubscriber(empty);
+
+    // 1대1 미팅룸으로 입장
+    var onebyoneSessionId = this.state.mySessionId + '-onebyone';
+    console.log('1대1 세션 입장 ', onebyoneSessionId);
+    this.getToken(onebyoneSessionId).then(token => {
+      mySession
+        .connect(token, {
+          // 추가로 넘겨주고 싶은 데이터가 있으면 여기에 추가
+          clientData: this.state.me.nick,
+          memberCode: this.state.me.code,
+        })
+        .then(() => {
+          // 연결 후에 내 정보를 담기
+          let publisher = this.OV.initPublisher(undefined, {
+            audioSource: undefined, // The source of audio. If undefined default microphone
+            videoSource: undefined, // The source of video. If undefined default webcam
+            publishAudio: true, // Whether you want to start publishing with your audio unmuted or not
+            publishVideo: true, // Whether you want to start publishing with your video enabled or not
+            resolution: '640x480', // The resolution of your video
+            frameRate: 30, // The frame rate of your video
+            insertMode: 'APPEND', // How the video is inserted in the target element 'video-container'
+            mirror: false, // Whether to mirror your local video or not
+          });
+
+          // 세션에 내 비디오 및 마이크 정보 푸시
+          mySession.publish(publisher);
+          this.props.doMainStreamManagerInfo(publisher);
+        })
+        .catch(error => {
+          console.log(
+            'There was an error connecting to the session:',
+            error.code,
+            error.message
+          );
+        });
+    });
+  }
+
+  userJoinOnebyOne() {
+    const mySession = this.state.session;
+    mySession.disconnect();
+
+    // 세션과 연결을 끊고 Store에 다른 사람들의 비디오도 초기화 해줌
+    var empty = [];
+    this.props.doDeleteSubscriber(empty);
+
+    // 1대1 미팅룸으로 입장
+    var onebyoneSessionId = this.state.mySessionId + '-onebyone';
+    console.log('1대1 세션 입장 ', onebyoneSessionId);
+    this.getToken(onebyoneSessionId).then(token => {
+      mySession
+        .connect(token, {
+          // 추가로 넘겨주고 싶은 데이터가 있으면 여기에 추가
+          clientData: this.state.me.nick,
+          memberCode: this.state.me.code,
+        })
+        .then(() => {
+          // 연결 후에 내 정보를 담기
+          let publisher = this.OV.initPublisher(undefined, {
+            audioSource: undefined, // The source of audio. If undefined default microphone
+            videoSource: undefined, // The source of video. If undefined default webcam
+            publishAudio: true, // Whether you want to start publishing with your audio unmuted or not
+            publishVideo: true, // Whether you want to start publishing with your video enabled or not
+            resolution: '640x480', // The resolution of your video
+            frameRate: 30, // The frame rate of your video
+            insertMode: 'APPEND', // How the video is inserted in the target element 'video-container'
+            mirror: false, // Whether to mirror your local video or not
+          });
+
+          // 세션에 내 비디오 및 마이크 정보 푸시
+          mySession.publish(publisher);
+          this.props.doUpdateMyInformation(publisher);
+        })
+        .catch(error => {
+          console.log(
+            'There was an error connecting to the session:',
+            error.code,
+            error.message
+          );
+        });
+    });
   }
 
   leaveSession() {
@@ -243,15 +348,15 @@ class RoomYoungWon extends Component {
    *   3) The Connection.token must be consumed in Session.connect() method
    */
 
-  getToken() {
-    return this.createSession(this.state.mySessionId).then(sessionId =>
+  getToken(curSessionId) {
+    return this.createSession(curSessionId).then(sessionId =>
       this.createToken(sessionId)
     );
   }
 
-  createSession(sessionId) {
+  createSession(curSessionId) {
     return new Promise((resolve, reject) => {
-      var data = JSON.stringify({ customSessionId: sessionId });
+      var data = JSON.stringify({ customSessionId: curSessionId });
       axios
         .post(OPENVIDU_SERVER_URL + '/openvidu/api/sessions', data, {
           headers: {
@@ -267,7 +372,7 @@ class RoomYoungWon extends Component {
         .catch(response => {
           var error = Object.assign({}, response);
           if (error?.response?.status === 409) {
-            resolve(sessionId);
+            resolve(curSessionId);
           } else {
             console.log(error);
             console.warn(

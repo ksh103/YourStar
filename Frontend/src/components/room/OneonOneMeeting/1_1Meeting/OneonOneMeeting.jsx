@@ -7,7 +7,8 @@ import Grid from '@mui/material/Grid';
 import { useSelector } from 'react-redux';
 
 export default function OneonOneMeetingStar() {
-  const { mainStreamManager, publisher } = useSelector(state => ({
+  const { me } = useSelector(state => state.mypage);
+  const { mainStreamManager, publisher, subscribers } = useSelector(state => ({
     mainStreamManager: state.MeetingRoom.mainStreamManager,
     publisher: state.MeetingRoom.publisher,
   }));
@@ -25,7 +26,12 @@ export default function OneonOneMeetingStar() {
           </Grid>
           <Grid xs={6}>
             <UserSelfCamBox>
-              {publisher && <UserVideoComponent streamManager={publisher} />}
+              {me.code === 3 && (
+                <UserVideoComponent streamManager={publisher} />
+              )}
+              {me.code === 4 && subscribers && (
+                <UserVideoComponent streamManager={subscribers[0]} />
+              )}
             </UserSelfCamBox>
           </Grid>
         </Grid>

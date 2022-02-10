@@ -63,11 +63,12 @@ export default function Header() {
     // console.log('현재 사용자 수', subscribers.length);
 
     if (idx < subscribers.length) {
+      var sessionId = storeSession.sessionId;
       var data = {
-        session: storeSession.sessionId, // 1-onebyone
+        session: sessionId.substring(0, sessionId.length - 9), // 1-onebyone 일때 1만 뽑아내기
         to: [subscribers[idx].stream.connection.connectionId],
-        type: 'one',
-        data: 'This is my signal data',
+        type: 'signal:one',
+        data: '6',
       };
       axios
         .post(OPENVIDU_SERVER_URL + '/openvidu/api/signal', data, {
