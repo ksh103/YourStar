@@ -96,6 +96,7 @@ stopScreenShare() {
   render() {
     return (
       <div className="hiddenConsole">
+        {this.props.me.code !== 3 ?
         <div className="son">
           {/* 마이크 */}
           {this.state.audioState ? (
@@ -157,7 +158,7 @@ stopScreenShare() {
               }}
             />
           )}
-        </div>
+        </div> : null}
 
         {this.props.streamManager !== undefined ? (
           <>
@@ -173,6 +174,7 @@ stopScreenShare() {
 const mapStateToProps = state => ({
   mainStreamManager: state.MeetingRoom.mainStreamManager,
   storeSession: state.MeetingRoom.storeSession,
+  me: state.mypage.me,
 });
 
 const mapDispatchToProps = dispatch => {

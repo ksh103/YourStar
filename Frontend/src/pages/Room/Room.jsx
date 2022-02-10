@@ -215,8 +215,13 @@ class Room extends Component {
         }
 
         mySession.on('signal:audio', event => {
+          console.log(event ,'audio 이벤트 정보입니다.')
           console.log('audioaudioaudio', event.data, '로 바꿔줘 !!!!!!!!!!1');
-          this.props.publisher.publishAudio(event.data);
+          if (event.data === true) {
+            this.props.publisher.publishAudio(true);
+          } else {
+            this.props.publisher.publishAudio(false);
+          }
         });
   
         mySession.on('signal:video', event => {
