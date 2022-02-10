@@ -215,9 +215,8 @@ class Room extends Component {
         }
 
         mySession.on('signal:audio', event => {
-          console.log(event ,'audio 이벤트 정보입니다.')
-          console.log('audioaudioaudio', event.data, '로 바꿔줘 !!!!!!!!!!1');
-          if (event.data === true) {
+          console.log('===== 오디오 상태 변경 =====');
+          if (event.data === 'true') {
             this.props.publisher.publishAudio(true);
           } else {
             this.props.publisher.publishAudio(false);
@@ -225,8 +224,12 @@ class Room extends Component {
         });
   
         mySession.on('signal:video', event => {
-            console.log('video', event.data, '로 바꿔줘 !!!!!!!!!!1');
-            this.props.publisher.publishVideo(event.data);
+            console.log('===== 비디오 상태 변경 =====');
+            if (event.data === 'true') {
+              this.props.publisher.publishVideo(true);
+            } else {
+              this.props.publisher.publishVideo(false);
+            }
         });
 
         // 세션과 연결하는 부분

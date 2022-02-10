@@ -30,7 +30,7 @@ class UserVideoComponent extends Component {
           // 마이크 상태 변경하고 싶은 사용자라면 
           if (user.stream.connection.connectionId === connection.connectionId) {
               user.stream.audioActive = !user.stream.audioActive; // 마이크 상태 변경 
-              console.log(user.stream.audioActive, '오디오상태변경즁!!!!!!!!!!')
+              
               this.props.storeSession.signal({  // 해당 사용자에게 마이크 상태 변경하라고 신호보내기 
                 data: user.stream.audioActive,
                 to: [connection],
@@ -59,36 +59,6 @@ class UserVideoComponent extends Component {
       this.props.doUpdateSubscriber(remoteUsers);
   }
 
-  audioChange() {
-    if (this.state.audioState === true) {
-      return (
-        <BsFillMicFill
-        size="24"
-        color='#00000'
-        onClick={() => {
-          this.forceMicControll(this.props.streamManager.stream.connection);
-          this.setState({
-            audioState: !this.state.audioState
-          })
-        }}
-      />
-      )
-  } else {
-    return (
-    <BsFillMicMuteFill
-      size="24"
-      color='#00000'
-      onClick={() => {
-        this.forceMicControll(this.props.streamManager.stream.connection);
-        this.setState({
-          audioState: !this.state.audioState
-        })
-      }}
-      />)
-  }
-}
-
-
   render() {
     return (
       <div className="hiddenConsole">
@@ -100,7 +70,6 @@ class UserVideoComponent extends Component {
                 size="24"
                 color='#00000'
                 onClick={() => {
-                  console.log("===== 오디오 클릭함 =====")
                   this.forceMicControll(this.props.streamManager.stream.connection);
                   this.setState({
                     audioState: !this.state.audioState
@@ -112,7 +81,6 @@ class UserVideoComponent extends Component {
                 size="24"
                 color='#00000'
                 onClick={() => {
-                  console.log("===== 오디오 클릭함 =====")
                   this.forceMicControll(this.props.streamManager.stream.connection);
                   this.setState({
                     audioState: !this.state.audioState
