@@ -6,14 +6,8 @@ import './App.css';
 import UserVideoComponent from './UserVideoComponent';
 import { connect } from 'react-redux';
 import { ChattingAction } from '../../../store/modules/meetingRoom';
-import './test.css';
+import './test.css'
 import { BsFillMicFill, BsFillMicMuteFill, BsFillCameraVideoFill, BsFillCameraVideoOffFill } from 'react-icons/bs';
-import { MdScreenShare, MdStopScreenShare} from 'react-icons/md';
-
-import sound from '../../../assets/images/MP_Tiny Button Push.mp3'
-import UserModel from './models/user-model';
-var localUser = new UserModel();
-
 const OPENVIDU_SERVER_URL = 'https://i6e204.p.ssafy.io:8443';
 const OPENVIDU_SERVER_SECRET = 'YOURSTAR';
 const BackgroundDiv = styled.div`
@@ -37,8 +31,8 @@ class RoomJisul extends Component {
       messages: [],
       testInputValue: '',
       // 기본 마이크, 비디오
-      audioState: true,
-      videoState: true,
+      audioState: false,
+      videoState: false,
       // 화면 공유 
       screenShareState: false,
     };
@@ -54,19 +48,11 @@ class RoomJisul extends Component {
     this.handleChatMessageChange = this.handleChatMessageChange.bind(this);
     this.sendmessageByEnter = this.sendmessageByEnter.bind(this);
 
-    this.screenShare = this.screenShare.bind(this);
-    this.stopScreenShare = this.stopScreenShare.bind(this);
-  }
-
-  // 효과음 
-  play() { 
-    var audio = document.getElementById('audio_play'); 
-    if (audio.paused) { 
-        audio.play(); 
-    }else{ 
-        audio.pause(); 
-        audio.currentTime = 0 
-    } 
+    this.forceMic = this.forceMic.bind(this);
+    // this.forceMicOff = this.forceMicOff.bind(this);
+    // this.forceMicOn = this.forceMicOn.bind(this);
+    // this.sendSignalUserChanged = this.sendSignalUserChanged.bind(this);
+    // this.subscribeToUserChanged = this.subscribeToUserChanged(this);
   }
 
   handleChatMessageChange(e) {
@@ -187,8 +173,6 @@ class RoomJisul extends Component {
           // Subscribe to the Stream to receive it. Second parameter is undefined
           // so OpenVidu doesn't create an HTML video by its own
           var subscriber = mySession.subscribe(event.stream, undefined);
-          console.log('----------------')
-          console.log(event.stream)
           var subscribers = this.state.subscribers;
           subscribers.push(subscriber);
 
@@ -209,6 +193,86 @@ class RoomJisul extends Component {
           console.warn(exception);
         });
 
+        // mySession.on('signal:micOff', event => {
+        //   // if (event.data === this.state.publisher.stream.connection.connectionId) {
+        //   //   this.state.publisher.publishAudio(!this.state.audioState);
+        //   //   this.setState({ audioState: !this.state.audioState });
+        //   // }
+        //   this.state.publisher.publishAudio(false);
+        //   this.setState({ 
+        //     audioState: false});
+        //   this.sendSignalUserChanged({ isAudioActive : false });
+        // });
+
+        // mySession.on('signal:micOn', event => {
+        //   this.state.publisher.publishAudio(true);
+        //   this.setState({ 
+        //     audioState: true
+        //   });
+        //   this.sendSignalUserChanged({ isAudioActive : true });
+        //   // if (event.data === this.state.publisher.stream.connection.connectionId) {
+        //   //   this.state.publisher.publishAudio(!this.state.audioState);
+        //   //   this.setState({ audioState: !this.state.audioState });
+        //   // }
+        // });
+
+        mySession.on('signal:audio', event => {
+          console.log('audioaudioaudio', !this.state.audioState, '로 바꿔줘 !!!!!!!!!!1');
+          this.state.publisher.publishAudio(!this.state.audioState);
+          this.setState({ 
+            audioState: !this.state.audioState
+          });
+        });
+
+          mySession.on('signal:video', event => {
+            console.log('video', event.data, '로 바꿔줘 !!!!!!!!!!1');
+            this.state.publisher.publishVideo(event.data);
+            this.setState({ 
+              videoState: event.data
+            });
+          });
+     
+
+        mySession.on('signal:userChanged', (event) => {
+          let remoteUsers = this.state.subscribers;
+          console.log(remoteUsers);
+          remoteUsers.forEach((user) => {
+            console.log('user')
+            console.log(user.stream.connection.connectionId)
+            console.log(event.from.connectionId)
+            console.log('from')
+              if (user.stream.connection.connectionId === event.from.connectionId) {
+                  const data = JSON.parse(event.data);
+                  console.log('EVENTO REMOTE: ', event.data);
+                  user.stream.audioActive = data.isAudioActive;
+                  // if (data.isAudioActive !== undefined) {
+                  //   user.stream.audioActive = data.isAudioActive;
+                  // }
+                  // if (data.isVideoActive !== undefined) {
+                  //     user.setVideoActive(data.isVideoActive);
+                  // }
+              }
+          });
+          this.setState(
+              {
+                  subscribers: remoteUsers,
+              }
+          );
+      });
+
+        // mySession.on('signal:mic', event => {
+        //   this.state.publisher.publishAudio(!this.state.audioState);
+        //   this.setState({ 
+        //     audioState: !this.state.audioState
+        //   });
+          
+        //   // if (event.data === this.state.publisher.stream.connection.connectionId) {
+        //   //   this.state.publisher.publishAudio(!this.state.audioState);
+        //   //   this.setState({ audioState: !this.state.audioState });
+        //   // }
+        // });
+
+       
         mySession.on('signal:chat', event => {
           let chatdata = event.data.split(',');
           console.log(chatdata, '채팅데이터');
@@ -249,7 +313,7 @@ class RoomJisul extends Component {
               let publisher = this.OV.initPublisher(undefined, {
                 audioSource: undefined, // The source of audio. If undefined default microphone
                 videoSource: undefined, // The source of video. If undefined default webcam
-                publishAudio: true, // Whether you want to start publishing with your audio unmuted or not
+                publishAudio: false, // Whether you want to start publishing with your audio unmuted or not
                 publishVideo: true, // Whether you want to start publishing with your video enabled or not
                 resolution: '640x480', // The resolution of your video
                 frameRate: 30, // The frame rate of your video
@@ -265,7 +329,9 @@ class RoomJisul extends Component {
               this.setState({
                 mainStreamManager: publisher,
                 publisher: publisher,
-                connectId: this.state.session.connection.connectionId,
+                audioState: false,
+                videoState: false,
+                screenShareState: false,
               });
             })
             .catch(error => {
@@ -368,6 +434,8 @@ stopScreenShare() {
     // Set the main video in the page to display our webcam and store our Publisher
     this.setState({
       publisher: publisher,
+      audioState: false,
+      videoState: false,
       screenShareState: false,
     });
     // this.connectWebCam();
@@ -380,6 +448,106 @@ stopScreenShare() {
   //   });
 }
 
+// deleteSubscriber(stream) {
+//   const remoteUsers = this.state.subscribers;
+//   const userStream = remoteUsers.filter((user) => user.getStreamManager().stream === stream)[0];
+//   let index = remoteUsers.indexOf(userStream, 0);
+//   if (index > -1) {
+//       remoteUsers.splice(index, 1);
+//       this.setState({
+//           subscribers: remoteUsers,
+//       });
+//   }
+// }
+
+// 강퇴
+forceDisconnect(connection){
+  // 경고 주기 
+  this.state.session.forceDisconnect(connection);
+  // 경고창 작업하기 
+  // window.close();
+}
+
+// forceMicOff(connection) {
+//   console.log("micoff"+ connection.connectionId);
+//   this.state.session.signal({
+//     data: connection.connectionId,
+//     to: [connection],
+//     type: "micOff"
+//   })
+//   // this.state.publisher.publishAudio(false);
+// }
+
+// forceMicOn(connection) {
+//   console.log("micon "+ connection.connectionId);
+//   this.state.session.signal({
+//     data: connection.connectionId,
+//     to: [connection],
+//     type: "micOn"
+//   })
+//   // this.render();
+//   // this.state.publisher.publishAudio(false);
+// }
+
+forceMic(connection) {
+  console.log(this.state.audioState);
+  this.state.session.signal({
+    data: connection.connectionId,
+    to: [connection],
+    type: "audio"
+  })
+
+  let remoteUsers = this.state.subscribers;
+    console.log(remoteUsers);
+    remoteUsers.forEach((user) => {
+        if (user.stream.connection.connectionId === connection.connectionId) {
+            user.stream.audioActive = !user.stream.audioActive; 
+            // if (data.isAudioActive !== undefined) {
+            //   user.stream.audioActive = data.isAudioActive;
+            // }
+            // if (data.isVideoActive !== undefined) {
+            //     user.setVideoActive(data.isVideoActive);
+            // }
+        }
+    });
+    this.setState(
+        {
+            subscribers: remoteUsers,
+        }
+    );
+}
+forceVideoControll(connection) {
+  
+
+  let remoteUsers = this.state.subscribers;
+    console.log(remoteUsers);
+    remoteUsers.forEach((user) => {
+        if (user.stream.connection.connectionId === connection.connectionId) {
+            user.stream.videoActive = !user.stream.videoActive; 
+
+            console.log(this.state.videoState);
+            this.state.session.signal({
+              data: user.stream.videoActive,
+              to: [connection],
+              type: "video"
+            })
+            // if (data.isAudioActive !== undefined) {
+            //   user.stream.audioActive = data.isAudioActive;
+            // }
+            // if (data.isVideoActive !== undefined) {
+            //     user.setVideoActive(data.isVideoActive);
+            // }
+        }
+    });
+    this.setState(
+        {
+            subscribers: remoteUsers,
+        }
+    );
+}
+
+
+
 
   render() {
     const { chattingList } = this.props;
@@ -389,13 +557,9 @@ stopScreenShare() {
       <BackgroundDiv>
         {/* 컴포넌트는 들고왔을 때 잘 작동함 */}
 
-        <div className="container test_obj">
+        <div className="container">
           {this.state.session === undefined ? (
             <div id="join">
-              <audio id='audio_play' src={sound}></audio> 
-              <button className='btn-13' onClick={this.play}></button>
-              <button className='btn-12'></button>
-              <button className='btn-11'></button>
               <div id="img-div">
                 <img
                   src="resources/images/openvidu_grey_bg_transp_cropped.png"
@@ -479,6 +643,7 @@ stopScreenShare() {
                   value="Leave session"
                 />
               </div>
+
               {this.state.mainStreamManager !== undefined ? (
                 <div id="main-video" className="col-md-6">
                   <UserVideoComponent
@@ -494,93 +659,81 @@ stopScreenShare() {
                       this.handleMainVideoStream(this.state.publisher)
                     }
                   >
-                    <UserVideoComponent streamManager={this.state.publisher} />
+                    <UserVideoComponent streamManager={this.state.publisher}/>
                   </div>
                 ) : null}
                 {this.state.subscribers.map((sub, i) => (
+                  <div>
                   <div
                     key={i}
-                    className="stream-container col-md-6 col-xs-6"
-                    onClick={() => this.handleMainVideoStream(sub)}
+                    className="stream-container col-md-6 col-xs-6"d
+                    // onClick={() => this.forceDisconnect(sub.stream.connection)}
                   >
-                    <UserVideoComponent streamManager={sub} />
+                    <UserVideoComponent streamManager={sub}/>
+
+                  </div>
+                  <div className='mic'>
+                        {sub.stream.connection.stream.audioActive ? (
+                        <BsFillMicFill
+                        size="24"
+                        color='#00000'
+                        onClick={() => {
+                          // sub.setAudioActive(false);
+                          this.forceMic(sub.stream.connection);
+                            // this.state.publisher.publishAudio(false);
+                            // this.subscriber.subscribeToAudio(false);
+                            // this.stopSpeaking(sub.stream.connection)
+                            // this.setState({ audioState: true });
+                        }}
+                        />
+                          ) : (
+                        <BsFillMicMuteFill
+                        size="24"
+                        color='#00000'
+                        onClick={() => {
+                          // this.subscribeToUserChanged(sub.stream.connection.connectionId);
+                          // sub.setAudioActive(true);
+                          this.forceMic(sub.stream.connection);
+                            // this.state.publisher.publishAudio(true);
+                            // this.subscriber.subscribeToAudio(true);
+                            // this.startSpeaking(sub.stream.connection)
+                            // this.setState({ audioState: !this.state.audioState });
+                        }}
+                        />
+                        )}
+                        {sub.stream.connection.stream.videoActive ? (
+                        <BsFillCameraVideoFill
+                        size="24"
+                        color='#00000'
+                        onClick={() => {
+                          // sub.setAudioActive(false);
+                          this.forceVideoControll(sub.stream.connection);
+                            // this.state.publisher.publishAudio(false);
+                            // this.subscriber.subscribeToAudio(false);
+                            // this.stopSpeaking(sub.stream.connection)
+                            // this.setState({ audioState: true });
+                        }}
+                        />
+                          ) : (
+                        <BsFillCameraVideoOffFill
+                        size="24"
+                        color='#00000'
+                        onClick={() => {
+                          // this.subscribeToUserChanged(sub.stream.connection.connectionId);
+                          // sub.setAudioActive(true);
+                          this.forceVideoControll(sub.stream.connection);
+                            // this.state.publisher.publishAudio(true);
+                            // this.subscriber.subscribeToAudio(true);
+                            // this.startSpeaking(sub.stream.connection)
+                            // this.setState({ audioState: !this.state.audioState });
+                        }}
+                        />
+                        )}
+                      </div>
+
                   </div>
                 ))}
               </div>
-              <div>
-              {/* <ToolbarComponent
-                    sessionId={mySessionId}
-                    user={localUser}
-                    showNotification={this.state.messageReceived}
-                    camStatusChanged={this.camStatusChanged}
-                    micStatusChanged={this.micStatusChanged}
-                    screenShare={this.screenShare}
-                    stopScreenShare={this.stopScreenShare}
-                    toggleFullscreen={this.toggleFullscreen}
-                    switchCamera={this.switchCamera}
-                    leaveSession={this.leaveSession}
-                    toggleChat={this.toggleChat}
-                /> */}
-                </div>
-                <div>
-              {this.state.audioState ? (
-                <BsFillMicFill
-                  size="24"
-                  color='#FFFFFF'
-                  onClick={() => {
-                    this.state.publisher.publishAudio(!this.state.audioState);
-                    this.setState({ audioState: !this.state.audioState });
-                  }}
-                />
-              ) : (
-                <BsFillMicMuteFill
-                  size="24"
-                  color='#FFFFFF'
-                  onClick={() => {
-                    this.state.publisher.publishAudio(!this.state.audioState);
-                    this.setState({ audioState: !this.state.audioState });
-                  }}
-                />
-              )}
-              {this.state.videoState ? (
-                <BsFillCameraVideoFill
-                  size="24"
-                  color='#FFFFFF'
-                  onClick={() => {
-                    this.state.publisher.publishVideo(!this.state.videoState);
-                    this.setState({ videoState: !this.state.videoState });
-                  }}
-                />
-              ) : (
-                <BsFillCameraVideoOffFill
-                  size="24"
-                  color='#FFFFFF'
-                  onClick={() => {
-                    this.state.publisher.publishVideo(!this.state.videoState);
-                    this.setState({ videoState: !this.state.videoState });
-                  }}
-                />
-              )}
-               {this.state.screenShareState ? (
-                <MdStopScreenShare
-                  size="24"
-                  color='#FFFFFF'
-                  onClick={() => {
-                    this.stopScreenShare();
-                    this.setState({ screenShareState: !this.state.screenShareState });
-                  }}
-                />
-              ) : (
-                <MdScreenShare
-                  size="24"
-                  color='#FFFFFF'
-                  onClick={() => {
-                    this.screenShare();
-                    this.setState({ screenShareState: !this.state.screenShareState });
-                  }}
-                />
-              )}
-            </div>
             </div>
           ) : null}
         </div>
@@ -653,6 +806,7 @@ stopScreenShare() {
   createToken(sessionId) {
     return new Promise((resolve, reject) => {
       var data = {};
+      data.role = 'MODERATOR';
       axios
         .post(
           OPENVIDU_SERVER_URL +

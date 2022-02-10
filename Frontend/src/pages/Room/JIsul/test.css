@@ -1,3 +1,10 @@
+.mic {
+    background-color: #fff;
+    z-index: 9999999;
+    margin: 10px;
+}
+
+
 @keyframes fadeInUp {
     0% {
         opacity: 0;
