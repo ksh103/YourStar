@@ -24,7 +24,7 @@ import {
   audioChange,
   UpdateOneByOne,
 } from '../../store/modules/meetingRoom';
-import { WarningCount } from '../../store/apis/Main/meeting';
+import { WarningToMemberAPI } from '../../store/apis/Main/meeting';
 // 컴포넌트
 import RoomComponent from './RoomComponent';
 
@@ -237,11 +237,13 @@ class Room extends Component {
         });
 
         mySession.on('signal:warning', event => {
-          console.log('======경고정보수신======')
-          this.props.doWarningCount({
-            type: WARNING_MEMBER_REQUEST,
-            data: {memberId : this.props.me.memberId , meetingId : this.state.session.sessionId}
-          })
+          console.log(event,'======경고정보수신======')
+          console.log( this.props.me.memberId,"멤버아이디")
+          console.log( this.state.session.sessionId,"세션아이디")
+          // 경고주기 
+          this.props.doWarningToMemberAPI(this.props.me.memberId ,this.state.session.sessionId)
+          // 경고횟수 2회 이상이면 강퇴 
+          // this.state.session.forceDisconnect(event.data);
         })
 
         // 세션과 연결하는 부분
@@ -556,7 +558,7 @@ const mapDispatchToProps = dispatch => {
     dochosonantQuiz: text => dispatch(choQuiz(text)),
     doaudioChange: () => dispatch(audioChange()),
     doUpdateOneByOne: stream => dispatch(UpdateOneByOne(stream)),
-    doWarningCount : data => dispatch(WarningCount(data))
+    doWarningToMemberAPI : (memberId, meetingId) => dispatch(WarningToMemberAPI({memberId, meetingId}))
   };
 };
 

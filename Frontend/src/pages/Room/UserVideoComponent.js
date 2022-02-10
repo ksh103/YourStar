@@ -3,9 +3,6 @@ import './UserVideo.css';
 import {
   UserDelete,
 } from '../../store/modules/meetingRoom';
-import {
-  WARNING_MEMBER_REQUEST
-} from '../../store/modules/meeting';
 
 import { connect } from 'react-redux';
 import OpenViduVideoComponent from './OvVideo';
@@ -65,16 +62,11 @@ class UserVideoComponent extends Component {
       this.props.doUpdateSubscriber(remoteUsers);
   }
 
+  // 경고 주기 
   warning(connection) {
-  
     console.log('connection 정보', connection);
-    // const sessionId = connection.session.sessionId
-    // this.props.doWarningCount({
-    //   type: WARNING_MEMBER_REQUEST,
-    //   data: {memberId : this.props.me.memberId , meetingId : sessionId}
-    // })
-    this.props.storeSession.signal({ // 해당 사용자에게 경고주기 
-      data: "",
+    this.props.storeSession.signal({ // 해당 사용자에게 경고 신호주기  
+      data: connection,
       to: [connection],
       type: "warning"
     })
