@@ -17,8 +17,9 @@ import {
   SetMySession,
   emoziListAdd,
 
-  // 추가
+  // 영원 추가
   UserDelete,
+  UpdateOneByOne,
 } from '../../../store/modules/meetingRoom';
 
 // 컴포넌트
@@ -105,17 +106,23 @@ class RoomYoungWon extends Component {
           var subscriber = mySession.subscribe(event.stream, undefined); // 들어온 사용자의 정보
           var subInfo = JSON.parse(subscriber.stream.connection.data);
 
-          // 스타가 들어왔으면 메인 화면으로, 아니면 일반 화면으로 보냄
-          if (subInfo.memberCode === 4) {
-            this.props.doMainStreamManagerInfo(subscriber);
-          } else if (subInfo.memberCode === 3) {
-            this.props.doUserUpdate(subscriber);
+          if (subInfo.memberInfo !== undefined) {
+            console.log('===== 불러오기 성공 ======');
+            this.props.doUpdateOneByOne(subscriber);
+          } else {
+            // 스타가 들어왔으면 메인 화면으로, 아니면 일반 화면으로 보냄
+            if (subInfo.memberCode === 4) {
+              this.props.doMainStreamManagerInfo(subscriber);
+            } else if (subInfo.memberCode === 3) {
+              console.log('=====사용자 입장=====');
+              this.props.doUserUpdate(subscriber);
+            }
           }
         });
 
         // 현재 미팅룸에서 퇴장한 사용자 확인
         mySession.on('streamDestroyed', event => {
-          this.deleteSubscriber(event.stream.streamManager);
+          // this.deleteSubscriber(event.stream.streamManager);
         });
 
         // Exception 처리
@@ -225,9 +232,9 @@ class RoomYoungWon extends Component {
     const mySession = this.state.session;
     mySession.disconnect();
 
-    // 세션과 연결을 끊고 Store에 다른 사람들의 비디오도 초기화 해줌
-    var empty = [];
-    this.props.doDeleteSubscriber(empty);
+    // // 세션과 연결을 끊고 Store에 다른 사람들의 비디오도 초기화 해줌
+    // var empty = [];
+    // this.props.doDeleteSubscriber(empty);
 
     // 1대1 미팅룸으로 입장
     var onebyoneSessionId = this.state.mySessionId + '-onebyone';
@@ -283,6 +290,7 @@ class RoomYoungWon extends Component {
           // 추가로 넘겨주고 싶은 데이터가 있으면 여기에 추가
           clientData: this.state.me.nick,
           memberCode: this.state.me.code,
+          memberInfo: 'one',
         })
         .then(() => {
           // 연결 후에 내 정보를 담기
@@ -467,8 +475,9 @@ const mapDispatchToProps = dispatch => {
     doSetMySession: storeSession => dispatch(SetMySession(storeSession)),
     doemoziListAdd: emozi => dispatch(emoziListAdd(emozi)),
 
-    // 추가
+    // 영원 추가
     doDeleteSubscriber: subscribers => dispatch(UserDelete(subscribers)),
+    doUpdateOneByOne: stream => dispatch(UpdateOneByOne(stream)),
   };
 };
 

@@ -1,4 +1,4 @@
-import React, { useSelector } from 'react-redux';
+import React, { useDispatch, useSelector } from 'react-redux';
 import Timer from '../../Timer/Timer';
 import styled from 'styled-components';
 import { IoIosAlarm, IoMdCreate, IoIosAperture } from 'react-icons/io';
@@ -49,20 +49,23 @@ const CaptureIcon = styled.div`
 
 export default function Header() {
   const { me } = useSelector(state => state.mypage);
-  const { index, storeSession, subscribers } = useSelector(state => ({
-    index: state.MeetingRoom.index,
-    storeSession: state.MeetingRoom.storeSession,
-    subscribers: state.MeetingRoom.subscribers,
-  }));
+  const { index, storeSession, subscribers, onebyoneStream } = useSelector(
+    state => ({
+      index: state.MeetingRoom.index,
+      storeSession: state.MeetingRoom.storeSession,
+      subscribers: state.MeetingRoom.subscribers,
+      onebyoneStream: state.MeetingRoom.onebyoneStream,
+    })
+  );
 
   const OPENVIDU_SERVER_URL = 'https://i6e204.p.ssafy.io:8443';
   const OPENVIDU_SERVER_SECRET = 'YOURSTAR';
 
   const signalToNextUser = idx => {
-    // console.log('현재 사용자 번호', idx);
-    // console.log('현재 사용자 수', subscribers.length);
+    console.log('===== 사용자 수 ======', subscribers.length);
 
     if (idx < subscribers.length) {
+      console.log('===== 불러오기 ======');
       const sessionId = storeSession.sessionId;
       const data = {
         session: sessionId.substring(0, sessionId.length - 9), // 1-onebyone 일때 1만 뽑아내기
@@ -86,10 +89,12 @@ export default function Header() {
 
     // 다시 이전 세션으로 보내기
     if (idx <= subscribers.length && idx > 0) {
+      console.log('===== 내보내기 ======');
       const sessionId = storeSession.sessionId;
+
       const data = {
         session: sessionId, // 1-onebyone 일때 1만 뽑아내기
-        to: [subscribers[idx - 1].stream.connection.connectionId],
+        to: [onebyoneStream.stream.connection.connectionId],
         type: 'signal:oneback',
         data: '0',
       };
