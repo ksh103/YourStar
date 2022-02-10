@@ -1,6 +1,8 @@
 import React, { useRef, useState } from 'react';
 import styled from 'styled-components';
 import { MainDiv } from '../Main.style';
+import { useSelector } from 'react-redux';
+import StarVideoComponent from '../../../../../pages/Room/StarVideoComponent';
 // 60vw 가로폭
 const RandomChoiceSc = styled.div`
   position: relative;
@@ -75,13 +77,19 @@ export default function RandomChoiceMain() {
       finished: result => setResult(result.innerText),
     });
   };
-
+  const { mainStreamManager } = useSelector(state => ({
+    mainStreamManager: state.MeetingRoom.mainStreamManager,
+  }));
   // const items = shuffleArray([...shuffleTarget.current.childNodes]);
   // console.log(items);
   return (
     <MainDiv>
       <MainGrid>
-        <RandomChoiceSc></RandomChoiceSc>
+        <RandomChoiceSc>
+          {mainStreamManager && (
+            <StarVideoComponent streamManager={mainStreamManager} />
+          )}
+        </RandomChoiceSc>
         <RandomChoiceSc>
           <button onClick={onShuffle}>돌려돌려 돌림판!</button>
           <div ref={shuffleTarget}>

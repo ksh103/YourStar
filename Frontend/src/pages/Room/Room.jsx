@@ -17,6 +17,11 @@ import {
   SetMySession,
   emoziListAdd,
   AddQnaList,
+  oxGameRound,
+  signalOX,
+  UserDelete,
+  choQuiz,
+  audioChange,
 } from '../../store/modules/meetingRoom';
 
 // 컴포넌트
@@ -37,7 +42,7 @@ class Room extends Component {
     var pathname = props.location.pathname;
 
     this.state = {
-      mySessionId: pathname.substr(6), // 넘어온 미팅룸 ID 입력
+      mySessionId: '1', // 넘어온 미팅룸 ID 입력
       session: undefined,
       me: this.props.me, // Store에 저장된 내 정보 입력
     };
@@ -62,22 +67,6 @@ class Room extends Component {
         type: 'screen',
       });
     }
-
-    // if (prevState.testInput !== this.props.testInput) {
-    //   mySession.signal({
-    //     data: `${this.props.me.nick},${this.props.testInput}`,
-    //     to: [],
-    //     type: 'chat',
-    //   });
-    // }
-
-    // if (prevState.QnAmode !== this.props.QnAmode) {
-    //   mySession.signal({
-    //     data: this.props.QnAmode,
-    //     to: [],
-    //     type: 'QnAmode',
-    //   });
-    // }
   }
 
   componentWillUnmount() {
@@ -89,13 +78,11 @@ class Room extends Component {
   }
 
   deleteSubscriber(streamManager) {
-    let subscribers = this.state.subscribers;
+    let subscribers = this.props.subscribers;
     let index = subscribers.indexOf(streamManager, 0);
     if (index > -1) {
       subscribers.splice(index, 1);
-      this.setState({
-        subscribers: subscribers,
-      });
+      this.props.doDeleteSubscriber(subscribers);
     }
   }
 
@@ -160,9 +147,10 @@ class Room extends Component {
         mySession.on('signal:QnAmode', event => {
           console.log('qna모드 변경신호받음');
           let Modedata = event.data.split(',');
-          const Mode = Modedata[1];
-          if (Mode !== this.props.QnAmode) {
-            this.props.dochangeQnAMode(Mode);
+          const QAmode = Modedata[1];
+          console.log(QAmode);
+          if (QAmode !== this.props.QnAmode) {
+            this.props.dochangeQnAMode(QAmode);
           }
         });
 
@@ -181,6 +169,37 @@ class Room extends Component {
               text: QnAdata[1],
             };
             this.props.doAddQnaList(inputValue);
+          }
+        });
+
+        if (this.props.userCode === 3) {
+          mySession.on('signal:OX', event => {
+            let OXdata = event.data.split(',');
+            if (OXdata[0] !== this.props.OXgameCount) {
+              this.props.doSignalOX(OXdata[1]);
+              this.props.doOXGameRound();
+            }
+          });
+        }
+
+        if (this.props.userCode === 3) {
+          mySession.on('signal:Cho', event => {
+            let chodata = event.data.split(',');
+            if (chodata[0] !== this.props.chosonantQuiz) {
+              this.props.dochosonantQuiz(chodata[1]);
+            }
+          });
+        }
+
+        mySession.on('signal:mic', event => {
+          console.log(event, '받음');
+          console.log(this.props.publisher, ' 퍼블리셔');
+          if (this.props.publisher.properties.publishAudio === false) {
+            const publisher = this.props.publisher.publishAudio(false);
+            this.props.doMainStreamManagerInfo(publisher);
+          } else {
+            const publisher = this.props.publisher.publishAudio(true);
+            this.props.doMainStreamManagerInfo(publisher);
           }
         });
 
@@ -208,7 +227,9 @@ class Room extends Component {
               // 세션에 내 비디오 및 마이크 정보 푸시
               mySession.publish(publisher);
 
-              this.props.doUpdateMyInformation(publisher); // 내 화면 보기 설정
+              if (this.props.me.code === 4)
+                this.props.doMainStreamManagerInfo(publisher);
+              else this.props.doUpdateMyInformation(publisher); // 내 화면 보기 설정
             })
             .catch(error => {
               console.log(
@@ -239,8 +260,6 @@ class Room extends Component {
   }
 
   render() {
-    const { publisher } = this.props;
-    console.log('렌더링중!');
     return (
       <BackgroundDiv>
         {/* 컴포넌트는 들고왔을 때 잘 작동함 */}
@@ -249,7 +268,7 @@ class Room extends Component {
             <div>Loading</div>
           ) : (
             <div>
-              {publisher !== undefined ? <RoomComponent></RoomComponent> : null}
+              <RoomComponent></RoomComponent>
             </div>
           )}
         </div>
@@ -362,10 +381,13 @@ const mapStateToProps = state => ({
   testInput: state.MeetingRoom.testInput,
   me: state.mypage.me,
   QnAmode: state.MeetingRoom.QnAmode,
+  OXsignal: state.MeetingRoom.OXsignal,
+  OXgameCount: state.MeetingRoom.OXgameCount,
+  userCode: state.mypage.me.code,
+  chosonantQuiz: state.MeetingRoom.chosonantQuiz,
 });
 
 const mapDispatchToProps = dispatch => {
-  console.log(dispatch, '디스패치');
   return {
     doChattingAction: inputValue => dispatch(ChattingAction(inputValue)),
     doUserUpdate: subscriber => dispatch(UserUpdate(subscriber)),
@@ -380,6 +402,11 @@ const mapDispatchToProps = dispatch => {
     doSetMySession: storeSession => dispatch(SetMySession(storeSession)),
     doemoziListAdd: emozi => dispatch(emoziListAdd(emozi)),
     doAddQnaList: QnAText => dispatch(AddQnaList(QnAText)),
+    doSignalOX: signal => dispatch(signalOX(signal)),
+    doOXGameRound: () => dispatch(oxGameRound()),
+    doDeleteSubscriber: subscribers => dispatch(UserDelete(subscribers)),
+    dochosonantQuiz: text => dispatch(choQuiz(text)),
+    doaudioChange: () => dispatch(audioChange()),
   };
 };
 

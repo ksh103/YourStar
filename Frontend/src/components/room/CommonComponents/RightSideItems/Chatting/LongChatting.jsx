@@ -14,8 +14,9 @@ import {
 export default function LongChatting() {
   const [testInput, setTestinput] = React.useState('');
 
-  const { chattingList } = useSelector(state => ({
+  const { chattingList, storeSession } = useSelector(state => ({
     chattingList: state.MeetingRoom.chattingList,
+    storeSession: state.MeetingRoom.storeSession,
   }));
   const dispatch = useDispatch();
 
@@ -25,10 +26,6 @@ export default function LongChatting() {
   const handleChatMessageChange = e => {
     setTestinput(e.target.value);
   };
-
-  const { storeSession } = useSelector(state => ({
-    storeSession: state.MeetingRoom.storeSession,
-  }));
 
   const { me } = useSelector(state => state.mypage);
 

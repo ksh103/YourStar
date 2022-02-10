@@ -3,7 +3,6 @@ import styled from 'styled-components';
 import { useSelector, useDispatch } from 'react-redux';
 import {
   changeQnAMode,
-  ChattingAction,
   changeQnAtoggle,
   AddQnaList,
 } from '../../../../../store/modules/meetingRoom';
@@ -39,12 +38,6 @@ const InnerDiv = styled.button`
   color: black;
 `;
 
-const StickBarUserDiv = styled.div`
-  position: absolute;
-  top: 50.5%;
-  left: 8%;
-`;
-
 const UserInput = styled.input`
   outlint: 0.3vw solid black;
   border-color: black;
@@ -69,11 +62,8 @@ export default function SubStickBar() {
     setQnAText(e.target.value);
   };
   // qna가 시작되었는지 확인하기
-  const { QnAmode } = useSelector(state => ({
+  const { QnAmode, StarQnAtoggle } = useSelector(state => ({
     QnAmode: state.MeetingRoom.QnAmode,
-  }));
-
-  const { StarQnAtoggle } = useSelector(state => ({
     StarQnAtoggle: state.MeetingRoom.StarQnAtoggle,
   }));
 
@@ -100,6 +90,7 @@ export default function SubStickBar() {
   };
 
   const UserQnAMessageByEnter = e => {
+    e.preventDefault();
     if (e.key === 'Enter') {
       const QnAValue = {
         userName: me.nick,

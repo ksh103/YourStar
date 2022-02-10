@@ -1,7 +1,8 @@
 import React from 'react';
 import styled from 'styled-components';
-import OtherScreenAngle from '../OtherScreen/OtherScreenAngle';
 import { MainDiv } from '../Main.style';
+import { useSelector, useDispatch } from 'react-redux';
+import UserVideoComponent from '../../../../../pages/Room/DongJun/UserVideoComponent';
 
 const StarScreen = styled.div`
   overflow-x: auto;
@@ -25,27 +26,23 @@ const PerScPosition = styled.div`
 `;
 
 export default function StarChosungScreen() {
+  const { subscribers, storeSession } = useSelector(state => ({
+    subscribers: state.MeetingRoom.subscribers,
+    storeSession: state.MeetingRoom.storeSession,
+  }));
   return (
     <MainDiv>
       <StarScreen>
         <PerScPosition>
-          <OtherScreenAngle value="3"></OtherScreenAngle>
-          <OtherScreenAngle></OtherScreenAngle>
-          <OtherScreenAngle></OtherScreenAngle>
-          <OtherScreenAngle></OtherScreenAngle>
-          <OtherScreenAngle></OtherScreenAngle>
-          <OtherScreenAngle></OtherScreenAngle>
-          <OtherScreenAngle></OtherScreenAngle>
-          <OtherScreenAngle></OtherScreenAngle>
-          <OtherScreenAngle></OtherScreenAngle>
-          <OtherScreenAngle></OtherScreenAngle>
-          <OtherScreenAngle></OtherScreenAngle>
-          <OtherScreenAngle></OtherScreenAngle>
-          <OtherScreenAngle></OtherScreenAngle>
-          <OtherScreenAngle></OtherScreenAngle>
-          <OtherScreenAngle></OtherScreenAngle>
-          <OtherScreenAngle></OtherScreenAngle>
-          <OtherScreenAngle></OtherScreenAngle>
+          {subscribers &&
+            subscribers.map((sub, i) => (
+              <div
+                // className="stream-container col-md-6 col-xs-6"
+                key={i}
+              >
+                <UserVideoComponent streamManager={sub} />
+              </div>
+            ))}
         </PerScPosition>
       </StarScreen>
     </MainDiv>
