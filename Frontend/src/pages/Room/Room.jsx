@@ -216,19 +216,14 @@ class Room extends Component {
 
         mySession.on('signal:audio', event => {
           console.log('audioaudioaudio', event.data, '로 바꿔줘 !!!!!!!!!!1');
-          this.publisher.publishAudio(event.data);
-          this.setState({ 
-            audioState: event.data
-          });
+          this.props.publisher.publishAudio(event.data);
         });
   
         mySession.on('signal:video', event => {
             console.log('video', event.data, '로 바꿔줘 !!!!!!!!!!1');
-            this.publisher.publishVideo(event.data);
-            this.setState({ 
-              videoState: event.data
-            });
-          });
+            this.props.publisher.publishVideo(event.data);
+        });
+
         // 세션과 연결하는 부분
         this.getToken(this.state.mySessionId).then(token => {
           mySession
