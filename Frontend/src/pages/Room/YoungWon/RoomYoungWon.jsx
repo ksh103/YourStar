@@ -115,8 +115,6 @@ class RoomYoungWon extends Component {
 
         // 현재 미팅룸에서 퇴장한 사용자 확인
         mySession.on('streamDestroyed', event => {
-          // store에서도 제거해줘야함 !!!!! 아직 안함
-          // Remove the stream from 'subscribers' array
           this.deleteSubscriber(event.stream.streamManager);
         });
 
@@ -170,6 +168,16 @@ class RoomYoungWon extends Component {
           if (changeNum !== this.props.selectNum) {
             this.props.doScreenChange(changeNum);
             this.userJoinOnebyOne();
+          }
+        });
+
+        mySession.on('signal:oneback', event => {
+          // 일반 유저가 1대1 미팅 퇴장 요구 받음
+          let changeNum = parseInt(event.data);
+          if (changeNum !== this.props.selectNum) {
+            this.props.doScreenChange(changeNum);
+            mySession.disconnect();
+            this.joinSession();
           }
         });
 

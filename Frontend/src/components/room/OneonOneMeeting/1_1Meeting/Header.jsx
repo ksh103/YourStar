@@ -63,12 +63,35 @@ export default function Header() {
     // console.log('현재 사용자 수', subscribers.length);
 
     if (idx < subscribers.length) {
-      var sessionId = storeSession.sessionId;
-      var data = {
+      const sessionId = storeSession.sessionId;
+      const data = {
         session: sessionId.substring(0, sessionId.length - 9), // 1-onebyone 일때 1만 뽑아내기
         to: [subscribers[idx].stream.connection.connectionId],
         type: 'signal:one',
         data: '6',
+      };
+      axios
+        .post(OPENVIDU_SERVER_URL + '/openvidu/api/signal', data, {
+          headers: {
+            Authorization:
+              'Basic ' + btoa('OPENVIDUAPP:' + OPENVIDU_SERVER_SECRET),
+            'Content-Type': 'application/json',
+          },
+        })
+        .then(response => {
+          console.log(response);
+        })
+        .catch(error => console.error(error));
+    }
+
+    // 다시 이전 세션으로 보내기
+    if (idx <= subscribers.length && idx > 0) {
+      const sessionId = storeSession.sessionId;
+      const data = {
+        session: sessionId, // 1-onebyone 일때 1만 뽑아내기
+        to: [subscribers[idx - 1].stream.connection.connectionId],
+        type: 'signal:oneback',
+        data: '0',
       };
       axios
         .post(OPENVIDU_SERVER_URL + '/openvidu/api/signal', data, {
