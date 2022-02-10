@@ -36,25 +36,50 @@ const ConcertDisplayBox = styled.div`
   box-shadow: 0.306vh 0.306vh gray;
 `;
 
-const EmoziBox = styled.div`
+const HolePlace = styled.div`
   position: absolute;
+  top: 66vh;
+  left: 56vw;
+  font-size: 3vw;
+  z-index: 10;
+`;
+const EmoziBox = styled.div`
   /* border: solid red; */
+  position: absolute;
+  bottom: -72vh;
+  margin-left: 56.5vw;
   border-radius: 1vw;
-  height: 75vh;
-  width: 20vw;
+  height: 72vh;
+  width: 2vw;
   background-color: rgba(255, 255, 255, 0);
-  z-index: 1;
-  // box-shadow: 0.306vh 0.306vh gray;
+  z-index: 1; // box-shadow: 0.306vh 0.306vh gray;
+`;
+
+const EmoziEffect = styled.div`
+  /* border: solid red; */
+  vertical-align: bottom;
+  position: absolute;
+  bottom: 22px;
+  font-size: 2vw;
+  width: 50px;
+  height: 20px;
+  background-size: cover;
+  animation: bubble 5s linear;
+  @keyframes bubble {
+    0% {
+      bottom: 2vh;
+      opacity: 1;
+    }
+    to {
+      bottom: 70vh;
+      opacity: 0;
+    }
+  }
 `;
 
 export default function Concert() {
   const [testInput, setTestinput] = React.useState('');
-  const { emoziList } = useSelector(state => ({
-    emoziList: state.MeetingRoom.emoziList,
-  }));
-  const { chattingList } = useSelector(state => ({
-    chattingList: state.MeetingRoom.chattingList,
-  }));
+
   const dispatch = useDispatch();
 
   const SubmitText = Input => dispatch(ChattingInputChange(Input));
@@ -64,9 +89,8 @@ export default function Concert() {
     setTestinput(e.target.value);
   };
 
-  const { storeSession } = useSelector(state => ({
-    storeSession: state.MeetingRoom.storeSession,
-  }));
+  const { storeSession, backgroundColor, chattingList, emoziList } =
+    useSelector(state => state.MeetingRoom);
 
   const { me } = useSelector(state => state.mypage);
 
@@ -87,7 +111,6 @@ export default function Concert() {
       setTestinput('');
     }
   };
-
   return (
     <BackgroundDiv>
       <ConcertWrapper>
@@ -96,11 +119,14 @@ export default function Concert() {
           {emoziList.map((emozi, idx) => {
             return (
               <div key={idx + emozi}>
-                <p>{emozi}</p>
+                <EmoziEffect>
+                  <span className="test">{emozi}</span>
+                </EmoziEffect>
               </div>
             );
           })}
-        </EmoziBox>
+        </EmoziBox>{' '}
+        <HolePlace>🎁</HolePlace>
       </ConcertWrapper>
       <HalfSideDiv1>
         <ConcertChattingBox></ConcertChattingBox>
@@ -108,6 +134,7 @@ export default function Concert() {
           onKeyPress={SendMessage}
           value={testInput}
           onChange={handleChatMessageChange}
+          color={backgroundColor}
         ></ConcertChattingInputBox>
         <ConcertChattingListBox>
           {chattingList.map((value, idx) => {

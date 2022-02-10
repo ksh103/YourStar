@@ -23,7 +23,7 @@ const LongChattingInputBox = styled.input`
   border-radius: 1vw;
   width: 75%;
   height: 5.1vh;
-  background-color: #e2d8ff;
+  background-color: ${props => props.color};
   border: none;
   padding-right: 0.52vw;
   padding-left: 0.52vw;
@@ -67,7 +67,7 @@ const SmallChattingInputBox = styled.input`
   border-radius: 1vw;
   width: 75%;
   height: 5.1vh;
-  background-color: #e2d8ff;
+  background-color: ${props => props.color};
   border: none;
   padding-right: 0.52vw;
   padding-left: 0.52vw;
@@ -121,7 +121,7 @@ const MiddleChattingInputBox = styled.input`
   border-radius: 1vw;
   width: 75%;
   height: 5.1vh;
-  background-color: #e2d8ff;
+  background-color: ${props => props.color};
   border: none;
   padding-right: 0.52vw;
   padding-left: 0.52vw;
@@ -159,7 +159,7 @@ const ConcertChattingInputBox = styled.input`
   border-radius: 1vw;
   width: 75%;
   height: 5.1vh;
-  background-color: #e2d8ff;
+  background-color: ${props => props.color};
   border: none;
   padding-right: 0.52vw;
   padding-left: 0.52vw;

@@ -11,8 +11,10 @@ import TableBody from '@mui/material/TableBody';
 import TableCell from '@mui/material/TableCell';
 import TableContainer from '@mui/material/TableContainer';
 import TableRow from '@mui/material/TableRow';
+import { useHistory } from 'react-router';
 export default function Apply() {
   const dispatch = useDispatch();
+  const history = useHistory();
   const { me } = useSelector(state => state.mypage);
   const { insertMeetingDone } = useSelector(state => state.meeting);
   const [cnt, setCnt] = useState(0);
@@ -36,8 +38,9 @@ export default function Apply() {
       setStartDate('');
       setEndDate('');
       setImage(null);
+      history.push('/'); // 미팅 신청 후 메인페이지로 이동
     }
-  }, [insertMeetingDone]);
+  }, [insertMeetingDone, history]);
 
   const onCntHandler = e => {
     setCnt(e.target.value);

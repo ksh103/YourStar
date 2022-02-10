@@ -5,7 +5,7 @@ import {
   AdminMeetingDetailFooter,
 } from './AdminMeeting.style';
 import { IoIosArrowBack } from 'react-icons/io';
-import { useParams } from 'react-router';
+import { useHistory, useParams } from 'react-router';
 import { Block, Layout, Wrapper } from '../../../styles/variables';
 import Navbar from '../../Navbar/Navbar';
 import Footer from '../../Footer/Footer';
@@ -32,13 +32,24 @@ const calcTime = (a, b) => {
 export default function AdminMeetingDetail() {
   const { id } = useParams(); // 미팅번호
   const dispatch = useDispatch();
-  const { meeting, detailMeetingDone } = useSelector(state => state.meeting);
+  const history = useHistory();
+  const { meeting, detailMeetingDone, updateApproveDone } = useSelector(
+    state => state.meeting
+  );
   useEffect(() => {
     dispatch({
       type: DETAIL_MEETING_REQUEST,
       data: { memberId: 0, meetingId: id },
     });
   }, [id, dispatch]);
+
+  useEffect(() => {
+    // 미팅 승인 후 메인페이지로 이동
+    if (updateApproveDone) {
+      history.push('/');
+    }
+  }, [updateApproveDone, history]);
+
   const updateApprove = () => {
     dispatch({
       type: UPDATE_APPROVE_REQUEST,

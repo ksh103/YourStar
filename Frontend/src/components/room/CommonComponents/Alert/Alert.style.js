@@ -9,6 +9,18 @@ const AlertParentDiv = styled.div`
   background-color: white;
   border-radius: 3vh;
   box-shadow: 0.306vh 0.306vh gray;
+   {
+    animation: 2s ease-in-out loadEffect1;
+  }
+
+  @keyframes loadEffect1 {
+    0% {
+      opacity: 0;
+    }
+    100% {
+      opacity: 1;
+    }
+  }
 `;
 
 const AlertHead = styled.div`
@@ -54,6 +66,61 @@ const AlertBody = styled.div`
   border-bottom-right-radius: 3vh;
 `;
 
+const ContentTextArea = styled.div`
+  position: absolute;
+  font-size: 21px;
+  top: 6%;
+  left: 2%;
+  width: 96%;
+  height: 70%;
+  overflow-y: auto;
+  li {
+    color: black;
+    padding: 1vw;
+  }
+`;
+
+const ButtonInputArea = styled.div`
+  position: absolute;
+  left: 2.5%;
+  bottom: 4%;
+  width: 95%;
+  height: 22%;
+  input {
+    position: relative;
+    top: 35%;
+    border-radius: 1vh;
+    padding-left: 0.52vw;
+    padding-right: 0.52vw;
+    width: 75%;
+    height: 5.1vh;
+    font-size: 1em;
+  }
+  button {
+    position: relative;
+    width: 18%;
+    height: 5vh;
+    right: -4%;
+    top: 35%;
+    background: #ff5455;
+    border: 0.2vw solid #000000;
+    border-radius: 1vw;
+  }
+`;
+
+const PlaceHolderText = styled.div`
+  pointer-events: none;
+  position: absolute;
+  top: 40.5%;
+  border-radius: 1vh;
+  padding-left: 0.6vw;
+  width: 75%;
+  height: 5.1vh;
+  z-index: 0;
+  color: #c8c8c8;
+  font-size: 0.8em;
+`;
+
 export {
   AlertParentDiv,
   AlertHead,
@@ -61,4 +128,7 @@ export {
   HeadTextArea,
   HeadContent,
   AlertBody,
+  PlaceHolderText,
+  ButtonInputArea,
+  ContentTextArea,
 };

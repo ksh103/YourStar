@@ -15,10 +15,12 @@ export async function CreateOfficialsAPI({
   accountCnt,
   managerCodeName,
   starAccountCnt,
+  managerEmail,
 }) {
   const result = await axios.post(`${BASE_URL}admin/create`, {
     accountCnt: accountCnt,
     managerCodeName: managerCodeName,
+    managerEmail: managerEmail,
     starAccountCnt: starAccountCnt,
   });
   return result;

@@ -13,6 +13,9 @@ const MY_SESSION_DEFIND = 'MY_SESSION_DEFIND';
 const EMOZI_LIST_ADD = 'EMOZI_LIST_ADD';
 const QNA_TOGGLE_CHANGE = 'QNA_TOGGLE_CHANGE';
 
+const BACKGROUND_COLOR_CHANGE = 'BACKGROUND_COLOR_CHANGE';
+const NOW_EMOZI = 'NOW_EMOZI';
+
 const PLUS_INDEX = 'PLUS_INDEX';
 
 // QnA 모드를 변경하기위한 action
@@ -129,6 +132,21 @@ export const changeQnAtoggle = toggle => {
   };
 };
 
+// 추가
+export const changeBackgroundColor = color => {
+  return {
+    type: BACKGROUND_COLOR_CHANGE,
+    payload: color,
+  };
+};
+
+export const changeNowEmozi = num => {
+  return {
+    type: NOW_EMOZI,
+    payload: num,
+  };
+};
+
 // 평소 컴포넌트에서 선언하던 state들!
 const initialState = {
   // 초기에는 시작 안한 상태!
@@ -148,6 +166,8 @@ const initialState = {
   emoziList: [],
   StarQnAtoggle: false,
   index: -1,
+  backgroundColor: '#C4C4C4', // 배경 컬러 22222222222222222222222222
+  nowEmozi: -1,
 };
 
 const MeetingRoom = (state = initialState, action) => {
@@ -221,6 +241,15 @@ const MeetingRoom = (state = initialState, action) => {
         ...state,
         StarQnAtoggle: !action.payload,
       };
+    case BACKGROUND_COLOR_CHANGE:
+      console.log('BACKGROUND_COLOR_CHANGE', action.payload);
+      return {
+        ...state,
+        backgroundColor: action.payload,
+      };
+
+    case NOW_EMOZI:
+      return { ...state, nowEmozi: action.payload };
     default:
       return state; // 기본 값 반환!
   }

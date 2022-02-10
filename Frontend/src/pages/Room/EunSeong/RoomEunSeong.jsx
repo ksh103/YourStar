@@ -4,6 +4,7 @@ import { OpenVidu } from 'openvidu-browser';
 import React, { Component } from 'react';
 import '../App.css';
 import { connect } from 'react-redux';
+import { BackgroundDiv } from '../../../components/room/styles/roomGlobal';
 
 // action 호출
 import {
@@ -23,12 +24,6 @@ import RoomComponent from '../RoomComponent';
 
 const OPENVIDU_SERVER_URL = 'https://i6e204.p.ssafy.io:8443';
 const OPENVIDU_SERVER_SECRET = 'YOURSTAR';
-const BackgroundDiv = styled.div`
-  width: 100%;
-  height: 100%;
-  background-color: #e2d8ff;
-  color: 'white';
-`;
 
 class RoomEunSeong extends Component {
   constructor(props) {
@@ -155,6 +150,14 @@ class RoomEunSeong extends Component {
           if (emozidata[0] !== this.props.me.nick) {
             this.props.doemoziListAdd(emozidata[1]);
           }
+        });
+
+        // 말하기 감지
+        mySession.on('publisherStartSpeaking', event => {
+          // 감지가 될 때 효과 줘버리깅
+          console.log(
+            'User ' + event.connection.connectionId + ' start speaking'
+          );
         });
 
         // 세션과 연결하는 부분

@@ -21,6 +21,8 @@ import {
   RoomJisul,
   RoomYoungWon,
   RoomSohyun,
+  Pledge,
+  Stanby,
 } from './pages/index';
 import GlobalStyle from './styles/global';
 import Pay from './components/Pay/Pay';
@@ -68,6 +70,12 @@ function App() {
           <Route exact component={Room} path="/room/:id" />
           <Route path="/mypage/:id">
             <MypageDetail />
+          </Route>
+          <Route path="/pledge/:id">
+            <Pledge />
+          </Route>
+          <Route path="/stanby/:id">
+            <Stanby />
           </Route>
           <Route path="/DongJun">
             <RoomDongJun />

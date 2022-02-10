@@ -14,6 +14,9 @@ export { default as Signup } from '../components/Memeber/Signup/Signup';
 export { default as AdminMeetingDetail } from '../components/Admin/AdminMeeting/AdminMeetingDetail';
 export { default as FindPassword } from '../components/Memeber/FindPassword/FindPassword';
 
+export { default as Pledge } from '../components/room/CommonComponents/Alert/Pledge';
+export { default as Stanby } from '../components/room/Stanby/Stanby';
+
 export { default as RoomDongJun } from './Room/DongJun/RoomDonJun';
 export { default as RoomEunSeong } from './Room/EunSeong/RoomEunSeong';
 export { default as RoomSumin } from './Room/Sumin/RoomSumin';

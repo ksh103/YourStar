@@ -79,7 +79,7 @@ export default function ScheduleDetailLeft() {
         return (
           <ScheduleDetailButton color="3">
             <div>
-              <Link to={`/room/${meeting.id}`}>입장하기</Link>
+              <Link to={`/pledge/${meeting.id}`}>입장하기</Link>
             </div>
           </ScheduleDetailButton>
         );

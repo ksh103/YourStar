@@ -10,7 +10,7 @@ import swal from 'sweetalert';
 function* loadCreateAccount(action) {
   try {
     const result = yield call(CreateOfficialsAPI, action.data);
-    swal('', '계정 생성이 완료되었습니다.', 'success', {
+    swal('계정 생성이 완료되었습니다.', '이메일을 확인해주세요.', 'success', {
       buttons: false,
       timer: 1800,
     });
