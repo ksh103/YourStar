@@ -6,7 +6,8 @@ import './App.css';
 import UserVideoComponent from './UserVideoComponent';
 import { connect } from 'react-redux';
 import { ChattingAction } from '../../../store/modules/meetingRoom';
-
+import './test.css'
+import { BsFillMicFill, BsFillMicMuteFill, BsFillCameraVideoFill, BsFillCameraVideoOffFill } from 'react-icons/bs';
 const OPENVIDU_SERVER_URL = 'https://i6e204.p.ssafy.io:8443';
 const OPENVIDU_SERVER_SECRET = 'YOURSTAR';
 const BackgroundDiv = styled.div`
@@ -29,6 +30,11 @@ class RoomJisul extends Component {
       subscribers: [],
       messages: [],
       testInputValue: '',
+      // 기본 마이크, 비디오
+      audioState: false,
+      videoState: false,
+      // 화면 공유 
+      screenShareState: false,
     };
     // 여기는 컴포넌트 내부에서 쓰이는 내용들에대한 bind 처리
     // 새로운 message를 보낸다 or 세션참여 or 종료와같은 기능들을 정의해놓은곳
@@ -41,6 +47,12 @@ class RoomJisul extends Component {
     this.sendmessageByClick = this.sendmessageByClick.bind(this);
     this.handleChatMessageChange = this.handleChatMessageChange.bind(this);
     this.sendmessageByEnter = this.sendmessageByEnter.bind(this);
+
+    this.forceMic = this.forceMic.bind(this);
+    // this.forceMicOff = this.forceMicOff.bind(this);
+    // this.forceMicOn = this.forceMicOn.bind(this);
+    // this.sendSignalUserChanged = this.sendSignalUserChanged.bind(this);
+    // this.subscribeToUserChanged = this.subscribeToUserChanged(this);
   }
 
   handleChatMessageChange(e) {
@@ -181,6 +193,86 @@ class RoomJisul extends Component {
           console.warn(exception);
         });
 
+        // mySession.on('signal:micOff', event => {
+        //   // if (event.data === this.state.publisher.stream.connection.connectionId) {
+        //   //   this.state.publisher.publishAudio(!this.state.audioState);
+        //   //   this.setState({ audioState: !this.state.audioState });
+        //   // }
+        //   this.state.publisher.publishAudio(false);
+        //   this.setState({ 
+        //     audioState: false});
+        //   this.sendSignalUserChanged({ isAudioActive : false });
+        // });
+
+        // mySession.on('signal:micOn', event => {
+        //   this.state.publisher.publishAudio(true);
+        //   this.setState({ 
+        //     audioState: true
+        //   });
+        //   this.sendSignalUserChanged({ isAudioActive : true });
+        //   // if (event.data === this.state.publisher.stream.connection.connectionId) {
+        //   //   this.state.publisher.publishAudio(!this.state.audioState);
+        //   //   this.setState({ audioState: !this.state.audioState });
+        //   // }
+        // });
+
+        mySession.on('signal:audio', event => {
+          console.log('audioaudioaudio', !this.state.audioState, '로 바꿔줘 !!!!!!!!!!1');
+          this.state.publisher.publishAudio(!this.state.audioState);
+          this.setState({ 
+            audioState: !this.state.audioState
+          });
+        });
+
+          mySession.on('signal:video', event => {
+            console.log('video', event.data, '로 바꿔줘 !!!!!!!!!!1');
+            this.state.publisher.publishVideo(event.data);
+            this.setState({ 
+              videoState: event.data
+            });
+          });
+     
+
+        mySession.on('signal:userChanged', (event) => {
+          let remoteUsers = this.state.subscribers;
+          console.log(remoteUsers);
+          remoteUsers.forEach((user) => {
+            console.log('user')
+            console.log(user.stream.connection.connectionId)
+            console.log(event.from.connectionId)
+            console.log('from')
+              if (user.stream.connection.connectionId === event.from.connectionId) {
+                  const data = JSON.parse(event.data);
+                  console.log('EVENTO REMOTE: ', event.data);
+                  user.stream.audioActive = data.isAudioActive;
+                  // if (data.isAudioActive !== undefined) {
+                  //   user.stream.audioActive = data.isAudioActive;
+                  // }
+                  // if (data.isVideoActive !== undefined) {
+                  //     user.setVideoActive(data.isVideoActive);
+                  // }
+              }
+          });
+          this.setState(
+              {
+                  subscribers: remoteUsers,
+              }
+          );
+      });
+
+        // mySession.on('signal:mic', event => {
+        //   this.state.publisher.publishAudio(!this.state.audioState);
+        //   this.setState({ 
+        //     audioState: !this.state.audioState
+        //   });
+          
+        //   // if (event.data === this.state.publisher.stream.connection.connectionId) {
+        //   //   this.state.publisher.publishAudio(!this.state.audioState);
+        //   //   this.setState({ audioState: !this.state.audioState });
+        //   // }
+        // });
+
+       
         mySession.on('signal:chat', event => {
           let chatdata = event.data.split(',');
           console.log(chatdata, '채팅데이터');
@@ -221,7 +313,7 @@ class RoomJisul extends Component {
               let publisher = this.OV.initPublisher(undefined, {
                 audioSource: undefined, // The source of audio. If undefined default microphone
                 videoSource: undefined, // The source of video. If undefined default webcam
-                publishAudio: true, // Whether you want to start publishing with your audio unmuted or not
+                publishAudio: false, // Whether you want to start publishing with your audio unmuted or not
                 publishVideo: true, // Whether you want to start publishing with your video enabled or not
                 resolution: '640x480', // The resolution of your video
                 frameRate: 30, // The frame rate of your video
@@ -237,6 +329,9 @@ class RoomJisul extends Component {
               this.setState({
                 mainStreamManager: publisher,
                 publisher: publisher,
+                audioState: false,
+                videoState: false,
+                screenShareState: false,
               });
             })
             .catch(error => {
@@ -271,6 +366,188 @@ class RoomJisul extends Component {
       publisher: undefined,
     });
   }
+
+  
+  screenShare() {
+    const videoSource = navigator.userAgent.indexOf('Firefox') !== -1 ? 'window' : 'screen';
+    const publisher = this.OV.initPublisher(
+      undefined,
+        {
+            videoSource: videoSource,
+            publishAudio: true,
+            publishVideo: true,
+            mirror: false,
+        },
+        (error) => {
+            if (error && error.name === 'SCREEN_EXTENSION_NOT_INSTALLED') {
+                this.setState({ showExtensionDialog: true });
+            } else if (error && error.name === 'SCREEN_SHARING_NOT_SUPPORTED') {
+                alert('Your browser does not support screen sharing');
+            } else if (error && error.name === 'SCREEN_EXTENSION_DISABLED') {
+                alert('You need to enable screen sharing extension');
+            } else if (error && error.name === 'SCREEN_CAPTURE_DENIED') {
+                alert('You need to choose a window or application to share');
+            }
+        },
+    );
+
+    publisher.once('accessAllowed', () => {
+        this.state.session.unpublish(this.state.publisher); // 송출하고 있는거 중단 (안하면 에러)
+        // localUser.setStreamManager(publisher);
+        this.state.session.publish(publisher).then(() => {  // 송출하기 
+            // You can send a signal with Session.signal method to warn other participants
+     
+            // localUser.setScreenShareActive(true);
+            // this.setState({
+            //   screenSharestate: true,
+            // });
+            // this.state.session.signal(signalOptions);
+            this.setState({ 
+              publisher: publisher,
+              screenShareState: true
+            });
+        });
+    });
+    // publisher.on('streamPlaying', () => {
+    //     // this.updateLayout();
+    //     publisher.videos[0].video.parentElement.classList.remove('custom-class');
+    // });
+}
+
+stopScreenShare() {
+    this.state.session.unpublish(this.state.publisher);
+    let publisher = this.OV.initPublisher(undefined, {
+      audioSource: undefined, // The source of audio. If undefined default microphone
+      videoSource: undefined, // The source of video. If undefined default webcam
+      publishAudio: true, // Whether you want to start publishing with your audio unmuted or not
+      publishVideo: true, // Whether you want to start publishing with your video enabled or not
+      resolution: '640x480', // The resolution of your video
+      frameRate: 30, // The frame rate of your video
+      insertMode: 'APPEND', // How the video is inserted in the target element 'video-container'
+      mirror: false, // Whether to mirror your local video or not
+    });
+
+    // --- 6) Publish your stream ---
+
+    this.state.session.publish(publisher);
+
+    // Set the main video in the page to display our webcam and store our Publisher
+    this.setState({
+      publisher: publisher,
+      audioState: false,
+      videoState: false,
+      screenShareState: false,
+    });
+    // this.connectWebCam();
+  //   var publisher = this.OV.initPublisherAsync({
+  //     videoSource: "screen"
+  // }).then(publisher => {
+  //     publisher.stream.getMediaStream().getVideoTracks()[0].addEventListener('ended', () => {
+  //         console.log('User pressed the "Stop sharing" button');
+  //     });
+  //   });
+}
+
+// deleteSubscriber(stream) {
+//   const remoteUsers = this.state.subscribers;
+//   const userStream = remoteUsers.filter((user) => user.getStreamManager().stream === stream)[0];
+//   let index = remoteUsers.indexOf(userStream, 0);
+//   if (index > -1) {
+//       remoteUsers.splice(index, 1);
+//       this.setState({
+//           subscribers: remoteUsers,
+//       });
+//   }
+// }
+
+// 강퇴
+forceDisconnect(connection){
+  // 경고 주기 
+  this.state.session.forceDisconnect(connection);
+  // 경고창 작업하기 
+  // window.close();
+}
+
+// forceMicOff(connection) {
+//   console.log("micoff"+ connection.connectionId);
+//   this.state.session.signal({
+//     data: connection.connectionId,
+//     to: [connection],
+//     type: "micOff"
+//   })
+//   // this.state.publisher.publishAudio(false);
+// }
+
+// forceMicOn(connection) {
+//   console.log("micon "+ connection.connectionId);
+//   this.state.session.signal({
+//     data: connection.connectionId,
+//     to: [connection],
+//     type: "micOn"
+//   })
+//   // this.render();
+//   // this.state.publisher.publishAudio(false);
+// }
+
+forceMic(connection) {
+  console.log(this.state.audioState);
+  this.state.session.signal({
+    data: connection.connectionId,
+    to: [connection],
+    type: "audio"
+  })
+
+  let remoteUsers = this.state.subscribers;
+    console.log(remoteUsers);
+    remoteUsers.forEach((user) => {
+        if (user.stream.connection.connectionId === connection.connectionId) {
+            user.stream.audioActive = !user.stream.audioActive; 
+            // if (data.isAudioActive !== undefined) {
+            //   user.stream.audioActive = data.isAudioActive;
+            // }
+            // if (data.isVideoActive !== undefined) {
+            //     user.setVideoActive(data.isVideoActive);
+            // }
+        }
+    });
+    this.setState(
+        {
+            subscribers: remoteUsers,
+        }
+    );
+}
+forceVideoControll(connection) {
+  
+
+  let remoteUsers = this.state.subscribers;
+    console.log(remoteUsers);
+    remoteUsers.forEach((user) => {
+        if (user.stream.connection.connectionId === connection.connectionId) {
+            user.stream.videoActive = !user.stream.videoActive; 
+
+            console.log(this.state.videoState);
+            this.state.session.signal({
+              data: user.stream.videoActive,
+              to: [connection],
+              type: "video"
+            })
+            // if (data.isAudioActive !== undefined) {
+            //   user.stream.audioActive = data.isAudioActive;
+            // }
+            // if (data.isVideoActive !== undefined) {
+            //     user.setVideoActive(data.isVideoActive);
+            // }
+        }
+    });
+    this.setState(
+        {
+            subscribers: remoteUsers,
+        }
+    );
+}
+
+
+
 
   render() {
     const { chattingList } = this.props;
@@ -382,16 +659,78 @@ class RoomJisul extends Component {
                       this.handleMainVideoStream(this.state.publisher)
                     }
                   >
-                    <UserVideoComponent streamManager={this.state.publisher} />
+                    <UserVideoComponent streamManager={this.state.publisher}/>
                   </div>
                 ) : null}
                 {this.state.subscribers.map((sub, i) => (
+                  <div>
                   <div
                     key={i}
-                    className="stream-container col-md-6 col-xs-6"
-                    onClick={() => this.handleMainVideoStream(sub)}
+                    className="stream-container col-md-6 col-xs-6"d
+                    // onClick={() => this.forceDisconnect(sub.stream.connection)}
                   >
-                    <UserVideoComponent streamManager={sub} />
+                    <UserVideoComponent streamManager={sub}/>
+
+                  </div>
+                  <div className='mic'>
+                        {sub.stream.connection.stream.audioActive ? (
+                        <BsFillMicFill
+                        size="24"
+                        color='#00000'
+                        onClick={() => {
+                          // sub.setAudioActive(false);
+                          this.forceMic(sub.stream.connection);
+                            // this.state.publisher.publishAudio(false);
+                            // this.subscriber.subscribeToAudio(false);
+                            // this.stopSpeaking(sub.stream.connection)
+                            // this.setState({ audioState: true });
+                        }}
+                        />
+                          ) : (
+                        <BsFillMicMuteFill
+                        size="24"
+                        color='#00000'
+                        onClick={() => {
+                          // this.subscribeToUserChanged(sub.stream.connection.connectionId);
+                          // sub.setAudioActive(true);
+                          this.forceMic(sub.stream.connection);
+                            // this.state.publisher.publishAudio(true);
+                            // this.subscriber.subscribeToAudio(true);
+                            // this.startSpeaking(sub.stream.connection)
+                            // this.setState({ audioState: !this.state.audioState });
+                        }}
+                        />
+                        )}
+                        {sub.stream.connection.stream.videoActive ? (
+                        <BsFillCameraVideoFill
+                        size="24"
+                        color='#00000'
+                        onClick={() => {
+                          // sub.setAudioActive(false);
+                          this.forceVideoControll(sub.stream.connection);
+                            // this.state.publisher.publishAudio(false);
+                            // this.subscriber.subscribeToAudio(false);
+                            // this.stopSpeaking(sub.stream.connection)
+                            // this.setState({ audioState: true });
+                        }}
+                        />
+                          ) : (
+                        <BsFillCameraVideoOffFill
+                        size="24"
+                        color='#00000'
+                        onClick={() => {
+                          // this.subscribeToUserChanged(sub.stream.connection.connectionId);
+                          // sub.setAudioActive(true);
+                          this.forceVideoControll(sub.stream.connection);
+                            // this.state.publisher.publishAudio(true);
+                            // this.subscriber.subscribeToAudio(true);
+                            // this.startSpeaking(sub.stream.connection)
+                            // this.setState({ audioState: !this.state.audioState });
+                        }}
+                        />
+                        )}
+                      </div>
+
                   </div>
                 ))}
               </div>
@@ -467,6 +806,7 @@ class RoomJisul extends Component {
   createToken(sessionId) {
     return new Promise((resolve, reject) => {
       var data = {};
+      data.role = 'MODERATOR';
       axios
         .post(
           OPENVIDU_SERVER_URL +

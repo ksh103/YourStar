@@ -17,10 +17,26 @@ export default function MyScreen() {
     publisher: state.MeetingRoom.publisher,
   }));
 
+  const { storeSession } = useSelector(state => ({
+    storeSession: state.MeetingRoom.storeSession,
+  }));
+
+  const forceMicOff = () => {
+    console.log(publisher, '커넥션');
+    const connectionId = publisher.stream.connection.connectionId;
+    storeSession.signal({
+      data: `${connectionId}`,
+      to: [connectionId],
+      type: 'mic',
+    });
+  };
+
   return (
     <MyScreenDiv>
       <QuestionMyScreen>
-        {publisher && <UserVideoComponent streamManager={publisher} />}
+        <div onClick={() => forceMicOff()}>
+          {publisher && <UserVideoComponent streamManager={publisher} />}
+        </div>
       </QuestionMyScreen>
     </MyScreenDiv>
   );

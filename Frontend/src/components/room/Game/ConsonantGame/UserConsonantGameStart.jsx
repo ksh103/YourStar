@@ -5,6 +5,7 @@ import MyScreen from '../../CommonComponents/MainItems/MyScreens/MyScreen';
 import OtherPersonScreen from '../../CommonComponents/MainItems/OtherScreen/OtherPersonScreen';
 import ConsonantAllRank from '../../CommonComponents/RightSideItems/Game/ConsonantGame/ConsonantAllRank';
 import ConsonantUserInput from '../../CommonComponents/RightSideItems/Game/ConsonantGame/ConsonantUserInput';
+import { useSelector, useDispatch } from 'react-redux';
 // 포지션작업
 const BackgroundDiv = styled.div`
   width: 100%;

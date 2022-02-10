@@ -4,11 +4,9 @@ import StarConsonantGame from './StarConsonantGame';
 import UserConsonantGameStart from './UserConsonantGameStart';
 
 export default function ConsonantGame() {
-  const { userId } = useSelector(state => ({
-    userId: state.MeetingRoom.userId,
-  }));
+  const { me } = useSelector(state => state.mypage);
   // 일반유저 === 0 , 스타 1
-  if (userId === 1) {
+  if (me.code === 4) {
     return <StarConsonantGame></StarConsonantGame>;
   } else {
     return <UserConsonantGameStart></UserConsonantGameStart>;

@@ -1,15 +1,10 @@
 package com.ssafy.yourstar.domain.meeting.service;
 
-import com.ssafy.yourstar.domain.meeting.db.entity.Applicant;
-import com.ssafy.yourstar.domain.meeting.db.entity.ApplicantID;
-import com.ssafy.yourstar.domain.meeting.db.entity.Meeting;
-import com.ssafy.yourstar.domain.meeting.db.entity.MeetingImgPath;
-import com.ssafy.yourstar.domain.meeting.db.repository.ApplicantRepository;
-import com.ssafy.yourstar.domain.meeting.db.repository.MeetingImgPathRepository;
-import com.ssafy.yourstar.domain.meeting.db.repository.MeetingRepository;
-import com.ssafy.yourstar.domain.meeting.db.repository.MeetingRepositorySpp;
+import com.ssafy.yourstar.domain.meeting.db.entity.*;
+import com.ssafy.yourstar.domain.meeting.db.repository.*;
 import com.ssafy.yourstar.domain.meeting.request.MeetingApplyByStarPostReq;
 import com.ssafy.yourstar.domain.meeting.request.MeetingApplyByUserPostReq;
+import com.ssafy.yourstar.domain.meeting.request.MeetingOathByUserPostReq;
 import com.ssafy.yourstar.domain.member.db.entity.Member;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.io.FilenameUtils;
@@ -38,6 +33,9 @@ public class MeetingServiceImpl implements MeetingService {
 
     @Autowired
     ApplicantRepository applicantRepository;
+
+    @Autowired
+    MeetingOathRepository meetingOathRepository;
 
     @Autowired
     MeetingRepositorySpp meetingRepositorySpp;
@@ -299,5 +297,16 @@ public class MeetingServiceImpl implements MeetingService {
         String path = uploadPath + meetingImgPath.getFileUrl();
         log.warn("Get Image Path : " + path);
         return path;
+    }
+
+    @Override
+    public MeetingOath meetingOathByUser(MeetingOathByUserPostReq meetingOathByUserPostReq) {
+        MeetingOath meetingOath = new MeetingOath();
+
+        meetingOath.setMeetingId(meetingOathByUserPostReq.getMeetingId());
+        meetingOath.setMemberId(meetingOathByUserPostReq.getMemberId());
+        meetingOath.setIsOath(true);
+
+        return meetingOathRepository.save(meetingOath);
     }
 }
