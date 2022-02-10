@@ -1,7 +1,7 @@
 import React from 'react';
 import styled from 'styled-components';
 import { MyScreenDiv } from '../Main.style';
-import { useSelector, useDispatch } from 'react-redux';
+import { useSelector } from 'react-redux';
 import UserVideoComponent from '../../../../../pages/Room/DongJun/UserVideoComponent';
 
 const QuestionMyScreen = styled.div`
@@ -17,10 +17,26 @@ export default function MyScreen() {
     publisher: state.MeetingRoom.publisher,
   }));
 
+  const { storeSession } = useSelector(state => ({
+    storeSession: state.MeetingRoom.storeSession,
+  }));
+
+  const forceMicOff = () => {
+    console.log(publisher, '커넥션');
+    const connectionId = publisher.stream.connection.connectionId;
+    storeSession.signal({
+      data: `${connectionId}`,
+      to: [connectionId],
+      type: 'mic',
+    });
+  };
+
   return (
     <MyScreenDiv>
       <QuestionMyScreen>
-        {publisher && <UserVideoComponent streamManager={publisher} />}
+        <div onClick={() => forceMicOff()}>
+          {publisher && <UserVideoComponent streamManager={publisher} />}
+        </div>
       </QuestionMyScreen>
     </MyScreenDiv>
   );

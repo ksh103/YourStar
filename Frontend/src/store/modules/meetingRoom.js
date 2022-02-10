@@ -8,6 +8,20 @@ const SCREEN_CHANGE = 'SCREEN_CHANGE';
 const USER_NICKNAME = 'USER_NICKNAME';
 const CHATTING_INPUT_CHANGE = 'CHATTING_INPUT_CHANGE';
 const ADD_QNA_LIST = 'ADD_QNA_LIST';
+const MY_SESSION_DEFIND = 'MY_SESSION_DEFIND';
+const EMOZI_LIST_ADD = 'EMOZI_LIST_ADD';
+const QNA_TOGGLE_CHANGE = 'QNA_TOGGLE_CHANGE';
+const SIGNAL_OX = 'SIGNAL_OX';
+const OX_GAME_COUNT = 'OX_GAME_COUNT';
+
+// 영원 추가
+const MEETINGROOM_USER_DELETE = 'MEETINGROOM_USER_DELETE';
+const PLUS_INDEX = 'PLUS_INDEX';
+const CHOSONANT_QUIZ = 'CHOSONANT_QUIZ';
+const PUBLISHER_AUDIO_CHANGE = 'PUBLISHER_AUDIO_CHANGE';
+const UPDATE_ONEBYONESTREAM = 'UPDATE_ONEBYONESTREAM';
+// 여기까지 =========
+
 // QnA 모드를 변경하기위한 action
 // 스타가 의 조작에 대한 action이라고 이해하면 된다.
 // 0일 경우 qna start
@@ -35,6 +49,28 @@ export const UserUpdate = subscriber => {
   };
 };
 
+// 영원 추가 ================================
+export const UserDelete = subscribers => {
+  return {
+    type: MEETINGROOM_USER_DELETE,
+    payload: subscribers,
+  };
+};
+
+export const PlusIndex = () => {
+  return {
+    type: PLUS_INDEX,
+  };
+};
+
+export const UpdateOneByOne = stream => {
+  return {
+    type: UPDATE_ONEBYONESTREAM,
+    payload: stream,
+  };
+};
+// 여기까지 =================================
+
 //내 정보에 대해서 업데이트 한다.
 // 미팅룸 컴포넌트에서 토큰을 통해 얻은 publisher 정보를 받고,
 // 이를 store에 저장시키기 위한 action
@@ -60,7 +96,6 @@ export const MainStreamManagerInfo = mainStreamManager => {
 
 // 화면 변경시키기 변경시키기
 export const ScreenChange = selectNum => {
-  console.log('액션수행');
   return {
     type: SCREEN_CHANGE,
     payload: selectNum,
@@ -88,6 +123,54 @@ export const AddQnaList = text => {
   };
 };
 
+export const SetMySession = session => {
+  return {
+    type: MY_SESSION_DEFIND,
+    payload: session,
+  };
+};
+
+export const emoziListAdd = emozi => {
+  return {
+    type: EMOZI_LIST_ADD,
+    payload: emozi,
+  };
+};
+
+export const changeQnAtoggle = toggle => {
+  return {
+    type: QNA_TOGGLE_CHANGE,
+    payload: toggle,
+  };
+};
+
+export const signalOX = signal => {
+  return {
+    type: SIGNAL_OX,
+    payload: signal,
+  };
+};
+
+export const oxGameRound = () => {
+  return {
+    type: OX_GAME_COUNT,
+  };
+};
+
+export const choQuiz = text => {
+  return {
+    type: CHOSONANT_QUIZ,
+    payload: text,
+  };
+};
+
+export const audioChange = fe => {
+  return {
+    type: PUBLISHER_AUDIO_CHANGE,
+    payload: fe,
+  };
+};
+
 // 평소 컴포넌트에서 선언하던 state들!
 const initialState = {
   // 초기에는 시작 안한 상태!
@@ -102,6 +185,15 @@ const initialState = {
   userId: 0,
   // 임시로 사용하는 유저 닉네임
   testInput: '테스트용',
+  // 세션정보
+  storeSession: undefined,
+  emoziList: [],
+  StarQnAtoggle: false,
+  OXsignal: null,
+  OXgameCount: 0,
+  index: -1,
+  chosonantQuiz: null,
+  onebyoneStream: undefined,
 };
 
 const MeetingRoom = (state = initialState, action) => {
@@ -112,8 +204,6 @@ const MeetingRoom = (state = initialState, action) => {
         QnAmode: action.payload,
       };
     case CHATTING_LIST_PLUS:
-      console.log('액션에따른 채팅 수행중');
-      console.log(action, '채팅에대해서 넘겨받은 payload');
       return {
         ...state,
         chattingList: [...state.chattingList, action.payload],
@@ -123,19 +213,33 @@ const MeetingRoom = (state = initialState, action) => {
         ...state,
         subscribers: [...state.subscribers, action.payload],
       };
+    // 영원 추가 ============================
+    case MEETINGROOM_USER_DELETE:
+      return {
+        ...state,
+        subscribers: action.payload,
+      };
+    case PLUS_INDEX:
+      return {
+        ...state,
+        index: state.index + 1,
+      };
+    case UPDATE_ONEBYONESTREAM:
+      return {
+        ...state,
+        onebyoneStream: action.payload,
+      };
+    // 여기까지 ============================
     case PUBLISHER_INFO:
-      console.log('내 정보가 들어오고 있습니다');
       return {
         ...state,
         publisher: action.payload,
       };
     case USER_INFO:
-      console.log('유저정보를 가져옵니다.');
       return {
         ...state,
       };
     case UPDATE_MAINSTREMMANAGER:
-      console.log('메인스트리머 지정');
       return {
         ...state,
         mainStreamManager: action.payload,
@@ -155,6 +259,41 @@ const MeetingRoom = (state = initialState, action) => {
         ...state,
         QnAList: [...state.QnAList, action.payload],
       };
+    case MY_SESSION_DEFIND:
+      return {
+        ...state,
+        storeSession: action.payload,
+      };
+    case EMOZI_LIST_ADD:
+      return {
+        ...state,
+        emoziList: [...state.emoziList, action.payload],
+      };
+    case QNA_TOGGLE_CHANGE:
+      return {
+        ...state,
+        StarQnAtoggle: !action.payload,
+      };
+    case OX_GAME_COUNT:
+      const prevCount = state.OXgameCount;
+      return {
+        ...state,
+        OXgameCount: prevCount + 1,
+      };
+    case CHOSONANT_QUIZ:
+      return {
+        ...state,
+        chosonantQuiz: action.payload,
+      };
+    // case PUBLISHER_AUDIO_CHANGE:
+    //   console.log(
+    //     state.publisher.properties.publishAudio,
+    //     '리듀서에서의 퍼블리셔'
+    //   );
+    //   const audiostate = state.publisher.properties.publishAudio;
+    //   return {
+    //     ...state,
+    //   };
     default:
       return state; // 기본 값 반환!
   }

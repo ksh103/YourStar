@@ -11,7 +11,9 @@ import { useSelector, useDispatch } from 'react-redux';
 import {
   ChattingAction,
   ChattingInputChange,
+  ScreenChange,
 } from '../../../store/modules/meetingRoom';
+import StarVideoComponent from '../../../pages/Room/StarVideoComponent';
 
 // 포지션작업
 const BackgroundDiv = styled.div`
@@ -27,6 +29,7 @@ const ConcertWrapper = styled.div`
 `;
 
 const ConcertDisplayBox = styled.div`
+  position: absolute;
   /* border: solid red; */
   border-radius: 1vw;
   height: 75vh;
@@ -35,11 +38,24 @@ const ConcertDisplayBox = styled.div`
   box-shadow: 0.306vh 0.306vh gray;
 `;
 
+const EmoziBox = styled.div`
+  position: absolute;
+  /* border: solid red; */
+  border-radius: 1vw;
+  height: 75vh;
+  width: 20vw;
+  background-color: rgba(255, 255, 255, 0);
+  z-index: 1;
+  // box-shadow: 0.306vh 0.306vh gray;
+`;
+
 export default function Concert() {
   const [testInput, setTestinput] = React.useState('');
 
-  const { chattingList } = useSelector(state => ({
+  const { chattingList, mainStreamManager, emoziList } = useSelector(state => ({
     chattingList: state.MeetingRoom.chattingList,
+    emoziList: state.MeetingRoom.emoziList,
+    mainStreamManager: state.MeetingRoom.mainStreamManager,
   }));
 
   const dispatch = useDispatch();
@@ -47,21 +63,29 @@ export default function Concert() {
   const SubmitText = Input => dispatch(ChattingInputChange(Input));
   const AppendChattingList = inputValue => dispatch(ChattingAction(inputValue));
 
+  const SetSelect = selectNum => dispatch(ScreenChange(selectNum));
   const handleChatMessageChange = e => {
     setTestinput(e.target.value);
   };
 
-  const { userNickName } = useSelector(state => ({
-    userNickName: state.MeetingRoom.userNickName,
+  const { storeSession } = useSelector(state => ({
+    storeSession: state.MeetingRoom.storeSession,
   }));
+
+  const { me } = useSelector(state => state.mypage);
 
   const SendMessage = e => {
     if (e.key === 'Enter') {
       const inputValue = {
-        userName: userNickName,
+        userName: me.nick,
         text: testInput,
         chatClass: 'messages__item--operator',
       };
+      storeSession.signal({
+        data: `${me.nick},${testInput}`,
+        to: [],
+        type: 'chat',
+      });
       SubmitText(testInput);
       AppendChattingList(inputValue);
       setTestinput('');
@@ -71,7 +95,20 @@ export default function Concert() {
   return (
     <BackgroundDiv>
       <ConcertWrapper>
-        <ConcertDisplayBox></ConcertDisplayBox>
+        <ConcertDisplayBox>
+          {mainStreamManager && (
+            <StarVideoComponent streamManager={mainStreamManager} />
+          )}
+        </ConcertDisplayBox>
+        <EmoziBox>
+          {emoziList.map((emozi, idx) => {
+            return (
+              <div key={idx + emozi}>
+                <p>{emozi}</p>
+              </div>
+            );
+          })}
+        </EmoziBox>
       </ConcertWrapper>
       <HalfSideDiv1>
         <ConcertChattingBox></ConcertChattingBox>
@@ -81,7 +118,6 @@ export default function Concert() {
           onChange={handleChatMessageChange}
         ></ConcertChattingInputBox>
         <ConcertChattingListBox>
-          {' '}
           {chattingList.map((value, idx) => {
             return (
               <div key={idx + value.text}>
@@ -94,6 +130,7 @@ export default function Concert() {
         </ConcertChattingListBox>
       </HalfSideDiv1>
       <EmoziBar></EmoziBar>
+      <button onClick={() => SetSelect(0)}>홈으로</button>
     </BackgroundDiv>
   );
 }

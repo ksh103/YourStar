@@ -1,0 +1,1 @@
+export const KAKAO_ADMIN_KEY = '3225f2910b8fe21411d8114c4eaf8e57';

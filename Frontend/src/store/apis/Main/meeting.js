@@ -6,6 +6,7 @@ export async function MeetingDetailAPI({ meetingId, memberId }) {
   const result = await axios
     .get(`${BASE_URL}meetings/${meetingId}`)
     .then(res => res.data.meeting);
+
   const applicant = await axios
     .get(`${BASE_URL}meetings/fan-applicant/list/${meetingId}?page=1&size=100`)
     .then(res => res.data.content);
@@ -22,7 +23,7 @@ export async function MeetingDetailAPI({ meetingId, memberId }) {
     cnt: result.meetingCnt,
     price: result.meetingPrice,
     description: result.meetingDescription,
-    image: result.meetingImgPath,
+    image: result.meetingImgPath !== null ? result.meetingImgPath.fileId : null,
     approve: result.approve,
     applicantCnt,
     isReserve,
@@ -42,7 +43,7 @@ export async function MeetingAllListAPI({ page, size }) {
       startDate: data.meetingStartDate,
       endDate: data.meetingEndDate,
       approve: data.approve,
-      image: data.meetingImgPath,
+      image: data.meetingImgPath !== null ? data.meetingImgPath.fileId : null,
     };
   });
 }
@@ -107,26 +108,41 @@ export async function WarningToMemberAPI(memberId, meetingId) {
 
 // 스타가 팬미팅 신청
 export async function InsertMeetingAPI({
-  managerCode,
-  meetingCnt,
-  meetingDescription,
-  meetingEndDate,
-  meetingName,
-  meetingOpenDate,
-  meetingPrice,
-  meetingStartDate,
+  code,
+  name,
+  price,
+  cnt,
+  description,
+  openDate,
+  startDate,
+  endDate,
+  image,
 }) {
-  const result = await axios.post(`${BASE_URL}meeting/room-applicant`, {
-    managerCode,
-    meetingCnt,
-    meetingDescription,
-    meetingEndDate,
-    meetingName,
-    meetingOpenDate,
-    meetingPrice,
-    meetingStartDate,
+  const form = new FormData();
+  form.append(
+    'meetingApply',
+    new Blob(
+      [
+        JSON.stringify({
+          managerCode: code,
+          meetingCnt: cnt,
+          meetingDescription: description,
+          meetingEndDate: endDate,
+          meetingName: name,
+          meetingOpenDate: openDate,
+          meetingPrice: price,
+          meetingStartDate: startDate,
+        }),
+      ],
+      { type: 'application/json' }
+    )
+  );
+  form.append('file', image);
+  axios.post(`${BASE_URL}meetings/room-applicant`, form, {
+    headers: {
+      'Content-Type': `multipart/form-data`,
+    },
   });
-  return result;
 }
 
 // 스타가 팬미팅 수정

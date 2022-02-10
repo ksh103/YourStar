@@ -14,10 +14,10 @@ import {
 export default function LongChatting() {
   const [testInput, setTestinput] = React.useState('');
 
-  const { chattingList } = useSelector(state => ({
+  const { chattingList, storeSession } = useSelector(state => ({
     chattingList: state.MeetingRoom.chattingList,
+    storeSession: state.MeetingRoom.storeSession,
   }));
-
   const dispatch = useDispatch();
 
   const SubmitText = Input => dispatch(ChattingInputChange(Input));
@@ -36,12 +36,16 @@ export default function LongChatting() {
         text: testInput,
         chatClass: 'messages__item--operator',
       };
+      storeSession.signal({
+        data: `${me.nick},${testInput}`,
+        to: [],
+        type: 'chat',
+      });
       SubmitText(testInput);
       AppendChattingList(inputValue);
       setTestinput('');
     }
   };
-
   return (
     <>
       <HalfSideDiv1>

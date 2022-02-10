@@ -2,6 +2,9 @@ import React from 'react';
 import styled from 'styled-components';
 import OtherScreenAngle from '../OtherScreen/OtherScreenAngle';
 import { MainDiv } from '../Main.style';
+import { useSelector, useDispatch } from 'react-redux';
+import { changeQnAtoggle } from '../../../../../store/modules/meetingRoom';
+// 포지션작업
 
 const StarScreen = styled.div`
   overflow: auto;
@@ -20,27 +23,35 @@ const PerScPosition = styled.div`
 `;
 
 export default function StarQnAListScreen() {
+  const { StarQnAtoggle } = useSelector(state => ({
+    StarQnAtoggle: state.MeetingRoom.StarQnAtoggle,
+  }));
+
+  const { QnAList } = useSelector(state => ({
+    QnAList: state.MeetingRoom.QnAList,
+  }));
+
+  const dispatch = useDispatch();
+
+  const toggleChange = tf => {
+    dispatch(changeQnAtoggle(tf));
+  };
+
   return (
     <MainDiv>
       <StarScreen>
+        <button onClick={() => toggleChange(StarQnAtoggle)}>
+          다시 작은화면
+        </button>
         <PerScPosition>
-          <OtherScreenAngle></OtherScreenAngle>
-          <OtherScreenAngle></OtherScreenAngle>
-          <OtherScreenAngle></OtherScreenAngle>
-          <OtherScreenAngle></OtherScreenAngle>
-          <OtherScreenAngle></OtherScreenAngle>
-          <OtherScreenAngle></OtherScreenAngle>
-          <OtherScreenAngle></OtherScreenAngle>
-          <OtherScreenAngle></OtherScreenAngle>
-          <OtherScreenAngle></OtherScreenAngle>
-          <OtherScreenAngle></OtherScreenAngle>
-          <OtherScreenAngle></OtherScreenAngle>
-          <OtherScreenAngle></OtherScreenAngle>
-          <OtherScreenAngle></OtherScreenAngle>
-          <OtherScreenAngle></OtherScreenAngle>
-          <OtherScreenAngle></OtherScreenAngle>
-          <OtherScreenAngle></OtherScreenAngle>
-          <OtherScreenAngle></OtherScreenAngle>
+          {QnAList.map((value, idx) => {
+            console.log(value, 'qna리스트 벨류');
+            return (
+              <OtherScreenAngle key={idx + value.text}>
+                {value}
+              </OtherScreenAngle>
+            );
+          })}
         </PerScPosition>
       </StarScreen>
     </MainDiv>

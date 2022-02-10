@@ -36,7 +36,7 @@ import {
   DELETE_MEETING_SUCCESS,
   DELETE_MEETING_FAILURE,
 } from '../modules/meeting';
-
+import swal from 'sweetalert';
 function* detailMeeting(action) {
   try {
     const result = yield call(MeetingDetailAPI, action.data);
@@ -83,6 +83,10 @@ function* updateApprove(action) {
       type: UPDATE_APPROVE_SUCCESS,
       data: result,
     });
+    swal('', '미팅이 등록 되었습니다.', 'success', {
+      buttons: false,
+      timer: 1800,
+    });
   } catch (err) {
     yield put({
       type: UPDATE_APPROVE_FAILURE,
@@ -107,7 +111,19 @@ function* insertMeeting(action) {
     const result = yield call(InsertMeetingAPI, action.data);
     yield put({
       type: INSERT_MEETING_SUCCESS,
-      data: result,
+    });
+    swal(
+      '미팅 신청 성공',
+      '미팅 신청이 완료되었습니다. 승인을 기다려주세요.',
+      'success',
+      {
+        buttons: false,
+        timer: 1800,
+      }
+    );
+    yield put({
+      type: TOTAL_MEETINGS_REQUEST,
+      data: { page: 1, size: 100 },
     });
   } catch (err) {
     yield put({

@@ -21,14 +21,14 @@ const FindPwHeader = styled.div`
     justify-content: center;
     align-items: center;
     height: 80%;
-    font-size: 2em;
+    font-size: 50px;
     font-weight: bold;
     color: ${pointColor};
   }
   #word {
     text-align: center;
     height: 20%;
-    font-size: 14px;
+    font-size: 17px;
     color: black;
   }
 `;
@@ -40,6 +40,7 @@ const FindPwContentRow = styled.div`
     display: block;
     width: 280px;
     height: 50px;
+    font-size: 18px;
     margin: 12px auto;
     padding: 0 20px;
     background-color: #dfdfdf;
@@ -48,6 +49,7 @@ const FindPwContentRow = styled.div`
   }
   button {
     display: block;
+    font-size: 18px;
     width: 320px;
     height: 50px;
     margin: 0 auto;

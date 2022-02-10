@@ -3,8 +3,8 @@ import { device, pointColor } from '../../../styles/variables';
 
 const AdminMeetingApproveButton = styled.div`
   background-color: ${props => (props.color === 0 ? 'lightpink' : 'lightblue')};
-  width: 60px;
-  border-radius: 10px;
+  width: 80px;
+  border-radius: 20px;
   text-align: center;
 `;
 const AdminMeetingDetailFooter = styled.div`
@@ -12,8 +12,8 @@ const AdminMeetingDetailFooter = styled.div`
   display: flex;
   justify-content: center;
   & > div {
-    width: 100px;
-    height: 40px;
+    width: 200px;
+    height: 70px;
     ${props => {
       if (props.color === '1') {
         return { backgroundColor: 'lightgray', color: 'gray' };
@@ -26,7 +26,7 @@ const AdminMeetingDetailFooter = styled.div`
       }
     }};
     border-radius: 10px;
-    margin: 10px;
+    margin: 30px;
     align-items: center;
     display: flex;
     justify-content: center;

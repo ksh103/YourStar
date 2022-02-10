@@ -4,6 +4,8 @@ import {
   SmallBox,
   SmallChattingInputBox,
 } from '../../Chatting/Chatting.style';
+import { useSelector, useDispatch } from 'react-redux';
+import { choQuiz } from '../../../../../../store/modules/meetingRoom';
 
 function cho_hangul(str) {
   const cho = [
@@ -41,16 +43,28 @@ function cho_hangul(str) {
 
 export default function ConsonantStarInput() {
   const [starConsungInputValue, setstarConsungInputValue] = useState('');
-  const [quiz, setquiz] = useState('');
+  const { chosonantQuiz, storeSession } = useSelector(state => ({
+    chosonantQuiz: state.MeetingRoom.chosonantQuiz,
+    storeSession: state.MeetingRoom.storeSession,
+  }));
 
   const changeStarInput = e => {
     setstarConsungInputValue(e.target.value);
   };
 
+  const dispatch = useDispatch();
+  const signalQuiz = text => dispatch(choQuiz(text));
+  const { me } = useSelector(state => state.mypage);
   const onSubmitForm = e => {
     e.preventDefault();
     // console.log(e.target[0].value);
-    setquiz(cho_hangul(e.target[0].value));
+    // setquiz(cho_hangul(e.target[0].value));
+    const problem = cho_hangul(e.target[0].value);
+    storeSession.signal({
+      data: `${me.nick},${problem}`,
+      type: 'Cho',
+    });
+    signalQuiz(problem);
     setstarConsungInputValue('');
   };
 
@@ -59,7 +73,7 @@ export default function ConsonantStarInput() {
       <HalfSideDiv2>
         <SmallBox>
           <p>스타 초성퀴즈 입력</p>
-          <div style={{ color: 'black' }}>{quiz}</div>
+          <div style={{ color: 'black' }}>{chosonantQuiz && chosonantQuiz}</div>
         </SmallBox>
 
         <form onSubmit={onSubmitForm}>

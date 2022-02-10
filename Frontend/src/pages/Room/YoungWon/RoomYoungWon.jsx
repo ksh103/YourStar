@@ -2,10 +2,28 @@ import styled from 'styled-components';
 import axios from 'axios';
 import { OpenVidu } from 'openvidu-browser';
 import React, { Component } from 'react';
-import './App.css';
-import UserVideoComponent from './UserVideoComponent';
+import '../App.css';
 import { connect } from 'react-redux';
-import { ChattingAction } from '../../../store/modules/meetingRoom';
+
+// action 호출
+import {
+  ChattingAction,
+  UserUpdate,
+  UpdateMyInformation,
+  MainStreamManagerInfo,
+  ScreenChange,
+  ChattingInputChange,
+  changeQnAMode,
+  SetMySession,
+  emoziListAdd,
+
+  // 영원 추가
+  UserDelete,
+  UpdateOneByOne,
+} from '../../../store/modules/meetingRoom';
+
+// 컴포넌트
+import RoomComponent from '../RoomComponent';
 
 const OPENVIDU_SERVER_URL = 'https://i6e204.p.ssafy.io:8443';
 const OPENVIDU_SERVER_SECRET = 'YOURSTAR';
@@ -19,86 +37,30 @@ const BackgroundDiv = styled.div`
 class RoomYoungWon extends Component {
   constructor(props) {
     super(props);
-    // 현재 세션에서 사용될 state들을 정의함
+    // var pathname = props.location.pathname;
+
     this.state = {
-      mySessionId: 'SessionA',
-      myUserName: 'Participant' + Math.floor(Math.random() * 100),
+      mySessionId: '89', //pathname.substr(6), // 넘어온 미팅룸 ID 입력
       session: undefined,
-      mainStreamManager: undefined,
-      publisher: undefined,
-      subscribers: [],
-      messages: [],
-      testInputValue: '',
+      me: this.props.me, // Store에 저장된 내 정보 입력
     };
-    // 여기는 컴포넌트 내부에서 쓰이는 내용들에대한 bind 처리
-    // 새로운 message를 보낸다 or 세션참여 or 종료와같은 기능들을 정의해놓은곳
-    this.joinSession = this.joinSession.bind(this);
-    this.leaveSession = this.leaveSession.bind(this);
-    this.handleChangeSessionId = this.handleChangeSessionId.bind(this);
-    this.handleChangeUserName = this.handleChangeUserName.bind(this);
-    this.handleMainVideoStream = this.handleMainVideoStream.bind(this);
-    this.onbeforeunload = this.onbeforeunload.bind(this);
-    this.sendmessageByClick = this.sendmessageByClick.bind(this);
-    this.handleChatMessageChange = this.handleChatMessageChange.bind(this);
-    this.sendmessageByEnter = this.sendmessageByEnter.bind(this);
-  }
-
-  handleChatMessageChange(e) {
-    this.setState({
-      testInputValue: e.target.value,
-    });
-  }
-
-  sendmessageByEnter(e) {
-    if (e.key === 'Enter') {
-      const inputValue = {
-        userName: this.state.myUserName,
-        text: this.state.testInputValue,
-        chatClass: 'messages__item--operator',
-      };
-      console.log(this.state.testInputValue, '입력값');
-      this.props.doChattingAction(inputValue);
-      const mySession = this.state.session;
-
-      mySession.signal({
-        data: `${this.state.myUserName},${this.state.testInputValue}`,
-        to: [],
-        type: 'chat',
-      });
-
-      this.setState({
-        testInputValue: '',
-      });
-    }
-  }
-  // 게임 등수 + 싸인한 파일 --> 스토어
-  sendmessageByClick() {
-    console.log('클릭을 했어요!');
-
-    const inputValue = {
-      userName: this.state.myUserName,
-      text: this.state.testInputValue,
-      chatClass: 'messages__item--operator',
-    };
-    console.log(this.state.testInputValue, '입력값');
-    this.props.doChattingAction(inputValue);
-
-    const mySession = this.state.session;
-    mySession.signal({
-      data: `${this.state.myUserName},${this.state.testInputValue}`,
-      to: [],
-      type: 'chat',
-    });
-
-    this.setState({
-      testInputValue: '',
-    });
   }
 
   componentDidMount() {
     window.addEventListener('beforeunload', this.onbeforeunload);
-    const { chattingList } = this.props;
-    console.log(chattingList, '리스트');
+    this.joinSession();
+    console.log('내 정보 확인', this.state.me);
+  }
+
+  componentDidUpdate(prevState) {
+    if (prevState.selectNum !== this.props.selectNum) {
+      // 스타가 1대1 미팅룸 입장
+      if (this.props.selectNum === 6) {
+        if (this.state.me.code !== 3) {
+          this.starJoinOnebyOne();
+        }
+      }
+    }
   }
 
   componentWillUnmount() {
@@ -106,118 +68,131 @@ class RoomYoungWon extends Component {
   }
 
   onbeforeunload(event) {
-    this.leaveSession();
-  }
-
-  handleChangeSessionId(e) {
-    this.setState({
-      mySessionId: e.target.value,
-    });
-  }
-
-  handleChangeUserName(e) {
-    this.setState({
-      myUserName: e.target.value,
-    });
-  }
-
-  handleMainVideoStream(stream) {
-    if (this.state.mainStreamManager !== stream) {
-      this.setState({
-        mainStreamManager: stream,
-      });
-    }
+    // this.leaveSession();
   }
 
   deleteSubscriber(streamManager) {
-    let subscribers = this.state.subscribers;
+    let subscribers = this.props.subscribers;
     let index = subscribers.indexOf(streamManager, 0);
     if (index > -1) {
       subscribers.splice(index, 1);
-      this.setState({
-        subscribers: subscribers,
-      });
+      this.props.doDeleteSubscriber(subscribers);
     }
   }
 
   joinSession() {
-    // --- 1) Get an OpenVidu object ---
+    console.log('====== JOINSESSION ======');
+    this.OV = new OpenVidu(); // Openvidu 객체 생성
 
-    this.OV = new OpenVidu();
-
-    // --- 2) Init a session ---
-
+    // 세션 진입
     this.setState(
       {
         session: this.OV.initSession(),
       },
       () => {
         var mySession = this.state.session;
+        this.props.doSetMySession(mySession);
 
-        // --- 3) Specify the actions when events take place in the session ---
-
-        // On every new Stream received...
+        // 현재 미팅룸에 들어온 사용자 확인
         mySession.on('streamCreated', event => {
-          // Subscribe to the Stream to receive it. Second parameter is undefined
-          // so OpenVidu doesn't create an HTML video by its own
-          var subscriber = mySession.subscribe(event.stream, undefined);
-          var subscribers = this.state.subscribers;
-          subscribers.push(subscriber);
+          var subscriber = mySession.subscribe(event.stream, undefined); // 들어온 사용자의 정보
+          var subInfo = JSON.parse(subscriber.stream.connection.data);
 
-          // Update the state with the new subscribers
-          this.setState({
-            subscribers: subscribers,
-          });
+          if (subInfo.memberInfo !== undefined) {
+            console.log('===== 불러오기 성공 ======');
+            this.props.doUpdateOneByOne(subscriber);
+          } else {
+            // 스타가 들어왔으면 메인 화면으로, 아니면 일반 화면으로 보냄
+            if (subInfo.memberCode === 4) {
+              this.props.doMainStreamManagerInfo(subscriber);
+            } else if (subInfo.memberCode === 3) {
+              console.log('=====사용자 입장=====');
+              this.props.doUserUpdate(subscriber);
+            }
+          }
         });
 
-        // On every Stream destroyed...
+        // 현재 미팅룸에서 퇴장한 사용자 확인
         mySession.on('streamDestroyed', event => {
-          // Remove the stream from 'subscribers' array
-          this.deleteSubscriber(event.stream.streamManager);
+          // this.deleteSubscriber(event.stream.streamManager);
         });
 
-        // On every asynchronous exception...
+        // Exception 처리
         mySession.on('exception', exception => {
           console.warn(exception);
         });
 
+        // 현재 미팅룸 채팅 데이터 받는 부분
         mySession.on('signal:chat', event => {
           let chatdata = event.data.split(',');
-          console.log(chatdata, '채팅데이터');
-          if (chatdata[0] !== this.state.myUserName) {
-            // this.setState({
-            //   messages: [
-            //     ...this.state.messages,
-            //     {
-            //       userName: chatdata[0],
-            //       text: chatdata[1],
-            //       chatClass: 'messages__item--visitor',
-            //     },
-            //   ],
-            // });
+          if (chatdata[0] !== this.props.me.nick) {
             const inputValue = {
               userName: chatdata[0],
               text: chatdata[1],
               chatClass: 'messages__item--operator',
             };
-            console.log(this.state.testInputValue, '세션온');
             this.props.doChattingAction(inputValue);
           }
         });
-        // --- 4) Connect to the session with a valid user token ---
 
-        // 'getToken' method is simulating what your server-side should do.
-        // 'token' parameter should be retrieved and returned by your own backend
-        this.getToken().then(token => {
-          // First param is the token got from OpenVidu Server. Second param can be retrieved by every user on event
-          // 'streamCreated' (property Stream.connection.data), and will be appended to DOM as the user's nickname
+        //변화감지
+        mySession.on('signal:screen', event => {
+          // event.data ==> string 형태의 변화된 메뉴선택한 번호들!
+
+          // 일반 유저가 변화를 감지하는 부분
+          let changeNum = parseInt(event.data);
+          if (changeNum !== this.props.selectNum) {
+            this.props.doScreenChange(changeNum);
+          }
+        });
+
+        mySession.on('signal:QnAmode', event => {
+          console.log('qna모드 변경신호받음');
+          const Mode = event.data;
+          if (Mode !== this.props.QnAmode) {
+            this.props.dochangeQnAMode(Mode);
+          }
+        });
+
+        mySession.on('signal:emozi', event => {
+          let emozidata = event.data.split(',');
+          if (emozidata[0] !== this.props.me.nick) {
+            this.props.doemoziListAdd(emozidata[1]);
+          }
+        });
+
+        mySession.on('signal:one', event => {
+          // 일반 유저가 1대1 미팅 참여 요구받음
+          let changeNum = parseInt(event.data);
+          if (changeNum !== this.props.selectNum) {
+            this.props.doScreenChange(changeNum);
+            this.userJoinOnebyOne();
+          }
+        });
+
+        mySession.on('signal:oneback', event => {
+          // 일반 유저가 1대1 미팅 퇴장 요구 받음
+          console.log('너 퇴장해 !!!');
+          let changeNum = parseInt(event.data);
+          if (changeNum !== this.props.selectNum) {
+            if (this.state.me.code === 3) {
+              this.props.doScreenChange(changeNum);
+              mySession.disconnect();
+              this.joinSession();
+            }
+          }
+        });
+
+        // 세션과 연결하는 부분
+        this.getToken(this.state.mySessionId).then(token => {
           mySession
-            .connect(token, { clientData: this.state.myUserName })
+            .connect(token, {
+              // 추가로 넘겨주고 싶은 데이터가 있으면 여기에 추가
+              clientData: this.state.me.nick,
+              memberCode: this.state.me.code,
+            })
             .then(() => {
-              // --- 5) Get your own camera stream ---
-
-              // Init a publisher passing undefined as targetElement (we don't want OpenVidu to insert a video
-              // element: we will manage it on our own) and with the desired properties
+              // 연결 후에 내 정보를 담기
               let publisher = this.OV.initPublisher(undefined, {
                 audioSource: undefined, // The source of audio. If undefined default microphone
                 videoSource: undefined, // The source of video. If undefined default webcam
@@ -229,15 +204,12 @@ class RoomYoungWon extends Component {
                 mirror: false, // Whether to mirror your local video or not
               });
 
-              // --- 6) Publish your stream ---
-
+              // 세션에 내 비디오 및 마이크 정보 푸시
               mySession.publish(publisher);
 
-              // Set the main video in the page to display our webcam and store our Publisher
-              this.setState({
-                mainStreamManager: publisher,
-                publisher: publisher,
-              });
+              if (this.props.me.code === 4)
+                this.props.doMainStreamManagerInfo(publisher);
+              else this.props.doUpdateMyInformation(publisher); // 내 화면 보기 설정
             })
             .catch(error => {
               console.log(
@@ -249,6 +221,97 @@ class RoomYoungWon extends Component {
         });
       }
     );
+  }
+
+  starJoinOnebyOne() {
+    const mySession = this.state.session;
+    mySession.disconnect();
+
+    // // 세션과 연결을 끊고 Store에 다른 사람들의 비디오도 초기화 해줌
+    // var empty = [];
+    // this.props.doDeleteSubscriber(empty);
+
+    // 1대1 미팅룸으로 입장
+    var onebyoneSessionId = this.state.mySessionId + '-onebyone';
+    console.log('1대1 세션 입장 ', onebyoneSessionId);
+    this.getToken(onebyoneSessionId).then(token => {
+      mySession
+        .connect(token, {
+          // 추가로 넘겨주고 싶은 데이터가 있으면 여기에 추가
+          clientData: this.state.me.nick,
+          memberCode: this.state.me.code,
+        })
+        .then(() => {
+          // 연결 후에 내 정보를 담기
+          let publisher = this.OV.initPublisher(undefined, {
+            audioSource: undefined, // The source of audio. If undefined default microphone
+            videoSource: undefined, // The source of video. If undefined default webcam
+            publishAudio: true, // Whether you want to start publishing with your audio unmuted or not
+            publishVideo: true, // Whether you want to start publishing with your video enabled or not
+            resolution: '640x480', // The resolution of your video
+            frameRate: 30, // The frame rate of your video
+            insertMode: 'APPEND', // How the video is inserted in the target element 'video-container'
+            mirror: false, // Whether to mirror your local video or not
+          });
+
+          // 세션에 내 비디오 및 마이크 정보 푸시
+          mySession.publish(publisher);
+          this.props.doMainStreamManagerInfo(publisher);
+        })
+        .catch(error => {
+          console.log(
+            'There was an error connecting to the session:',
+            error.code,
+            error.message
+          );
+        });
+    });
+  }
+
+  userJoinOnebyOne() {
+    const mySession = this.state.session;
+    mySession.disconnect();
+
+    // // 세션과 연결을 끊고 Store에 다른 사람들의 비디오도 초기화 해줌
+    // var empty = [];
+    // this.props.doDeleteSubscriber(empty);
+
+    // 1대1 미팅룸으로 입장
+    var onebyoneSessionId = this.state.mySessionId + '-onebyone';
+    console.log('1대1 세션 입장 ', onebyoneSessionId);
+    this.getToken(onebyoneSessionId).then(token => {
+      mySession
+        .connect(token, {
+          // 추가로 넘겨주고 싶은 데이터가 있으면 여기에 추가
+          clientData: this.state.me.nick,
+          memberCode: this.state.me.code,
+          memberInfo: 'one',
+        })
+        .then(() => {
+          // 연결 후에 내 정보를 담기
+          let publisher = this.OV.initPublisher(undefined, {
+            audioSource: undefined, // The source of audio. If undefined default microphone
+            videoSource: undefined, // The source of video. If undefined default webcam
+            publishAudio: true, // Whether you want to start publishing with your audio unmuted or not
+            publishVideo: true, // Whether you want to start publishing with your video enabled or not
+            resolution: '640x480', // The resolution of your video
+            frameRate: 30, // The frame rate of your video
+            insertMode: 'APPEND', // How the video is inserted in the target element 'video-container'
+            mirror: false, // Whether to mirror your local video or not
+          });
+
+          // 세션에 내 비디오 및 마이크 정보 푸시
+          mySession.publish(publisher);
+          this.props.doUpdateMyInformation(publisher);
+        })
+        .catch(error => {
+          console.log(
+            'There was an error connecting to the session:',
+            error.code,
+            error.message
+          );
+        });
+    });
   }
 
   leaveSession() {
@@ -264,139 +327,21 @@ class RoomYoungWon extends Component {
     this.OV = null;
     this.setState({
       session: undefined,
-      subscribers: [],
-      mySessionId: 'SessionA',
-      myUserName: 'Participant' + Math.floor(Math.random() * 100),
-      mainStreamManager: undefined,
-      publisher: undefined,
     });
   }
 
   render() {
-    const { chattingList } = this.props;
-    const mySessionId = this.state.mySessionId;
-    const myUserName = this.state.myUserName;
     return (
       <BackgroundDiv>
         {/* 컴포넌트는 들고왔을 때 잘 작동함 */}
-
         <div className="container">
           {this.state.session === undefined ? (
-            <div id="join">
-              <div id="img-div">
-                <img
-                  src="resources/images/openvidu_grey_bg_transp_cropped.png"
-                  alt="OpenVidu logo"
-                />
-              </div>
-              <div id="join-dialog" className="jumbotron vertical-center">
-                <h1> Join a video session </h1>
-                <form className="form-group" onSubmit={this.joinSession}>
-                  <p>
-                    <label>Participant: </label>
-                    <input
-                      className="form-control"
-                      type="text"
-                      id="userName"
-                      value={myUserName}
-                      onChange={this.handleChangeUserName}
-                      required
-                    />
-                  </p>
-                  <p>
-                    <label> Session: </label>
-                    <input
-                      className="form-control"
-                      type="text"
-                      id="sessionId"
-                      value={mySessionId}
-                      onChange={this.handleChangeSessionId}
-                      required
-                    />
-                  </p>
-                  <p className="text-center">
-                    <input
-                      className="btn btn-lg btn-success"
-                      name="commit"
-                      type="submit"
-                      value="JOIN"
-                    />
-                  </p>
-                </form>
-              </div>
+            <div>Loading</div>
+          ) : (
+            <div>
+              <RoomComponent></RoomComponent>
             </div>
-          ) : null}
-
-          {this.state.session !== undefined ? (
-            <div id="session">
-              <div
-                style={{
-                  backgroundColor: 'black',
-                  width: '500px',
-                  height: '500px',
-                  color: 'white',
-                }}
-              >
-                <p>messages</p>
-
-                {chattingList.map((value, idx) => {
-                  return (
-                    <div key={idx + value.text}>
-                      <p>{value.text}</p>
-                    </div>
-                  );
-                })}
-              </div>
-              <div id="session-header">
-                <h1 id="session-title">{mySessionId}</h1>
-                <h1>안녕하세요</h1>
-                <input
-                  type="text"
-                  onChange={this.handleChatMessageChange}
-                  value={this.state.testInputValue}
-                  onKeyPress={this.sendmessageByEnter}
-                />
-                <p onClick={this.sendmessageByClick}>제출하기</p>
-
-                <input
-                  className="btn btn-large btn-danger"
-                  type="button"
-                  id="buttonLeaveSession"
-                  onClick={this.leaveSession}
-                  value="Leave session"
-                />
-              </div>
-
-              {this.state.mainStreamManager !== undefined ? (
-                <div id="main-video" className="col-md-6">
-                  <UserVideoComponent
-                    streamManager={this.state.mainStreamManager}
-                  />
-                </div>
-              ) : null}
-              <div id="video-container" className="col-md-6">
-                {this.state.publisher !== undefined ? (
-                  <div
-                    className="stream-container col-md-6 col-xs-6"
-                    onClick={() =>
-                      this.handleMainVideoStream(this.state.publisher)
-                    }
-                  >
-                    <UserVideoComponent streamManager={this.state.publisher} />
-                  </div>
-                ) : null}
-                {this.state.subscribers.map((sub, i) => (
-                  <div
-                    key={i}
-                    className="stream-container col-md-6 col-xs-6"
-                    onClick={() => this.handleMainVideoStream(sub)}
-                  >
-                    <UserVideoComponent streamManager={sub} />
-                  </div>
-                ))}
-              </div>
-            </div>
-          ) : null}
+          )}
         </div>
       </BackgroundDiv>
     );
@@ -414,15 +359,16 @@ class RoomYoungWon extends Component {
    *   3) The Connection.token must be consumed in Session.connect() method
    */
 
-  getToken() {
-    return this.createSession(this.state.mySessionId).then(sessionId =>
+  getToken(curSessionId) {
+    console.log('===== 세션 연결 중 : ', curSessionId);
+    return this.createSession(curSessionId).then(sessionId =>
       this.createToken(sessionId)
     );
   }
 
-  createSession(sessionId) {
+  createSession(curSessionId) {
     return new Promise((resolve, reject) => {
-      var data = JSON.stringify({ customSessionId: sessionId });
+      var data = JSON.stringify({ customSessionId: curSessionId });
       axios
         .post(OPENVIDU_SERVER_URL + '/openvidu/api/sessions', data, {
           headers: {
@@ -438,7 +384,7 @@ class RoomYoungWon extends Component {
         .catch(response => {
           var error = Object.assign({}, response);
           if (error?.response?.status === 409) {
-            resolve(sessionId);
+            resolve(curSessionId);
           } else {
             console.log(error);
             console.warn(
@@ -467,6 +413,8 @@ class RoomYoungWon extends Component {
   createToken(sessionId) {
     return new Promise((resolve, reject) => {
       var data = {};
+      if (this.state.me.code === 4) data.role = 'MODERATOR';
+      else if (this.state.me.code === 2) data.role = 'SUBSCRIBER';
       axios
         .post(
           OPENVIDU_SERVER_URL +
@@ -492,13 +440,40 @@ class RoomYoungWon extends Component {
 }
 
 const mapStateToProps = state => ({
+  // 채팅내용
   chattingList: state.MeetingRoom.chattingList,
+  // 입장한 유저들 정보
+  subscribers: state.MeetingRoom.subscribers,
+  publisher: state.MeetingRoom.publisher,
+  // 임시용 userid
+  userId: state.MeetingRoom.userId,
+  mainStreamManager: state.MeetingRoom.mainStreamManager,
+  selectNum: state.MeetingRoom.selectNum,
+  userNickName: state.MeetingRoom.userNickName,
+  testInput: state.MeetingRoom.testInput,
+  me: state.mypage.me,
+  QnAmode: state.MeetingRoom.QnAmode,
 });
 
 const mapDispatchToProps = dispatch => {
+  console.log(dispatch, '디스패치');
   return {
-    // dispatch 가져오기
     doChattingAction: inputValue => dispatch(ChattingAction(inputValue)),
+    doUserUpdate: subscriber => dispatch(UserUpdate(subscriber)),
+    doUpdateMyInformation: publisher =>
+      dispatch(UpdateMyInformation(publisher)),
+    doMainStreamManagerInfo: mainStreamManager =>
+      dispatch(MainStreamManagerInfo(mainStreamManager)),
+    doScreenChange: selectNum => dispatch(ScreenChange(selectNum)),
+    doChattingInputChange: testinput =>
+      dispatch(ChattingInputChange(testinput)),
+    dochangeQnAMode: QnAmode => dispatch(changeQnAMode(QnAmode)),
+    doSetMySession: storeSession => dispatch(SetMySession(storeSession)),
+    doemoziListAdd: emozi => dispatch(emoziListAdd(emozi)),
+
+    // 영원 추가
+    doDeleteSubscriber: subscribers => dispatch(UserDelete(subscribers)),
+    doUpdateOneByOne: stream => dispatch(UpdateOneByOne(stream)),
   };
 };
 

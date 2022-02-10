@@ -3,7 +3,8 @@ import styled from 'styled-components';
 import { useSelector, useDispatch } from 'react-redux';
 import {
   changeQnAMode,
-  ChattingAction,
+  changeQnAtoggle,
+  AddQnaList,
 } from '../../../../../store/modules/meetingRoom';
 
 // dispatch action 사용하기! 이때는 넘겨주는 값이 있어야합니다.
@@ -37,12 +38,6 @@ const InnerDiv = styled.button`
   color: black;
 `;
 
-const StickBarUserDiv = styled.div`
-  position: absolute;
-  top: 50.5%;
-  left: 8%;
-`;
-
 const UserInput = styled.input`
   outlint: 0.3vw solid black;
   border-color: black;
@@ -61,32 +56,71 @@ const UserInput = styled.input`
 export default function SubStickBar() {
   // QnA 입력을 위한것
   const [QnAText, setQnAText] = useState('');
-  const userSubmitState = false;
 
   const valueChange = e => {
     console.log(e.target.value);
     setQnAText(e.target.value);
   };
   // qna가 시작되었는지 확인하기
-  const { QnAmode } = useSelector(state => ({
-    QnAmode: state.changeQnAmode.QnAmode,
+  const { QnAmode, StarQnAtoggle } = useSelector(state => ({
+    QnAmode: state.MeetingRoom.QnAmode,
+    StarQnAtoggle: state.MeetingRoom.StarQnAtoggle,
   }));
 
-  // const { userSubmitState } = useSelector(state => ({
-  //   userSubmitState: state.userCheck.userSubmitState,
-  // }));
+  const { me } = useSelector(state => state.mypage);
 
-  const { userId } = useSelector(state => ({
-    userId: state.MeetingRoom.userId,
+  const { storeSession } = useSelector(state => ({
+    storeSession: state.MeetingRoom.storeSession,
   }));
-
   const dispatch = useDispatch();
 
   // 모드 변경
-  const QnAChange = number => dispatch(changeQnAMode(number));
+  const QnAChange = str => {
+    storeSession.signal({
+      data: `${me.nick},${str}`,
+      to: [],
+      type: 'QnAmode',
+    });
+    dispatch(changeQnAMode(str));
+  };
   // 유저 id에 따라서 바꾸어준다
   // 스타라면?
-  if (userId === 1) {
+  const toggleChange = () => {
+    dispatch(changeQnAtoggle());
+  };
+
+  const UserQnAMessageByEnter = e => {
+    e.preventDefault();
+    if (e.key === 'Enter') {
+      const QnAValue = {
+        userName: me.nick,
+        text: QnAText,
+      };
+      storeSession.signal({
+        data: `${me.nick},${QnAText}`,
+        to: [],
+        type: 'UserQnA',
+      });
+      dispatch(AddQnaList(QnAValue));
+      setQnAText('');
+    }
+  };
+
+  const UserQnAMessageByClick = e => {
+    const QnAValue = {
+      userName: me.nick,
+      text: QnAText,
+    };
+    storeSession.signal({
+      data: `${me.nick},${QnAText}`,
+      to: [],
+      type: 'UserQnA',
+    });
+    dispatch(AddQnaList(QnAValue));
+    setQnAText('');
+  };
+
+  if (me.code !== 3) {
     return (
       <>
         <StickBarDiv>
@@ -95,7 +129,9 @@ export default function SubStickBar() {
               {/* 여기를 스토어로 바꿔주기 */}
               <InnerDiv onClick={() => QnAChange('start')}>Q&A 시작</InnerDiv>|
               <InnerDiv onClick={() => QnAChange('end')}>Q&A 종료</InnerDiv>|
-              <InnerDiv onClick={() => QnAChange('list')}>Q&A 리스트</InnerDiv>
+              <InnerDiv onClick={() => toggleChange(StarQnAtoggle)}>
+                Q&A 리스트
+              </InnerDiv>
             </GridDiv>
           </StickBar>
         </StickBarDiv>
@@ -106,38 +142,62 @@ export default function SubStickBar() {
   // 유저라면?
   else {
     if (QnAmode === 'ready') {
-      <StickBarDiv>
-        <StickBar>
-          <GridDiv>
-            <>
-              <div style={{ color: 'black' }}>
-                스타가 시작하기를 눌리면 입력창이 나타납니다.
-              </div>
-            </>
-          </GridDiv>
-        </StickBar>
-      </StickBarDiv>;
+      return (
+        <StickBarDiv>
+          <StickBar>
+            <GridDiv>
+              <>
+                <div style={{ color: 'black' }}>
+                  스타가 시작하기를 눌리면 입력창이 나타납니다.
+                </div>
+              </>
+            </GridDiv>
+          </StickBar>
+        </StickBarDiv>
+      );
     } else if (QnAmode === 'start') {
-      <>
-        <h2>Q.</h2>
-        <form>
-          <UserInput value={QnAText} onChange={valueChange}></UserInput>
-          <button>제출하기</button>
-        </form>
-      </>;
+      return (
+        <StickBarDiv>
+          <StickBar>
+            <GridDiv>
+              <h2>Q.</h2>
+              <form onKeyPress={UserQnAMessageByEnter}>
+                <UserInput value={QnAText} onChange={valueChange}></UserInput>
+                <button onClick={UserQnAMessageByClick}>제출하기</button>
+              </form>
+            </GridDiv>
+          </StickBar>
+        </StickBarDiv>
+      );
     } else if (QnAmode === 'end') {
-      <StickBarDiv>
-        <StickBar>
-          <GridDiv>
-            <>
-              <div style={{ color: 'black' }}>
-                기다리시면 채택된 질문이 나옵니다.
-              </div>
-              <button>다시 작성하기</button>
-            </>
-          </GridDiv>
-        </StickBar>
-      </StickBarDiv>;
+      return (
+        <StickBarDiv>
+          <StickBar>
+            <GridDiv>
+              <>
+                <div style={{ color: 'black' }}>
+                  기다리시면 채택된 질문이 나옵니다.
+                </div>
+                <button>다시 작성하기</button>
+              </>
+            </GridDiv>
+          </StickBar>
+        </StickBarDiv>
+      );
+    } else if (QnAmode === 'list') {
+      return (
+        <StickBarDiv>
+          <StickBar>
+            <GridDiv>
+              <>
+                <div style={{ color: 'black' }}>
+                  여러분들이 보내주신 질문들을 확인하고있어요..!
+                </div>
+              </>
+            </GridDiv>
+          </StickBar>
+        </StickBarDiv>
+      );
     }
 
     // return (

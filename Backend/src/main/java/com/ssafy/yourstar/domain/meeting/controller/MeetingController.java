@@ -12,15 +12,26 @@ import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiParam;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.core.io.FileSystemResource;
+import org.springframework.core.io.Resource;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
+import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
+
+import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 
 @Api("미팅룸 어드민 관련 API")
 @Slf4j
-@RestController
+@Controller
 @RequestMapping("/api/meetings")
 public class MeetingController {
     @Autowired
@@ -44,7 +55,7 @@ public class MeetingController {
 
         log.info("meetingPendingList - Call");
 
-        Page<Meeting> meetingPage = meetingService.meetingPendingList(PageRequest.of(page - 1, size));
+        Page<Meeting> meetingPage = meetingService.meetingPendingList(PageRequest.of(page - 1, size, Sort.by(Sort.Direction.DESC, "meetingRegDt")));
 
         return ResponseEntity.status(200).body(MeetingListGetRes.of(200, "Success", meetingPage));
     }
@@ -104,5 +115,28 @@ public class MeetingController {
             log.error("meetingGiveWarnToUser - This MeetingId or MemberId doesn't exist");
             return ResponseEntity.status(400).body(BaseResponseBody.of(400, "This MeetingId or MemberId doesn't exist"));
         }
+    }
+
+    @ApiOperation(value = "팬미팅 이미지 확인")
+    @GetMapping(value = "/image/{fileId}",
+    produces = MediaType.IMAGE_JPEG_VALUE)
+    public ResponseEntity<Resource> getImageWithMediaType(@PathVariable("fileId") int fileId) {
+        String filePath = meetingService.getMeetingImgPath(fileId);
+
+        Resource resource = new FileSystemResource(filePath);
+        if (!resource.exists()) return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+
+        HttpHeaders headers = new HttpHeaders();
+        Path path = null;
+
+        try {
+            path = Paths.get(filePath);
+            headers.add("Content-Type", Files.probeContentType(path));
+        } catch (IOException e) {
+            log.error(e.getMessage());
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        }
+
+        return new ResponseEntity<>(resource, headers, HttpStatus.OK);
     }
 }

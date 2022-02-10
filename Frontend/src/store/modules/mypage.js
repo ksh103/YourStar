@@ -2,11 +2,11 @@ import produce from 'immer';
 const initialState = {
   me: {
     memberId: 0,
-    code: 0,
+    code: 4,
     managerCode: 0,
     email: '',
-    name: 'TestName',
-    nick: 'TestNick',
+    name: 'namememe',
+    nick: 'namememe',
     phone: '',
     address: '',
     birth: '',

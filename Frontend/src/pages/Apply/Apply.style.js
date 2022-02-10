@@ -1,98 +1,53 @@
 import styled from 'styled-components';
 import { device, pointColor } from '../../styles/variables';
 
-const Title = styled.div`
-  font-size: 2.2vw;
-  color: black;
-  height: 10vh;
-  padding-right: 3vw;
-  /* border: solid red; */
-  display: flex; // div태그 내 text 수직, 수평정렬
-  align-items: center; // div태그 내 text 수직, 수평정렬
-  /* justify-content: center; // div태그 내 text 수직, 수평정렬 */
-  div {
-    padding-left: 1.2vw;
-    padding-right: 0;
-    text-align: left;
-  }
-`;
-
-const UploadImage = styled.div`
-  border-radius: 5%;
-  background-color: #dfe4ea;
-  margin-top: 5vh;
-  margin-left: 3vw;
-  margin-right: 2vw;
-  height: 56vh;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-`;
-
-const InputData = styled.div`
-  margin-top: 5vh;
-  margin-right: 3vw;
-  margin-bottom: 1em;
-`;
-
 const ApplyButton = styled.div`
   margin-right: 3vw;
   text-align: center;
   button {
-    width: 100px;
-    height: 40px;
+    width: 160px;
+    height: 60px;
+    font-size: 20px;
     color: white;
     background-color: ${pointColor};
     border-radius: 10px;
   }
 `;
-const Section1 = styled.div`
-  padding-left: 2vw;
-  margin: 0 auto;
-  color: black;
-  table {
-    width: 100%;
-    text-align: left;
-  }
-  td {
-    font-size: 1vw;
-    font-weight: bold;
-    padding-top: 2.4vh;
-  }
-  input {
-    width: 80%;
-    height: 3vh;
-  }
-  textarea {
-    width: 80%;
-    height: 15vh;
-  }
+const ApplyWrapper = styled.div`
+  display: flex;
+  justify-content: center;
+  margin: 0 10px;
+  height: 100%;
+  overflow-y: auto;
   @media ${device.TabletPortrait} {
-    width: 100%;
-    border-radius: 0px;
-    table {
+    margin: 0;
+  }
+  .apply {
+    width: 70%;
+    @media ${device.TabletPortrait} {
       width: 100%;
-      text-align: left;
-    }
-    td {
-      font-size: 1.8vw;
     }
   }
+  .title {
+    text-align: center;
+    padding: 20px;
+    font-size: 30px;
+    font-weight: bold;
+  }
+  .content {
+    padding: 10px 20px;
+    background-color: white;
+    border-radius: 10px;
+  }
+  .button {
+    padding: 30px;
+  }
+  input,
+  textarea {
+    font-size: 20px;
+    width: 80%;
+    padding: 5px;
+  }
 `;
-const ApplyHeadBlock = styled.div`
-  margin: 0 1.5em;
-  padding: 10px;
-  border-bottom: 2px solid gray;
-`;
-const Input = styled('input')({
-  display: 'none',
-});
-export {
-  Title,
-  UploadImage,
-  InputData,
-  ApplyButton,
-  Section1,
-  ApplyHeadBlock,
-  Input,
-};
+
+export { ApplyWrapper, ApplyButton };

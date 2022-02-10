@@ -3,7 +3,6 @@ const initialState = {
   meeting: {},
   totalMeetings: [],
   approvedMeetings: [],
-
   detailMeetingLoading: false, // 미팅 상세정보
   detailMeetingDone: false,
   detailMeetingError: null,
@@ -135,7 +134,6 @@ const reducer = (state = initialState, action) =>
       case INSERT_MEETING_SUCCESS:
         draft.insertMeetingLoading = false;
         draft.insertMeetingDone = true;
-        draft.totalMeetings.push(action.data);
         break;
       case INSERT_MEETING_FAILURE:
         draft.insertMeetingLoading = false;
