@@ -53,20 +53,12 @@ class RoomYoungWon extends Component {
   }
 
   componentDidUpdate(prevState) {
-    const mySession = this.state.session;
-
     if (prevState.selectNum !== this.props.selectNum) {
       // 스타가 1대1 미팅룸 입장
       if (this.props.selectNum === 6) {
         if (this.state.me.code !== 3) {
           this.starJoinOnebyOne();
         }
-      } else {
-        mySession.signal({
-          data: this.props.selectNum,
-          to: [],
-          type: 'screen',
-        });
       }
     }
   }
@@ -76,7 +68,7 @@ class RoomYoungWon extends Component {
   }
 
   onbeforeunload(event) {
-    this.leaveSession();
+    // this.leaveSession();
   }
 
   deleteSubscriber(streamManager) {
@@ -180,11 +172,14 @@ class RoomYoungWon extends Component {
 
         mySession.on('signal:oneback', event => {
           // 일반 유저가 1대1 미팅 퇴장 요구 받음
+          console.log('너 퇴장해 !!!');
           let changeNum = parseInt(event.data);
           if (changeNum !== this.props.selectNum) {
-            this.props.doScreenChange(changeNum);
-            mySession.disconnect();
-            this.joinSession();
+            if (this.state.me.code === 3) {
+              this.props.doScreenChange(changeNum);
+              mySession.disconnect();
+              this.joinSession();
+            }
           }
         });
 
@@ -277,9 +272,9 @@ class RoomYoungWon extends Component {
     const mySession = this.state.session;
     mySession.disconnect();
 
-    // 세션과 연결을 끊고 Store에 다른 사람들의 비디오도 초기화 해줌
-    var empty = [];
-    this.props.doDeleteSubscriber(empty);
+    // // 세션과 연결을 끊고 Store에 다른 사람들의 비디오도 초기화 해줌
+    // var empty = [];
+    // this.props.doDeleteSubscriber(empty);
 
     // 1대1 미팅룸으로 입장
     var onebyoneSessionId = this.state.mySessionId + '-onebyone';
@@ -365,6 +360,7 @@ class RoomYoungWon extends Component {
    */
 
   getToken(curSessionId) {
+    console.log('===== 세션 연결 중 : ', curSessionId);
     return this.createSession(curSessionId).then(sessionId =>
       this.createToken(sessionId)
     );

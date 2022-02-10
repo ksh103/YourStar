@@ -89,7 +89,10 @@ export default function Header() {
 
     // 다시 이전 세션으로 보내기
     if (idx <= subscribers.length && idx > 0) {
-      console.log('===== 내보내기 ======');
+      console.log(
+        '===== 내보내기 ======',
+        onebyoneStream.stream.connection.connectionId
+      );
       const sessionId = storeSession.sessionId;
 
       const data = {
