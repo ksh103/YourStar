@@ -2,8 +2,10 @@ package com.ssafy.yourstar.domain.meeting.service;
 
 import com.ssafy.yourstar.domain.meeting.db.entity.Applicant;
 import com.ssafy.yourstar.domain.meeting.db.entity.Meeting;
+import com.ssafy.yourstar.domain.meeting.db.entity.MeetingOath;
 import com.ssafy.yourstar.domain.meeting.request.MeetingApplyByStarPostReq;
 import com.ssafy.yourstar.domain.meeting.request.MeetingApplyByUserPostReq;
+import com.ssafy.yourstar.domain.meeting.request.MeetingOathByUserPostReq;
 import com.ssafy.yourstar.domain.member.db.entity.Member;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -28,5 +30,7 @@ public interface MeetingService {
     Applicant applicantDetail(int memberId, int meetingId);
     boolean meetingGiveWarnToUser(int memberId, int meetingId);
     String getMeetingImgPath(int fileId);
+
+    MeetingOath meetingOathByUser(MeetingOathByUserPostReq meetingOathByUserPostReq); // 보안서약서 작성 유무
 
 }

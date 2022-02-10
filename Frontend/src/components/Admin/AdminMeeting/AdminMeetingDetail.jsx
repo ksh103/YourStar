@@ -20,6 +20,7 @@ import {
   DETAIL_MEETING_REQUEST,
   UPDATE_APPROVE_REQUEST,
 } from '../../../store/modules/meeting';
+import { IMAGE_URL } from '../../../utils/contants';
 
 const calcTime = (a, b) => {
   const date1 = moment(b, 'YYYY-MM-DD HH:mm:ss');
@@ -31,7 +32,7 @@ const calcTime = (a, b) => {
 export default function AdminMeetingDetail() {
   const { id } = useParams(); // 미팅번호
   const dispatch = useDispatch();
-  const { meeting } = useSelector(state => state.meeting);
+  const { meeting, detailMeetingDone } = useSelector(state => state.meeting);
   useEffect(() => {
     dispatch({
       type: DETAIL_MEETING_REQUEST,
@@ -61,86 +62,125 @@ export default function AdminMeetingDetail() {
           <AdminMeetingDetailContent>
             <div id="detail">
               <div id="detail2">
-                <TableContainer sx={{ width: '80%' }}>
+                <TableContainer sx={{ padding: '0 10%' }}>
                   <Table>
                     <TableBody>
                       <TableRow>
-                        <TableCell width={'30%'} sx={{ fontSize: '1.2rem' }}>
+                        <TableCell
+                          sx={{
+                            fontSize: '1.5rem',
+                            fontWeight: 'bold',
+                            width: '30%',
+                          }}
+                        >
                           미팅번호
                         </TableCell>
-                        <TableCell sx={{ fontSize: '1.2rem' }}>
+                        <TableCell sx={{ fontSize: '1.5rem' }}>
                           {meeting.id}
                         </TableCell>
                       </TableRow>
 
                       <TableRow>
-                        <TableCell sx={{ fontSize: '1.2rem' }}>
+                        <TableCell
+                          sx={{ fontSize: '1.5rem', fontWeight: 'bold' }}
+                        >
                           멤버코드
                         </TableCell>
-                        <TableCell sx={{ fontSize: '1.2rem' }}>
+                        <TableCell sx={{ fontSize: '1.5rem' }}>
                           {meeting.code}
                         </TableCell>
                       </TableRow>
                       <TableRow>
-                        <TableCell sx={{ fontSize: '1.2rem' }}>
+                        <TableCell
+                          sx={{ fontSize: '1.5rem', fontWeight: 'bold' }}
+                        >
                           미팅이름
                         </TableCell>
-                        <TableCell sx={{ fontSize: '1.2rem' }}>
+                        <TableCell sx={{ fontSize: '1.5rem' }}>
                           {meeting.name}
                         </TableCell>
                       </TableRow>
                       <TableRow>
-                        <TableCell sx={{ fontSize: '1.2rem' }}>
+                        <TableCell
+                          sx={{ fontSize: '1.5rem', fontWeight: 'bold' }}
+                        >
                           예매날짜
                         </TableCell>
-                        <TableCell sx={{ fontSize: '1.2rem' }}>
+                        <TableCell sx={{ fontSize: '1.5rem' }}>
                           {meeting.openDate}
                         </TableCell>
                       </TableRow>
                       <TableRow>
-                        <TableCell sx={{ fontSize: '1.2rem' }}>
+                        <TableCell
+                          sx={{ fontSize: '1.5rem', fontWeight: 'bold' }}
+                        >
                           미팅날짜
                         </TableCell>
-                        <TableCell sx={{ fontSize: '1.2rem' }}>
+                        <TableCell sx={{ fontSize: '1.5rem' }}>
                           {meeting.startDate}
                         </TableCell>
                       </TableRow>
                       <TableRow>
-                        <TableCell sx={{ fontSize: '1.2rem' }}>
+                        <TableCell
+                          sx={{ fontSize: '1.5rem', fontWeight: 'bold' }}
+                        >
                           관람시간
                         </TableCell>
-                        <TableCell sx={{ fontSize: '1.2rem' }}>
+                        <TableCell sx={{ fontSize: '1.5rem' }}>
                           {calcTime(meeting.startDate, meeting.endDate)}
                         </TableCell>
                       </TableRow>
                       <TableRow>
-                        <TableCell sx={{ fontSize: '1.2rem' }}>
+                        <TableCell
+                          sx={{ fontSize: '1.5rem', fontWeight: 'bold' }}
+                        >
                           인원수
                         </TableCell>
-                        <TableCell sx={{ fontSize: '1.2rem' }}>
+                        <TableCell sx={{ fontSize: '1.5rem' }}>
                           {meeting.cnt}
                         </TableCell>
                       </TableRow>
                       <TableRow>
-                        <TableCell sx={{ fontSize: '1.2rem' }} l>
+                        <TableCell
+                          sx={{ fontSize: '1.5rem', fontWeight: 'bold' }}
+                          l
+                        >
                           가격
                         </TableCell>
-                        <TableCell sx={{ fontSize: '1.2rem' }}>
+                        <TableCell sx={{ fontSize: '1.5rem' }}>
                           {meeting.price}
                         </TableCell>
                       </TableRow>
                       <TableRow>
-                        <TableCell sx={{ fontSize: '1.2rem' }}>설명</TableCell>
-                        <TableCell sx={{ fontSize: '1.2rem' }}>
+                        <TableCell
+                          sx={{ fontSize: '1.5rem', fontWeight: 'bold' }}
+                        >
+                          설명
+                        </TableCell>
+                        <TableCell sx={{ fontSize: '1.5rem' }}>
                           {meeting.description}
                         </TableCell>
                       </TableRow>
                       <TableRow>
-                        <TableCell sx={{ fontSize: '1.2rem' }}>
+                        <TableCell
+                          sx={{ fontSize: '1.5rem', fontWeight: 'bold' }}
+                        >
                           이미지
                         </TableCell>
-                        <TableCell sx={{ fontSize: '1.2rem' }}>
-                          김다미포스터
+                        <TableCell>
+                          {detailMeetingDone && meeting.image === null ? (
+                            <img
+                              width="400px"
+                              src={'/images/noimg.gif'}
+                              alt={meeting.id}
+                            />
+                          ) : (
+                            <img
+                              src={`${IMAGE_URL}${meeting.image}`}
+                              width="300px"
+                              alt={meeting.id}
+                            />
+                          )}
                         </TableCell>
                       </TableRow>
                     </TableBody>
@@ -149,7 +189,7 @@ export default function AdminMeetingDetail() {
               </div>
               <AdminMeetingDetailFooter color={meeting.approve ? '1' : '0'}>
                 {meeting.approve ? (
-                  <div style={{ fontSize: '1.2rem' }}>등록완료</div>
+                  <div style={{ fontSize: '1.5rem' }}>등록완료</div>
                 ) : (
                   <div
                     onClick={() => updateApprove()}

@@ -7,6 +7,7 @@ import com.ssafy.yourstar.domain.member.db.entity.ManagerGroup;
 import com.ssafy.yourstar.domain.member.db.entity.Member;
 import com.ssafy.yourstar.domain.member.db.repository.MemberRepository;
 import com.ssafy.yourstar.domain.member.service.MemberService;
+import com.ssafy.yourstar.global.util.ManagerRegisterMailUtil;
 import com.ssafy.yourstar.global.util.MemberPasswordMailUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -133,6 +134,8 @@ public class AdminServiceImpl implements AdminService{
 
             accounts.add(newAccountRes);
         }
+
+        ManagerRegisterMailUtil.sendManagerAccountEmail(managerRegister.getManagerEmail(), accounts);
 
         return accounts;
         }

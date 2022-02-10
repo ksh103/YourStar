@@ -7,7 +7,6 @@ export async function MeetingDetailAPI({ meetingId, memberId }) {
     .get(`${BASE_URL}meetings/${meetingId}`)
     .then(res => res.data.meeting);
 
-  console.log(result);
   const applicant = await axios
     .get(`${BASE_URL}meetings/fan-applicant/list/${meetingId}?page=1&size=100`)
     .then(res => res.data.content);
@@ -24,7 +23,7 @@ export async function MeetingDetailAPI({ meetingId, memberId }) {
     cnt: result.meetingCnt,
     price: result.meetingPrice,
     description: result.meetingDescription,
-    image: result.meetingImgPath,
+    image: result.meetingImgPath !== null ? result.meetingImgPath.fileId : null,
     approve: result.approve,
     applicantCnt,
     isReserve,
@@ -44,7 +43,7 @@ export async function MeetingAllListAPI({ page, size }) {
       startDate: data.meetingStartDate,
       endDate: data.meetingEndDate,
       approve: data.approve,
-      image: data.meetingImgPath,
+      image: data.meetingImgPath !== null ? data.meetingImgPath.fileId : null,
     };
   });
 }

@@ -1,7 +1,6 @@
 const CHANGE_QNA_MODE = 'CHANGE_QNA_MODE';
 const CHATTING_LIST_PLUS = 'CHATTING_LIST_PLUS';
 const MEETINGROOM_USER_UPDATE = 'MEETINGROOM_USER_UPDATE';
-const MEETINGROOM_USER_DELETE = 'MEETINGROOM_USER_DELETE'; // 영원 추가 ============================================================
 const PUBLISHER_INFO = 'PUBLISHER_INFO';
 const USER_INFO = 'USER_INFO';
 const UPDATE_MAINSTREMMANAGER = 'UPDATE_MAINSTREMMANAGER';
@@ -15,9 +14,13 @@ const QNA_TOGGLE_CHANGE = 'QNA_TOGGLE_CHANGE';
 const SIGNAL_OX = 'SIGNAL_OX';
 const OX_GAME_COUNT = 'OX_GAME_COUNT';
 
+// 영원 추가
+const MEETINGROOM_USER_DELETE = 'MEETINGROOM_USER_DELETE';
 const PLUS_INDEX = 'PLUS_INDEX';
 const CHOSONANT_QUIZ = 'CHOSONANT_QUIZ';
 const PUBLISHER_AUDIO_CHANGE = 'PUBLISHER_AUDIO_CHANGE';
+const UPDATE_ONEBYONESTREAM = 'UPDATE_ONEBYONESTREAM';
+// 여기까지 =========
 
 // QnA 모드를 변경하기위한 action
 // 스타가 의 조작에 대한 action이라고 이해하면 된다.
@@ -46,7 +49,7 @@ export const UserUpdate = subscriber => {
   };
 };
 
-// 영원 추가 =========================================================================================
+// 영원 추가 ================================
 export const UserDelete = subscribers => {
   return {
     type: MEETINGROOM_USER_DELETE,
@@ -59,6 +62,14 @@ export const PlusIndex = () => {
     type: PLUS_INDEX,
   };
 };
+
+export const UpdateOneByOne = stream => {
+  return {
+    type: UPDATE_ONEBYONESTREAM,
+    payload: stream,
+  };
+};
+// 여기까지 =================================
 
 //내 정보에 대해서 업데이트 한다.
 // 미팅룸 컴포넌트에서 토큰을 통해 얻은 publisher 정보를 받고,
@@ -182,6 +193,7 @@ const initialState = {
   OXgameCount: 0,
   index: -1,
   chosonantQuiz: null,
+  onebyoneStream: undefined,
 };
 
 const MeetingRoom = (state = initialState, action) => {
@@ -201,7 +213,8 @@ const MeetingRoom = (state = initialState, action) => {
         ...state,
         subscribers: [...state.subscribers, action.payload],
       };
-    case MEETINGROOM_USER_DELETE: // 영원 추가 ==============================================================================
+    // 영원 추가 ============================
+    case MEETINGROOM_USER_DELETE:
       return {
         ...state,
         subscribers: action.payload,
@@ -211,6 +224,12 @@ const MeetingRoom = (state = initialState, action) => {
         ...state,
         index: state.index + 1,
       };
+    case UPDATE_ONEBYONESTREAM:
+      return {
+        ...state,
+        onebyoneStream: action.payload,
+      };
+    // 여기까지 ============================
     case PUBLISHER_INFO:
       return {
         ...state,

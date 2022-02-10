@@ -4,6 +4,8 @@ import { OpenVidu } from 'openvidu-browser';
 import React, { Component } from 'react';
 import '../App.css';
 import { connect } from 'react-redux';
+import * as tf from '@tensorflow/tfjs';
+import * as tmPose from '@teachablemachine/pose';
 
 // action 호출
 import {
@@ -39,11 +41,22 @@ class RoomSohyun extends Component {
       mySessionId: '1', //pathname.substr(6), // 넘어온 미팅룸 ID 입력
       session: undefined,
       me: this.props.me, // Store에 저장된 내 정보 입력
+      URL : "https://teachablemachine.withgoogle.com/models/2c2rSxbLy/",
+      model : null,
+      webcam : null,
+      maxPredictions : null,
+      ctx : null,
+      labelContainer : null,
+      loopPredict : undefined
     };
 
     this.joinSession = this.joinSession.bind(this);
     this.leaveSession = this.leaveSession.bind(this);
     this.onbeforeunload = this.onbeforeunload.bind(this);
+    this.oxGameInit = this.oxGameInit(this);
+    this.loop = this.loop.bind(this);
+    this.predict = this.loop.bind(this);
+    this.drawPose = this.drawPose.bind(this);
   }
 
   componentDidMount() {
@@ -82,6 +95,61 @@ class RoomSohyun extends Component {
     }
   }
 
+  // teachable machine test
+  oxGameInit = async() => {
+    const modelURL = URL + "model.json";
+    const metadataURL = URL + "metadata.json";
+
+    this.state.model = await tmPose.load(modelURL, metadataURL);
+    this.state.maxPredictions = this.state.model.getTotalClasses();
+
+    const size = 500;
+    const flip = true; // whether to flip the webcam
+    this.state.webcam = new tmPose.Webcam(size, size, flip);
+
+    await this.state.webcam.setup();
+    await this.state.webcam.play();
+
+    window.requestAnimationFrame(this.loop);
+  }
+
+  loop = async(timestamp) => {
+    this.state.webcam.update(); 
+    await this.predict();
+    this.state.loopPredict = window.requestAnimationFrame(this.loop);
+  }
+
+  predict = async() => {
+
+    const { pose, posenetOutput } = await this.state.model.estimatePose(this.state.webcam.canvas)
+    
+    const prediction = await this.model.predict(posenetOutput);
+
+    if(prediction[0].probability == 1) {
+        console.log("정답")
+    }else {
+        console.log("틀렸다.")
+    }
+
+    for (let i = 0; i < this.state.maxPredictions; i++) {
+        const classPrediction =
+            prediction[i].className + ": " + prediction[i].probability.toFixed(2);
+        this.state.labelContainer.childNodes[i].innerHTML = classPrediction;
+    }
+    // finally draw the poses
+    this.drawPose(pose);
+  }
+
+  drawPose = async(pose) => {
+    if (this.state.webcam) {
+        if (pose) {
+            const minPartConfidence = 0.5;
+            tmPose.drawKeypoints(pose.keypoints, minPartConfidence, this.state.ctx);
+            tmPose.drawSkeleton(pose.keypoints, minPartConfidence, this.state.ctx);
+        }
+    }
+  }
+
   joinSession() {
     this.OV = new OpenVidu(); // Openvidu 객체 생성
 
@@ -103,7 +171,7 @@ class RoomSohyun extends Component {
           if (subInfo.memberCode === 4) {
             this.props.doMainStreamManagerInfo(subscriber);
           } else if (subInfo.memberCode === 3) {
-            this.props.doUserUpdate(subscriber);
+            // this.props.doUserUpdate(subscriber);
           }
         });
 
@@ -353,6 +421,8 @@ const mapDispatchToProps = dispatch => {
     doSetMySession: storeSession => dispatch(SetMySession(storeSession)),
     doemoziListAdd: emozi => dispatch(emoziListAdd(emozi)),
   };
+
+ 
 };
 
 export default connect(mapStateToProps, mapDispatchToProps)(RoomSohyun);
