@@ -164,10 +164,10 @@ export const oxGameRound = () => {
   };
 };
 
-export const choQuiz = ({ question, answer }) => {
+export const choQuiz = (question, answer) => {
   return {
     type: CHOSONANT_QUIZ,
-    payload: { question, answer },
+    payload: [question, answer],
   };
 };
 
