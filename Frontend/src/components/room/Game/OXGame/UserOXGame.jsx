@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import styled from 'styled-components';
 import OXUserScreen from '../../CommonComponents/MainItems/Game/OXUserScreen';
 import OtherPersonScreen from '../../CommonComponents/MainItems/OtherScreen/OtherPersonScreen';
@@ -18,24 +18,22 @@ const BackgroundDiv = styled.div`
 `;
 
 export default function UserOXGame() {
+  const [isCorrect, setIsCorrect] = useState(true);
+  const { storeSession, publisher } = useSelector(state => ({
+    storeSession: state.MeetingRoom.storeSession,
+    publisher: state.MeetingRoom.publisher,
+  }));
+
   const state = {
-    isCorrect: true,
     cnt: 0,
     userAnswer: '',
     answer: 0,
     webcam: null,
-    progress: undefined,
-    message: undefined,
     loopPredict: undefined,
     maxPredictions: null,
     model: null,
     URL: 'https://teachablemachine.withgoogle.com/models/2c2rSxbLy/',
   };
-
-  const { storeSession, publisher } = useSelector(state => ({
-    storeSession: state.MeetingRoom.storeSession,
-    publisher: state.MeetingRoom.publisher,
-  }));
 
   storeSession.on('signal:OXStart', event => {
     console.log('=== 유저가 OX게임 시작 신호 받음 ===');
@@ -64,16 +62,16 @@ export default function UserOXGame() {
         buttons: false,
         timer: 1500,
       }).then(() => {
-        state.isCorrect = false;
+        setIsCorrect(false);
         publisher.publishVideo(false);
       });
     }
   });
 
   function start() {
-    if (state.isCorrect) {
+    if (isCorrect) {
       init();
-      swal('준비됬나요?', '게임이 곧 시작됩니다', {
+      swal('준비됐나요?', 'O X 동작을 카메라에 보여주세요!', {
         buttons: false,
         timer: 2000,
       }).then(() => {});
@@ -99,18 +97,10 @@ export default function UserOXGame() {
     state.cnt = 0;
 
     // Convenience function to setup a webcam
-    const size = 500;
-    const flip = true; // whether to flip the webcam
-    state.webcam = new tmPose.Webcam(size, size, flip); // width, height, flip
-    await state.webcam.setup(); // request access to the webcam
-    await state.webcam.play();
     state.loopPredict = window.requestAnimationFrame(loop); // 예측 반복 작업
 
     // append/get elements to the DOM
     state.webcam = document.getElementById('webcam');
-
-    state.progress = document.getElementById('progress');
-    state.message = document.getElementById('message');
   }
 
   async function loop() {
@@ -127,53 +117,48 @@ export default function UserOXGame() {
     );
     const prediction = await state.model.predict(posenetOutput);
 
-    if (prediction[0].probability > 0.5) {
-      document.querySelector('body').style.backgroundColor = 'white';
-      document.querySelector('body').style.color = 'black';
-    } else {
-      document.querySelector('body').style.backgroundColor = 'black';
-      document.querySelector('body').style.color = 'white';
-    }
-
     for (let i = 0; i < state.maxPredictions; i++) {
-      state.progress.innerHTML = '인식 ' + state.cnt + '% 진행중';
-
+      swal({
+        text:
+          (state.answer === 0 ? '⭕' : '❌') +
+          ' 인식 ' +
+          state.cnt +
+          '% 진행중...!',
+        buttons: false,
+        timer: 1000,
+        customClass: 'sweet-color',
+      }).then(() => {});
       if (
         prediction[0].probability.toFixed(2) >= 0.5 &&
         state.userAnswer === ''
       ) {
         if (state.answer === 1) {
-          state.message.innerHTML = '초기화';
           state.answer = 0;
           state.cnt = 0;
           continue;
         }
-
-        if (state.cnt === 0)
-          state.message.innerHTML = '인식 중입니다. 잠시만 기다려주세요';
         state.cnt++;
       } else if (
         prediction[1].probability.toFixed(2) >= 0.5 &&
         state.userAnswer === ''
       ) {
         if (state.answer === 0) {
-          state.message.innerHTML = '초기화';
           state.answer = 1;
           state.cnt = 0;
           continue;
         }
-        if (state.cnt === 0)
-          state.message.innerHTML = '인식 중입니다. 잠시만 기다려주세요';
         state.cnt++;
       }
     }
 
-    if (state.cnt >= 200) {
-      state.cnt = 0;
-      console.log('인식 성공', state.userAnswer);
-      state.userAnswer = state.answer === 0 ? 'O' : 'X';
-      state.progress.innerHTML = '인식성공';
-      state.message.innerHTML = state.userAnswer;
+    if (state.cnt >= 100) {
+      state.userAnswer = state.answer === 0 ? '⭕' : '❌';
+      swal({
+        title: (state.userAnswer === 'o' ? '⭕' : '❌') + ' 인식 성공!',
+        text: '잠시만 기다려 주세요!',
+        timer: 2000,
+      }).then(() => {});
+
       stopMission();
     }
   }
@@ -192,8 +177,6 @@ export default function UserOXGame() {
       {/* <button type="button" onClick={() => start()}>
         Start
       </button> */}
-      <div id="progress"></div>
-      <div id="message"></div>
     </BackgroundDiv>
   );
 }
