@@ -27,12 +27,7 @@ export default function UserQnA() {
   const { storeSession } = useSelector(state => state.MeetingRoom);
   const [test, setTest] = useState(false);
   const [data, setData] = useState('');
-  // const qnaContents = () => {
-  //   storeSession.on('signal:qnaContents', event => {
-  //     console.log(event, '이벤트가 들어왔습니다.');
-  //     return <QnaContents>{event.data}</QnaContents>;
-  //   });
-  // };
+
   storeSession.on('signal:qnaContents', event => {
     console.log(event, '이벤트가 들어왔습니다.');
     setTest(true);
@@ -40,10 +35,6 @@ export default function UserQnA() {
     // 받은 데이터로 모달창 띄우기
     // 모달창 종료될때  다시 setTest : false
   });
-
-  // useEffect(() => {
-  //   qnaContents();
-  // }, []);
 
   return (
     <BackgroundDiv>

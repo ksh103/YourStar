@@ -249,6 +249,14 @@ class Room extends Component {
           // this.state.session.forceDisconnect(event.data);
         });
 
+        mySession.on('streamAudioVolumeChange', event => {
+          console.log(
+            event,
+            '말하고있는쥬우우우우우우우우우우우우우우우우ㅜ우우우움ㅁㅁㅁㅁㅁㅁㅁㅁㅁㅁㅁㅁㅁㅁㅁㅁㅁㅁㅁㅁㅁㅁㅁㅁㅁㅁㅁ'
+          );
+          // Speaking(false);
+        });
+
         // 여기에 스티커 신호 받아주면 됩니다.
 
         // 세션과 연결하는 부분
