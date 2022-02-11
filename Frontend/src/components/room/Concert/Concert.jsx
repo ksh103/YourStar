@@ -44,6 +44,24 @@ const HolePlace = styled.div`
   left: 56vw;
   font-size: 3vw;
   z-index: 10;
+   {
+    animation: 0.6s ease-in-out infinite loadEffect3;
+  }
+
+  @keyframes loadEffect3 {
+    65% {
+      opacity: 1;
+      transform: scale(1.01);
+    }
+    85% {
+      opacity: 1;
+      transform: scale(0.97);
+    }
+    100% {
+      opacity: 1;
+      transform: scale(1);
+    }
+  }
 `;
 const EmoziBox = styled.div`
   /* border: solid red; */

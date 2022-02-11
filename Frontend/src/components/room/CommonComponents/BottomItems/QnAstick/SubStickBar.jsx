@@ -38,7 +38,7 @@ const InnerDiv = styled.button`
   color: black;
 `;
 
-const UserInput = styled.input`
+const UserInput = styled.div`
   outlint: 0.3vw solid black;
   border-color: black;
   width: 40vw;
@@ -48,6 +48,17 @@ const UserInput = styled.input`
   margin: 1vw;
 `;
 
+const TestInput = styled.div`
+  position: absolute;
+  outlint: 0.3vw solid black;
+  border-color: black;
+  width: 40vw;
+  height: 4vh;
+  border-radius: 3vh;
+  padding-left: 0.5vw;
+  margin: 1vw;
+  z-index: 1;
+`;
 // 필요한 state
 // 1. 유저 id 를 통한 구분
 // 2. 모드변경에 따른 ui 구성 분기점 --> 분기점 만들었다!
@@ -90,6 +101,7 @@ export default function SubStickBar() {
   };
 
   const UserQnAMessageByEnter = e => {
+    console.log(e);
     e.preventDefault();
     if (e.key === 'Enter') {
       const QnAValue = {
@@ -123,6 +135,11 @@ export default function SubStickBar() {
   if (me.code !== 3) {
     return (
       <>
+        <h2>Q.</h2>
+        <TestInput>
+          <input type="text" onChange={valueChange} value={QnAText} />
+          <button onClick={UserQnAMessageByClick}>제출하기</button>
+        </TestInput>
         <StickBarDiv>
           <StickBar>
             <GridDiv>
