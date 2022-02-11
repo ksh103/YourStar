@@ -205,7 +205,7 @@ const initialState = {
   emoziList: [],
   StarQnAtoggle: false,
   OXsignal: null,
-  OXgameCount: 0,
+  OXgameCount: 1,
   index: -1,
   backgroundColor: '#C4C4C4', // 배경 컬러 22222222222222222222222222
   nowEmozi: -1,

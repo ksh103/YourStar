@@ -67,7 +67,7 @@ export async function ApprovedMeetingListAPI({ page, size }) {
 }
 
 // 승인대기중인 팬미팅 전체보기
-export async function PendingMeetingListAPI(page, size) {
+export async function PendingMeetingListAPI({ page, size }) {
   const result = await axios.get(
     `${BASE_URL}meetings/room-applicant/pending?page=${page}&size=${size}`
   );
@@ -91,7 +91,8 @@ export async function PendingMeetingAPI(meeting) {
 }
 
 // 팬미팅에 참여한 팬의 경고 횟수 확인
-export async function WarningCount(memberId, meetingId) {
+export async function WarningCount({memberId, meetingId}) {
+  console.log('WarningCount',memberId," ",meetingId)
   const result = await axios.get(
     `${BASE_URL}meetings/warning/${memberId}/${meetingId}`
   );
@@ -99,7 +100,8 @@ export async function WarningCount(memberId, meetingId) {
 }
 
 // 팬미팅에 참여한 팬의 경고 주기
-export async function WarningToMemberAPI(memberId, meetingId) {
+export async function WarningToMemberAPI({memberId, meetingId}) {
+  console.log('WarningCount',memberId," ",meetingId)
   const result = await axios.put(
     `${BASE_URL}meetings/warning/${memberId}/${meetingId}`
   );

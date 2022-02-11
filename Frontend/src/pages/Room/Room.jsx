@@ -17,16 +17,16 @@ import {
   SetMySession,
   emoziListAdd,
   AddQnaList,
-  oxGameRound,
-  signalOX,
   UserDelete,
   choQuiz,
   audioChange,
   UpdateOneByOne,
 } from '../../store/modules/meetingRoom';
-
+import { WarningToMemberAPI } from '../../store/apis/Main/meeting';
 // 컴포넌트
 import RoomComponent from './RoomComponent';
+
+import { WARNING_MEMBER_REQUEST } from '../../store/modules/meeting';
 
 const OPENVIDU_SERVER_URL = 'https://i6e204.p.ssafy.io:8443';
 const OPENVIDU_SERVER_SECRET = 'YOURSTAR';
@@ -93,8 +93,6 @@ class Room extends Component {
       },
       () => {
         var mySession = this.state.session;
-        // 스토어로 저장을 해봐라.
-        this.props.doSetMySession(mySession);
         // 현재 미팅룸에 들어온 사용자 확인
         mySession.on('streamCreated', event => {
           var subscriber = mySession.subscribe(event.stream, undefined); // 들어온 사용자의 정보
@@ -144,6 +142,7 @@ class Room extends Component {
           if (changeNum !== this.props.selectNum) {
             if (changeNum !== 6) {
               this.props.doScreenChange(changeNum);
+              this.props.publisher.publishVideo(true);
             }
           }
         });
@@ -184,6 +183,18 @@ class Room extends Component {
           }
         });
 
+        mySession.on('signal:starback', event => {
+          // 스타가 1대1 미팅 퇴장 요구 받음
+          let changeNum = parseInt(event.data);
+          if (changeNum !== this.props.selectNum) {
+            if (this.state.me.code === 4) {
+              this.props.doScreenChange(changeNum);
+              mySession.disconnect();
+              this.joinSession();
+            }
+          }
+        });
+
         mySession.on('signal:UserQnA', event => {
           let QnAdata = event.data.split(',');
           if (QnAdata[0] !== this.props.me.nick) {
@@ -194,16 +205,6 @@ class Room extends Component {
             this.props.doAddQnaList(inputValue);
           }
         });
-
-        if (this.props.userCode === 3) {
-          mySession.on('signal:OX', event => {
-            let OXdata = event.data.split(',');
-            if (OXdata[0] !== this.props.OXgameCount) {
-              this.props.doSignalOX(OXdata[1]);
-              this.props.doOXGameRound();
-            }
-          });
-        }
 
         if (this.props.userCode === 3) {
           mySession.on('signal:Cho', event => {
@@ -222,15 +223,30 @@ class Room extends Component {
             this.props.publisher.publishAudio(false);
           }
         });
-  
+
         mySession.on('signal:video', event => {
-            console.log('===== 비디오 상태 변경 =====');
-            if (event.data === 'true') {
-              this.props.publisher.publishVideo(true);
-            } else {
-              this.props.publisher.publishVideo(false);
-            }
+          console.log('===== 비디오 상태 변경 =====');
+          if (event.data === 'true') {
+            this.props.publisher.publishVideo(true);
+          } else {
+            this.props.publisher.publishVideo(false);
+          }
         });
+
+        mySession.on('signal:warning', event => {
+          console.log(event, '======경고정보수신======');
+          console.log(this.props.me.memberId, '멤버아이디');
+          console.log(this.state.session.sessionId, '세션아이디');
+          // 경고주기
+          this.props.doWarningToMemberAPI(
+            this.props.me.memberId,
+            this.state.session.sessionId
+          );
+          // 경고횟수 2회 이상이면 강퇴
+          // this.state.session.forceDisconnect(event.data);
+        });
+
+        // 여기에 스티커 신호 받아주면 됩니다.
 
         // 세션과 연결하는 부분
         this.getToken(this.state.mySessionId).then(token => {
@@ -270,6 +286,10 @@ class Room extends Component {
               // 세션에 내 비디오 및 마이크 정보 푸시
               mySession.publish(publisher);
 
+              // 스토어로 저장을 해봐라.
+              this.props.doSetMySession(mySession);
+
+              // 내 화면 보이게 하기
               if (this.props.me.code === 4)
                 this.props.doMainStreamManagerInfo(publisher);
               else this.props.doUpdateMyInformation(publisher); // 내 화면 보기 설정
@@ -289,10 +309,6 @@ class Room extends Component {
   starJoinOnebyOne() {
     const mySession = this.state.session;
     mySession.disconnect();
-
-    // // 세션과 연결을 끊고 Store에 다른 사람들의 비디오도 초기화 해줌
-    // var empty = [];
-    // this.props.doDeleteSubscriber(empty);
 
     // 1대1 미팅룸으로 입장
     var onebyoneSessionId = this.state.mySessionId + '-onebyone';
@@ -319,6 +335,7 @@ class Room extends Component {
 
           // 세션에 내 비디오 및 마이크 정보 푸시
           mySession.publish(publisher);
+          this.props.doSetMySession(mySession);
           this.props.doMainStreamManagerInfo(publisher);
         })
         .catch(error => {
@@ -335,9 +352,9 @@ class Room extends Component {
     const mySession = this.state.session;
     mySession.disconnect();
 
-    // // 세션과 연결을 끊고 Store에 다른 사람들의 비디오도 초기화 해줌
-    // var empty = [];
-    // this.props.doDeleteSubscriber(empty);
+    // 세션과 연결을 끊고 Store에 다른 사람들의 비디오도 초기화 해줌
+    var empty = [];
+    this.props.doDeleteSubscriber(empty);
 
     // 1대1 미팅룸으로 입장
     var onebyoneSessionId = this.state.mySessionId + '-onebyone';
@@ -365,6 +382,7 @@ class Room extends Component {
 
           // 세션에 내 비디오 및 마이크 정보 푸시
           mySession.publish(publisher);
+          this.props.doSetMySession(mySession);
           this.props.doUpdateMyInformation(publisher);
         })
         .catch(error => {
@@ -516,10 +534,9 @@ const mapStateToProps = state => ({
   testInput: state.MeetingRoom.testInput,
   me: state.mypage.me,
   QnAmode: state.MeetingRoom.QnAmode,
-  OXsignal: state.MeetingRoom.OXsignal,
-  OXgameCount: state.MeetingRoom.OXgameCount,
   userCode: state.mypage.me.code,
   chosonantQuiz: state.MeetingRoom.chosonantQuiz,
+  meetingId: state.meeting.meeting.id,
 });
 
 const mapDispatchToProps = dispatch => {
@@ -537,12 +554,12 @@ const mapDispatchToProps = dispatch => {
     doSetMySession: storeSession => dispatch(SetMySession(storeSession)),
     doemoziListAdd: emozi => dispatch(emoziListAdd(emozi)),
     doAddQnaList: QnAText => dispatch(AddQnaList(QnAText)),
-    doSignalOX: signal => dispatch(signalOX(signal)),
-    doOXGameRound: () => dispatch(oxGameRound()),
     doDeleteSubscriber: subscribers => dispatch(UserDelete(subscribers)),
     dochosonantQuiz: text => dispatch(choQuiz(text)),
     doaudioChange: () => dispatch(audioChange()),
     doUpdateOneByOne: stream => dispatch(UpdateOneByOne(stream)),
+    doWarningToMemberAPI: (memberId, meetingId) =>
+      dispatch(WarningToMemberAPI({ memberId, meetingId })),
   };
 };
 

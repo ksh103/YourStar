@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import styled from 'styled-components';
 import { SmallBox, HalfSideDiv2 } from '../../Chatting/Chatting.style';
 import { useSelector, useDispatch } from 'react-redux';
@@ -35,6 +35,11 @@ const XButton = styled.div`
   width: 18vw;
 `;
 export default function OXButtonStar() {
+  // const usestate = {
+  //   isStart: false,
+  // };
+  const [isStart, setIsStart] = useState(false);
+
   const { OXsignal } = useSelector(state => ({
     OXsignal: state.MeetingRoom.OXsignal,
   }));
@@ -50,21 +55,41 @@ export default function OXButtonStar() {
   const dispatch = useDispatch();
 
   const OXClick = e => {
+    console.log('==== 스타가 OX게임 끝냄 ====');
+    setIsStart(false);
     dispatch(oxGameRound());
     storeSession.signal({
       data: `${OXgameCount},${e.target.innerText}`,
       to: [],
-      type: 'OX',
+      type: 'OXEnd',
     });
     dispatch(signalOX(e.target.innerText));
   };
+
+  const start = e => {
+    console.log('==== 스타가 OX게임 시작 ====');
+    setIsStart(true);
+    storeSession.signal({
+      data: 'Start OX Game',
+      to: [],
+      type: 'OXStart',
+    });
+  };
+  // OX 세션 종료 버튼 만듦 -> 화면이 켜진 사용자만 체크 -> 그사람의 NICK을 받음
+  // NICK을 바탕으로 우승자 등록
 
   return (
     <>
       <HalfSideDiv2>
         <SmallBox>
-          <OButton onClick={OXClick}>O</OButton>
-          <XButton onClick={OXClick}>X</XButton>
+          {isStart ? (
+            <div>
+              <OButton onClick={OXClick}>O</OButton>
+              <XButton onClick={OXClick}>X</XButton>
+            </div>
+          ) : (
+            <button onClick={start}>Start</button>
+          )}
         </SmallBox>
       </HalfSideDiv2>
     </>
