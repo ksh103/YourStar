@@ -213,7 +213,7 @@ class Room extends Component {
           mySession.on('signal:Cho', event => {
             let chodata = event.data.split(',');
             if (chodata[0] !== this.props.chosonantQuiz) {
-              this.props.dochosonantQuiz(chodata[1]);
+              this.props.dochosonantQuiz(chodata[1], chodata[2]);
             }
           });
         }
@@ -558,7 +558,8 @@ const mapDispatchToProps = dispatch => {
     doemoziListAdd: emozi => dispatch(emoziListAdd(emozi)),
     doAddQnaList: QnAText => dispatch(AddQnaList(QnAText)),
     doDeleteSubscriber: subscribers => dispatch(UserDelete(subscribers)),
-    dochosonantQuiz: text => dispatch(choQuiz(text)),
+    dochosonantQuiz: (question, answer) =>
+      dispatch(choQuiz({ question, answer })),
     doaudioChange: () => dispatch(audioChange()),
     doWarningToMemberAPI: (memberId, meetingId) =>
       dispatch(WarningToMemberAPI({ memberId, meetingId })),
