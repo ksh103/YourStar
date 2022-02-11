@@ -1,7 +1,6 @@
 package com.ssafy.yourstar.domain.meeting.controller;
 
 import com.ssafy.yourstar.domain.meeting.request.MeetingGameWinnerApplyByUserPostReq;
-import com.ssafy.yourstar.domain.meeting.response.MeetingGameResultListByStarGetRes;
 import com.ssafy.yourstar.domain.meeting.response.MeetingGameResultListByUserGetRes;
 import com.ssafy.yourstar.domain.meeting.service.MeetingGameService;
 import com.ssafy.yourstar.global.model.response.BaseResponseBody;
@@ -10,6 +9,8 @@ import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiParam;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -24,11 +25,11 @@ public class MeetingGameController {
     @Autowired
     MeetingGameService meetingGameService;
 
-    @ApiOperation(value = "팬미팅에 참여한 팬에게 경고 주기")
+    @ApiOperation(value = "팬미팅 게임 점수 등록")
     @PutMapping("/game-score/{meetingId}/{memberId}")
     public ResponseEntity<BaseResponseBody> meetingGameScoreApply
-            (@ApiParam(value = "회원 구분 번호") @PathVariable("meetingId") int meetingId,
-             @ApiParam(value = "팬미팅 번호") @PathVariable("memberId") int memberId) {
+            (@ApiParam(value = "팬미팅 번호") @PathVariable("meetingId") int meetingId,
+             @ApiParam(value = "회원 구분 번호") @PathVariable("memberId") int memberId) {
         log.info("meetingGameScore - Call");
 
         if (meetingGameService.meetingGameScore(meetingId, memberId)) {
@@ -41,7 +42,9 @@ public class MeetingGameController {
 
     @ApiOperation(value = "팬미팅 게임 우승 내역(일반회원)")
     @GetMapping("/game-result/{memberId}")
-    public ResponseEntity<MeetingGameResultListByUserGetRes> meetingGameResultListByUser (@ApiParam(value = "회원 구분 번호") @PathVariable int memberId) {
+    public ResponseEntity<MeetingGameResultListByUserGetRes> meetingGameResultListByUser (@ApiParam(value = "회원 구분 번호") @PathVariable("memberId") int memberId) {
+        log.info("meetingGameResultListByUser - Call");
+
         List<String> meetingGameResultList = meetingGameService.meetingGameResultListByUser(memberId);
 
         if(meetingGameResultList != null && !meetingGameResultList.isEmpty()) {
@@ -54,15 +57,10 @@ public class MeetingGameController {
     
     @ApiOperation(value = "팬미팅 게임 우승 내역(관계자)")
     @GetMapping("/game-result/admin/{meetingId}")
-    public ResponseEntity<MeetingGameResultListByStarGetRes> meetingGameResultListByStart (@PathVariable("meetingId") int meetingId) {
-        List<String> meetingGameResultList = meetingGameService.meetingGameResultListByStar(meetingId);
+    public Page<String> meetingGameResultListByStart (@PathVariable("meetingId") int meetingId) {
+        Page<String> rankingList = meetingGameService.meetingGameResultListByStar(meetingId, PageRequest.of(0, 3));
 
-        if (meetingGameResultList != null && !meetingGameResultList.isEmpty()) {
-            return ResponseEntity.status(200).body(MeetingGameResultListByStarGetRes.of(200, "Success", meetingGameResultList));
-        }else {
-            log.error("meetingGameResultListByStart - None");
-            return ResponseEntity.status(400).body(MeetingGameResultListByStarGetRes.of(400, "None", null));
-        }
+       return rankingList;
     }
 
     @ApiOperation(value = "팬미팅 게임 우승자 등록")
