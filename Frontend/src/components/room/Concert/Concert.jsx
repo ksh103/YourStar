@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect, useRef } from 'react';
 import styled from 'styled-components';
 import EmoziBar from '../CommonComponents/BottomItems/Emozi/EmoziBar';
 import { HalfSideDiv1 } from '../CommonComponents/RightSideItems/Chatting/Chatting.style';
@@ -44,9 +44,7 @@ const HolePlace = styled.div`
   left: 56vw;
   font-size: 3vw;
   z-index: 10;
-   {
-    animation: 0.6s ease-in-out infinite loadEffect3;
-  }
+  animation: 0.6s ease-in-out infinite loadEffect3;
 
   @keyframes loadEffect3 {
     65% {
@@ -63,6 +61,7 @@ const HolePlace = styled.div`
     }
   }
 `;
+
 const EmoziBox = styled.div`
   /* border: solid red; */
   position: absolute;
@@ -137,6 +136,17 @@ export default function Concert() {
       setTestinput('');
     }
   };
+
+  // 채팅 스크롤 아래로 내려주기
+  const messagesEndRef = useRef(null);
+  const scrollToBottom = () => {
+    messagesEndRef.current?.scrollIntoView({ behavior: 'smooth' });
+  };
+  useEffect(() => {
+    // 채팅 리스트가 업데이트 될 때마다 제일 아래로 내려주기
+    scrollToBottom();
+  }, [chattingList]);
+
   return (
     <BackgroundDiv>
       <ConcertWrapper>
@@ -155,8 +165,11 @@ export default function Concert() {
               </div>
             );
           })}
-        </EmoziBox>{' '}
-        <HolePlace>🎁</HolePlace>
+        </EmoziBox>
+        <HolePlace>
+          {console.log('8')}
+          🎁
+        </HolePlace>
       </ConcertWrapper>
       <HalfSideDiv1>
         <ConcertChattingBox></ConcertChattingBox>
@@ -176,6 +189,7 @@ export default function Concert() {
               </div>
             );
           })}
+          <div ref={messagesEndRef}></div> {/**채팅 스크롤 아래로 내려주기 */}
         </ConcertChattingListBox>
       </HalfSideDiv1>
       <EmoziBar></EmoziBar>

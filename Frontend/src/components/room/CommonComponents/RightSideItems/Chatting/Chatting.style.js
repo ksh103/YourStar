@@ -27,6 +27,7 @@ const LongChattingInputBox = styled.input`
   border: none;
   padding-right: 0.52vw;
   padding-left: 0.52vw;
+  outline: none;
 `;
 
 const LongChattingListBox = styled.div`
@@ -40,8 +41,10 @@ const LongChattingListBox = styled.div`
   height: 54vh;
   padding: 1vh;
   margin-top: 2vh;
-  background-color: black;
-  color: white;
+  background-color: #f5f5f5;
+  color: black;
+  font-size: 20px;
+  overflow-y: scroll;
 `;
 
 const HalfSideDiv2 = styled.div`
@@ -71,6 +74,7 @@ const SmallChattingInputBox = styled.input`
   border: none;
   padding-right: 0.52vw;
   padding-left: 0.52vw;
+  outline: none;
 `;
 
 const SmallChattingListBox = styled.div`
@@ -84,8 +88,9 @@ const SmallChattingListBox = styled.div`
   height: 19vh;
   padding: 1vh;
   margin-top: 2vh;
-  background-color: black;
-  color: white;
+  background-color: #f5f5f5;
+  color: black;
+  overflow-y: scroll;
 `;
 
 const ThridSideDiv1 = styled.div`
@@ -125,6 +130,8 @@ const MiddleChattingInputBox = styled.input`
   border: none;
   padding-right: 0.52vw;
   padding-left: 0.52vw;
+  outline: none;
+  overflow-y: scroll;
 `;
 
 const MiddleChattingListBox = styled.div`
@@ -138,8 +145,8 @@ const MiddleChattingListBox = styled.div`
   height: 31vh;
   padding: 1vh;
   margin-top: 2vh;
-  background-color: black;
-  color: white;
+  background-color: #f5f5f5;
+  color: black;
 `;
 
 const ConcertChattingBox = styled.div`
@@ -163,6 +170,7 @@ const ConcertChattingInputBox = styled.input`
   border: none;
   padding-right: 0.52vw;
   padding-left: 0.52vw;
+  outline: none;
 `;
 
 const ConcertChattingListBox = styled.div`
@@ -176,9 +184,10 @@ const ConcertChattingListBox = styled.div`
   height: 60vh;
   padding: 1vh;
   margin-top: 2vh;
-  background-color: black;
-  color: white;
+  background-color: #f5f5f5;
+  color: black;
   overflow-y: auto;
+  overflow-y: scroll;
 `;
 
 export {
