@@ -24,6 +24,21 @@ public class MeetingGameController {
     @Autowired
     MeetingGameService meetingGameService;
 
+    @ApiOperation(value = "팬미팅에 참여한 팬에게 경고 주기")
+    @PutMapping("/game-score/{meetingId}/{memberId}")
+    public ResponseEntity<BaseResponseBody> meetingGameScoreApply
+            (@ApiParam(value = "회원 구분 번호") @PathVariable("meetingId") int meetingId,
+             @ApiParam(value = "팬미팅 번호") @PathVariable("memberId") int memberId) {
+        log.info("meetingGameScore - Call");
+
+        if (meetingGameService.meetingGameScore(meetingId, memberId)) {
+            return ResponseEntity.status(200).body(BaseResponseBody.of(200, "Success"));
+        } else {
+            log.error("meetingGiveWarnToUser - This MeetingId or MemberId doesn't exist");
+            return ResponseEntity.status(400).body(BaseResponseBody.of(400, "This MeetingId or MemberId doesn't exist"));
+        }
+    }
+
     @ApiOperation(value = "팬미팅 게임 우승 내역(일반회원)")
     @GetMapping("/game-result/{memberId}")
     public ResponseEntity<MeetingGameResultListByUserGetRes> meetingGameResultListByUser (@ApiParam(value = "회원 구분 번호") @PathVariable int memberId) {
