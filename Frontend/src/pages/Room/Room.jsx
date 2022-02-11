@@ -4,6 +4,7 @@ import { OpenVidu } from 'openvidu-browser';
 import React, { Component } from 'react';
 import './App.css';
 import { connect } from 'react-redux';
+import swal from 'sweetalert';
 
 // action 호출
 import {
@@ -20,13 +21,10 @@ import {
   UserDelete,
   choQuiz,
   audioChange,
-  UpdateOneByOne,
 } from '../../store/modules/meetingRoom';
 import { WarningToMemberAPI } from '../../store/apis/Main/meeting';
 // 컴포넌트
 import RoomComponent from './RoomComponent';
-
-import { WARNING_MEMBER_REQUEST } from '../../store/modules/meeting';
 
 const OPENVIDU_SERVER_URL = 'https://i6e204.p.ssafy.io:8443';
 const OPENVIDU_SERVER_SECRET = 'YOURSTAR';
@@ -97,10 +95,7 @@ class Room extends Component {
         mySession.on('streamCreated', event => {
           var subscriber = mySession.subscribe(event.stream, undefined); // 들어온 사용자의 정보
           var subInfo = JSON.parse(subscriber.stream.connection.data);
-          if (subInfo.memberInfo !== undefined) {
-            console.log('===== 불러오기 성공 ======');
-            this.props.doUpdateOneByOne(subscriber);
-          } else {
+          if (subInfo.memberInfo === undefined) {
             // 스타가 들어왔으면 메인 화면으로, 아니면 일반 화면으로 보냄
             if (subInfo.memberCode === 4) {
               this.props.doMainStreamManagerInfo(subscriber);
@@ -193,6 +188,14 @@ class Room extends Component {
               this.joinSession();
             }
           }
+        });
+
+        mySession.on('signal:wait', event => {
+          // 대기 순번 알림
+          swal({
+            title: '1대1미팅 대기시간 알림',
+            text: event.data + '분 뒤 입장 됩니다.',
+          });
         });
 
         mySession.on('signal:UserQnA', event => {
@@ -359,7 +362,7 @@ class Room extends Component {
     // 1대1 미팅룸으로 입장
     var onebyoneSessionId = this.state.mySessionId + '-onebyone';
     console.log('1대1 세션 입장 ', onebyoneSessionId);
-    this.getToken(onebyoneSessionId).then(token => {
+    this.createToken(onebyoneSessionId).then(token => {
       mySession
         .connect(token, {
           // 추가로 넘겨주고 싶은 데이터가 있으면 여기에 추가
@@ -558,7 +561,6 @@ const mapDispatchToProps = dispatch => {
     dochosonantQuiz: (question, answer) =>
       dispatch(choQuiz({ question, answer })),
     doaudioChange: () => dispatch(audioChange()),
-    doUpdateOneByOne: stream => dispatch(UpdateOneByOne(stream)),
     doWarningToMemberAPI: (memberId, meetingId) =>
       dispatch(WarningToMemberAPI({ memberId, meetingId })),
   };

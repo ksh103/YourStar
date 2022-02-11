@@ -274,7 +274,7 @@ public class MeetingServiceImpl implements MeetingService {
     }
 
     @Override
-    public boolean meetingGiveWarnToUser(int memberId, int meetingId) {
+    public Applicant meetingGiveWarnToUser(int memberId, int meetingId) {
         ApplicantID applicantID = new ApplicantID();
         applicantID.setMemberId(memberId);
         applicantID.setMeetingId(meetingId);
@@ -285,9 +285,9 @@ public class MeetingServiceImpl implements MeetingService {
             applicant.setApplicantWarnCount(applicant.getApplicantWarnCount() + 1); // 현재 경고 횟수에서 +1
             applicantRepository.save(applicant); // 값 업데이트
 
-            return true;
+            return applicant;
         } else {
-            return false;
+            return null;
         }
     }
 

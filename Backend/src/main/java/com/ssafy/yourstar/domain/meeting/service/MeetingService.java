@@ -28,7 +28,7 @@ public interface MeetingService {
     boolean meetingRemoveByUser(int memberId, int meetingId);
     Page<Meeting> meetingApplyListByUser(int memberId, Pageable pageable);
     Applicant applicantDetail(int memberId, int meetingId);
-    boolean meetingGiveWarnToUser(int memberId, int meetingId);
+    Applicant meetingGiveWarnToUser(int memberId, int meetingId);
     String getMeetingImgPath(int fileId);
 
     MeetingOath meetingOathByUser(MeetingOathByUserPostReq meetingOathByUserPostReq); // 보안서약서 작성 유무
