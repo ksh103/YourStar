@@ -1,5 +1,6 @@
 import React from 'react';
 import styled from 'styled-components';
+import { useSelector } from 'react-redux';
 
 //margin: 3.125vh 2vh;
 const OtherAngelStyle = styled.div`
@@ -11,6 +12,18 @@ const OtherAngelStyle = styled.div`
   border-radius: 2vh;
 `;
 
-export default function OtherScreenAngle() {
-  return <OtherAngelStyle></OtherAngelStyle>;
+export default function OtherScreenAngle(props) {
+  const { storeSession } = useSelector(state => state.MeetingRoom);
+  const sendQnaContents = value => {
+    storeSession.signal({
+      data: value,
+      to: [],
+      type: 'qnaContents',
+    });
+  };
+  return (
+    <OtherAngelStyle onClick={() => sendQnaContents()}>
+      {props.text}
+    </OtherAngelStyle>
+  );
 }

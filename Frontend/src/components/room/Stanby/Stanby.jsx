@@ -39,47 +39,44 @@ const ColorCircle = [
 
 const OPENVIDU_SERVER_URL = 'https://i6e204.p.ssafy.io:8443';
 const OPENVIDU_SERVER_SECRET = 'YOURSTAR';
-// const JoinStanby = () => {
-//   // // 세션과 연결을 끊고 Store에 다른 사람들의 비디오도 초기화 해줌
-//   // var empty = [];
-//   // this.props.doDeleteSubscriber(empty);
 
-//   // 1대1 미팅룸으로 입장
-//   var onebyoneSessionId = this.state.mySessionId + '-onebyone';
-//   console.log('1대1 세션 입장 ', onebyoneSessionId);
-//   this.getToken(onebyoneSessionId).then(token => {
-//     mySession
-//       .connect(token, {
-//         // 추가로 넘겨주고 싶은 데이터가 있으면 여기에 추가
-//         clientData: this.state.me.nick,
-//         memberCode: this.state.me.code,
-//       })
-//       .then(() => {
-//         // 연결 후에 내 정보를 담기
-//         let publisher = this.OV.initPublisher(undefined, {
-//           audioSource: undefined, // The source of audio. If undefined default microphone
-//           videoSource: undefined, // The source of video. If undefined default webcam
-//           publishAudio: true, // Whether you want to start publishing with your audio unmuted or not
-//           publishVideo: true, // Whether you want to start publishing with your video enabled or not
-//           resolution: '640x480', // The resolution of your video
-//           frameRate: 30, // The frame rate of your video
-//           insertMode: 'APPEND', // How the video is inserted in the target element 'video-container'
-//           mirror: false, // Whether to mirror your local video or not
-//         });
+// 스탠바이룸 시작
+const StanbyJoin = (StanbySession, nick) => {
+  var StanbySessionId = 'test' + `${nick}`;
+  console.log('스탠바이 세션 입장 ', StanbySessionId);
+  this.getToken(StanbySessionId).then(token => {
+    StanbySession.connect(token, {
+      // 추가로 넘겨주고 싶은 데이터가 있으면 여기에 추가
+      clientData: this.state.me.nick,
+      memberCode: this.state.me.code,
+    })
+      .then(() => {
+        // 연결 후에 내 정보를 담기
+        let publisher = this.OV.initPublisher(undefined, {
+          audioSource: undefined, // The source of audio. If undefined default microphone
+          videoSource: undefined, // The source of video. If undefined default webcam
+          publishAudio: true, // Whether you want to start publishing with your audio unmuted or not
+          publishVideo: true, // Whether you want to start publishing with your video enabled or not
+          resolution: '640x480', // The resolution of your video
+          frameRate: 30, // The frame rate of your video
+          insertMode: 'APPEND', // How the video is inserted in the target element 'video-container'
+          mirror: false, // Whether to mirror your local video or not
+        });
 
-//         // 세션에 내 비디오 및 마이크 정보 푸시
-//         mySession.publish(publisher);
-//         this.props.doMainStreamManagerInfo(publisher);
-//       })
-//       .catch(error => {
-//         console.log(
-//           'There was an error connecting to the session:',
-//           error.code,
-//           error.message
-//         );
-//       });
-//   });
-// };
+        // 세션에 내 비디오 및 마이크 정보 푸시
+        StanbySession.publish(publisher);
+        this.props.doSetMySession(StanbySession);
+        this.props.doMainStreamManagerInfo(publisher);
+      })
+      .catch(error => {
+        console.log(
+          'There was an error connecting to the session:',
+          error.code,
+          error.message
+        );
+      });
+  });
+};
 
 const leaveSession = () => {
   // --- 7) Leave the session by calling 'disconnect' method over the Session object ---
@@ -173,11 +170,11 @@ const createToken = sessionId => {
       .catch(error => reject(error));
   });
 };
-
+const OV = new OpenVidu();
 export default function Stanby() {
   const dispatch = useDispatch();
   const history = useHistory();
-  const OV = new OpenVidu();
+  const { me } = useSelector(state => state.mypage);
   const { meeting, storeSession } = useSelector(state => state.meeting);
   const [color, SetColor] = useState('#C4C4C4');
   const [video, SetVideo] = useState(0); // 1 ON, 0 OFF
@@ -198,9 +195,9 @@ export default function Stanby() {
     mirror: false, // Whether to mirror your local video or not
   });
 
-  storeSession.on('streamAudioVolumeChange', event => {
-    // isSpeaking(false);
-  });
+  // storeSession.on('streamAudioVolumeChange', event => {
+  //   // isSpeaking(false);
+  // });
 
   const Speaking = isSpeaking => {
     console.log('스피킹중', isSpeaking);
@@ -214,6 +211,7 @@ export default function Stanby() {
     // history.push(`/room/${meeting.id}`);
     history.push(`/EunSeong`);
   };
+
   useEffect(() => {
     swal(
       '반갑습니다',
