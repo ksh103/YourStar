@@ -23,6 +23,9 @@ import { useDispatch, useSelector } from 'react-redux';
 import { useEffect } from 'react';
 import swal from 'sweetalert';
 import { changeBackgroundColor } from '../../../store/modules/meetingRoom';
+import { OpenVidu } from 'openvidu-browser';
+import UserVideoComponent from '../../../pages/Room/UserVideoComponent';
+import axios from 'axios';
 
 const ColorCircle = [
   roomColor.gray.background,
@@ -34,17 +37,175 @@ const ColorCircle = [
   roomColor.purple.background,
 ];
 
+const OPENVIDU_SERVER_URL = 'https://i6e204.p.ssafy.io:8443';
+const OPENVIDU_SERVER_SECRET = 'YOURSTAR';
+// const JoinStanby = () => {
+//   // // 세션과 연결을 끊고 Store에 다른 사람들의 비디오도 초기화 해줌
+//   // var empty = [];
+//   // this.props.doDeleteSubscriber(empty);
+
+//   // 1대1 미팅룸으로 입장
+//   var onebyoneSessionId = this.state.mySessionId + '-onebyone';
+//   console.log('1대1 세션 입장 ', onebyoneSessionId);
+//   this.getToken(onebyoneSessionId).then(token => {
+//     mySession
+//       .connect(token, {
+//         // 추가로 넘겨주고 싶은 데이터가 있으면 여기에 추가
+//         clientData: this.state.me.nick,
+//         memberCode: this.state.me.code,
+//       })
+//       .then(() => {
+//         // 연결 후에 내 정보를 담기
+//         let publisher = this.OV.initPublisher(undefined, {
+//           audioSource: undefined, // The source of audio. If undefined default microphone
+//           videoSource: undefined, // The source of video. If undefined default webcam
+//           publishAudio: true, // Whether you want to start publishing with your audio unmuted or not
+//           publishVideo: true, // Whether you want to start publishing with your video enabled or not
+//           resolution: '640x480', // The resolution of your video
+//           frameRate: 30, // The frame rate of your video
+//           insertMode: 'APPEND', // How the video is inserted in the target element 'video-container'
+//           mirror: false, // Whether to mirror your local video or not
+//         });
+
+//         // 세션에 내 비디오 및 마이크 정보 푸시
+//         mySession.publish(publisher);
+//         this.props.doMainStreamManagerInfo(publisher);
+//       })
+//       .catch(error => {
+//         console.log(
+//           'There was an error connecting to the session:',
+//           error.code,
+//           error.message
+//         );
+//       });
+//   });
+// };
+
+const leaveSession = () => {
+  // --- 7) Leave the session by calling 'disconnect' method over the Session object ---
+
+  const mySession = this.state.session;
+
+  if (mySession) {
+    mySession.disconnect();
+  }
+
+  // Empty all properties...
+  this.OV = null;
+  this.setState({
+    session: undefined,
+  });
+};
+
+const getToken = curSessionId => {
+  console.log('===== 세션 연결 중 : ', curSessionId);
+  return this.createSession(curSessionId).then(sessionId =>
+    this.createToken(sessionId)
+  );
+};
+
+const createSession = curSessionId => {
+  return new Promise((resolve, reject) => {
+    var data = JSON.stringify({ customSessionId: curSessionId });
+    axios
+      .post(OPENVIDU_SERVER_URL + '/openvidu/api/sessions', data, {
+        headers: {
+          Authorization:
+            'Basic ' + btoa('OPENVIDUAPP:' + OPENVIDU_SERVER_SECRET),
+          'Content-Type': 'application/json',
+        },
+      })
+      .then(response => {
+        console.log('CREATE SESION', response);
+        resolve(response.data.id);
+      })
+      .catch(response => {
+        var error = Object.assign({}, response);
+        if (error?.response?.status === 409) {
+          resolve(curSessionId);
+        } else {
+          console.log(error);
+          console.warn(
+            'No connection to OpenVidu Server. This may be a certificate error at ' +
+              OPENVIDU_SERVER_URL
+          );
+          if (
+            window.confirm(
+              'No connection to OpenVidu Server. This may be a certificate error at "' +
+                OPENVIDU_SERVER_URL +
+                '"\n\nClick OK to navigate and accept it. ' +
+                'If no certificate warning is shown, then check that your OpenVidu Server is up and running at "' +
+                OPENVIDU_SERVER_URL +
+                '"'
+            )
+          ) {
+            window.location.assign(OPENVIDU_SERVER_URL + '/accept-certificate');
+          }
+        }
+      });
+  });
+};
+
+const createToken = sessionId => {
+  return new Promise((resolve, reject) => {
+    var data = {};
+    if (this.state.me.code === 4) data.role = 'MODERATOR';
+    else if (this.state.me.code === 2) data.role = 'SUBSCRIBER';
+    axios
+      .post(
+        OPENVIDU_SERVER_URL +
+          '/openvidu/api/sessions/' +
+          sessionId +
+          '/connection',
+        data,
+        {
+          headers: {
+            Authorization:
+              'Basic ' + btoa('OPENVIDUAPP:' + OPENVIDU_SERVER_SECRET),
+            'Content-Type': 'application/json',
+          },
+        }
+      )
+      .then(response => {
+        console.log('TOKEN', response);
+        resolve(response.data.token);
+      })
+      .catch(error => reject(error));
+  });
+};
+
 export default function Stanby() {
   const dispatch = useDispatch();
   const history = useHistory();
-
-  const { meeting } = useSelector(state => state.meeting);
-
+  const OV = new OpenVidu();
+  const { meeting, storeSession } = useSelector(state => state.meeting);
   const [color, SetColor] = useState('#C4C4C4');
   const [video, SetVideo] = useState(0); // 1 ON, 0 OFF
   const [mic, SetMic] = useState(0); // 1 ON, 0 OFF
+  const [isSpeaking, setIsSpeaking] = useState(false);
   const CircleOnclick = props => {
     SetColor(props);
+  };
+
+  let publisher = OV.initPublisher(undefined, {
+    audioSource: undefined, // The source of audio. If undefined default microphone
+    videoSource: undefined, // The source of video. If undefined default webcam
+    publishAudio: true, // Whether you want to start publishing with your audio unmuted or not
+    publishVideo: true, // Whether you want to start publishing with your video enabled or not
+    resolution: '640x480', // The resolution of your video
+    frameRate: 30, // The frame rate of your video
+    insertMode: 'APPEND', // How the video is inserted in the target element 'video-container'
+    mirror: false, // Whether to mirror your local video or not
+  });
+
+  storeSession.on('streamAudioVolumeChange', event => {
+    // isSpeaking(false);
+  });
+
+  const Speaking = isSpeaking => {
+    console.log('스피킹중', isSpeaking);
+    setIsSpeaking(isSpeaking);
+    return isSpeaking;
   };
 
   const onClickEnter = () => {
@@ -80,7 +241,9 @@ export default function Stanby() {
           ))}
         </ColorCircleBox>
       </ColorCircleWrapper>
-      <StarScreen></StarScreen>
+      <StarScreen>
+        {publisher && <UserVideoComponent streamManager={publisher} />}
+      </StarScreen>
       <SettingWrapper>
         <SettingBox>
           {video === 0 ? (
