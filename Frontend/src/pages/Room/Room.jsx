@@ -46,6 +46,7 @@ class Room extends Component {
       mySessionId: pathname.substr(6), // 넘어온 미팅룸 ID 입력
       session: undefined,
       me: this.props.me, // Store에 저장된 내 정보 입력
+      recordId: null,
     };
   }
 
@@ -431,17 +432,19 @@ class Room extends Component {
       })
       .then(response => {
         console.log('===== 녹화 시작 =====', response);
+        this.setState({
+          recordId: response.id,
+        });
       })
       .catch(error => console.error(error));
   }
 
   stopRecording() {
-    var onebyoneSessionId = this.state.mySessionId + '-onebyone';
     axios
       .post(BASE_URL + 'meetings/recording', {
         meetingId: this.state.mySessionId,
         memberId: this.state.me.memberId,
-        recordId: onebyoneSessionId,
+        recordId: this.recordId,
       })
       .then(response => {
         console.log('===== 녹화 중지 =====', response);
