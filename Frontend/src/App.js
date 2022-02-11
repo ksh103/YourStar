@@ -19,7 +19,6 @@ import {
   Login,
   MypageDetail,
   RoomJisul,
-  RoomYoungWon,
   RoomSohyun,
   Pledge,
   Stanby,
@@ -88,9 +87,6 @@ function App() {
           </Route>
           <Route path="/Sohyun">
             <RoomSohyun />
-          </Route>
-          <Route path="/YoungWon">
-            <RoomYoungWon />
           </Route>
           <Route path="/Jisul">
             <RoomJisul />

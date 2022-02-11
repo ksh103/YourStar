@@ -35,14 +35,7 @@ const XButton = styled.div`
   width: 18vw;
 `;
 export default function OXButtonStar() {
-  // const usestate = {
-  //   isStart: false,
-  // };
   const [isStart, setIsStart] = useState(false);
-
-  const { OXsignal } = useSelector(state => ({
-    OXsignal: state.MeetingRoom.OXsignal,
-  }));
 
   const { storeSession } = useSelector(state => ({
     storeSession: state.MeetingRoom.storeSession,

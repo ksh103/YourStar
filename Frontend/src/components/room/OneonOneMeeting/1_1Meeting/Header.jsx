@@ -64,6 +64,33 @@ export default function Header() {
   const signalToNextUser = idx => {
     console.log('===== 사용자 수 ======', subscribers.length);
 
+    // 다음 사람에게 남은 시간 알리기
+    if (idx < subscribers.length - 1) {
+      for (var i = idx; i < subscribers.length; i++) {
+        var order = 1; // 현재 기다려야하는 인원 수
+        const sessionId = storeSession.sessionId;
+        const data = {
+          session: sessionId.substring(0, sessionId.length - 9), // 1-onebyone 일때 1만 뽑아내기
+          to: [subscribers[idx].stream.connection.connectionId],
+          type: 'signal:wait',
+          data: order,
+        };
+        axios
+          .post(OPENVIDU_SERVER_URL + '/openvidu/api/signal', data, {
+            headers: {
+              Authorization:
+                'Basic ' + btoa('OPENVIDUAPP:' + OPENVIDU_SERVER_SECRET),
+              'Content-Type': 'application/json',
+            },
+          })
+          .then(response => {
+            console.log(response);
+          })
+          .catch(error => console.error(error));
+      }
+      order++;
+    }
+
     if (idx < subscribers.length) {
       console.log('===== 불러오기 ======');
       const sessionId = storeSession.sessionId;
