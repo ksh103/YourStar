@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import styled from 'styled-components';
 import { SmallBox, HalfSideDiv2 } from '../../Chatting/Chatting.style';
 import { useSelector, useDispatch } from 'react-redux';
@@ -35,9 +35,10 @@ const XButton = styled.div`
   width: 18vw;
 `;
 export default function OXButtonStar() {
-  const state = {
-    isStart: false,
-  };
+  // const usestate = {
+  //   isStart: false,
+  // };
+  const [isStart, setIsStart] = useState(false);
 
   const { OXsignal } = useSelector(state => ({
     OXsignal: state.MeetingRoom.OXsignal,
@@ -55,7 +56,7 @@ export default function OXButtonStar() {
 
   const OXClick = e => {
     console.log('==== 스타가 OX게임 끝냄 ====');
-    state.isStart = false;
+    setIsStart(false);
     dispatch(oxGameRound());
     storeSession.signal({
       data: `${OXgameCount},${e.target.innerText}`,
@@ -67,7 +68,7 @@ export default function OXButtonStar() {
 
   const start = e => {
     console.log('==== 스타가 OX게임 시작 ====');
-    state.isStart = true;
+    setIsStart(true);
     storeSession.signal({
       data: 'Start OX Game',
       to: [],
@@ -81,7 +82,7 @@ export default function OXButtonStar() {
     <>
       <HalfSideDiv2>
         <SmallBox>
-          {state.isStart ? (
+          {isStart ? (
             <div>
               <OButton onClick={OXClick}>O</OButton>
               <XButton onClick={OXClick}>X</XButton>
