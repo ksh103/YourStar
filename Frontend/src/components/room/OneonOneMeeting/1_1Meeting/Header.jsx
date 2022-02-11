@@ -71,7 +71,7 @@ export default function Header() {
         const sessionId = storeSession.sessionId;
         const data = {
           session: sessionId.substring(0, sessionId.length - 9), // 1-onebyone 일때 1만 뽑아내기
-          to: [subscribers[idx].stream.connection.connectionId],
+          to: [subscribers[i].stream.connection.connectionId],
           type: 'signal:wait',
           data: order,
         };
