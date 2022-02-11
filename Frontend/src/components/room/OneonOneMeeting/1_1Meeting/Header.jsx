@@ -63,10 +63,11 @@ export default function Header() {
 
   const signalToNextUser = idx => {
     console.log('===== 사용자 수 ======', subscribers.length);
-
+    console.log('=== 현재 인덱스 ===', idx);
+    // idx 0 , length 2
     // 다음 사람에게 남은 시간 알리기
     if (idx < subscribers.length - 1) {
-      for (var i = idx; i < subscribers.length; i++) {
+      for (var i = idx + 1; i < subscribers.length; i++) {
         var order = 1; // 현재 기다려야하는 인원 수
         const sessionId = storeSession.sessionId;
         const data = {
@@ -87,8 +88,8 @@ export default function Header() {
             console.log(response);
           })
           .catch(error => console.error(error));
+        order++;
       }
-      order++;
     }
 
     if (idx < subscribers.length) {
@@ -145,7 +146,7 @@ export default function Header() {
       const sessionId = storeSession.sessionId;
 
       const data = {
-        session: sessionId, // 1-onebyone 일때 1만 뽑아내기
+        session: sessionId,
         to: [storeSession.connection.connectionId],
         type: 'signal:starback',
         data: '0',

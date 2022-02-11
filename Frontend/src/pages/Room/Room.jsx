@@ -113,7 +113,11 @@ class Room extends Component {
 
         // 현재 미팅룸에서 퇴장한 사용자 확인
         mySession.on('streamDestroyed', event => {
-          this.deleteSubscriber(event.stream.streamManager);
+          var check = mySession.sessionId.slice(-1);
+          if (check !== 'e') {
+            console.log('===== 누군가 퇴장 =====');
+            this.deleteSubscriber(event.stream.streamManager);
+          }
         });
 
         // Exception 처리
@@ -199,7 +203,7 @@ class Room extends Component {
         });
 
         mySession.on('signal:wait', event => {
-          // 대기 순번 알림
+          console.log('대기 순번 알림', event.data);
           swal({
             title: '1대1미팅 대기시간 알림',
             text: '약 ' + event.data + '분 뒤 입장 됩니다.',
