@@ -104,16 +104,18 @@ public class MeetingController {
 
     @ApiOperation(value = "팬미팅에 참여한 팬에게 경고 주기")
     @PutMapping("/warning/{memberId}/{meetingId}")
-    public ResponseEntity<BaseResponseBody> meetingGiveWarnToUser
+    public ResponseEntity<ApplicantDetailGetRes> meetingGiveWarnToUser
             (@ApiParam(value = "회원 구분 번호") @PathVariable("memberId") int memberId,
              @ApiParam(value = "팬미팅 번호") @PathVariable("meetingId") int meetingId) {
         log.info("meetingGiveWarnToUser - Call");
 
-        if (meetingService.meetingGiveWarnToUser(memberId, meetingId)) {
-            return ResponseEntity.status(200).body(BaseResponseBody.of(200, "Success"));
-        } else {
+        Applicant applicant = meetingService.meetingGiveWarnToUser(memberId, meetingId);
+
+        if (applicant == null) {
             log.error("meetingGiveWarnToUser - This MeetingId or MemberId doesn't exist");
-            return ResponseEntity.status(400).body(BaseResponseBody.of(400, "This MeetingId or MemberId doesn't exist"));
+            return ResponseEntity.status(400).body(ApplicantDetailGetRes.of(400, "This MemberId or MeetingId doesn't exist", null));
+        } else {
+            return ResponseEntity.status(200).body(ApplicantDetailGetRes.of(200, "Success", applicant));
         }
     }
 
