@@ -63,6 +63,8 @@ export default function OXButtonStar() {
     <>
       <HalfSideDiv2>
         <SmallBox>
+          {/* 스타트 버튼 만듦 */}
+          {/* 조건문 달아서 시작전일때는 스타트 버튼, 시작 후에는 아래 OX 버튼 */}
           <OButton onClick={OXClick}>O</OButton>
           <XButton onClick={OXClick}>X</XButton>
         </SmallBox>
