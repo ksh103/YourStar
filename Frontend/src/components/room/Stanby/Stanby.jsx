@@ -233,6 +233,19 @@ export default function Stanby() {
     StanbyJoin(testSession, me.memberId);
   }, []);
 
+  const videoControll = num => {
+    SetVideo(num);
+    if (pub.stream.videoActive === true) {
+      pub.publishVideo(false);
+    } else {
+      pub.publishVideo(true);
+    }
+  };
+
+  console.log(
+    pub.stream.videoActive,
+    '==========들어온사람의 비디오 상태 정보========='
+  );
   return (
     <BackgroundDiv color={color}>
       <ColorCircleWrapper>
@@ -266,14 +279,14 @@ export default function Stanby() {
             <BsFillCameraVideoOffFill
               style={{ cursor: 'pointer' }}
               onClick={() => {
-                SetVideo(1);
+                videoControll(0);
               }}
             />
           ) : (
             <BsFillCameraVideoFill
               style={{ cursor: 'pointer' }}
               onClick={() => {
-                SetVideo(0);
+                videoControll(1);
               }}
             />
           )}

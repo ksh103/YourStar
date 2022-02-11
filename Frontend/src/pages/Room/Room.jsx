@@ -218,6 +218,13 @@ class Room extends Component {
           });
         }
 
+        if (this.props.userCode === 4) {
+          mySession.on('signal:ChoUserAns', event => {
+            let chodata = event.data.split(',');
+            console.log(chodata);
+          });
+        }
+
         mySession.on('signal:audio', event => {
           console.log('===== 오디오 상태 변경 =====');
           if (event.data === 'true') {
@@ -247,14 +254,6 @@ class Room extends Component {
           );
           // 경고횟수 2회 이상이면 강퇴
           // this.state.session.forceDisconnect(event.data);
-        });
-
-        mySession.on('streamAudioVolumeChange', event => {
-          console.log(
-            event,
-            '말하고있는쥬우우우우우우우우우우우우우우우우ㅜ우우우움ㅁㅁㅁㅁㅁㅁㅁㅁㅁㅁㅁㅁㅁㅁㅁㅁㅁㅁㅁㅁㅁㅁㅁㅁㅁㅁㅁ'
-          );
-          // Speaking(false);
         });
 
         // 여기에 스티커 신호 받아주면 됩니다.
@@ -566,8 +565,7 @@ const mapDispatchToProps = dispatch => {
     doemoziListAdd: emozi => dispatch(emoziListAdd(emozi)),
     doAddQnaList: QnAText => dispatch(AddQnaList(QnAText)),
     doDeleteSubscriber: subscribers => dispatch(UserDelete(subscribers)),
-    dochosonantQuiz: (question, answer) =>
-      dispatch(choQuiz({ question, answer })),
+    dochosonantQuiz: (question, answer) => dispatch(choQuiz(question, answer)),
     doaudioChange: () => dispatch(audioChange()),
     doWarningToMemberAPI: (memberId, meetingId) =>
       dispatch(WarningToMemberAPI({ memberId, meetingId })),
