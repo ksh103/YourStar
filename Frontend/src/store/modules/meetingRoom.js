@@ -195,7 +195,7 @@ const initialState = {
   subscribers: [],
   publisher: undefined,
   mainStreamManager: undefined,
-  selectNum: 4,
+  selectNum: 0,
   // 임시로 사용하는 유저아이디
   userId: 0,
   // 임시로 사용하는 유저 닉네임

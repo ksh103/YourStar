@@ -19,7 +19,7 @@ const BackgroundDiv = styled.div`
 
 export default function UserOXGame() {
   const state = {
-    game: false,
+    isCorrect: true,
     cnt: 0,
     userAnswer: '',
     answer: 0,
@@ -27,14 +27,14 @@ export default function UserOXGame() {
     progress: undefined,
     message: undefined,
     loopPredict: undefined,
-    starAnswer: '',
     maxPredictions: null,
     model: null,
     URL: 'https://teachablemachine.withgoogle.com/models/2c2rSxbLy/',
   };
 
-  const { storeSession } = useSelector(state => ({
+  const { storeSession, publisher } = useSelector(state => ({
     storeSession: state.MeetingRoom.storeSession,
+    publisher: state.MeetingRoom.publisher,
   }));
 
   storeSession.on('signal:OXStart', event => {
@@ -42,12 +42,47 @@ export default function UserOXGame() {
     start();
   });
 
+  storeSession.on('signal:OXEnd', event => {
+    console.log('=== 유저가 OX게임 종료 신호 받음 ===');
+    let data = event.data.split(',');
+    let round = data[0];
+    let starAnswer = data[1];
+
+    if (state.userAnswer === starAnswer) {
+      swal({
+        title: round + '라운드 종료',
+        text: '정답',
+        icon: 'success',
+        buttons: false,
+        timer: 1500,
+      });
+    } else {
+      swal({
+        title: round + '라운드 종료',
+        text: '오답',
+        icon: 'error',
+        buttons: false,
+        timer: 1500,
+      }).then(() => {
+        state.isCorrect = false;
+        publisher.publishVideo(false);
+      });
+    }
+  });
+
   function start() {
-    init();
-    swal('준비됬나요?', '게임이 곧 시작됩니다', {
-      buttons: false,
-      timer: 3000,
-    }).then(() => {});
+    if (state.isCorrect) {
+      init();
+      swal('준비됬나요?', '게임이 곧 시작됩니다', {
+        buttons: false,
+        timer: 2000,
+      }).then(() => {});
+    } else {
+      swal('다음 라운드 시작', {
+        buttons: false,
+        timer: 2000,
+      }).then(() => {});
+    }
   }
 
   // init() 실행하면 예측 작업이 시작
@@ -62,7 +97,6 @@ export default function UserOXGame() {
 
     state.userAnswer = '';
     state.cnt = 0;
-    state.starAnswer = '';
 
     // Convenience function to setup a webcam
     const size = 500;
@@ -134,10 +168,10 @@ export default function UserOXGame() {
       }
     }
 
-    if (state.cnt >= 100) {
+    if (state.cnt >= 200) {
       state.cnt = 0;
       console.log('인식 성공', state.userAnswer);
-      state.userAnswer = state.answer === 0 ? 'o' : 'x';
+      state.userAnswer = state.answer === 0 ? 'O' : 'X';
       state.progress.innerHTML = '인식성공';
       state.message.innerHTML = state.userAnswer;
       stopMission();
