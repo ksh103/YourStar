@@ -6,7 +6,9 @@ import MyScreen from '../../CommonComponents/MainItems/MyScreens/MyScreen';
 
 import * as tmPose from '@teachablemachine/pose';
 
-import swal from 'sweetalert'; // 추가
+// 추가
+import swal from 'sweetalert';
+import { useSelector } from 'react-redux';
 
 // 포지션작업
 const BackgroundDiv = styled.div`
@@ -31,13 +33,21 @@ export default function UserOXGame() {
     URL: 'https://teachablemachine.withgoogle.com/models/2c2rSxbLy/',
   };
 
+  const { storeSession } = useSelector(state => ({
+    storeSession: state.MeetingRoom.storeSession,
+  }));
+
+  storeSession.on('signal:OXStart', event => {
+    console.log('=== 유저가 OX게임 시작 신호 받음 ===');
+    start();
+  });
+
   function start() {
+    init();
     swal('준비됬나요?', '게임이 곧 시작됩니다', {
       buttons: false,
-      timer: 1800,
-    }).then(() => {
-      init();
-    });
+      timer: 3000,
+    }).then(() => {});
   }
 
   // init() 실행하면 예측 작업이 시작
@@ -145,9 +155,9 @@ export default function UserOXGame() {
       <OXUserScreen></OXUserScreen>
       <MyScreen></MyScreen>
       <OtherPersonScreen></OtherPersonScreen>
-      <button type="button" onClick={() => start()}>
+      {/* <button type="button" onClick={() => start()}>
         Start
-      </button>
+      </button> */}
       <div id="progress"></div>
       <div id="message"></div>
     </BackgroundDiv>
