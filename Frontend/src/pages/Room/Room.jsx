@@ -225,7 +225,12 @@ class Room extends Component {
             mySession.on('signal:ChoUserAns', event => {
               // 세션 받와와서 처리해주기
               let chodata = event.data.split(',');
-              console.log(chodata[1]);
+              console.log(
+                '초성게임 정답자!!!!!!!!!!!!',
+                this.state.choAnsUserCnt,
+                '.',
+                chodata[1]
+              );
             });
             if (this.state.choAnsUserCnt === 3) {
               // 마지막 정답자라면
