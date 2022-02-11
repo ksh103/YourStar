@@ -8,6 +8,8 @@ import com.ssafy.yourstar.domain.meeting.db.repository.MeetingGameRepository;
 import com.ssafy.yourstar.domain.meeting.db.repository.MeetingRepositorySpp;
 import com.ssafy.yourstar.domain.meeting.request.MeetingGameWinnerApplyByUserPostReq;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -49,8 +51,8 @@ public class MeetingGameServiceImpl implements MeetingGameService {
     }
 
     @Override
-    public List<String> meetingGameResultListByStar(int meetingId) {
-        return meetingGameRepository.fintMeetingResultListByMeetingId(meetingId);
+    public Page<String> meetingGameResultListByStar(int meetingId, Pageable pageable) {
+        return meetingGameRepository.fintMeetingResultListByMeetingId(meetingId, pageable);
     }
 
     @Override
