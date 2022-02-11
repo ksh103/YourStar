@@ -95,8 +95,6 @@ class Room extends Component {
       },
       () => {
         var mySession = this.state.session;
-        // 스토어로 저장을 해봐라.
-        this.props.doSetMySession(mySession);
         // 현재 미팅룸에 들어온 사용자 확인
         mySession.on('streamCreated', event => {
           var subscriber = mySession.subscribe(event.stream, undefined); // 들어온 사용자의 정보
@@ -179,6 +177,18 @@ class Room extends Component {
           let changeNum = parseInt(event.data);
           if (changeNum !== this.props.selectNum) {
             if (this.state.me.code === 3) {
+              this.props.doScreenChange(changeNum);
+              mySession.disconnect();
+              this.joinSession();
+            }
+          }
+        });
+
+        mySession.on('signal:starback', event => {
+          // 스타가 1대1 미팅 퇴장 요구 받음
+          let changeNum = parseInt(event.data);
+          if (changeNum !== this.props.selectNum) {
+            if (this.state.me.code === 4) {
               this.props.doScreenChange(changeNum);
               mySession.disconnect();
               this.joinSession();
@@ -287,6 +297,10 @@ class Room extends Component {
               // 세션에 내 비디오 및 마이크 정보 푸시
               mySession.publish(publisher);
 
+              // 스토어로 저장을 해봐라.
+              this.props.doSetMySession(mySession);
+
+              // 내 화면 보이게 하기
               if (this.props.me.code === 4)
                 this.props.doMainStreamManagerInfo(publisher);
               else this.props.doUpdateMyInformation(publisher); // 내 화면 보기 설정
@@ -306,10 +320,6 @@ class Room extends Component {
   starJoinOnebyOne() {
     const mySession = this.state.session;
     mySession.disconnect();
-
-    // // 세션과 연결을 끊고 Store에 다른 사람들의 비디오도 초기화 해줌
-    // var empty = [];
-    // this.props.doDeleteSubscriber(empty);
 
     // 1대1 미팅룸으로 입장
     var onebyoneSessionId = this.state.mySessionId + '-onebyone';
@@ -336,6 +346,7 @@ class Room extends Component {
 
           // 세션에 내 비디오 및 마이크 정보 푸시
           mySession.publish(publisher);
+          this.props.doSetMySession(mySession);
           this.props.doMainStreamManagerInfo(publisher);
         })
         .catch(error => {
@@ -352,9 +363,9 @@ class Room extends Component {
     const mySession = this.state.session;
     mySession.disconnect();
 
-    // // 세션과 연결을 끊고 Store에 다른 사람들의 비디오도 초기화 해줌
-    // var empty = [];
-    // this.props.doDeleteSubscriber(empty);
+    // 세션과 연결을 끊고 Store에 다른 사람들의 비디오도 초기화 해줌
+    var empty = [];
+    this.props.doDeleteSubscriber(empty);
 
     // 1대1 미팅룸으로 입장
     var onebyoneSessionId = this.state.mySessionId + '-onebyone';
@@ -382,6 +393,7 @@ class Room extends Component {
 
           // 세션에 내 비디오 및 마이크 정보 푸시
           mySession.publish(publisher);
+          this.props.doSetMySession(mySession);
           this.props.doUpdateMyInformation(publisher);
         })
         .catch(error => {

@@ -1,4 +1,4 @@
-import React, { useDispatch, useSelector } from 'react-redux';
+import React, { useSelector } from 'react-redux';
 import Timer from '../../Timer/Timer';
 import styled from 'styled-components';
 import { IoIosAlarm, IoMdCreate, IoIosAperture } from 'react-icons/io';
@@ -89,16 +89,38 @@ export default function Header() {
 
     // 다시 이전 세션으로 보내기
     if (idx <= subscribers.length && idx > 0) {
-      console.log(
-        '===== 내보내기 ======',
-        onebyoneStream.stream.connection.connectionId
-      );
+      console.log('===== 내보내기 ======');
       const sessionId = storeSession.sessionId;
 
       const data = {
         session: sessionId, // 1-onebyone 일때 1만 뽑아내기
         to: [onebyoneStream.stream.connection.connectionId],
         type: 'signal:oneback',
+        data: '0',
+      };
+      axios
+        .post(OPENVIDU_SERVER_URL + '/openvidu/api/signal', data, {
+          headers: {
+            Authorization:
+              'Basic ' + btoa('OPENVIDUAPP:' + OPENVIDU_SERVER_SECRET),
+            'Content-Type': 'application/json',
+          },
+        })
+        .then(response => {
+          console.log(response);
+        })
+        .catch(error => console.error(error));
+    }
+
+    // 스타 돌려 보내기
+    if (idx > subscribers.length) {
+      console.log('===== 스타도 돌아가기 ======');
+      const sessionId = storeSession.sessionId;
+
+      const data = {
+        session: sessionId, // 1-onebyone 일때 1만 뽑아내기
+        to: [storeSession.connection.connectionId],
+        type: 'signal:starback',
         data: '0',
       };
       axios
