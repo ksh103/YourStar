@@ -21,5 +21,4 @@ export { default as RoomDongJun } from './Room/DongJun/RoomDonJun';
 export { default as RoomEunSeong } from './Room/EunSeong/RoomEunSeong';
 export { default as RoomSumin } from './Room/Sumin/RoomSumin';
 export { default as RoomJisul } from './Room/JIsul/RoomJisul';
-export { default as RoomYoungWon } from './Room/YoungWon/RoomYoungWon';
 export { default as RoomSohyun } from './Room/Sohyun/RoomSohyun';
