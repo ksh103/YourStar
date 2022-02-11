@@ -433,7 +433,7 @@ class Room extends Component {
       .then(response => {
         console.log('===== 녹화 시작 =====', response);
         this.setState({
-          recordId: response.id,
+          recordId: response.data.id,
         });
       })
       .catch(error => console.error(error));
@@ -444,7 +444,7 @@ class Room extends Component {
       .post(BASE_URL + 'meetings/recording', {
         meetingId: this.state.mySessionId,
         memberId: this.state.me.memberId,
-        recordId: this.recordId,
+        recordId: this.state.recordId,
       })
       .then(response => {
         console.log('===== 녹화 중지 =====', response);

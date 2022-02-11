@@ -17,6 +17,7 @@ const BACKGROUND_COLOR_CHANGE = 'BACKGROUND_COLOR_CHANGE';
 const NOW_EMOZI = 'NOW_EMOZI';
 const MEETINGROOM_USER_DELETE = 'MEETINGROOM_USER_DELETE';
 const PLUS_INDEX = 'PLUS_INDEX';
+const CHECK_OUT = 'CHECK_OUT';
 const CHOSONANT_QUIZ = 'CHOSONANT_QUIZ';
 const PUBLISHER_AUDIO_CHANGE = 'PUBLISHER_AUDIO_CHANGE';
 const UPDATE_ONEBYONESTREAM = 'UPDATE_ONEBYONESTREAM';
@@ -60,6 +61,12 @@ export const UserDelete = subscribers => {
 export const PlusIndex = () => {
   return {
     type: PLUS_INDEX,
+  };
+};
+
+export const CheckOut = () => {
+  return {
+    type: CHECK_OUT,
   };
 };
 
@@ -207,6 +214,7 @@ const initialState = {
   OXsignal: null,
   OXgameCount: 1,
   index: -1,
+  checkCnt: -1,
   backgroundColor: '#C4C4C4', // 배경 컬러 22222222222222222222222222
   nowEmozi: -1,
   chosonantQuiz: null,
@@ -240,6 +248,11 @@ const MeetingRoom = (state = initialState, action) => {
       return {
         ...state,
         index: state.index + 1,
+      };
+    case CHECK_OUT:
+      return {
+        ...state,
+        checkCnt: state.checkCnt + 1,
       };
     case UPDATE_ONEBYONESTREAM:
       return {
