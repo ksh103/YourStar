@@ -1,18 +1,22 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import {
   ScheduleDetailButton,
   ScheduleDetailImage,
   ScheduleDetailLeftWrapper,
 } from './ScheduleDetail.style';
-import poster from '../../../assets/images/poster1.jpg';
-import { Link, useHistory } from 'react-router-dom';
+import { useHistory } from 'react-router-dom';
 import { useSelector, useDispatch } from 'react-redux';
 import { DELETE_FANMEETING_REQUEST } from '../../../store/modules/fan';
 import axios from 'axios';
 import { KAKAO_ADMIN_KEY } from '../../../utils/dev';
 import { IMAGE_URL } from '../../../utils/contants';
+import { WARNING_COUNT_REQUEST } from '../../../store/modules/meeting';
+import swal from 'sweetalert';
+
 export default function ScheduleDetailLeft() {
-  const { meeting, detailMeetingDone } = useSelector(state => state.meeting);
+  const { meeting, detailMeetingDone, warningAccount } = useSelector(
+    state => state.meeting
+  );
   const { me } = useSelector(state => state.mypage);
   const history = useHistory();
   const dispatch = useDispatch();
@@ -34,6 +38,28 @@ export default function ScheduleDetailLeft() {
       cancel_url: `http://localhost:3000/pay`,
     },
   };
+
+  const enterButton = () => {
+    // 입장버튼 클릭 시 경고횟수가 2 이상이면 못들어가게 처리
+    if (warningAccount < 2) {
+      history.push(`/pledge/${meeting.id}`);
+    } else {
+      swal(
+        '경고횟수 2회 누적',
+        '귀하는 미팅 진행 시 욕설 및 비방으로 경고횟수 2회가 누적되어 입장하실 수 없습니다.',
+        'error'
+      );
+    }
+  };
+
+  // 입장 시 경고횟수 확인
+  useEffect(() => {
+    console.log(meeting.id);
+    dispatch({
+      type: WARNING_COUNT_REQUEST,
+      data: { memberId: me.memberId, meetingId: meeting.id },
+    });
+  }, [dispatch, me.memberId, meeting.id]);
 
   const showButton = () => {
     const now = new Date();
@@ -78,8 +104,9 @@ export default function ScheduleDetailLeft() {
       if (meeting.isReserve) {
         return (
           <ScheduleDetailButton color="3">
-            <div>
-              <Link to={`/pledge/${meeting.id}`}>입장하기</Link>
+            <div onClick={enterButton}>
+              입장하기
+              {/* <Link to={`/pledge/${meeting.id}`}>입장하기</Link> */}
             </div>
           </ScheduleDetailButton>
         );
@@ -120,6 +147,7 @@ export default function ScheduleDetailLeft() {
       );
     }
   };
+
   return (
     <ScheduleDetailLeftWrapper>
       <ScheduleDetailImage>

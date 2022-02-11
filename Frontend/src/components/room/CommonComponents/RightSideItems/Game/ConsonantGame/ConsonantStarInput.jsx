@@ -61,7 +61,7 @@ export default function ConsonantStarInput() {
     // setquiz(cho_hangul(e.target[0].value));
     const problem = cho_hangul(e.target[0].value);
     storeSession.signal({
-      data: `${me.nick},${problem}`,
+      data: `${me.nick},${problem},${e.target[0].value}`, // 정답 신호 보내주기
       type: 'Cho',
     });
     signalQuiz(problem);

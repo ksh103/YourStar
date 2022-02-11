@@ -172,10 +172,10 @@ export const oxGameRound = () => {
   };
 };
 
-export const choQuiz = text => {
+export const choQuiz = ({ question, answer }) => {
   return {
     type: CHOSONANT_QUIZ,
-    payload: text,
+    payload: { question, answer },
   };
 };
 
@@ -209,7 +209,7 @@ const initialState = {
   index: -1,
   backgroundColor: '#C4C4C4', // 배경 컬러 22222222222222222222222222
   nowEmozi: -1,
-  chosonantQuiz: null,
+  chosonantQuiz: [],
   onebyoneStream: undefined,
 };
 
