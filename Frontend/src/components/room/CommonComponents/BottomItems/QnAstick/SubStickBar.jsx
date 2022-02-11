@@ -178,10 +178,8 @@ export default function SubStickBar() {
           <StickBar>
             <GridDiv>
               <h2>Q.</h2>
-              <form onKeyPress={UserQnAMessageByEnter}>
-                <UserInput value={QnAText} onChange={valueChange}></UserInput>
-                <button onClick={UserQnAMessageByClick}>제출하기</button>
-              </form>
+              <input type="text" onChange={valueChange} value={QnAText} />
+              <button onClick={UserQnAMessageByClick}>제출하기</button>
             </GridDiv>
           </StickBar>
         </StickBarDiv>

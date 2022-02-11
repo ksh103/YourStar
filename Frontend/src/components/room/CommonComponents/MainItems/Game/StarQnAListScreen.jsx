@@ -23,27 +23,12 @@ const PerScPosition = styled.div`
 `;
 
 export default function StarQnAListScreen() {
-  const { StarQnAtoggle, QnAList, storeSession } = useSelector(
-    state => state.MeetingRoom
-  );
+  const { StarQnAtoggle, QnAList } = useSelector(state => state.MeetingRoom);
 
   const dispatch = useDispatch();
 
   const toggleChange = tf => {
     dispatch(changeQnAtoggle(tf));
-  };
-
-  // 클릭을 했을 때,
-  // 다른 모든 사용자게에, 클릭 한 영역의 내용이 전달되게 해주기
-  // 모달창에 띄워주기!
-
-  // 시그널 여기서
-  const sendQnaContents = value => {
-    storeSession.signal({
-      data: value,
-      to: [],
-      type: 'qnaContents',
-    });
   };
 
   return (
@@ -55,13 +40,11 @@ export default function StarQnAListScreen() {
         <PerScPosition>
           {QnAList &&
             QnAList.map((value, idx) => {
-              console.log(value, 'qna리스트 벨류');
               return (
-                <div onClick={sendQnaContents(value)}>
-                  <OtherScreenAngle key={idx + value.text}>
-                    {value}
-                  </OtherScreenAngle>
-                </div>
+                <OtherScreenAngle
+                  key={idx + value.text}
+                  text={value.text}
+                ></OtherScreenAngle>
               );
             })}
         </PerScPosition>

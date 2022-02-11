@@ -37,10 +37,10 @@ export default function UserOXGame() {
     storeSession: state.MeetingRoom.storeSession,
   }));
 
-  storeSession.on('signal:OXStart', event => {
-    console.log('=== 유저가 OX게임 시작 신호 받음 ===');
-    start();
-  });
+  // storeSession.on('signal:OXStart', event => {
+  //   console.log('=== 유저가 OX게임 시작 신호 받음 ===');
+  //   start();
+  // });
 
   function start() {
     init();
