@@ -19,6 +19,7 @@ const MEETINGROOM_USER_DELETE = 'MEETINGROOM_USER_DELETE';
 const PLUS_INDEX = 'PLUS_INDEX';
 const CHOSONANT_QUIZ = 'CHOSONANT_QUIZ';
 const PUBLISHER_AUDIO_CHANGE = 'PUBLISHER_AUDIO_CHANGE';
+const UPDATE_ONEBYONESTREAM = 'UPDATE_ONEBYONESTREAM';
 // 여기까지 =========
 
 // QnA 모드를 변경하기위한 action
@@ -59,6 +60,13 @@ export const UserDelete = subscribers => {
 export const PlusIndex = () => {
   return {
     type: PLUS_INDEX,
+  };
+};
+
+export const UpdateOneByOneStream = stream => {
+  return {
+    type: UPDATE_ONEBYONESTREAM,
+    payload: stream,
   };
 };
 // 여기까지 =================================
@@ -197,11 +205,12 @@ const initialState = {
   emoziList: [],
   StarQnAtoggle: false,
   OXsignal: null,
-  OXgameCount: 0,
+  OXgameCount: 1,
   index: -1,
   backgroundColor: '#C4C4C4', // 배경 컬러 22222222222222222222222222
   nowEmozi: -1,
   chosonantQuiz: null,
+  onebyonestream: undefined,
 };
 
 const MeetingRoom = (state = initialState, action) => {
@@ -231,6 +240,11 @@ const MeetingRoom = (state = initialState, action) => {
       return {
         ...state,
         index: state.index + 1,
+      };
+    case UPDATE_ONEBYONESTREAM:
+      return {
+        ...state,
+        onebyonestream: action.payload,
       };
     // 여기까지 ============================
     case PUBLISHER_INFO:

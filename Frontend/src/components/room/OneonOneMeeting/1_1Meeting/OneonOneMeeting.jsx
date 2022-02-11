@@ -1,13 +1,17 @@
-import React, { useState } from 'react';
 import Header from './Header';
 import { StarSelfCamBox, UserSelfCamBox } from './OneonOneMeeting.style';
 import StarVideoComponent from '../../../../pages/Room/StarVideoComponent';
 import UserVideoComponent from '../../../../pages/Room/UserVideoComponent';
 import Grid from '@mui/material/Grid';
-import { useSelector } from 'react-redux';
+import { useSelector, useDispatch } from 'react-redux';
+import { UpdateOneByOneStream } from '../../../../store/modules/meetingRoom';
 
 export default function OneonOneMeetingStar() {
-  const [onebyoneStream, setOnebyoneStream] = useState();
+  const dispatch = useDispatch();
+  const updateStream = Stream => dispatch(UpdateOneByOneStream(Stream));
+  const { onebyoneStream } = useSelector(state => ({
+    onebyoneStream: state.MeetingRoom.onebyoneStream,
+  }));
 
   const { me } = useSelector(state => state.mypage);
   const { mainStreamManager, publisher, storeSession } = useSelector(state => ({
@@ -21,8 +25,7 @@ export default function OneonOneMeetingStar() {
     var subInfo = JSON.parse(subscriber.stream.connection.data);
     if (subInfo.memberInfo !== undefined) {
       console.log('===== 불러오기 성공 ======');
-      // setOnebyoneStream();
-      setOnebyoneStream(subscriber);
+      updateStream(subscriber);
     }
   });
 

@@ -25,6 +25,7 @@ import {
 import { WarningToMemberAPI } from '../../store/apis/Main/meeting';
 // 컴포넌트
 import RoomComponent from './RoomComponent';
+import { BASE_URL } from '../../utils/contants';
 
 const OPENVIDU_SERVER_URL = 'https://i6e204.p.ssafy.io:8443';
 const OPENVIDU_SERVER_SECRET = 'YOURSTAR';
@@ -44,6 +45,7 @@ class Room extends Component {
       mySessionId: pathname.substr(6), // 넘어온 미팅룸 ID 입력
       session: undefined,
       me: this.props.me, // Store에 저장된 내 정보 입력
+      recordId: null,
     };
   }
 
@@ -174,6 +176,7 @@ class Room extends Component {
               this.props.doScreenChange(changeNum);
               mySession.disconnect();
               this.joinSession();
+              this.stopRecording();
             }
           }
         });
@@ -396,6 +399,48 @@ class Room extends Component {
           );
         });
     });
+
+    // 녹화 시작
+    var data = {
+      session: onebyoneSessionId,
+      name: mySession.sessionId + this.state.me.nick,
+      hasAudio: true,
+      hasVideo: true,
+      outputMode: 'COMPOSED',
+      recordingLayout: 'CUSTOM',
+      customLayout: 'mySimpleLayout',
+      resolution: '1280x720',
+      frameRate: 25,
+      shmSize: 536870912,
+      ignoreFailedStreams: false,
+    };
+    axios
+      .post(OPENVIDU_SERVER_URL + '/openvidu/api/recordings/start', data, {
+        headers: {
+          Authorization:
+            'Basic ' + btoa('OPENVIDUAPP:' + OPENVIDU_SERVER_SECRET),
+          'Content-Type': 'application/json',
+        },
+      })
+      .then(response => {
+        console.log('===== 녹화 시작 =====', response);
+        this.setState({
+          recordId: response.id,
+        });
+      })
+      .catch(error => console.error(error));
+  }
+
+  stopRecording() {
+    axios
+      .post(BASE_URL + 'meetings/recording', {
+        meetingId: this.state.mySessionId,
+        memberId: this.state.me.memberId,
+        recordId: this.state.recordId,
+      })
+      .then(response => {
+        console.log('===== 녹화 중지 =====', response);
+      });
   }
 
   leaveSession() {

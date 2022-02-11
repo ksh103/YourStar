@@ -119,6 +119,7 @@ export default function Header() {
       console.log('===== 내보내기 ======');
       const sessionId = storeSession.sessionId;
 
+      // 여기 수정
       const data = {
         session: sessionId, // 1-onebyone 일때 1만 뽑아내기
         to: [onebyoneStream.stream.connection.connectionId],
