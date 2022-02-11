@@ -210,7 +210,7 @@ const initialState = {
   backgroundColor: '#C4C4C4', // 배경 컬러 22222222222222222222222222
   nowEmozi: -1,
   chosonantQuiz: null,
-  onebyonestream: undefined,
+  onebyoneStream: undefined,
 };
 
 const MeetingRoom = (state = initialState, action) => {
@@ -244,7 +244,7 @@ const MeetingRoom = (state = initialState, action) => {
     case UPDATE_ONEBYONESTREAM:
       return {
         ...state,
-        onebyonestream: action.payload,
+        onebyoneStream: action.payload,
       };
     // 여기까지 ============================
     case PUBLISHER_INFO:

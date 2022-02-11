@@ -21,6 +21,7 @@ import {
   UserDelete,
   choQuiz,
   audioChange,
+  UpdateOneByOneStream,
 } from '../../store/modules/meetingRoom';
 import { WarningToMemberAPI } from '../../store/apis/Main/meeting';
 // 컴포넌트
@@ -96,7 +97,10 @@ class Room extends Component {
         mySession.on('streamCreated', event => {
           var subscriber = mySession.subscribe(event.stream, undefined); // 들어온 사용자의 정보
           var subInfo = JSON.parse(subscriber.stream.connection.data);
-          if (subInfo.memberInfo === undefined) {
+          if (subInfo.memberInfo !== undefined) {
+            console.log('===== 불러오기 성공 ======');
+            this.props.doUpdateOneByOne(subscriber);
+          } else {
             // 스타가 들어왔으면 메인 화면으로, 아니면 일반 화면으로 보냄
             if (subInfo.memberCode === 4) {
               this.props.doMainStreamManagerInfo(subscriber);
@@ -187,6 +191,8 @@ class Room extends Component {
             if (this.state.me.code === 4) {
               this.props.doScreenChange(changeNum);
               mySession.disconnect();
+              var empty = [];
+              this.props.doDeleteSubscriber(empty);
               this.joinSession();
             }
           }
@@ -602,6 +608,7 @@ const mapDispatchToProps = dispatch => {
     doaudioChange: () => dispatch(audioChange()),
     doWarningToMemberAPI: (memberId, meetingId) =>
       dispatch(WarningToMemberAPI({ memberId, meetingId })),
+    doUpdateOneByOne: stream => dispatch(UpdateOneByOneStream(stream)),
   };
 };
 
