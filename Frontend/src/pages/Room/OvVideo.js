@@ -20,6 +20,6 @@ export default class OpenViduVideoComponent extends Component {
 
   render() {
     // 여기에 video가 비디오 사이즈를 조절해준다
-    return <video autoPlay={true} ref={this.videoRef} />;
+    return <video autoPlay={true} ref={this.videoRef} id="webcam" />;
   }
 }

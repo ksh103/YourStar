@@ -35,6 +35,10 @@ const XButton = styled.div`
   width: 18vw;
 `;
 export default function OXButtonStar() {
+  const state = {
+    isStart: false,
+  };
+
   const { OXsignal } = useSelector(state => ({
     OXsignal: state.MeetingRoom.OXsignal,
   }));
@@ -59,12 +63,27 @@ export default function OXButtonStar() {
     dispatch(signalOX(e.target.innerText));
   };
 
+  const start = e => {
+    console.log('==== 스타가 OX게임 시작 ====');
+    storeSession.signal({
+      data: 'Start OX Game',
+      to: [],
+      type: 'OXStart',
+    });
+  };
+
   return (
     <>
       <HalfSideDiv2>
         <SmallBox>
-          <OButton onClick={OXClick}>O</OButton>
-          <XButton onClick={OXClick}>X</XButton>
+          {state.isStart ? (
+            <div>
+              <OButton onClick={OXClick}>O</OButton>
+              <XButton onClick={OXClick}>X</XButton>
+            </div>
+          ) : (
+            <button onClick={start}>Start</button>
+          )}
         </SmallBox>
       </HalfSideDiv2>
     </>
