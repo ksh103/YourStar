@@ -4,6 +4,7 @@ import { OpenVidu } from 'openvidu-browser';
 import React, { Component } from 'react';
 import './App.css';
 import { connect } from 'react-redux';
+import swal from 'sweetalert';
 
 // action 호출
 import {
@@ -187,6 +188,14 @@ class Room extends Component {
               this.joinSession();
             }
           }
+        });
+
+        mySession.on('signal:wait', event => {
+          // 대기 순번 알림
+          swal({
+            title: '1대1미팅 대기시간 알림',
+            text: event.data + '분 뒤 입장 됩니다.',
+          });
         });
 
         mySession.on('signal:UserQnA', event => {
