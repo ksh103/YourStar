@@ -10,9 +10,6 @@ import java.util.List;
 @Repository
 public interface MeetingGameRepository extends JpaRepository<MeetingGame, Integer> {
 
-    @Query(value = "select g from MeetingGame g where g.meetingId = :meetingId ")
-    List<MeetingGame> findMeetingGameByMeetingId(int meetingId);
-
     @Query(value = "select g.meetingGameName, m.meetingName from MeetingGame g left join Meeting m on m.meetingId = g.meetingId where g.memberId = :memberId")
     List<String> fintMeetingResultListByMemberId(int memberId);
 
