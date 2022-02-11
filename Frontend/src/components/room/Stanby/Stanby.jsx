@@ -41,136 +41,7 @@ const OPENVIDU_SERVER_URL = 'https://i6e204.p.ssafy.io:8443';
 const OPENVIDU_SERVER_SECRET = 'YOURSTAR';
 
 // 스탠바이룸 시작
-const StanbyJoin = (StanbySession, nick) => {
-  var StanbySessionId = 'test' + `${nick}`;
-  console.log('스탠바이 세션 입장 ', StanbySessionId);
-  this.getToken(StanbySessionId).then(token => {
-    StanbySession.connect(token, {
-      // 추가로 넘겨주고 싶은 데이터가 있으면 여기에 추가
-      clientData: this.state.me.nick,
-      memberCode: this.state.me.code,
-    })
-      .then(() => {
-        // 연결 후에 내 정보를 담기
-        let publisher = this.OV.initPublisher(undefined, {
-          audioSource: undefined, // The source of audio. If undefined default microphone
-          videoSource: undefined, // The source of video. If undefined default webcam
-          publishAudio: true, // Whether you want to start publishing with your audio unmuted or not
-          publishVideo: true, // Whether you want to start publishing with your video enabled or not
-          resolution: '640x480', // The resolution of your video
-          frameRate: 30, // The frame rate of your video
-          insertMode: 'APPEND', // How the video is inserted in the target element 'video-container'
-          mirror: false, // Whether to mirror your local video or not
-        });
 
-        // 세션에 내 비디오 및 마이크 정보 푸시
-        StanbySession.publish(publisher);
-        this.props.doSetMySession(StanbySession);
-        this.props.doMainStreamManagerInfo(publisher);
-      })
-      .catch(error => {
-        console.log(
-          'There was an error connecting to the session:',
-          error.code,
-          error.message
-        );
-      });
-  });
-};
-
-const leaveSession = () => {
-  // --- 7) Leave the session by calling 'disconnect' method over the Session object ---
-
-  const mySession = this.state.session;
-
-  if (mySession) {
-    mySession.disconnect();
-  }
-
-  // Empty all properties...
-  this.OV = null;
-  this.setState({
-    session: undefined,
-  });
-};
-
-const getToken = curSessionId => {
-  console.log('===== 세션 연결 중 : ', curSessionId);
-  return this.createSession(curSessionId).then(sessionId =>
-    this.createToken(sessionId)
-  );
-};
-
-const createSession = curSessionId => {
-  return new Promise((resolve, reject) => {
-    var data = JSON.stringify({ customSessionId: curSessionId });
-    axios
-      .post(OPENVIDU_SERVER_URL + '/openvidu/api/sessions', data, {
-        headers: {
-          Authorization:
-            'Basic ' + btoa('OPENVIDUAPP:' + OPENVIDU_SERVER_SECRET),
-          'Content-Type': 'application/json',
-        },
-      })
-      .then(response => {
-        console.log('CREATE SESION', response);
-        resolve(response.data.id);
-      })
-      .catch(response => {
-        var error = Object.assign({}, response);
-        if (error?.response?.status === 409) {
-          resolve(curSessionId);
-        } else {
-          console.log(error);
-          console.warn(
-            'No connection to OpenVidu Server. This may be a certificate error at ' +
-              OPENVIDU_SERVER_URL
-          );
-          if (
-            window.confirm(
-              'No connection to OpenVidu Server. This may be a certificate error at "' +
-                OPENVIDU_SERVER_URL +
-                '"\n\nClick OK to navigate and accept it. ' +
-                'If no certificate warning is shown, then check that your OpenVidu Server is up and running at "' +
-                OPENVIDU_SERVER_URL +
-                '"'
-            )
-          ) {
-            window.location.assign(OPENVIDU_SERVER_URL + '/accept-certificate');
-          }
-        }
-      });
-  });
-};
-
-const createToken = sessionId => {
-  return new Promise((resolve, reject) => {
-    var data = {};
-    if (this.state.me.code === 4) data.role = 'MODERATOR';
-    else if (this.state.me.code === 2) data.role = 'SUBSCRIBER';
-    axios
-      .post(
-        OPENVIDU_SERVER_URL +
-          '/openvidu/api/sessions/' +
-          sessionId +
-          '/connection',
-        data,
-        {
-          headers: {
-            Authorization:
-              'Basic ' + btoa('OPENVIDUAPP:' + OPENVIDU_SERVER_SECRET),
-            'Content-Type': 'application/json',
-          },
-        }
-      )
-      .then(response => {
-        console.log('TOKEN', response);
-        resolve(response.data.token);
-      })
-      .catch(error => reject(error));
-  });
-};
-const OV = new OpenVidu();
 export default function Stanby() {
   const dispatch = useDispatch();
   const history = useHistory();
@@ -183,33 +54,170 @@ export default function Stanby() {
   const CircleOnclick = props => {
     SetColor(props);
   };
+  const [pub, setPub] = useState('');
+  // const [testSession, setTestSession] = useState(null);
+  // 오픈비듀 생성
+  const OV = new OpenVidu();
+  // 세션생성
+  const testSession = OV.initSession();
 
-  let publisher = OV.initPublisher(undefined, {
-    audioSource: undefined, // The source of audio. If undefined default microphone
-    videoSource: undefined, // The source of video. If undefined default webcam
-    publishAudio: true, // Whether you want to start publishing with your audio unmuted or not
-    publishVideo: true, // Whether you want to start publishing with your video enabled or not
-    resolution: '640x480', // The resolution of your video
-    frameRate: 30, // The frame rate of your video
-    insertMode: 'APPEND', // How the video is inserted in the target element 'video-container'
-    mirror: false, // Whether to mirror your local video or not
-  });
+  const getToken = curSessionId => {
+    console.log('===== 세션 연결 중 : ', curSessionId);
+    return createSession(curSessionId).then(sessionId =>
+      createToken(sessionId)
+    );
+  };
 
-  // storeSession.on('streamAudioVolumeChange', event => {
-  //   // isSpeaking(false);
-  // });
+  const StanbyJoin = (StanbySession, nick) => {
+    var StanbySessionId = nick + 'test';
+    console.log('스탠바이 세션 입장 ', StanbySessionId);
+
+    getToken(StanbySessionId).then(token => {
+      StanbySession.connect(token, {
+        // 추가로 넘겨주고 싶은 데이터가 있으면 여기에 추가
+        // clientData: this.state.me.nick,
+        // memberCode: this.state.me.code,
+      })
+        .then(() => {
+          // 연결 후에 내 정보를 담기
+          let publisher = OV.initPublisher(undefined, {
+            audioSource: undefined, // The source of audio. If undefined default microphone
+            videoSource: undefined, // The source of video. If undefined default webcam
+            publishAudio: true, // Whether you want to start publishing with your audio unmuted or not
+            publishVideo: true, // Whether you want to start publishing with your video enabled or not
+            resolution: '640x480', // The resolution of your video
+            frameRate: 30, // The frame rate of your video
+            insertMode: 'APPEND', // How the video is inserted in the target element 'video-container'
+            mirror: false, // Whether to mirror your local video or not
+          });
+          // 할필요는 없는듯 지금 여기에 저장시겨주자
+          // 세션에 내 비디오 및 마이크 정보 푸시
+          StanbySession.publish(publisher);
+          setPub(publisher);
+          // this.props.doSetMySession(StanbySession);
+          // this.props.doMainStreamManagerInfo(publisher);
+        })
+        .catch(error => {
+          console.log(
+            'There was an error connecting to the session:',
+            error.code,
+            error.message
+          );
+        });
+    });
+  };
+
+  const leaveSession = () => {
+    // --- 7) Leave the session by calling 'disconnect' method over the Session object ---
+
+    const mySession = testSession;
+
+    if (mySession) {
+      mySession.disconnect();
+    }
+
+    // Empty all properties...
+  };
+
+  const createSession = curSessionId => {
+    return new Promise((resolve, reject) => {
+      var data = JSON.stringify({ customSessionId: curSessionId });
+      axios
+        .post(OPENVIDU_SERVER_URL + '/openvidu/api/sessions', data, {
+          headers: {
+            Authorization:
+              'Basic ' + btoa('OPENVIDUAPP:' + OPENVIDU_SERVER_SECRET),
+            'Content-Type': 'application/json',
+          },
+        })
+        .then(response => {
+          console.log('CREATE SESION', response);
+          resolve(response.data.id);
+        })
+        .catch(response => {
+          var error = Object.assign({}, response);
+          if (error?.response?.status === 409) {
+            resolve(curSessionId);
+          } else {
+            console.log(error);
+            console.warn(
+              'No connection to OpenVidu Server. This may be a certificate error at ' +
+                OPENVIDU_SERVER_URL
+            );
+            if (
+              window.confirm(
+                'No connection to OpenVidu Server. This may be a certificate error at "' +
+                  OPENVIDU_SERVER_URL +
+                  '"\n\nClick OK to navigate and accept it. ' +
+                  'If no certificate warning is shown, then check that your OpenVidu Server is up and running at "' +
+                  OPENVIDU_SERVER_URL +
+                  '"'
+              )
+            ) {
+              window.location.assign(
+                OPENVIDU_SERVER_URL + '/accept-certificate'
+              );
+            }
+          }
+        });
+    });
+  };
+
+  const createToken = sessionId => {
+    return new Promise((resolve, reject) => {
+      var data = {};
+      if (me.code === 4) data.role = 'MODERATOR';
+      else if (me.code === 2) data.role = 'SUBSCRIBER';
+      axios
+        .post(
+          OPENVIDU_SERVER_URL +
+            '/openvidu/api/sessions/' +
+            sessionId +
+            '/connection',
+          data,
+          {
+            headers: {
+              Authorization:
+                'Basic ' + btoa('OPENVIDUAPP:' + OPENVIDU_SERVER_SECRET),
+              'Content-Type': 'application/json',
+            },
+          }
+        )
+        .then(response => {
+          console.log('TOKEN', response);
+          resolve(response.data.token);
+        })
+        .catch(error => reject(error));
+    });
+  };
 
   const Speaking = isSpeaking => {
     console.log('스피킹중', isSpeaking);
     setIsSpeaking(isSpeaking);
-    return isSpeaking;
+    console.log('test');
   };
+
+  console.log(
+    testSession,
+    '테에에에에에스스스스스스ㅡ트트트트트트세세세세세세ㅔ셔셔셔셔셔셔션'
+  );
+
+  testSession.on('publisherStopSpeaking', event => {
+    // 감지가 될 때 효과 줘버리깅
+    Speaking(false);
+  });
+
+  testSession.on('publisherStartSpeaking', event => {
+    Speaking(true);
+  });
 
   const onClickEnter = () => {
     // 선택한 컬러 전역으로 저장하기
+    testSession.disconnect();
+    console.log(testSession, '============나갔습니다================');
     dispatch(changeBackgroundColor(color));
-    // history.push(`/room/${meeting.id}`);
-    history.push(`/EunSeong`);
+    history.push(`/room/${meeting.id}`);
+    // history.push(`/room/:`);
   };
 
   useEffect(() => {
@@ -219,6 +227,12 @@ export default function Stanby() {
       'success'
     );
   }, []);
+
+  useEffect(() => {
+    // 마운트 될 때 세션정보와, 내 아이디를 보내준다.
+    StanbyJoin(testSession, me.memberId);
+  }, []);
+
   return (
     <BackgroundDiv color={color}>
       <ColorCircleWrapper>
@@ -239,8 +253,12 @@ export default function Stanby() {
           ))}
         </ColorCircleBox>
       </ColorCircleWrapper>
-      <StarScreen>
-        {publisher && <UserVideoComponent streamManager={publisher} />}
+      <StarScreen
+        style={
+          isSpeaking ? { backgroundColor: 'green' } : { backgroundColor: 'red' }
+        }
+      >
+        {pub && <UserVideoComponent streamManager={pub} />}
       </StarScreen>
       <SettingWrapper>
         <SettingBox>
