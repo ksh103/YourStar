@@ -195,7 +195,7 @@ const initialState = {
   subscribers: [],
   publisher: undefined,
   mainStreamManager: undefined,
-  selectNum: 4,
+  selectNum: 0,
   // 임시로 사용하는 유저아이디
   userId: 0,
   // 임시로 사용하는 유저 닉네임
@@ -205,7 +205,7 @@ const initialState = {
   emoziList: [],
   StarQnAtoggle: false,
   OXsignal: null,
-  OXgameCount: 0,
+  OXgameCount: 1,
   index: -1,
   backgroundColor: '#C4C4C4', // 배경 컬러 22222222222222222222222222
   nowEmozi: -1,

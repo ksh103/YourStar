@@ -17,8 +17,6 @@ import {
   SetMySession,
   emoziListAdd,
   AddQnaList,
-  oxGameRound,
-  signalOX,
   UserDelete,
   choQuiz,
   audioChange,
@@ -144,6 +142,7 @@ class Room extends Component {
           if (changeNum !== this.props.selectNum) {
             if (changeNum !== 6) {
               this.props.doScreenChange(changeNum);
+              this.props.publisher.publishVideo(true);
             }
           }
         });
@@ -206,16 +205,6 @@ class Room extends Component {
             this.props.doAddQnaList(inputValue);
           }
         });
-
-        if (this.props.userCode === 3) {
-          mySession.on('signal:OX', event => {
-            let OXdata = event.data.split(',');
-            if (OXdata[0] !== this.props.OXgameCount) {
-              this.props.doSignalOX(OXdata[1]);
-              this.props.doOXGameRound();
-            }
-          });
-        }
 
         if (this.props.userCode === 3) {
           mySession.on('signal:Cho', event => {
@@ -545,8 +534,6 @@ const mapStateToProps = state => ({
   testInput: state.MeetingRoom.testInput,
   me: state.mypage.me,
   QnAmode: state.MeetingRoom.QnAmode,
-  OXsignal: state.MeetingRoom.OXsignal,
-  OXgameCount: state.MeetingRoom.OXgameCount,
   userCode: state.mypage.me.code,
   chosonantQuiz: state.MeetingRoom.chosonantQuiz,
   meetingId: state.meeting.meeting.id,
@@ -567,8 +554,6 @@ const mapDispatchToProps = dispatch => {
     doSetMySession: storeSession => dispatch(SetMySession(storeSession)),
     doemoziListAdd: emozi => dispatch(emoziListAdd(emozi)),
     doAddQnaList: QnAText => dispatch(AddQnaList(QnAText)),
-    doSignalOX: signal => dispatch(signalOX(signal)),
-    doOXGameRound: () => dispatch(oxGameRound()),
     doDeleteSubscriber: subscribers => dispatch(UserDelete(subscribers)),
     dochosonantQuiz: text => dispatch(choQuiz(text)),
     doaudioChange: () => dispatch(audioChange()),
