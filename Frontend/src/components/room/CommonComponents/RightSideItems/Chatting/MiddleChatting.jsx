@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect, useRef } from 'react';
 import {
   MiddleChattingBox,
   MiddleChattingInputBox,
@@ -49,6 +49,16 @@ export default function MiddleChatting() {
     }
   };
 
+  // 채팅 스크롤 아래로 내려주기
+  const messagesEndRef = useRef(null);
+  const scrollToBottom = () => {
+    messagesEndRef.current?.scrollIntoView({ behavior: 'smooth' });
+  };
+  useEffect(() => {
+    // 채팅 리스트가 업데이트 될 때마다 제일 아래로 내려주기
+    scrollToBottom();
+  }, [chattingList]);
+
   return (
     <>
       <ThridSideDiv2>
@@ -63,6 +73,7 @@ export default function MiddleChatting() {
                 </div>
               );
             })}
+            <div ref={messagesEndRef}></div> {/**채팅 스크롤 아래로 내려주기 */}
           </MiddleChattingListBox>
           <MiddleChattingInputBox
             onKeyPress={SendMessage}

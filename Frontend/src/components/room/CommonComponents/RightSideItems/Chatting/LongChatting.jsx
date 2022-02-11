@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import {
   LongChattingInputBox,
   LongChattingListBox,
@@ -12,7 +12,7 @@ import {
 } from '../../../../../store/modules/meetingRoom';
 
 export default function LongChatting() {
-  const [testInput, setTestinput] = React.useState('');
+  const [testInput, setTestinput] = useState('');
 
   const dispatch = useDispatch();
 
@@ -46,6 +46,17 @@ export default function LongChatting() {
       setTestinput('');
     }
   };
+
+  // 채팅 스크롤 아래로 내려주기
+  const messagesEndRef = useRef(null);
+  const scrollToBottom = () => {
+    messagesEndRef.current?.scrollIntoView({ behavior: 'smooth' });
+  };
+  useEffect(() => {
+    // 채팅 리스트가 업데이트 될 때마다 제일 아래로 내려주기
+    scrollToBottom();
+  }, [chattingList]);
+
   return (
     <>
       <HalfSideDiv1>
@@ -54,12 +65,13 @@ export default function LongChatting() {
             {chattingList.map((value, idx) => {
               return (
                 <div key={idx + value.text}>
-                  <p>
+                  <p style={{ margin: '0' }}>
                     {value.userName} : {value.text}
                   </p>
                 </div>
               );
             })}
+            <div ref={messagesEndRef}></div> {/**채팅 스크롤 아래로 내려주기 */}
           </LongChattingListBox>
           <LongChattingInputBox
             onKeyPress={SendMessage}

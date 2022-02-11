@@ -2,7 +2,6 @@ import React from 'react';
 import {
   AlertParentDiv,
   AlertHead,
-  ExitIcon,
   HeadTextArea,
   HeadContent,
   AlertBody,
@@ -13,7 +12,6 @@ import {
   ButtonInputArea,
   ContentTextArea,
 } from './Alert.style';
-import ExitButton from './ExitButton';
 import swal from 'sweetalert';
 import { useState } from 'react';
 import { useHistory } from 'react-router';
@@ -49,9 +47,6 @@ export default function Pledge(props) {
     <AlertParentDiv>
       {/* head 부분 */}
       <AlertHead>
-        <ExitIcon>
-          <ExitButton></ExitButton>
-        </ExitIcon>
         <HeadTextArea>
           <HeadContent>
             <FcLock style={{ fontSize: '3vw' }}></FcLock>
@@ -95,7 +90,9 @@ export default function Pledge(props) {
           <PlaceHolderText>
             본인은 위 사항을 지킬것을 동의합니다
           </PlaceHolderText>
-          <button onClick={onClicksubmit}>제출</button>
+          <button onClick={onClicksubmit} style={{ fontSize: '20px' }}>
+            제출
+          </button>
         </ButtonInputArea>
       </AlertBody>
     </AlertParentDiv>
