@@ -90,7 +90,7 @@ export default function OXButtonStar() {
     console.log('==== OX게임세션 종료 ====');
     var meetingId = storeSession.sessionId;
     for (var i = 0; i < subscribers.length; i++) {
-      if (subscribers[i].stream.videoActive === false) {
+      if (subscribers[i].stream.videoActive) {
         var memberId = JSON.parse(
           subscribers[i].stream.connection.data
         ).memberId;
