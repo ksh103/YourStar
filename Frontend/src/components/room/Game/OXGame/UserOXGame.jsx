@@ -5,6 +5,7 @@ import OtherPersonScreen from '../../CommonComponents/MainItems/OtherScreen/Othe
 import MyScreen from '../../CommonComponents/MainItems/MyScreens/MyScreen';
 
 import * as tmPose from '@teachablemachine/pose';
+import axios from 'axios';
 
 // 추가
 import swal from 'sweetalert';
@@ -17,6 +18,9 @@ const BackgroundDiv = styled.div`
   height: 100%;
   background-color: #e2d8ff;
 `;
+
+const OPENVIDU_SERVER_URL = 'https://i6e204.p.ssafy.io:8443';
+const OPENVIDU_SERVER_SECRET = 'YOURSTAR';
 
 export default function UserOXGame() {
   const [isCorrect, setIsCorrect] = useState(true); // 탈락 여부
@@ -170,6 +174,28 @@ export default function UserOXGame() {
         });
       });
       stopMission();
+
+      // 인식 완료 전송하기
+      const sessionId = storeSession.sessionId;
+
+      const data = {
+        session: sessionId,
+        to: [],
+        type: 'signal:OXDone',
+        data: '0',
+      };
+      axios
+        .post(OPENVIDU_SERVER_URL + '/openvidu/api/signal', data, {
+          headers: {
+            Authorization:
+              'Basic ' + btoa('OPENVIDUAPP:' + OPENVIDU_SERVER_SECRET),
+            'Content-Type': 'application/json',
+          },
+        })
+        .then(response => {
+          console.log(response);
+        })
+        .catch(error => console.error(error));
     }
   }
 

@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import styled from 'styled-components';
 import { SmallBox, HalfSideDiv2 } from '../../Chatting/Chatting.style';
 import { useSelector, useDispatch } from 'react-redux';
@@ -39,6 +39,7 @@ const XButton = styled.div`
 `;
 export default function OXButtonStar() {
   const [isStart, setIsStart] = useState(false);
+  const [doneCnt, setDoneCnt] = useState(0);
 
   const { storeSession, subscribers } = useSelector(state => ({
     storeSession: state.MeetingRoom.storeSession,
@@ -51,8 +52,8 @@ export default function OXButtonStar() {
 
   const dispatch = useDispatch();
 
+  // 스타가 OX 끝남
   const OXClick = e => {
-    console.log('==== 스타가 OX게임 끝냄 ====');
     setIsStart(false);
     dispatch(oxGameRound());
     storeSession.signal({
@@ -83,8 +84,9 @@ export default function OXButtonStar() {
     });
   };
 
+  // 스타가 OX게임 시작시킴
   const start = e => {
-    console.log('==== 스타가 OX게임 시작 ====');
+    setDoneCnt(0);
     setIsStart(true);
     storeSession.signal({
       data: 'Start OX Game',
@@ -99,9 +101,8 @@ export default function OXButtonStar() {
     });
   };
 
+  // 스타가 OX게임 세션종료
   const oxStop = e => {
-    console.log('==== OX게임세션 종료 ====');
-
     swal({
       title: 'OX 게임 세션 종료',
       text: '대기화면으로 이동합니다',
@@ -118,6 +119,11 @@ export default function OXButtonStar() {
     });
   };
 
+  // OX 게임 인식 완료 알림
+  storeSession.on('signal:OXDone', event => {
+    setDoneCnt(doneCnt + 1);
+  });
+
   return (
     <>
       <HalfSideDiv2>
@@ -129,6 +135,7 @@ export default function OXButtonStar() {
             </div>
           ) : (
             <>
+              {console.log(doneCnt + ' / ' + subscribers.length)}
               <button onClick={start}>Start</button>
               <button onClick={oxStop}>OX게임세션 종료</button>
             </>
