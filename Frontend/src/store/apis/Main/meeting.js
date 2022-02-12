@@ -107,6 +107,13 @@ export async function WarningToMemberAPI({ memberId, meetingId }) {
   return result;
 }
 
+// 미팅 종료
+export async function EndMeetingAPI(meetingId) {
+  await axios.post(`${BASE_URL}meetings/warning`, {
+    meetingId: meetingId,
+  });
+}
+
 // 스타가 팬미팅 신청
 export async function InsertMeetingAPI({
   code,
@@ -144,29 +151,4 @@ export async function InsertMeetingAPI({
       'Content-Type': `multipart/form-data`,
     },
   });
-}
-
-// 스타가 팬미팅 수정
-export async function UpdateMeetingAPI({
-  meetingCnt,
-  meetingDescription,
-  meetingEndDate,
-  meetingOpenDate,
-  meetingPrice,
-  meetingStartDate,
-}) {
-  const result = await axios.put(`${BASE_URL}meeting/room-application`, {
-    meetingCnt,
-    meetingDescription,
-    meetingEndDate,
-    meetingOpenDate,
-    meetingPrice,
-    meetingStartDate,
-  });
-  return result;
-}
-
-// 스타가 팬미팅 제거
-export async function DeleteMeetingAPI(meetingId) {
-  await axios.delete(`${BASE_URL}meeting/room-applicant/${meetingId}`);
 }

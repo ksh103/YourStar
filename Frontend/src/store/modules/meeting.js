@@ -25,12 +25,9 @@ const initialState = {
   insertMeetingLoading: false, // 미팅신청
   insertMeetingDone: false,
   insertMeetingError: null,
-  updateMeetingLoading: false, // 미팅수정
-  updateMeetingDone: false,
-  updateMeetingError: null,
-  deleteMeetingLoading: false, // 미팅 삭제
-  deleteMeetingDone: false,
-  deleteMeetingError: null,
+  endMeetingLoading: false, // 미팅 종료
+  endMeetingDone: false,
+  endMeetingError: null,
 };
 
 export const DETAIL_MEETING_REQUEST = 'DETAIL_MEETING_REQUEST'; // 상세정보 미팅
@@ -61,13 +58,9 @@ export const INSERT_MEETING_REQUEST = 'INSERT_MEETING_REQUEST'; // 미팅 신청
 export const INSERT_MEETING_SUCCESS = 'INSERT_MEETING_SUCCESS';
 export const INSERT_MEETING_FAILURE = 'INSERT_MEETING_FAILURE';
 
-export const UPDATE_MEETING_REQUEST = 'UPDATE_MEETING_REQUEST'; // 미팅 수정(스타)
-export const UPDATE_MEETING_SUCCESS = 'UPDATE_MEETING_SUCCESS';
-export const UPDATE_MEETING_FAILURE = 'UPDATE_MEETING_FAILURE';
-
-export const DELETE_MEETING_REQUEST = 'DELETE_MEETING_REQUEST'; // 미팅 취소(스타)
-export const DELETE_MEETING_SUCCESS = 'DELETE_MEETING_SUCCESS';
-export const DELETE_MEETING_FAILURE = 'DELETE_MEETING_FAILURE';
+export const END_MEETING_REQUEST = 'END_MEETING_REQUEST'; // 미팅 종료(스타)
+export const END_MEETING_SUCCESS = 'END_MEETING_SUCCESS';
+export const END_MEETING_FAILURE = 'END_MEETING_FAILURE';
 
 export const ADD_APPLICANT_MEMBER = 'ADD_APPLICANT_MEMBER';
 export const REMOVE_APPLICANT_MEMBER = 'REMOVE_APPLICANT_MEMBER';
@@ -175,50 +168,18 @@ const reducer = (state = initialState, action) =>
         draft.insertMeetingLoading = false;
         draft.insertMeetingError = action.error;
         break;
-      case UPDATE_MEETING_REQUEST:
-        draft.updateMeetingLoading = true;
-        draft.updateMeetingDone = false;
-        draft.updateMeetingError = null;
+      case END_MEETING_REQUEST:
+        draft.endMeetingLoading = true;
+        draft.endMeetingDone = false;
+        draft.endMeetingError = null;
         break;
-      case UPDATE_MEETING_SUCCESS:
-        draft.updateMeetingLoading = false;
-        draft.updateMeetingDone = true;
-        let idx = draft.totalMeetings.findIndex(
-          m => m.meetingId === action.data.meetingId
-        );
-        draft.totalMeetings[idx] = action.data;
-        idx = draft.approvedMeetings.findIndex(
-          m => m.meetingId === action.data.meetingId
-        );
-        draft.approvedMeetings[idx] = action.data;
-        idx = draft.upcomingMeetings.findIndex(
-          m => m.meetingId === action.data.meetingId
-        );
-        draft.upcomingMeetings[idx] = action.data;
+      case END_MEETING_SUCCESS:
+        draft.endMeetingLoading = false;
+        draft.endMeetingDone = true;
         break;
-      case UPDATE_MEETING_FAILURE:
-        draft.updateMeetingLoading = false;
-        draft.updateMeetingError = action.error;
-        break;
-      case DELETE_MEETING_REQUEST:
-        draft.deleteMeetingLoading = true;
-        draft.deleteMeetingDone = false;
-        draft.deleteMeetingError = null;
-        break;
-      case DELETE_MEETING_SUCCESS:
-        draft.deleteMeetingLoading = false;
-        draft.deleteMeetingDone = true;
-        draft.totalMeetings.filter(m => m.meetingId !== action.data.meetingId);
-        draft.approvedMeetings.filter(
-          m => m.meetingId !== action.data.meetingId
-        );
-        draft.upcomingMeetings.filter(
-          m => m.meetingId !== action.data.meetingId
-        );
-        break;
-      case DELETE_MEETING_FAILURE:
-        draft.deleteMeetingLoading = false;
-        draft.deleteMeetingError = action.error;
+      case END_MEETING_FAILURE:
+        draft.endMeetingLoading = false;
+        draft.endMeetingError = action.error;
         break;
       case ADD_APPLICANT_MEMBER:
         draft.meeting.applicantCnt++;

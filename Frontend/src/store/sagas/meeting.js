@@ -7,8 +7,7 @@ import {
   WarningCountAPI,
   WarningToMemberAPI,
   InsertMeetingAPI,
-  UpdateMeetingAPI,
-  DeleteMeetingAPI,
+  EndMeetingAPI,
 } from '../apis/Main/meeting';
 import {
   DETAIL_MEETING_FAILURE,
@@ -32,12 +31,9 @@ import {
   INSERT_MEETING_REQUEST,
   INSERT_MEETING_SUCCESS,
   INSERT_MEETING_FAILURE,
-  UPDATE_MEETING_REQUEST,
-  UPDATE_MEETING_SUCCESS,
-  UPDATE_MEETING_FAILURE,
-  DELETE_MEETING_REQUEST,
-  DELETE_MEETING_SUCCESS,
-  DELETE_MEETING_FAILURE,
+  END_MEETING_REQUEST,
+  END_MEETING_SUCCESS,
+  END_MEETING_FAILURE,
 } from '../modules/meeting';
 import swal from 'sweetalert';
 function* detailMeeting(action) {
@@ -149,29 +145,15 @@ function* insertMeeting(action) {
     });
   }
 }
-function* updateMeeting(action) {
+function* endMeeting(action) {
   try {
-    const result = yield call(UpdateMeetingAPI, action.data);
+    const result = yield call(EndMeetingAPI, action.data);
     yield put({
-      type: UPDATE_MEETING_SUCCESS,
-      data: result,
+      type: END_MEETING_SUCCESS,
     });
   } catch (err) {
     yield put({
-      type: UPDATE_MEETING_FAILURE,
-    });
-  }
-}
-function* deleteMeeting(action) {
-  try {
-    const result = yield call(DeleteMeetingAPI, action.data);
-    yield put({
-      type: DELETE_MEETING_SUCCESS,
-      data: result,
-    });
-  } catch (err) {
-    yield put({
-      type: DELETE_MEETING_FAILURE,
+      type: END_MEETING_FAILURE,
     });
   }
 }
@@ -197,11 +179,8 @@ function* watchWarningMember() {
 function* watchInsertMeeting() {
   yield takeLatest(INSERT_MEETING_REQUEST, insertMeeting);
 }
-function* watchUpdateMeeting() {
-  yield takeLatest(UPDATE_MEETING_REQUEST, updateMeeting);
-}
-function* watchDeleteMeeting() {
-  yield takeLatest(DELETE_MEETING_REQUEST, deleteMeeting);
+function* watchEndMeeting() {
+  yield takeLatest(END_MEETING_REQUEST, endMeeting);
 }
 
 export default function* meetingSaga() {
@@ -213,7 +192,6 @@ export default function* meetingSaga() {
     fork(watchWarningCount),
     fork(watchWarningMember),
     fork(watchInsertMeeting),
-    fork(watchUpdateMeeting),
-    fork(watchDeleteMeeting),
+    fork(watchEndMeeting),
   ]);
 }
