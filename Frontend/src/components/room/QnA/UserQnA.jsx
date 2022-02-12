@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React from 'react';
 import styled from 'styled-components';
 import QuestionMainScreen from '../CommonComponents/MainItems/Game/QuestionMainScreen';
 import SubStickBar from '../CommonComponents/BottomItems/QnAstick/SubStickBar';
@@ -7,7 +7,7 @@ import OtherPersonScreen from '../CommonComponents/MainItems/OtherScreen/OtherPe
 import LongChatting from '../CommonComponents/RightSideItems/Chatting/LongChatting';
 import { useSelector } from 'react-redux';
 import swal from 'sweetalert';
-import { BsJournalMinus } from 'react-icons/bs';
+
 // 포지션작업
 const BackgroundDiv = styled.div`
   width: 100%;
@@ -15,41 +15,20 @@ const BackgroundDiv = styled.div`
   background-color: #e2d8ff;
 `;
 
-const QnaContents = styled.div`
-  top: 50%;
-  left: 50%;
-  transform: translate(-50%, -50%);
-  font-size: medium;
-`;
-
-// 여기서 받게 해보자!
-// 여기서 받아보쟈!
-
 export default function UserQnA() {
   const { storeSession } = useSelector(state => state.MeetingRoom);
-  const [test, setTest] = useState(false);
-  const [data, setData] = useState('');
-  // const qnaContents = () => {
-  //   storeSession.on('signal:qnaContents', event => {
-  //     console.log(event, '이벤트가 들어왔습니다.');
-  //     return <QnaContents>{event.data}</QnaContents>;
-  //   });
-  // };
+
   storeSession.on('signal:qnaContents', event => {
-    console.log(event, '이벤트가 들어왔습니다.');
-    if (event.data.length > 1) {
+    if (event.data.length > 1) {  // qna 모달창 여는 신호 받음(값이 있는 경우)
       swal({
         text: event.data,
-        closeOnClickOutside: false,
+        button: false,
+        closeOnClickOutside: false, // 사용자가 모달창 못닫게 
       })
-    } else {
+    } else {  // qna 모달창 닫는 신호 받았을 경우 
       swal.close()
     }
   });
-
-  // useEffect(() => {
-  //   qnaContents();
-  // }, []);
 
   return (
     <BackgroundDiv>
@@ -57,7 +36,6 @@ export default function UserQnA() {
       <SubStickBar></SubStickBar>
       <LongChatting></LongChatting>
       <MyScreen></MyScreen>
-      {/* {test && <QnaContents>{data}</QnaContents>} */}
       <OtherPersonScreen></OtherPersonScreen>
     </BackgroundDiv>
   );

@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React from 'react';
 import styled from 'styled-components';
 import { useSelector } from 'react-redux';
 import swal from 'sweetalert';
@@ -15,35 +15,23 @@ const OtherAngelStyle = styled.div`
 
 export default function OtherScreenAngle(props) {
   const { storeSession } = useSelector(state => state.MeetingRoom);
-  const [qnaModalIsActive, setQnaModalIsActive] = useState(false);
-
 
   const sendQnaContents = () => {
-    // let qnaContent;
-    // if (qnaModalIsActive) {
-    //   qnaContent = "";
-    //   setQnaModalIsActive(true);
-    // } else {
-    //   qnaContent = props.text;
-    //   setQnaModalIsActive(false);
-    // }
-    storeSession.signal({
+    storeSession.signal({ // qna 모달창 여는 신호 보내기(text 전달)
       data: props.text,
       to: [],
       type: 'qnaContents',
     });
-    swal({
+    swal({  // 스타쪽 모달창 열기 
       text: props.text,
       button: "close",
-      // closeOnClickOutside: false,
-    }).then(() => {
+    }).then(() => { // 스타가 모달 창 닫았을 경우 사용자에게도 닫으라는 신호 보내기 
       storeSession.signal({
         data: "",
         to: [],
         type: 'qnaContents',
       });
   })
-    
   };
 
   return (
