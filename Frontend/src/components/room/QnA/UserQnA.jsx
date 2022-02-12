@@ -6,6 +6,8 @@ import MyScreen from '../CommonComponents/MainItems/MyScreens/MyScreen';
 import OtherPersonScreen from '../CommonComponents/MainItems/OtherScreen/OtherPersonScreen';
 import LongChatting from '../CommonComponents/RightSideItems/Chatting/LongChatting';
 import { useSelector } from 'react-redux';
+import swal from 'sweetalert';
+import { BsJournalMinus } from 'react-icons/bs';
 // 포지션작업
 const BackgroundDiv = styled.div`
   width: 100%;
@@ -27,14 +29,27 @@ export default function UserQnA() {
   const { storeSession } = useSelector(state => state.MeetingRoom);
   const [test, setTest] = useState(false);
   const [data, setData] = useState('');
-
+  // const qnaContents = () => {
+  //   storeSession.on('signal:qnaContents', event => {
+  //     console.log(event, '이벤트가 들어왔습니다.');
+  //     return <QnaContents>{event.data}</QnaContents>;
+  //   });
+  // };
   storeSession.on('signal:qnaContents', event => {
     console.log(event, '이벤트가 들어왔습니다.');
-    setTest(true);
-    setData(event.data);
-    // 받은 데이터로 모달창 띄우기
-    // 모달창 종료될때  다시 setTest : false
+    if (event.data.length > 1) {
+      swal({
+        text: event.data,
+        closeOnClickOutside: false,
+      })
+    } else {
+      swal.close()
+    }
   });
+
+  // useEffect(() => {
+  //   qnaContents();
+  // }, []);
 
   return (
     <BackgroundDiv>
@@ -42,7 +57,7 @@ export default function UserQnA() {
       <SubStickBar></SubStickBar>
       <LongChatting></LongChatting>
       <MyScreen></MyScreen>
-      {test && <QnaContents>{data}</QnaContents>}
+      {/* {test && <QnaContents>{data}</QnaContents>} */}
       <OtherPersonScreen></OtherPersonScreen>
     </BackgroundDiv>
   );
