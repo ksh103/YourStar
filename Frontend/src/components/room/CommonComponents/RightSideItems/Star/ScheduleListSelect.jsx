@@ -44,9 +44,11 @@ export default function ScheduleListSelect() {
   // const { selectNum } = useSelector(state => ({
   //   selectNum: state.selectmode.selectNum,
   // }));
+
   const { storeSession } = useSelector(state => ({
     storeSession: state.MeetingRoom.storeSession,
   }));
+
   const dispatch = useDispatch();
 
   const SetSelect = selectNum => {

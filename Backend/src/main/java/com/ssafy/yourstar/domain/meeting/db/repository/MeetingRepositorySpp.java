@@ -22,7 +22,6 @@ public class MeetingRepositorySpp {
     QMeetingRecordImgPath qMeetingRecordImgPath = QMeetingRecordImgPath.meetingRecordImgPath;
     QMeetingRecordVideoPath qMeetingRecordVideoPath = QMeetingRecordVideoPath.meetingRecordVideoPath;
 
-    QMeetingGame qMeetingGame = QMeetingGame.meetingGame;
 
     public Page<Meeting> findAllApplyMeetingByMemberId(int memberId, Pageable pageable) {
         QueryResults<Meeting> list = jpaQueryFactory.select(qMeeting).from(qMeeting)

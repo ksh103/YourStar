@@ -9,23 +9,13 @@ import {
   LoginHeader,
 } from './Login.style';
 import { LOG_IN_REQUEST } from '../../store/modules/member';
-import { Link, useHistory } from 'react-router-dom';
-import { useDispatch, useSelector } from 'react-redux';
+import { Link } from 'react-router-dom';
+import { useDispatch } from 'react-redux';
 
 export default function Login() {
   const dispatch = useDispatch();
-  const history = useHistory();
-
   const [id, SetId] = useState('');
   const [pw, SetPw] = useState('');
-  const { logInDone } = useSelector(state => state.member);
-
-  useEffect(() => {
-    // 로그인 처리 되었을 때 main으로 이동
-    if (logInDone) {
-      history.push('/');
-    }
-  }, [logInDone, history]);
 
   const LoginButton = () => {
     if (id === '') {
@@ -37,7 +27,6 @@ export default function Login() {
         type: LOG_IN_REQUEST,
         data: { id: id, pw: pw },
       });
-      // done 일 때 메인으로 이동하기, 어떤 값으로 이동하냐?
     }
   };
 
