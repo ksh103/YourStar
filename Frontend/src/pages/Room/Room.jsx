@@ -299,6 +299,7 @@ class Room extends Component {
             .connect(token, {
               // 추가로 넘겨주고 싶은 데이터가 있으면 여기에 추가
               clientData: this.state.me.nick,
+              memberId: this.state.me.memberId,
               memberCode: this.state.me.code,
             })
             .then(() => {
@@ -363,6 +364,7 @@ class Room extends Component {
         .connect(token, {
           // 추가로 넘겨주고 싶은 데이터가 있으면 여기에 추가
           clientData: this.state.me.nick,
+          memberId: this.state.me.memberId,
           memberCode: this.state.me.code,
         })
         .then(() => {
@@ -409,6 +411,7 @@ class Room extends Component {
         .connect(token, {
           // 추가로 넘겨주고 싶은 데이터가 있으면 여기에 추가
           clientData: this.state.me.nick,
+          memberId: this.state.me.memberId,
           memberCode: this.state.me.code,
           memberInfo: 'one',
         })
