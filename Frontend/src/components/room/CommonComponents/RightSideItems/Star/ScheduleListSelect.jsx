@@ -1,34 +1,13 @@
 import React, { useState } from 'react';
 import { HalfSideDiv1, SmallBox } from '../Chatting/Chatting.style';
-import styled from 'styled-components';
 import { useSelector, useDispatch } from 'react-redux';
 // import { changeList } from '../../../../../store/modules/selectList';
 import { ScreenChange } from '../../../../../store/modules/meetingRoom';
-const ScheduleListWrapper = styled.div`
-  /* border: solid red; */
-  border-radius: 1vw;
-  position: absolute;
-  top: 2vh;
-  left: 0.8vw;
-  width: 18vw;
-  height: 28vh;
-  overflow-y: auto;
-`;
-const ScheduleListBox = styled.div`
-  /* border: solid red; */
-  background-color: black;
-  border-radius: 1vw;
-  margin-top: 1vh;
-  margin-bottom: 1vh;
-  margin-left: 0.8vw;
-  width: 16vw;
-  height: 4vh;
-  cursor: pointer;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  color: white;
-`;
+import {
+  ScheduleListBox,
+  ScheduleListWrapper,
+} from './ScheduleListSelect.style';
+import { blockColor } from '../../../../../styles/variables';
 
 const List = [
   '대기화면',
@@ -48,7 +27,9 @@ export default function ScheduleListSelect() {
   const { storeSession } = useSelector(state => ({
     storeSession: state.MeetingRoom.storeSession,
   }));
-
+  const { selectNum, backgroundColor } = useSelector(
+    state => state.MeetingRoom
+  );
   const dispatch = useDispatch();
 
   const SetSelect = selectNum => {
@@ -66,7 +47,12 @@ export default function ScheduleListSelect() {
         <SmallBox>
           <ScheduleListWrapper>
             {List.map((list, index) => (
-              <ScheduleListBox key={index} onClick={() => SetSelect(index)}>
+              <ScheduleListBox
+                key={index}
+                onClick={() => SetSelect(index)}
+                check={index === selectNum ? '1' : '0'}
+                color={index === selectNum ? backgroundColor : blockColor}
+              >
                 {list}
               </ScheduleListBox>
             ))}
