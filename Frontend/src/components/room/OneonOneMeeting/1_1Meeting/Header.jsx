@@ -1,4 +1,5 @@
 import React, { useSelector } from 'react-redux';
+import { useState } from 'react';
 import Timer from '../../Timer/Timer';
 import styled from 'styled-components';
 import { IoIosAlarm, IoMdCreate, IoIosAperture } from 'react-icons/io';
@@ -48,30 +49,34 @@ const CaptureIcon = styled.div`
 `;
 
 export default function Header() {
+  const [prevIdx, setPrevIdx] = useState(-1);
+  const [prevCnt, setPrevCnt] = useState(-1);
   const { me } = useSelector(state => state.mypage);
-  const { index, storeSession, subscribers, onebyoneStream } = useSelector(
-    state => ({
+  const { index, storeSession, subscribers, onebyoneStream, checkCnt } =
+    useSelector(state => ({
       index: state.MeetingRoom.index,
       storeSession: state.MeetingRoom.storeSession,
       subscribers: state.MeetingRoom.subscribers,
       onebyoneStream: state.MeetingRoom.onebyoneStream,
-    })
-  );
+      checkCnt: state.MeetingRoom.checkCnt,
+    }));
 
   const OPENVIDU_SERVER_URL = 'https://i6e204.p.ssafy.io:8443';
   const OPENVIDU_SERVER_SECRET = 'YOURSTAR';
 
   const signalToNextUser = idx => {
     console.log('===== 사용자 수 ======', subscribers.length);
+    console.log('=== 현재 인덱스 ===', idx);
+    setPrevIdx(idx);
 
     // 다음 사람에게 남은 시간 알리기
     if (idx < subscribers.length - 1) {
-      for (var i = idx; i < subscribers.length; i++) {
+      for (var i = idx + 1; i < subscribers.length; i++) {
         var order = 1; // 현재 기다려야하는 인원 수
         const sessionId = storeSession.sessionId;
         const data = {
           session: sessionId.substring(0, sessionId.length - 9), // 1-onebyone 일때 1만 뽑아내기
-          to: [subscribers[idx].stream.connection.connectionId],
+          to: [subscribers[i].stream.connection.connectionId],
           type: 'signal:wait',
           data: order,
         };
@@ -87,8 +92,8 @@ export default function Header() {
             console.log(response);
           })
           .catch(error => console.error(error));
+        order++;
       }
-      order++;
     }
 
     if (idx < subscribers.length) {
@@ -114,38 +119,13 @@ export default function Header() {
         .catch(error => console.error(error));
     }
 
-    // 다시 이전 세션으로 보내기
-    if (idx <= subscribers.length && idx > 0) {
-      console.log('===== 내보내기 ======');
-      const sessionId = storeSession.sessionId;
-
-      const data = {
-        session: sessionId, // 1-onebyone 일때 1만 뽑아내기
-        to: [onebyoneStream.stream.connection.connectionId],
-        type: 'signal:oneback',
-        data: '0',
-      };
-      axios
-        .post(OPENVIDU_SERVER_URL + '/openvidu/api/signal', data, {
-          headers: {
-            Authorization:
-              'Basic ' + btoa('OPENVIDUAPP:' + OPENVIDU_SERVER_SECRET),
-            'Content-Type': 'application/json',
-          },
-        })
-        .then(response => {
-          console.log(response);
-        })
-        .catch(error => console.error(error));
-    }
-
     // 스타 돌려 보내기
     if (idx > subscribers.length) {
       console.log('===== 스타도 돌아가기 ======');
       const sessionId = storeSession.sessionId;
 
       const data = {
-        session: sessionId, // 1-onebyone 일때 1만 뽑아내기
+        session: sessionId,
         to: [storeSession.connection.connectionId],
         type: 'signal:starback',
         data: '0',
@@ -163,6 +143,32 @@ export default function Header() {
         })
         .catch(error => console.error(error));
     }
+  };
+
+  const signalToCurUserOut = () => {
+    // 다시 이전 세션으로 보내기
+    console.log('===== 내보내기 ======');
+    setPrevCnt(checkCnt);
+    const sessionId = storeSession.sessionId;
+
+    const data = {
+      session: sessionId,
+      to: [onebyoneStream.stream.connection.connectionId],
+      type: 'signal:oneback',
+      data: '0',
+    };
+    axios
+      .post(OPENVIDU_SERVER_URL + '/openvidu/api/signal', data, {
+        headers: {
+          Authorization:
+            'Basic ' + btoa('OPENVIDUAPP:' + OPENVIDU_SERVER_SECRET),
+          'Content-Type': 'application/json',
+        },
+      })
+      .then(response => {
+        console.log(response);
+      })
+      .catch(error => console.error(error));
   };
 
   return (
@@ -198,7 +204,8 @@ export default function Header() {
                   }}
                 />
                 <Timer style={{ float: 'left' }} />
-                {index !== -1 && signalToNextUser(index)}
+                {prevIdx !== index ? signalToNextUser(index) : null}
+                {prevCnt !== checkCnt ? signalToCurUserOut() : null}
               </div>
             </StarBox>
             <SignIcon>

@@ -21,10 +21,12 @@ import {
   UserDelete,
   choQuiz,
   audioChange,
+  UpdateOneByOneStream,
 } from '../../store/modules/meetingRoom';
 import { WarningToMemberAPI } from '../../store/apis/Main/meeting';
 // 컴포넌트
 import RoomComponent from './RoomComponent';
+import { BASE_URL } from '../../utils/contants';
 
 const OPENVIDU_SERVER_URL = 'https://i6e204.p.ssafy.io:8443';
 const OPENVIDU_SERVER_SECRET = 'YOURSTAR';
@@ -44,6 +46,8 @@ class Room extends Component {
       mySessionId: pathname.substr(6), // 넘어온 미팅룸 ID 입력
       session: undefined,
       me: this.props.me, // Store에 저장된 내 정보 입력
+      recordId: null,
+      choAnsUserCnt: 0, // 초성게임 맞춘 유저 수
     };
   }
 
@@ -95,7 +99,10 @@ class Room extends Component {
         mySession.on('streamCreated', event => {
           var subscriber = mySession.subscribe(event.stream, undefined); // 들어온 사용자의 정보
           var subInfo = JSON.parse(subscriber.stream.connection.data);
-          if (subInfo.memberInfo === undefined) {
+          if (subInfo.memberInfo !== undefined) {
+            console.log('===== 불러오기 성공 ======');
+            this.props.doUpdateOneByOne(subscriber);
+          } else {
             // 스타가 들어왔으면 메인 화면으로, 아니면 일반 화면으로 보냄
             if (subInfo.memberCode === 4) {
               this.props.doMainStreamManagerInfo(subscriber);
@@ -108,7 +115,11 @@ class Room extends Component {
 
         // 현재 미팅룸에서 퇴장한 사용자 확인
         mySession.on('streamDestroyed', event => {
-          this.deleteSubscriber(event.stream.streamManager);
+          var check = mySession.sessionId.slice(-1);
+          if (check !== 'e') {
+            console.log('===== 누군가 퇴장 =====');
+            this.deleteSubscriber(event.stream.streamManager);
+          }
         });
 
         // Exception 처리
@@ -174,6 +185,7 @@ class Room extends Component {
               this.props.doScreenChange(changeNum);
               mySession.disconnect();
               this.joinSession();
+              this.stopRecording();
             }
           }
         });
@@ -185,16 +197,18 @@ class Room extends Component {
             if (this.state.me.code === 4) {
               this.props.doScreenChange(changeNum);
               mySession.disconnect();
+              var empty = [];
+              this.props.doDeleteSubscriber(empty);
               this.joinSession();
             }
           }
         });
 
         mySession.on('signal:wait', event => {
-          // 대기 순번 알림
+          console.log('대기 순번 알림', event.data);
           swal({
             title: '1대1미팅 대기시간 알림',
-            text: event.data + '분 뒤 입장 됩니다.',
+            text: '약 ' + event.data + '분 뒤 입장 됩니다.',
           });
         });
 
@@ -218,6 +232,26 @@ class Room extends Component {
           });
         }
 
+        if (this.props.userCode === 4) {
+          if (this.state.choAnsUserCnt < 4) {
+            // 맞춘 유저 수가 3명보다 적다면
+            mySession.on('signal:ChoUserAns', event => {
+              // 세션 받와와서 처리해주기
+              let chodata = event.data.split(',');
+              console.log(
+                '초성게임 정답자!!!!!!!!!!!!',
+                this.state.choAnsUserCnt,
+                '.',
+                chodata[1]
+              );
+            });
+            if (this.state.choAnsUserCnt === 3) {
+              // 마지막 정답자라면
+              // 게임 reset or 다시 하기
+              // this.setState({ choAnsUserCnt: 0 }); // 만약 reset 시 게임이 choAnsUserCnt가 초기화가 안되면 맞춘 정답 user 수 초기화
+            }
+          }
+        }
         mySession.on('signal:audio', event => {
           console.log('===== 오디오 상태 변경 =====');
           if (event.data === 'true') {
@@ -249,14 +283,6 @@ class Room extends Component {
           // this.state.session.forceDisconnect(event.data);
         });
 
-        mySession.on('streamAudioVolumeChange', event => {
-          console.log(
-            event,
-            '말하고있는쥬우우우우우우우우우우우우우우우우ㅜ우우우움ㅁㅁㅁㅁㅁㅁㅁㅁㅁㅁㅁㅁㅁㅁㅁㅁㅁㅁㅁㅁㅁㅁㅁㅁㅁㅁㅁ'
-          );
-          // Speaking(false);
-        });
-
         // 여기에 스티커 신호 받아주면 됩니다.
 
         // 세션과 연결하는 부분
@@ -265,6 +291,7 @@ class Room extends Component {
             .connect(token, {
               // 추가로 넘겨주고 싶은 데이터가 있으면 여기에 추가
               clientData: this.state.me.nick,
+              memberId: this.state.me.memberId,
               memberCode: this.state.me.code,
             })
             .then(() => {
@@ -329,6 +356,7 @@ class Room extends Component {
         .connect(token, {
           // 추가로 넘겨주고 싶은 데이터가 있으면 여기에 추가
           clientData: this.state.me.nick,
+          memberId: this.state.me.memberId,
           memberCode: this.state.me.code,
         })
         .then(() => {
@@ -375,6 +403,7 @@ class Room extends Component {
         .connect(token, {
           // 추가로 넘겨주고 싶은 데이터가 있으면 여기에 추가
           clientData: this.state.me.nick,
+          memberId: this.state.me.memberId,
           memberCode: this.state.me.code,
           memberInfo: 'one',
         })
@@ -404,6 +433,46 @@ class Room extends Component {
           );
         });
     });
+
+    // 녹화 시작
+    var data = {
+      session: onebyoneSessionId,
+      name: mySession.sessionId + this.state.me.nick,
+      hasAudio: true,
+      hasVideo: true,
+      outputMode: 'COMPOSED',
+      resolution: '1280x720',
+      frameRate: 25,
+      shmSize: 536870912,
+      ignoreFailedStreams: false,
+    };
+    axios
+      .post(OPENVIDU_SERVER_URL + '/openvidu/api/recordings/start', data, {
+        headers: {
+          Authorization:
+            'Basic ' + btoa('OPENVIDUAPP:' + OPENVIDU_SERVER_SECRET),
+          'Content-Type': 'application/json',
+        },
+      })
+      .then(response => {
+        console.log('===== 녹화 시작 =====', response);
+        this.setState({
+          recordId: response.data.id,
+        });
+      })
+      .catch(error => console.error(error));
+  }
+
+  stopRecording() {
+    axios
+      .post(BASE_URL + 'meetings/recording', {
+        meetingId: this.state.mySessionId,
+        memberId: this.state.me.memberId,
+        recordId: this.state.recordId,
+      })
+      .then(response => {
+        console.log('===== 녹화 중지 =====', response);
+      });
   }
 
   leaveSession() {
@@ -566,11 +635,11 @@ const mapDispatchToProps = dispatch => {
     doemoziListAdd: emozi => dispatch(emoziListAdd(emozi)),
     doAddQnaList: QnAText => dispatch(AddQnaList(QnAText)),
     doDeleteSubscriber: subscribers => dispatch(UserDelete(subscribers)),
-    dochosonantQuiz: (question, answer) =>
-      dispatch(choQuiz({ question, answer })),
+    dochosonantQuiz: (question, answer) => dispatch(choQuiz(question, answer)),
     doaudioChange: () => dispatch(audioChange()),
     doWarningToMemberAPI: (memberId, meetingId) =>
       dispatch(WarningToMemberAPI({ memberId, meetingId })),
+    doUpdateOneByOne: stream => dispatch(UpdateOneByOneStream(stream)),
   };
 };
 

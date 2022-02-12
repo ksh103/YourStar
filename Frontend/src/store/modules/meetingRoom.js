@@ -17,8 +17,10 @@ const BACKGROUND_COLOR_CHANGE = 'BACKGROUND_COLOR_CHANGE';
 const NOW_EMOZI = 'NOW_EMOZI';
 const MEETINGROOM_USER_DELETE = 'MEETINGROOM_USER_DELETE';
 const PLUS_INDEX = 'PLUS_INDEX';
+const CHECK_OUT = 'CHECK_OUT';
 const CHOSONANT_QUIZ = 'CHOSONANT_QUIZ';
 const PUBLISHER_AUDIO_CHANGE = 'PUBLISHER_AUDIO_CHANGE';
+const UPDATE_ONEBYONESTREAM = 'UPDATE_ONEBYONESTREAM';
 // 여기까지 =========
 
 // QnA 모드를 변경하기위한 action
@@ -59,6 +61,19 @@ export const UserDelete = subscribers => {
 export const PlusIndex = () => {
   return {
     type: PLUS_INDEX,
+  };
+};
+
+export const CheckOut = () => {
+  return {
+    type: CHECK_OUT,
+  };
+};
+
+export const UpdateOneByOneStream = stream => {
+  return {
+    type: UPDATE_ONEBYONESTREAM,
+    payload: stream,
   };
 };
 // 여기까지 =================================
@@ -164,10 +179,10 @@ export const oxGameRound = () => {
   };
 };
 
-export const choQuiz = ({ question, answer }) => {
+export const choQuiz = (question, answer) => {
   return {
     type: CHOSONANT_QUIZ,
-    payload: { question, answer },
+    payload: [question, answer],
   };
 };
 
@@ -197,8 +212,9 @@ const initialState = {
   emoziList: [],
   StarQnAtoggle: false,
   OXsignal: null,
-  OXgameCount: 0,
+  OXgameCount: 1,
   index: -1,
+  checkCnt: -1,
   backgroundColor: '#C4C4C4', // 배경 컬러 22222222222222222222222222
   nowEmozi: -1,
   chosonantQuiz: [],
@@ -232,6 +248,16 @@ const MeetingRoom = (state = initialState, action) => {
       return {
         ...state,
         index: state.index + 1,
+      };
+    case CHECK_OUT:
+      return {
+        ...state,
+        checkCnt: state.checkCnt + 1,
+      };
+    case UPDATE_ONEBYONESTREAM:
+      return {
+        ...state,
+        onebyoneStream: action.payload,
       };
     // 여기까지 ============================
     case PUBLISHER_INFO:

@@ -4,8 +4,8 @@ import OtherScreenAngle from '../OtherScreen/OtherScreenAngle';
 import { MainDiv } from '../Main.style';
 import { useSelector, useDispatch } from 'react-redux';
 import { changeQnAtoggle } from '../../../../../store/modules/meetingRoom';
-// 포지션작업
 
+// 포지션작업
 const StarScreen = styled.div`
   overflow: auto;
   position: relative;

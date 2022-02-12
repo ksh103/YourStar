@@ -3,6 +3,9 @@ import styled from 'styled-components';
 import { MainDiv } from '../Main.style';
 import { useSelector } from 'react-redux';
 import StarVideoComponent from '../../../../../pages/Room/StarVideoComponent';
+import swal from 'sweetalert';
+import './alertCss.css';
+import UserVideoComponent from '../../../../../pages/Room/UserVideoComponent';
 // 60vw 가로폭
 const RandomChoiceSc = styled.div`
   position: relative;
@@ -48,40 +51,69 @@ const shuffleArray = array => {
 
 export default function RandomChoiceMain() {
   const [result, setResult] = useState(''); // 변경점
-  const shuffleTarget = useRef();
+  // 랜덤으로 뽑힌 유저의 정보를 모두에게 적용시켜야함
+  const [randomUser, setRandomUser] = useState('');
 
-  const shuffle = ({ start, end, duration, render, finished }) => {
-    const now = performance.now(); // 지금 렌더된 당시의 시간
-    const items = shuffleArray([...shuffleTarget.current.childNodes]);
-    requestAnimationFrame(function move(time) {
-      let timefraction = (time - now) / duration;
-      const value = end * timefraction;
-      const index = Math.floor(value % items.length);
-      render(items, index);
-
-      if (timefraction > 1) finished(items[index]);
-      else requestAnimationFrame(move);
-    });
-  };
-
-  const onShuffle = () => {
-    shuffle({
-      start: 0,
-      end: 100,
-      duration: 3000,
-      render: (items, index) => {
-        if (!items[index]) return;
-        items.forEach(item => (item.style.display = 'none'));
-        items[index].style.display = 'block';
-      },
-      finished: result => setResult(result.innerText),
-    });
-  };
+  // store 정보 불러오기
+  const { me } = useSelector(state => state.mypage);
   const { mainStreamManager } = useSelector(state => ({
     mainStreamManager: state.MeetingRoom.mainStreamManager,
   }));
-  // const items = shuffleArray([...shuffleTarget.current.childNodes]);
-  // console.log(items);
+  // 유저정보 불러오기 --> 랜덤으로 하나를 뽑기 위함
+  const { subscribers, storeSession } = useSelector(state => state.MeetingRoom);
+
+  const onShuffle = e => {
+    console.log(e);
+    // 아래 리스트만 바뀐 로직은 두세요 추데이터 받아왔을때 실험합니다.
+    // const rand = Math.floor(Math.random() * subscribers.length);
+    const rand = Math.floor(Math.random() * UserList.length);
+    // const randomresult = subscribers[rand];
+    const randomresult = subscribers[rand];
+    setResult(randomresult);
+    storeSession.signal({
+      data: randomresult,
+      to: [],
+      type: 'random',
+    });
+  };
+
+  storeSession.on('signal:random', event => {
+    console.log(event, '========랜덤정보 수신');
+
+    setTimeout(function () {
+      swal('3', {
+        buttons: false,
+        timer: 500,
+      }); // 틀렸을 때 게임 다시하기위해 호출하는 함수
+    });
+    setTimeout(function () {
+      swal('2', {
+        buttons: false,
+        timer: 500,
+      }); // 틀렸을 때 게임 다시하기위해 호출하는 함수
+    }, 1000);
+    setTimeout(function () {
+      swal('1', {
+        buttons: false,
+        timer: 500,
+      }); // 틀렸을 때 게임 다시하기위해 호출하는 함수
+    }, 2000);
+    // 유저컴포정보 띄워주기 !!!
+    setTimeout(setRandomUser(event), 3000);
+  });
+
+  // 모달에 시간별로 사진 or 텍스트 띄우기
+  // const CountAlert = () => {
+  //   swal("Here's the title!", "...and here's the text!", {
+  //     buttons: false,
+  //     timer: 3000,
+  //   });
+  // };
+  // let arr = [3, 2, 1];
+  // const countDown = arr.forEach((value, idx) => {
+  //   return alert(value, { button: false, timer: 1000 });
+  // });
+
   return (
     <MainDiv>
       <MainGrid>
@@ -91,14 +123,13 @@ export default function RandomChoiceMain() {
           )}
         </RandomChoiceSc>
         <RandomChoiceSc>
-          <button onClick={onShuffle}>돌려돌려 돌림판!</button>
-          <div ref={shuffleTarget}>
-            {UserList.map((value, idx) => (
-              <h1 key={`number${idx}`} style={{ color: 'black' }}>
-                {value}
-              </h1>
-            ))}
-          </div>
+          {me.code === 4 ? (
+            <button onClick={onShuffle}>돌려돌려 돌림판!</button>
+          ) : null}
+          {/* 유저 정보가 들어오면 띄워주기 */}
+          {randomUser && (
+            <UserVideoComponent streamManager={randomUser}></UserVideoComponent>
+          )}
         </RandomChoiceSc>
       </MainGrid>
     </MainDiv>

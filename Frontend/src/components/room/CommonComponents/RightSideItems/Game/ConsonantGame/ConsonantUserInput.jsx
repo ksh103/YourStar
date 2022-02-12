@@ -1,12 +1,14 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import {
   HalfSideDiv2,
   SmallBox,
   SmallChattingInputBox,
   SmallChattingListBox,
 } from '../../Chatting/Chatting.style';
-import { useSelector, useDispatch } from 'react-redux';
-
+import { useSelector } from 'react-redux';
+import swal from 'sweetalert';
+import { BsSlack } from 'react-icons/bs';
+import SmallChatting from '../../Chatting/SmallChatting';
 export default function ConsonantUserInput() {
   const [userConsungInputValue, setUserConsungInputValue] = useState('');
 
@@ -17,37 +19,85 @@ export default function ConsonantUserInput() {
   const { chosonantQuiz, storeSession } = useSelector(
     state => state.MeetingRoom
   );
-  console.log('초성게임 주제제ㅔ젲제', chosonantQuiz);
 
   const { me } = useSelector(state => state.mypage);
 
-  const onSubmitForm = e => {
-    e.preventDefault();
-    const answer = e.target[0].value;
-    if (answer === chosonantQuiz[1]) {
-      storeSession.signal({
-        data: `${me.nick},${answer}`, // 정답 신호 보내주기
-        type: 'Cho',
-      });
-      setUserConsungInputValue('');
+  useEffect(() => {
+    if (chosonantQuiz.length === 0) {
+      // 초성게임에 문제가 없을 때 : 초기 상태일 때
+      return;
     } else {
-      alert('틀렸다 이자식아!');
+      swal('🔔스타가 내는 문제를 맞춰보세요🔔', chosonantQuiz[0], {
+        closeOnClickOutside: false,
+        content: 'input',
+        button: '제출',
+      }).then(answer => {
+        if (answer === chosonantQuiz[1]) {
+          swal(
+            '축하합니다 정답입니다🎉',
+            '정답 정보가 스타에게 제공됩니다',
+            'success',
+            {
+              buttons: false,
+              timer: 3000,
+              closeOnClickOutside: false,
+            }
+          );
+          storeSession.signal({
+            data: `${me.nick},${me.memberId}`, // 정답 신호 보내주기
+            type: 'ChoUserAns',
+          });
+        } else {
+          swal('틀렸습니다', '다시한번 풀어보세요!', 'error', {
+            buttons: false,
+            timer: 2800,
+            closeOnClickOutside: false,
+          });
+          setTimeout(function () {
+            regame(); // 틀렸을 때 게임 다시하기위해 호출하는 함수
+          }, 3000);
+        }
+      });
     }
+  }, [chosonantQuiz, me.nick, me.memberId, storeSession]);
+
+  const regame = () => {
+    swal('🔔스타가 내는 문제를 맞춰보세요🔔', chosonantQuiz[0], {
+      closeOnClickOutside: false,
+      content: 'input',
+      button: '제출',
+    }).then(answer => {
+      if (answer === chosonantQuiz[1]) {
+        swal(
+          '축하합니다 정답입니다🎉',
+          '정답 정보가 스타에게 제공됩니다',
+          'success',
+          {
+            buttons: false,
+            timer: 3000,
+            closeOnClickOutside: false,
+          }
+        );
+        storeSession.signal({
+          data: `${me.nick},${me.memberId}`, // 정답 신호 보내주기
+          type: 'ChoUserAns',
+        });
+      } else {
+        swal('틀렸습니다', '다시한번 풀어보세요!', 'error', {
+          buttons: false,
+          timer: 2800,
+          closeOnClickOutside: false,
+        });
+        setTimeout(function () {
+          regame(); // 틀렸을 때 게임 다시하기위해 호출하는 함수
+        }, 3000);
+      }
+    });
   };
 
   return (
     <>
-      <HalfSideDiv2>
-        <SmallBox>유저 입력창</SmallBox>
-        <SmallChattingListBox>{chosonantQuiz}</SmallChattingListBox>
-        <form onSubmit={onSubmitForm}>
-          <SmallChattingInputBox
-            type="text"
-            value={userConsungInputValue}
-            onChange={changeUserInput}
-          />
-        </form>
-      </HalfSideDiv2>
+      <SmallChatting></SmallChatting>
     </>
   );
 }
