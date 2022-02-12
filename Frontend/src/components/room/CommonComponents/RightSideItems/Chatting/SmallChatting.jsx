@@ -11,6 +11,8 @@ import {
   ChattingInputChange,
   ChattingAction,
 } from '../../../../../store/modules/meetingRoom';
+import swal from 'sweetalert';
+import { checkText } from '../../../../../utils/checkText';
 
 export default function SmallChatting() {
   const [testInput, setTestinput] = React.useState('');
@@ -31,19 +33,22 @@ export default function SmallChatting() {
   const { me } = useSelector(state => state.mypage);
 
   const SendMessage = e => {
-    if (e.key === 'Enter') {
-      const inputValue = {
-        userName: me.nick,
-        text: testInput,
-        chatClass: 'messages__item--operator',
-      };
-      storeSession.signal({
-        data: `${me.nick},${testInput}`,
-        to: [],
-        type: 'chat',
-      });
-      SubmitText(testInput);
-      AppendChattingList(inputValue);
+    if (e.key === 'Enter' && testInput !== '') {
+      // 욕설 체크하고 욕설이 포함되어있으면 모달창 보여주기-> 경고 주기
+      if (checkText(testInput)) {
+        const inputValue = {
+          userName: me.nick,
+          text: testInput,
+          chatClass: 'messages__item--operator',
+        };
+        storeSession.signal({
+          data: `${me.nick},${testInput}`,
+          to: [],
+          type: 'chat',
+        });
+        SubmitText(testInput);
+        AppendChattingList(inputValue);
+      }
       setTestinput('');
     }
   };
