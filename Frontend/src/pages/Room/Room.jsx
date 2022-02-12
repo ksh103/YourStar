@@ -5,6 +5,7 @@ import React, { Component } from 'react';
 import './App.css';
 import { connect } from 'react-redux';
 import swal from 'sweetalert';
+import sweetAlertStyles from '../../styles/sweetAlert.module.css';
 
 // action 호출
 import {
@@ -47,7 +48,7 @@ class Room extends Component {
       session: undefined,
       me: this.props.me, // Store에 저장된 내 정보 입력
       recordId: null,
-      choAnsUserCnt: 0, // 초성게임 맞춘 유저 수
+      choAnsUserCnt: 1, // 초성게임 맞춘 유저 수
     };
   }
 
@@ -233,25 +234,69 @@ class Room extends Component {
         }
 
         if (this.props.userCode === 4) {
-          if (this.state.choAnsUserCnt < 4) {
-            // 맞춘 유저 수가 3명보다 적다면
-            mySession.on('signal:ChoUserAns', event => {
+          // 맞춘 유저 수가 3명보다 적다면
+          mySession.on('signal:ChoUserAns', event => {
+            if (this.state.choAnsUserCnt < 4) {
               // 세션 받와와서 처리해주기
               let chodata = event.data.split(',');
-              console.log(
-                '초성게임 정답자!!!!!!!!!!!!',
-                this.state.choAnsUserCnt,
-                '.',
-                chodata[1]
+              swal(
+                `🎇${this.state.choAnsUserCnt}등 정답자 : ${chodata[0]}🎇`,
+                '축하합니다',
+                { timer: 1800, button: false }
               );
-            });
-            if (this.state.choAnsUserCnt === 3) {
+              switch (this.state.choAnsUserCnt) {
+                case 1: // 1등이면
+                  // 100점 axios 추가하기
+                  break;
+                case 2: // 2등이면
+                  // 80점 axios 추가하기
+                  break;
+                case 3: // 3등이면
+                  // 50점 axios 추가하기
+                  break;
+                default:
+                  break;
+              }
+              this.setState({ choAnsUserCnt: this.state.choAnsUserCnt + 1 }); // 맞춘 사람 수 1 늘리기
+            }
+            if (this.state.choAnsUserCnt === 4) {
               // 마지막 정답자라면
               // 게임 reset or 다시 하기
-              // this.setState({ choAnsUserCnt: 0 }); // 만약 reset 시 게임이 choAnsUserCnt가 초기화가 안되면 맞춘 정답 user 수 초기화
+              this.setState({ choAnsUserCnt: 1 }); // 맞춘 사람 수 초기화
+              setTimeout(function () {
+                swal('🎇3명의 정답자가 나왔습니다.🎇', '게임이 초기화됩니다.', {
+                  button: false,
+                  timer: 2000,
+                });
+              }, 2000);
+              setTimeout(function () {
+                mySession.signal({
+                  // 초기화 신호 보내기
+                  data: '5',
+                  to: [],
+                  type: 'endConsonant',
+                });
+              }, 4000);
             }
-          }
+          });
         }
+
+        // 초성게임 초기화
+        mySession.on('signal:endConsonant', () => {
+          this.props.doScreenChange(5);
+          this.props.publisher.publishVideo(true);
+          swal('🎇3명의 정답자가 나왔습니다!!🎇', '다음 라운드로 넘어갑니다', {
+            timer: 2000,
+            button: false,
+          });
+        });
+
+        // 초성게임 종료
+        mySession.on('signal:endCho', () => {
+          this.props.doScreenChange(0);
+          this.props.publisher.publishVideo(true);
+        });
+
         mySession.on('signal:audio', event => {
           console.log('===== 오디오 상태 변경 =====');
           if (event.data === 'true') {
