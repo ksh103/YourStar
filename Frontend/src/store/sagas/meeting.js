@@ -4,7 +4,7 @@ import {
   MeetingAllListAPI,
   ApprovedMeetingListAPI,
   PendingMeetingAPI,
-  WarningCount,
+  WarningCountAPI,
   WarningToMemberAPI,
   InsertMeetingAPI,
   UpdateMeetingAPI,
@@ -23,6 +23,9 @@ import {
   UPDATE_APPROVE_REQUEST,
   UPDATE_APPROVE_SUCCESS,
   UPDATE_APPROVE_FAILURE,
+  WARNING_COUNT_REQUEST,
+  WARNING_COUNT_SUCCESS,
+  WARNING_COUNT_FAILURE,
   WARNING_MEMBER_REQUEST,
   WARNING_MEMBER_SUCCESS,
   WARNING_MEMBER_FAILURE,
@@ -93,6 +96,20 @@ function* updateApprove(action) {
     });
   }
 }
+function* warningCount(action) {
+  try {
+    const result = yield call(WarningCountAPI, action.data);
+    yield put({
+      type: WARNING_COUNT_SUCCESS,
+      data: result.data,
+    });
+  } catch (err) {
+    yield put({
+      type: WARNING_COUNT_FAILURE,
+    });
+  }
+}
+
 function* warningMember(action) {
   try {
     const result = yield call(WarningToMemberAPI, action.data);
@@ -106,6 +123,7 @@ function* warningMember(action) {
     });
   }
 }
+
 function* insertMeeting(action) {
   try {
     const result = yield call(InsertMeetingAPI, action.data);
@@ -170,6 +188,9 @@ function* watchAprovedMeetings() {
 function* watchUpdateApprove() {
   yield takeLatest(UPDATE_APPROVE_REQUEST, updateApprove);
 }
+function* watchWarningCount() {
+  yield takeLatest(WARNING_COUNT_REQUEST, warningCount);
+}
 function* watchWarningMember() {
   yield takeLatest(WARNING_MEMBER_REQUEST, warningMember);
 }
@@ -189,6 +210,7 @@ export default function* meetingSaga() {
     fork(watchTotalMeetings),
     fork(watchAprovedMeetings),
     fork(watchUpdateApprove),
+    fork(watchWarningCount),
     fork(watchWarningMember),
     fork(watchInsertMeeting),
     fork(watchUpdateMeeting),

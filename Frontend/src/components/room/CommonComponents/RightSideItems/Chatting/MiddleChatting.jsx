@@ -67,7 +67,7 @@ export default function MiddleChatting() {
             {chattingList.map((value, idx) => {
               return (
                 <div key={idx + value.text}>
-                  <p>
+                  <p style={{ margin: '0' }}>
                     {value.userName} : {value.text}
                   </p>
                 </div>

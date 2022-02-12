@@ -47,6 +47,7 @@ class Room extends Component {
       session: undefined,
       me: this.props.me, // Store에 저장된 내 정보 입력
       recordId: null,
+      choAnsUserCnt: 0, // 초성게임 맞춘 유저 수
     };
   }
 
@@ -226,11 +227,31 @@ class Room extends Component {
           mySession.on('signal:Cho', event => {
             let chodata = event.data.split(',');
             if (chodata[0] !== this.props.chosonantQuiz) {
-              this.props.dochosonantQuiz(chodata[1]);
+              this.props.dochosonantQuiz(chodata[1], chodata[2]);
             }
           });
         }
 
+        if (this.props.userCode === 4) {
+          if (this.state.choAnsUserCnt < 4) {
+            // 맞춘 유저 수가 3명보다 적다면
+            mySession.on('signal:ChoUserAns', event => {
+              // 세션 받와와서 처리해주기
+              let chodata = event.data.split(',');
+              console.log(
+                '초성게임 정답자!!!!!!!!!!!!',
+                this.state.choAnsUserCnt,
+                '.',
+                chodata[1]
+              );
+            });
+            if (this.state.choAnsUserCnt === 3) {
+              // 마지막 정답자라면
+              // 게임 reset or 다시 하기
+              // this.setState({ choAnsUserCnt: 0 }); // 만약 reset 시 게임이 choAnsUserCnt가 초기화가 안되면 맞춘 정답 user 수 초기화
+            }
+          }
+        }
         mySession.on('signal:audio', event => {
           console.log('===== 오디오 상태 변경 =====');
           if (event.data === 'true') {
@@ -260,6 +281,14 @@ class Room extends Component {
           );
           // 경고횟수 2회 이상이면 강퇴
           // this.state.session.forceDisconnect(event.data);
+        });
+
+        mySession.on('streamAudioVolumeChange', event => {
+          console.log(
+            event,
+            '말하고있는쥬우우우우우우우우우우우우우우우우ㅜ우우우움ㅁㅁㅁㅁㅁㅁㅁㅁㅁㅁㅁㅁㅁㅁㅁㅁㅁㅁㅁㅁㅁㅁㅁㅁㅁㅁㅁ'
+          );
+          // Speaking(false);
         });
 
         // 여기에 스티커 신호 받아주면 됩니다.
@@ -611,7 +640,7 @@ const mapDispatchToProps = dispatch => {
     doemoziListAdd: emozi => dispatch(emoziListAdd(emozi)),
     doAddQnaList: QnAText => dispatch(AddQnaList(QnAText)),
     doDeleteSubscriber: subscribers => dispatch(UserDelete(subscribers)),
-    dochosonantQuiz: text => dispatch(choQuiz(text)),
+    dochosonantQuiz: (question, answer) => dispatch(choQuiz(question, answer)),
     doaudioChange: () => dispatch(audioChange()),
     doWarningToMemberAPI: (memberId, meetingId) =>
       dispatch(WarningToMemberAPI({ memberId, meetingId })),

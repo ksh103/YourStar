@@ -18,7 +18,7 @@ const BackgroundDiv = styled.div`
 `;
 
 export default function UserOXGame() {
-  const [isCorrect, setIsCorrect] = useState(true);
+  const [isCorrect, setIsCorrect] = useState(true); // 탈락 여부
   const { storeSession, publisher } = useSelector(state => ({
     storeSession: state.MeetingRoom.storeSession,
     publisher: state.MeetingRoom.publisher,
@@ -70,11 +70,12 @@ export default function UserOXGame() {
 
   function start() {
     if (isCorrect) {
-      init();
-      swal('준비됐나요?', 'O X 동작을 카메라에 보여주세요!', {
+      swal('🙆‍♀️ 준비됐나요?  🙅‍♂️', 'O X 동작을 카메라에 보여주세요!', {
         buttons: false,
         timer: 2000,
-      }).then(() => {});
+      }).then(() => {
+        init();
+      });
     } else {
       swal('다음 라운드 시작', {
         buttons: false,
@@ -104,7 +105,6 @@ export default function UserOXGame() {
   }
 
   async function loop() {
-    // state.webcam.update(); // webcam update 하고
     await predict(); // 예측 작업
     if (state.loopPredict) {
       state.loopPredict = window.requestAnimationFrame(loop); // 반복
@@ -120,7 +120,7 @@ export default function UserOXGame() {
     for (let i = 0; i < state.maxPredictions; i++) {
       swal({
         text:
-          (state.answer === 0 ? '⭕' : '❌') +
+          (state.answer === 0 ? '' : '❌') +
           ' 인식 ' +
           state.cnt +
           '% 진행중...!',
@@ -151,17 +151,19 @@ export default function UserOXGame() {
       }
     }
 
-    if (state.cnt >= 100) {
-      state.userAnswer = state.answer === 0 ? '⭕' : '❌';
+    if (state.cnt >= 100 && isCorrect) {
+      state.userAnswer = state.answer === 0 ? 'O' : 'X';
       swal({
-        title: (state.userAnswer === 'o' ? '⭕' : '❌') + ' 인식 성공!',
+        title: (state.userAnswer === 'O' ? '⭕' : '❌') + ' 인식 성공!',
         text: '잠시만 기다려 주세요!',
         timer: 2000,
+        button: false,
       }).then(() => {});
 
       stopMission();
     }
   }
+
   const stopMission = () => {
     if (state.loopPredict) {
       window.cancelAnimationFrame(state.loopPredict);

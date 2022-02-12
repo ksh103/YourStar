@@ -3,6 +3,7 @@ const initialState = {
   meeting: {},
   totalMeetings: [],
   approvedMeetings: [],
+  warningAccount: 0, // 경고횟수
   detailMeetingLoading: false, // 미팅 상세정보
   detailMeetingDone: false,
   detailMeetingError: null,
@@ -15,6 +16,9 @@ const initialState = {
   updateApproveLoading: false, // 팬미팅 승인 업데이트
   updateApproveDone: false,
   updateApproveError: null,
+  warningCountLoading: false, // 회원 경고횟수 받아오기
+  warningCountDone: false,
+  warningCountError: null,
   warningMemberLoading: false, // 회원에서 경고주기
   warningMemberDone: false,
   warningMemberError: null,
@@ -48,6 +52,10 @@ export const UPDATE_APPROVE_FAILURE = 'UPDATE_APPROVE_FAILURE';
 export const WARNING_MEMBER_REQUEST = 'WARNING_MEMBER_REQUEST'; // 팬에게 경고주기
 export const WARNING_MEMBER_SUCCESS = 'WARNING_MEMBER_SUCCESS';
 export const WARNING_MEMBER_FAILURE = 'WARNING_MEMBER_FAILURE';
+
+export const WARNING_COUNT_REQUEST = 'WARNING_COUNT_REQUEST'; // 팬에게 경고주기
+export const WARNING_COUNT_SUCCESS = 'WARNING_COUNT_SUCCESS';
+export const WARNING_COUNT_FAILURE = 'WARNING_COUNT_FAILURE';
 
 export const INSERT_MEETING_REQUEST = 'INSERT_MEETING_REQUEST'; // 미팅 신청(스타)
 export const INSERT_MEETING_SUCCESS = 'INSERT_MEETING_SUCCESS';
@@ -126,22 +134,34 @@ const reducer = (state = initialState, action) =>
         draft.updateApproveLoading = false;
         draft.updateApproveError = action.error;
         break;
-
-        case WARNING_MEMBER_REQUEST:
-          draft.warningMemberLoading = true;
-          draft.insertMeetingDone = false;
-          draft.warningMemberError = null;
-          break;
-        case  WARNING_MEMBER_SUCCESS:
-          draft.warningMemberLoading = false;
-          draft.warningMemberDone = true;
-          console.log(action);
-          break;
-        case  WARNING_MEMBER_FAILURE:
-          draft.warningMemberLoading = false;
-          draft.warningMemberError = action.error;
-          break;
-
+      case WARNING_COUNT_REQUEST:
+        draft.warningCountLoading = true;
+        draft.warningCountDone = false;
+        draft.warningCountError = null;
+        break;
+      case WARNING_COUNT_SUCCESS:
+        draft.warningCountLoading = false;
+        draft.warningCountDone = true;
+        draft.warningAccount = action.data.applicant.applicantWarnCount; //경고횟수 저장하기!!!!!
+        break;
+      case WARNING_COUNT_FAILURE:
+        draft.warningCountLoading = false;
+        draft.warningCountError = action.error;
+        break;
+      case WARNING_MEMBER_REQUEST:
+        draft.warningMemberLoading = true;
+        draft.warningMemberDone = false;
+        draft.warningMemberError = null;
+        break;
+      case WARNING_MEMBER_SUCCESS:
+        draft.warningMemberLoading = false;
+        draft.warningMemberDone = true;
+        console.log(action);
+        break;
+      case WARNING_MEMBER_FAILURE:
+        draft.warningMemberLoading = false;
+        draft.warningMemberError = action.error;
+        break;
       case INSERT_MEETING_REQUEST:
         draft.insertMeetingLoading = true;
         draft.insertMeetingDone = false;
