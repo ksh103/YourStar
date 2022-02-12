@@ -65,23 +65,19 @@ export default function Header() {
   const OPENVIDU_SERVER_SECRET = 'YOURSTAR';
 
   const signalToNextUser = idx => {
-    console.log('===== 사용자 수 ======', subscribers.length);
-    console.log('=== 현재 인덱스 ===', idx);
     setPrevIdx(idx);
 
     // 다음 사람에게 남은 시간 알리기
     if (idx < subscribers.length - 1) {
       for (var i = idx + 1; i < subscribers.length; i++) {
-        console.log(i + '번째 사람에게 보내는중');
         var order = 1; // 현재 기다려야하는 인원 수
         const sessionId = storeSession.sessionId;
         const data = {
           session: sessionId.substring(0, sessionId.length - 9), // 1-onebyone 일때 1만 뽑아내기
           to: [subscribers[i].stream.connection.connectionId],
           type: 'signal:userwait',
-          data: order,
+          data: String(order),
         };
-        console.log('보낸 데이터', data);
         axios
           .post(OPENVIDU_SERVER_URL + '/openvidu/api/signal', data, {
             headers: {
@@ -91,7 +87,7 @@ export default function Header() {
             },
           })
           .then(response => {
-            console.log('응답 받음 !!', response);
+            console.log(response);
           })
           .catch(error => console.error(error));
         order++;
@@ -99,7 +95,6 @@ export default function Header() {
     }
 
     if (idx < subscribers.length) {
-      console.log('===== 불러오기 ======');
       const sessionId = storeSession.sessionId;
       const data = {
         session: sessionId.substring(0, sessionId.length - 9), // 1-onebyone 일때 1만 뽑아내기
@@ -123,7 +118,6 @@ export default function Header() {
 
     // 스타 돌려 보내기
     if (idx > subscribers.length) {
-      console.log('===== 스타도 돌아가기 ======');
       const sessionId = storeSession.sessionId;
 
       const data = {
@@ -149,7 +143,6 @@ export default function Header() {
 
   const signalToCurUserOut = () => {
     // 다시 이전 세션으로 보내기
-    console.log('===== 내보내기 ======');
     setPrevCnt(checkCnt);
     const sessionId = storeSession.sessionId;
 
