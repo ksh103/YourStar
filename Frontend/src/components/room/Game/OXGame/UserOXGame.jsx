@@ -9,6 +9,7 @@ import * as tmPose from '@teachablemachine/pose';
 // 추가
 import swal from 'sweetalert';
 import { useSelector } from 'react-redux';
+import { TM_URL } from '../../../../utils/contants';
 
 // 포지션작업
 const BackgroundDiv = styled.div`
@@ -32,7 +33,7 @@ export default function UserOXGame() {
     loopPredict: undefined,
     maxPredictions: null,
     model: null,
-    URL: 'https://teachablemachine.withgoogle.com/models/2c2rSxbLy/',
+    URL: TM_URL,
   };
 
   storeSession.on('signal:OXStart', event => {
@@ -118,16 +119,18 @@ export default function UserOXGame() {
     const prediction = await state.model.predict(posenetOutput);
 
     for (let i = 0; i < state.maxPredictions; i++) {
-      swal({
-        text:
-          (state.answer === 0 ? '' : '❌') +
-          ' 인식 ' +
-          state.cnt +
-          '% 진행중...!',
-        buttons: false,
-        timer: 1000,
-        customClass: 'sweet-color',
-      }).then(() => {});
+      if (state.cnt % 10 === 0) {
+        swal({
+          text:
+            (state.answer === 0 ? '⭕' : '❌') +
+            ' 인식 ' +
+            state.cnt +
+            '% 진행중...!',
+          buttons: false,
+          timer: 1000,
+        });
+      }
+
       if (
         prediction[0].probability.toFixed(2) >= 0.5 &&
         state.userAnswer === ''
@@ -154,12 +157,18 @@ export default function UserOXGame() {
     if (state.cnt >= 100 && isCorrect) {
       state.userAnswer = state.answer === 0 ? 'O' : 'X';
       swal({
-        title: (state.userAnswer === 'O' ? '⭕' : '❌') + ' 인식 성공!',
-        text: '잠시만 기다려 주세요!',
-        timer: 2000,
-        button: false,
-      }).then(() => {});
-
+        text:
+          (state.answer === 0 ? '⭕' : '❌') + ' 인식 ' + 100 + '% 진행중...!',
+        buttons: false,
+        timer: 300,
+      }).then(() => {
+        swal({
+          title: (state.userAnswer === 'O' ? '⭕' : '❌') + ' 인식 성공!',
+          text: '잠시만 기다려 주세요!',
+          timer: 2000,
+          button: false,
+        });
+      });
       stopMission();
     }
   }
@@ -176,9 +185,9 @@ export default function UserOXGame() {
       <OXUserScreen></OXUserScreen>
       <MyScreen></MyScreen>
       <OtherPersonScreen></OtherPersonScreen>
-      {/* <button type="button" onClick={() => start()}>
+      <button type="button" onClick={() => start()}>
         Start
-      </button> */}
+      </button>
     </BackgroundDiv>
   );
 }

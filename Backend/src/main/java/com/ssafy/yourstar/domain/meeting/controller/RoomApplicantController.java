@@ -15,6 +15,7 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartHttpServletRequest;
 
 import java.io.IOException;
+import java.time.LocalDateTime;
 
 @Api("미팅룸 관계자 관련 API")
 @Slf4j
@@ -74,4 +75,15 @@ public class RoomApplicantController {
             return ResponseEntity.status(400).body(BaseResponseBody.of(400, "This MeetingId doesn't exist"));
         }
     }
-}
+
+    @ApiOperation(value = "팬미팅 종료")
+    @PutMapping("/room-close")
+    public ResponseEntity<? extends BaseResponseBody> meetingEndByStar (@ApiParam(value = "팬미팅 번호") int meetingId) {
+
+        log.info("meetingEndByStar - Call");
+
+        meetingService.meetingEndByStar(meetingId, LocalDateTime.now().minusMinutes(1));
+
+        return ResponseEntity.status(200).body(BaseResponseBody.of(200, "Success"));
+    }
+ }

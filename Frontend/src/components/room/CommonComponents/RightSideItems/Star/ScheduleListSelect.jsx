@@ -43,6 +43,8 @@ export default function ScheduleListSelect() {
   }, [endMeetingDone, history, id, storeSession]);
 
   const SetSelect = selectNum => {
+    if (selectNum === 4) dispatch(ResetIndex());
+
     storeSession.signal({
       data: `${selectNum}`,
       to: [],

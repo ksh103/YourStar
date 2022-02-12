@@ -38,7 +38,7 @@ const InnerDiv = styled.button`
   color: black;
 `;
 
-const UserInput = styled.div`
+const UserInput = styled.input`
   outlint: 0.3vw solid black;
   border-color: black;
   width: 40vw;
@@ -48,17 +48,17 @@ const UserInput = styled.div`
   margin: 1vw;
 `;
 
-const TestInput = styled.div`
-  position: absolute;
-  outlint: 0.3vw solid black;
-  border-color: black;
-  width: 40vw;
-  height: 4vh;
-  border-radius: 3vh;
-  padding-left: 0.5vw;
-  margin: 1vw;
-  z-index: 1;
-`;
+// const TestInput = styled.div`
+//   position: absolute;
+//   outlint: 0.3vw solid black;
+//   border-color: black;
+//   width: 40vw;
+//   height: 4vh;
+//   border-radius: 3vh;
+//   padding-left: 0.5vw;
+//   margin: 1vw;
+//   z-index: 1;
+// `;
 // 필요한 state
 // 1. 유저 id 를 통한 구분
 // 2. 모드변경에 따른 ui 구성 분기점 --> 분기점 만들었다!
@@ -69,7 +69,6 @@ export default function SubStickBar() {
   const [QnAText, setQnAText] = useState('');
 
   const valueChange = e => {
-    console.log(e.target.value);
     setQnAText(e.target.value);
   };
   // qna가 시작되었는지 확인하기
@@ -101,8 +100,6 @@ export default function SubStickBar() {
   };
 
   const UserQnAMessageByEnter = e => {
-    console.log(e);
-    e.preventDefault();
     if (e.key === 'Enter') {
       const QnAValue = {
         userName: me.nick,
@@ -136,10 +133,10 @@ export default function SubStickBar() {
     return (
       <>
         <h2>Q.</h2>
-        <TestInput>
+        {/* <TestInput>
           <input type="text" onChange={valueChange} value={QnAText} />
           <button onClick={UserQnAMessageByClick}>제출하기</button>
-        </TestInput>
+        </TestInput> */}
         <StickBarDiv>
           <StickBar>
             <GridDiv>
@@ -178,7 +175,7 @@ export default function SubStickBar() {
           <StickBar>
             <GridDiv>
               <h2>Q.</h2>
-              <input type="text" onChange={valueChange} value={QnAText} />
+              <UserInput type="text" onChange={valueChange} onKeyPress={UserQnAMessageByEnter} value={QnAText} ></UserInput>
               <button onClick={UserQnAMessageByClick}>제출하기</button>
             </GridDiv>
           </StickBar>

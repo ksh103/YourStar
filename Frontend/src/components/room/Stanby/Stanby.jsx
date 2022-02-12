@@ -139,7 +139,6 @@ export default function Stanby() {
           if (error?.response?.status === 409) {
             resolve(curSessionId);
           } else {
-            console.log(error);
             console.warn(
               'No connection to OpenVidu Server. This may be a certificate error at ' +
                 OPENVIDU_SERVER_URL
@@ -192,15 +191,8 @@ export default function Stanby() {
   };
 
   const Speaking = isSpeaking => {
-    console.log('스피킹중', isSpeaking);
     setIsSpeaking(isSpeaking);
-    console.log('test');
   };
-
-  console.log(
-    testSession,
-    '테에에에에에스스스스스스ㅡ트트트트트트세세세세세세ㅔ셔셔셔셔셔셔션'
-  );
 
   testSession.on('publisherStopSpeaking', event => {
     // 감지가 될 때 효과 줘버리깅
@@ -214,7 +206,6 @@ export default function Stanby() {
   const onClickEnter = () => {
     // 선택한 컬러 전역으로 저장하기
     testSession.disconnect();
-    console.log(testSession, '============나갔습니다================');
     dispatch(changeBackgroundColor(color));
     history.push(`/room/${meeting.id}`);
     // history.push(`/room/:`);
@@ -233,6 +224,19 @@ export default function Stanby() {
     StanbyJoin(testSession, me.memberId);
   }, []);
 
+  const videoControll = num => {
+    SetVideo(num);
+    if (pub.stream.videoActive === true) {
+      pub.publishVideo(false);
+    } else {
+      pub.publishVideo(true);
+    }
+  };
+
+  console.log(
+    pub.stream.videoActive,
+    '==========들어온사람의 비디오 상태 정보========='
+  );
   return (
     <BackgroundDiv color={color}>
       <ColorCircleWrapper>
@@ -266,14 +270,14 @@ export default function Stanby() {
             <BsFillCameraVideoOffFill
               style={{ cursor: 'pointer' }}
               onClick={() => {
-                SetVideo(1);
+                videoControll(0);
               }}
             />
           ) : (
             <BsFillCameraVideoFill
               style={{ cursor: 'pointer' }}
               onClick={() => {
-                SetVideo(0);
+                videoControll(1);
               }}
             />
           )}

@@ -34,7 +34,7 @@ public class ManagerRegisterMailUtil {
         msg += "<span style=\"color: #212121;\">관계자 계정 정보</span> 안내입니다. </h1>";
         msg += "<p style=\"font-size: 16px; line-height: 26px; margin-top: 50px; padding: 0 5px;\">";
         msg += "안녕하세요.<br />";
-        msg += "Your Start 팬미팅 시, 다음과 같은 계정을 사용해주세요!<br /><br />"
+        msg += "Your Star 팬미팅 시, 다음과 같은 계정을 사용해주세요!<br /><br />"
                 + managerAccount(managerAccountList) +
                 "<br />감사합니다.\n" + "</p> </div>";
 
