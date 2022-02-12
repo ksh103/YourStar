@@ -62,11 +62,24 @@ export default function OXButtonStar() {
     });
     dispatch(signalOX(e.target.innerText));
 
+    var meetingId = storeSession.sessionId;
+    for (var i = 0; i < subscribers.length; i++) {
+      if (subscribers[i].stream.videoActive) {
+        var memberId = JSON.parse(
+          subscribers[i].stream.connection.data
+        ).memberId;
+        // api 추가하면 이 콘솔 지우면됨
+        console.log(
+          '미팅룸 ' + meetingId + '번에서 ' + memberId + '가 살아남았습니다.'
+        );
+      }
+    }
+
     swal({
       title: OXgameCount + '라운드 종료',
-      text: '정답을 맞추지 못한 유저의 화면이 꺼집니다',
+      text: '정답을 맞추지 못한 유저의 화면이 꺼집니다\n점수가 DB에 반영되었습니다',
       buttons: false,
-      timer: 1500,
+      timer: 2000,
     });
   };
 
@@ -88,20 +101,10 @@ export default function OXButtonStar() {
 
   const oxStop = e => {
     console.log('==== OX게임세션 종료 ====');
-    var meetingId = storeSession.sessionId;
-    for (var i = 0; i < subscribers.length; i++) {
-      if (subscribers[i].stream.videoActive) {
-        var memberId = JSON.parse(
-          subscribers[i].stream.connection.data
-        ).memberId;
-        console.log(
-          '미팅룸 ' + meetingId + '번에서 ' + memberId + '가 살아남았습니다.'
-        );
-      }
-    }
+
     swal({
       title: 'OX 게임 세션 종료',
-      text: '우승자가 DB에 저장되었습니다',
+      text: '대기화면으로 이동합니다',
       icon: 'info',
       buttons: false,
       timer: 3000,
