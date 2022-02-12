@@ -99,7 +99,7 @@ export default function RandomChoiceMain() {
       }); // 틀렸을 때 게임 다시하기위해 호출하는 함수
     }, 2000);
     // 유저컴포정보 띄워주기 !!!
-    // setTimeout()
+    setTimeout(setRandomUser(event), 3000);
   });
 
   // 모달에 시간별로 사진 or 텍스트 띄우기
