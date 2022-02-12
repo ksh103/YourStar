@@ -1,7 +1,10 @@
 import React, { useEffect } from 'react';
 import { HalfSideDiv1, SmallBox } from '../Chatting/Chatting.style';
 import { useSelector, useDispatch } from 'react-redux';
-import { ScreenChange } from '../../../../../store/modules/meetingRoom';
+import {
+  ResetIndex,
+  ScreenChange,
+} from '../../../../../store/modules/meetingRoom';
 import {
   ScheduleListBox,
   ScheduleListWrapper,
