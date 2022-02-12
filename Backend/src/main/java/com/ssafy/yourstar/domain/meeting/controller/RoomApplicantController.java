@@ -2,6 +2,7 @@ package com.ssafy.yourstar.domain.meeting.controller;
 
 import com.ssafy.yourstar.domain.meeting.db.entity.Meeting;
 import com.ssafy.yourstar.domain.meeting.request.MeetingApplyByStarPostReq;
+import com.ssafy.yourstar.domain.meeting.request.MeetingRoomEndByStarPostReq;
 import com.ssafy.yourstar.domain.meeting.service.MeetingService;
 import com.ssafy.yourstar.global.model.response.BaseResponseBody;
 import io.swagger.annotations.Api;
@@ -78,11 +79,11 @@ public class RoomApplicantController {
 
     @ApiOperation(value = "팬미팅 종료")
     @PutMapping("/room-close")
-    public ResponseEntity<? extends BaseResponseBody> meetingEndByStar (@ApiParam(value = "팬미팅 번호") int meetingId) {
+    public ResponseEntity<? extends BaseResponseBody> meetingEndByStar (@ApiParam(value = "팬미팅 번호")MeetingRoomEndByStarPostReq meetingRoomEndByStarPostReq) {
 
         log.info("meetingEndByStar - Call");
 
-        meetingService.meetingEndByStar(meetingId, LocalDateTime.now().minusMinutes(1));
+        meetingService.meetingEndByStar(meetingRoomEndByStarPostReq, LocalDateTime.now().minusMinutes(1));
 
         return ResponseEntity.status(200).body(BaseResponseBody.of(200, "Success"));
     }

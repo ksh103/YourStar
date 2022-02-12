@@ -5,6 +5,7 @@ import com.ssafy.yourstar.domain.meeting.db.repository.*;
 import com.ssafy.yourstar.domain.meeting.request.MeetingApplyByStarPostReq;
 import com.ssafy.yourstar.domain.meeting.request.MeetingApplyByUserPostReq;
 import com.ssafy.yourstar.domain.meeting.request.MeetingOathByUserPostReq;
+import com.ssafy.yourstar.domain.meeting.request.MeetingRoomEndByStarPostReq;
 import com.ssafy.yourstar.domain.member.db.entity.Member;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.io.FilenameUtils;
@@ -312,10 +313,12 @@ public class MeetingServiceImpl implements MeetingService {
     }
 
     @Override
-    public Meeting meetingEndByStar(int meetingId, LocalDateTime meetingEndDate) {
+    public Meeting meetingEndByStar(MeetingRoomEndByStarPostReq meetingRoomEndByStarPostReq, LocalDateTime meetingEndDate) {
         Meeting meeting = new Meeting();
 
-        if(meetingRepository.findById(meetingId).isPresent()) {
+        if(meetingRepository.findById(meetingRoomEndByStarPostReq.getMeetingId()).isPresent()) {
+            int meetingId = meetingRoomEndByStarPostReq.getMeetingId();
+
             meeting.setMeetingId(meetingId);
             meeting.setMeetingEndDate(meetingEndDate);
             
