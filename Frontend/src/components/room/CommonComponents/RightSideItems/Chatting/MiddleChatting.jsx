@@ -12,6 +12,7 @@ import {
   ChattingInputChange,
   ChattingAction,
 } from '../../../../../store/modules/meetingRoom';
+import { checkText } from '../../../../../utils/checkText';
 
 export default function MiddleChatting() {
   const [testInput, setTestinput] = React.useState('');
@@ -33,18 +34,20 @@ export default function MiddleChatting() {
 
   const SendMessage = e => {
     if (e.key === 'Enter') {
-      const inputValue = {
-        userName: me.nick,
-        text: testInput,
-        chatClass: 'messages__item--operator',
-      };
-      storeSession.signal({
-        data: `${me.nick},${testInput}`,
-        to: [],
-        type: 'chat',
-      });
-      SubmitText(testInput);
-      AppendChattingList(inputValue);
+      if (checkText(testInput)) {
+        const inputValue = {
+          userName: me.nick,
+          text: testInput,
+          chatClass: 'messages__item--operator',
+        };
+        storeSession.signal({
+          data: `${me.nick},${testInput}`,
+          to: [],
+          type: 'chat',
+        });
+        SubmitText(testInput);
+        AppendChattingList(inputValue);
+      }
       setTestinput('');
     }
   };

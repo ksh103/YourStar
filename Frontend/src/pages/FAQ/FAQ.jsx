@@ -20,8 +20,8 @@ export default function FAQ() {
     });
   }, [dispatch]);
   const FAQDate = () => {
-    return faqs.map(faq => (
-      <FAQContentRow key={faq.id}>
+    return faqs.map((faq, i) => (
+      <FAQContentRow key={i}>
         <Accordion>
           <AccordionSummary
             expandIcon={<MdExpandMore />}

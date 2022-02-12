@@ -53,7 +53,7 @@ export default function Mypage() {
         new Date(meeting.meetingEndDate) > now ? (
           <UserMypageCard meeting={meeting} key={meeting.meetingId} />
         ) : (
-          <></>
+          <div key={meeting.meetingId}></div>
         )
       );
     } else if (menu === 2) {
@@ -62,7 +62,7 @@ export default function Mypage() {
         new Date(meeting.meetingEndDate) <= now ? (
           <RepositoryMypageCard meeting={meeting} key={meeting.meetingId} />
         ) : (
-          <></>
+          <div key={meeting.meetingId}></div>
         )
       );
     }
