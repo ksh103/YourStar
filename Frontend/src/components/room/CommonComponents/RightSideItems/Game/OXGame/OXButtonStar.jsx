@@ -121,6 +121,7 @@ export default function OXButtonStar() {
 
   // OX 게임 인식 완료 알림
   storeSession.on('signal:OXDone', event => {
+    console.log('인식 완료 신호옴');
     setDoneCnt(doneCnt + 1);
   });
 
