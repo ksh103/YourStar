@@ -12,6 +12,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.web.multipart.MultipartHttpServletRequest;
 
 import java.io.IOException;
+import java.time.LocalDateTime;
 
 public interface MeetingService {
     int meetingApplyByStar(MeetingApplyByStarPostReq meetingApplyByStarPostReq, MultipartHttpServletRequest request) throws IOException;
@@ -32,5 +33,7 @@ public interface MeetingService {
     String getMeetingImgPath(int fileId);
 
     MeetingOath meetingOathByUser(MeetingOathByUserPostReq meetingOathByUserPostReq); // 보안서약서 작성 유무
+    
+    Meeting meetingEndByStar(int meetingId, LocalDateTime meetingEndDate); // 팬미팅 종료
 
 }
