@@ -19,6 +19,7 @@ import org.springframework.web.multipart.MultipartHttpServletRequest;
 import javax.swing.filechooser.FileSystemView;
 import java.io.File;
 import java.io.IOException;
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.UUID;
 
@@ -308,5 +309,27 @@ public class MeetingServiceImpl implements MeetingService {
         meetingOath.setIsOath(true);
 
         return meetingOathRepository.save(meetingOath);
+    }
+
+    @Override
+    public Meeting meetingEndByStar(int meetingId, LocalDateTime meetingEndDate) {
+        Meeting meeting = new Meeting();
+
+        if(meetingRepository.findById(meetingId).isPresent()) {
+            meeting.setMeetingId(meetingId);
+            meeting.setMeetingEndDate(meetingEndDate);
+            
+            // 그대로 유지
+            meeting.setMeetingName(meetingRepository.findById(meetingId).get().getMeetingName());
+            meeting.setMeetingOpenDate(meetingRepository.findById(meetingId).get().getMeetingOpenDate());
+            meeting.setMeetingStartDate(meetingRepository.findById(meetingId).get().getMeetingStartDate());
+            meeting.setMeetingCnt(meetingRepository.findById(meetingId).get().getMeetingCnt());
+            meeting.setMeetingPrice(meetingRepository.findById(meetingId).get().getMeetingPrice());
+            meeting.setMeetingDescription(meetingRepository.findById(meetingId).get().getMeetingDescription());
+            meeting.setApprove(true);
+            meeting.setMeetingRegDt(meetingRepository.findById(meetingId).get().getMeetingRegDt());
+
+            return meetingRepository.save(meeting);
+        }else return meeting;
     }
 }
