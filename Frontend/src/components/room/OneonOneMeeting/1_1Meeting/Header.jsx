@@ -69,8 +69,7 @@ export default function Header() {
 
     // 다음 사람에게 남은 시간 알리기
     if (idx < subscribers.length - 1) {
-      for (var i = idx + 1; i < subscribers.length; i++) {
-        var order = 1; // 현재 기다려야하는 인원 수
+      for (let i = idx + 1, order = 1; i < subscribers.length; i++, order++) {
         const sessionId = storeSession.sessionId;
         const data = {
           session: sessionId.substring(0, sessionId.length - 9), // 1-onebyone 일때 1만 뽑아내기
@@ -90,7 +89,6 @@ export default function Header() {
             console.log(response);
           })
           .catch(error => console.error(error));
-        order++;
       }
     }
 

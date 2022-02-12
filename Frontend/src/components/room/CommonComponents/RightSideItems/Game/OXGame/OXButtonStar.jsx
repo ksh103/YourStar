@@ -119,9 +119,8 @@ export default function OXButtonStar() {
     });
   };
 
-  // OX 게임 인식 완료 알림
+  // OX 게임 인식 완료 신호 수신
   storeSession.on('signal:OXDone', event => {
-    console.log('인식 완료 신호옴');
     setDoneCnt(doneCnt + 1);
   });
 
@@ -129,6 +128,7 @@ export default function OXButtonStar() {
     <>
       <HalfSideDiv2>
         <SmallBox>
+          {console.log(doneCnt + ' / ' + subscribers.length)}
           {isStart ? (
             <div>
               <OButton onClick={OXClick}>O</OButton>
@@ -136,7 +136,6 @@ export default function OXButtonStar() {
             </div>
           ) : (
             <>
-              {console.log(doneCnt + ' / ' + subscribers.length)}
               <button onClick={start}>Start</button>
               <button onClick={oxStop}>OX게임세션 종료</button>
             </>

@@ -206,28 +206,6 @@ export default function UserOXGame() {
       window.cancelAnimationFrame(state.loopPredict);
       state.loopPredict = undefined;
     }
-
-    // 인식 완료 전송하기
-    const sessionId = storeSession.sessionId;
-
-    const data = {
-      session: sessionId,
-      to: [],
-      type: 'signal:OXDone',
-      data: '0',
-    };
-    axios
-      .post(OPENVIDU_SERVER_URL + '/openvidu/api/signal', data, {
-        headers: {
-          Authorization:
-            'Basic ' + btoa('OPENVIDUAPP:' + OPENVIDU_SERVER_SECRET),
-          'Content-Type': 'application/json',
-        },
-      })
-      .then(response => {
-        console.log(response);
-      })
-      .catch(error => console.error(error));
   };
 
   return (
