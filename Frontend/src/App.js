@@ -32,44 +32,31 @@ function App() {
       <GlobalStyle />
       <BrowserRouter>
         <Switch>
-          <Route exact path="/">
-            <Main />
-          </Route>
-          <Route exact path="/login">
-            <Login />
-          </Route>
-          <Route exact path="/signup">
-            <Signup />
-          </Route>
-          <Route exact path="/faq">
-            <FAQ />
-          </Route>
-          <Route exact path="/apply">
-            <Apply />
-          </Route>
-          <Route exact path="/admin/:id">
-            <AdminMeetingDetail />
-          </Route>
-          <Route exact path="/admin">
-            <Admin />
-          </Route>
-          <Route exact path="/schedule/:id">
-            <ScheduleDetail />
-          </Route>
-          <Route exact path="/schedule">
-            <Schedule />
-          </Route>
-          <Route exact path="/mypage">
-            <Mypage />
-          </Route>
-          <Route exact path="/find/password">
-            <FindPassword />
-          </Route>
-          <Route exact component={Pay} path="/pay" />
-          <Route exact component={Room} path="/room/:id" />
-          <Route path="/mypage/:id">
-            <MypageDetail />
-          </Route>
+          <Route exact path="/" component={Main} />
+          <PrivateRoute exact path="/login" component={Login} code={[0]} />
+          <PrivateRoute exact path="/signup" component={Signup} code={[0]} />
+          <Route exact path="/faq" component={FAQ} />
+          <PrivateRoute exact path="/apply" component={Apply} code={[2]} />
+          <PrivateRoute
+            exact
+            path="/admin/:id"
+            component={AdminMeetingDetail}
+            code={[1]}
+          />
+          <PrivateRoute exact path="/admin" component={Admin} code={[1]} />
+          <Route exact path="/schedule/:id" component={ScheduleDetail} />
+          <Route exact path="/schedule" component={Schedule} />
+          {/* 0 빼고 다 */}
+          <Route exact path="/mypage" component={Mypage} code={[1, 2, 3, 4]} />
+          <Route
+            exact
+            path="/find/password"
+            component={FindPassword}
+            code={[0]}
+          />
+          <Route exact path="/pay" component={Pay} />
+          <Route exact path="/room/:id" component={Room} />
+          <Route path="/mypage/:id" component={MypageDetail} />
           <Route path="/pledge/:id">
             <Pledge />
           </Route>
