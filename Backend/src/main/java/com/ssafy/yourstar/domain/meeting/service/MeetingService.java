@@ -6,6 +6,7 @@ import com.ssafy.yourstar.domain.meeting.db.entity.MeetingOath;
 import com.ssafy.yourstar.domain.meeting.request.MeetingApplyByStarPostReq;
 import com.ssafy.yourstar.domain.meeting.request.MeetingApplyByUserPostReq;
 import com.ssafy.yourstar.domain.meeting.request.MeetingOathByUserPostReq;
+import com.ssafy.yourstar.domain.meeting.request.MeetingRoomEndByStarPostReq;
 import com.ssafy.yourstar.domain.member.db.entity.Member;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -34,6 +35,6 @@ public interface MeetingService {
 
     MeetingOath meetingOathByUser(MeetingOathByUserPostReq meetingOathByUserPostReq); // 보안서약서 작성 유무
     
-    Meeting meetingEndByStar(int meetingId, LocalDateTime meetingEndDate); // 팬미팅 종료
+    Meeting meetingEndByStar(MeetingRoomEndByStarPostReq meetingRoomEndByStarPostReq, LocalDateTime meetingEndDate); // 팬미팅 종료
 
 }
