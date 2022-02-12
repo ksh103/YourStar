@@ -37,6 +37,15 @@ const BackgroundDiv = styled.div`
   background-color: #e2d8ff;
   color: 'white';
 `;
+const List = [
+  '대기화면',
+  '공연모드',
+  'QnA모드',
+  '랜덤추첨',
+  'O/X게임',
+  '초성게임',
+  '1:1팬미팅',
+];
 
 class Room extends Component {
   constructor(props) {
@@ -147,6 +156,13 @@ class Room extends Component {
           // 일반 유저가 변화를 감지하는 부분          let changeNum = parseInt(event.data);
           let changeNum = parseInt(event.data);
           if (changeNum !== this.props.selectNum) {
+            swal({
+              title: '세션 이동 알림',
+              text: List[changeNum] + ' 세션으로 이동',
+              icon: 'info',
+              buttons: false,
+              timer: 2000,
+            });
             if (changeNum !== 6) {
               this.props.doScreenChange(changeNum);
               this.props.publisher.publishVideo(true);
