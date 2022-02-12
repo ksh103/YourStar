@@ -24,6 +24,7 @@ const OPENVIDU_SERVER_SECRET = 'YOURSTAR';
 
 export default function UserOXGame() {
   const [isCorrect, setIsCorrect] = useState(true); // 탈락 여부
+  const [recognize, setRecognize] = useState(0); // 인식 여부
   const { storeSession, publisher } = useSelector(state => ({
     storeSession: state.MeetingRoom.storeSession,
     publisher: state.MeetingRoom.publisher,
@@ -42,6 +43,7 @@ export default function UserOXGame() {
 
   storeSession.on('signal:OXStart', event => {
     console.log('=== 유저가 OX게임 시작 신호 받음 ===');
+    setRecognize(0);
     start();
   });
 
@@ -171,6 +173,28 @@ export default function UserOXGame() {
           text: '잠시만 기다려 주세요!',
           timer: 2000,
           button: false,
+        }).then(() => {
+          // 인식완료시 스타에게 정보 보냄
+          const sessionId = storeSession.sessionId;
+
+          const data = {
+            session: sessionId,
+            to: [],
+            type: 'signal:OXDone',
+            data: '0',
+          };
+          axios
+            .post(OPENVIDU_SERVER_URL + '/openvidu/api/signal', data, {
+              headers: {
+                Authorization:
+                  'Basic ' + btoa('OPENVIDUAPP:' + OPENVIDU_SERVER_SECRET),
+                'Content-Type': 'application/json',
+              },
+            })
+            .then(response => {
+              console.log(response);
+            })
+            .catch(error => console.error(error));
         });
       });
       stopMission();
