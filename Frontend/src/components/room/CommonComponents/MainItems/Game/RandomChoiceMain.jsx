@@ -68,10 +68,10 @@ export default function RandomChoiceMain() {
     // const rand = Math.floor(Math.random() * subscribers.length);
     const rand = Math.floor(Math.random() * UserList.length);
     // const randomresult = subscribers[rand];
-    const randomresult = UserList[rand];
+    const randomresult = subscribers[rand];
     setResult(randomresult);
     storeSession.signal({
-      data: `${randomresult}`,
+      data: randomresult,
       to: [],
       type: 'random',
     });
