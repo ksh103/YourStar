@@ -72,14 +72,16 @@ export default function Header() {
     // 다음 사람에게 남은 시간 알리기
     if (idx < subscribers.length - 1) {
       for (var i = idx + 1; i < subscribers.length; i++) {
+        console.log(i + '번째 사람에게 보내는중');
         var order = 1; // 현재 기다려야하는 인원 수
         const sessionId = storeSession.sessionId;
         const data = {
           session: sessionId.substring(0, sessionId.length - 9), // 1-onebyone 일때 1만 뽑아내기
           to: [subscribers[i].stream.connection.connectionId],
-          type: 'signal:wait',
+          type: 'signal:userwait',
           data: order,
         };
+        console.log('보낸 데이터', data);
         axios
           .post(OPENVIDU_SERVER_URL + '/openvidu/api/signal', data, {
             headers: {
@@ -89,7 +91,7 @@ export default function Header() {
             },
           })
           .then(response => {
-            console.log(response);
+            console.log('응답 받음 !!', response);
           })
           .catch(error => console.error(error));
         order++;

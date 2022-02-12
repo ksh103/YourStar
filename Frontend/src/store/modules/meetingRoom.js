@@ -17,11 +17,11 @@ const BACKGROUND_COLOR_CHANGE = 'BACKGROUND_COLOR_CHANGE';
 const NOW_EMOZI = 'NOW_EMOZI';
 const MEETINGROOM_USER_DELETE = 'MEETINGROOM_USER_DELETE';
 const PLUS_INDEX = 'PLUS_INDEX';
+const RESET_IDNEX = 'RESET_IDNEX';
 const CHECK_OUT = 'CHECK_OUT';
 const CHOSONANT_QUIZ = 'CHOSONANT_QUIZ';
 const PUBLISHER_AUDIO_CHANGE = 'PUBLISHER_AUDIO_CHANGE';
 const UPDATE_ONEBYONESTREAM = 'UPDATE_ONEBYONESTREAM';
-// 여기까지 =========
 
 // QnA 모드를 변경하기위한 action
 // 스타가 의 조작에 대한 action이라고 이해하면 된다.
@@ -61,6 +61,12 @@ export const UserDelete = subscribers => {
 export const PlusIndex = () => {
   return {
     type: PLUS_INDEX,
+  };
+};
+
+export const ResetIndex = () => {
+  return {
+    type: RESET_IDNEX,
   };
 };
 
@@ -248,6 +254,11 @@ const MeetingRoom = (state = initialState, action) => {
       return {
         ...state,
         index: state.index + 1,
+      };
+    case RESET_IDNEX:
+      return {
+        ...state,
+        index: -1,
       };
     case CHECK_OUT:
       return {

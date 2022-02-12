@@ -204,7 +204,7 @@ class Room extends Component {
           }
         });
 
-        mySession.on('signal:wait', event => {
+        mySession.on('signal:userwait', event => {
           console.log('대기 순번 알림', event.data);
           swal({
             title: '1대1미팅 대기시간 알림',
@@ -437,7 +437,8 @@ class Room extends Component {
     // 녹화 시작
     var data = {
       session: onebyoneSessionId,
-      name: mySession.sessionId + this.state.me.nick,
+      name:
+        'room-' + mySession.sessionId + '_memberId-' + this.state.me.memberId,
       hasAudio: true,
       hasVideo: true,
       outputMode: 'COMPOSED',

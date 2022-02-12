@@ -2,7 +2,10 @@ import React, { useState } from 'react';
 import { HalfSideDiv1, SmallBox } from '../Chatting/Chatting.style';
 import { useSelector, useDispatch } from 'react-redux';
 // import { changeList } from '../../../../../store/modules/selectList';
-import { ScreenChange } from '../../../../../store/modules/meetingRoom';
+import {
+  ResetIndex,
+  ScreenChange,
+} from '../../../../../store/modules/meetingRoom';
 import {
   ScheduleListBox,
   ScheduleListWrapper,
@@ -33,6 +36,8 @@ export default function ScheduleListSelect() {
   const dispatch = useDispatch();
 
   const SetSelect = selectNum => {
+    if (selectNum === 4) dispatch(ResetIndex());
+
     storeSession.signal({
       data: `${selectNum}`,
       to: [],
