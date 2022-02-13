@@ -1,29 +1,16 @@
 import React, { useRef, useState, useEffect } from 'react';
 import styled from 'styled-components';
 import { MainDiv } from '../Main.style';
-import { useSelector } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import StarVideoComponent from '../../../../../pages/Room/StarVideoComponent';
-import './alertCss.css';
+// import './alertCss.css';
 import UserVideoComponent from '../../../../../pages/Room/UserVideoComponent';
 import swal from '@sweetalert/with-react';
 import './rolling.scss';
-
-const RollingDiv = styled.div`
-  width: 20rem;
-  display: inline-block;
-  position: absolute;
-  top: -200px;
-  transform: rotateX(-90deg);
-  opacity: 0;
-  text-shadow: 0px 5px 5px rgba(0, 0, 0, 0.25);
-  animation-timing-function: ease;
-  &: nth-child(${num});
-   {
-    animation: rollDown 3s 1;
-  }
-``
-`;
-
+import {
+  randomResult,
+  randomSub,
+} from '../../../../../store/modules/meetingRoom';
 // 60vw 가로폭
 const RandomChoiceSc = styled.div`
   position: relative;
@@ -37,48 +24,28 @@ const RandomChoiceSc = styled.div`
 
 const MainGrid = styled.div`
   width: 100%;
-  heigth: 100%;
+  height: 100%;
   display: inline-flex;
 `;
 
-const UserList = [
-  '동준',
-  '지슬',
-  '은성',
-  '수민',
-  '영원',
-  '소현',
-  '쌈디',
-  '물소가이',
-  '공혁준',
-  '육지담',
-];
-
 //git commit -m "[S06P12E204-261] FE-미팅룸UI: RandomGame생성&미팅룸redux 생성 &  "
 export default function RandomChoiceMain() {
-  const [test, setTest] = useState(false);
-  const [result, setResult] = useState(''); // 변경점
-  // 랜덤으로 뽑힌 유저의 정보를 모두에게 적용시켜야함
-  const [randomUser, setRandomUser] = useState('');
-  const [num, setNum] = useState(0);
-  // store 정보 불러오기
   const { me } = useSelector(state => state.mypage);
-  const { mainStreamManager } = useSelector(state => ({
+  const [somone, setSomeone] = useState('');
+  const [userscreen, setUserScreen] = useState(false);
+  const { mainStreamManager, randomPerson } = useSelector(state => ({
     mainStreamManager: state.MeetingRoom.mainStreamManager,
+    randomPerson: state.MeetingRoom.randomPerson,
   }));
   // 유저정보 불러오기 --> 랜덤으로 하나를 뽑기 위함
-  const { subscribers, storeSession } = useSelector(state => state.MeetingRoom);
-  const [pickone, setpickone] = useState('지슬');
-  const [studentsName, setstudentsName] = useState([
-    '동준',
-    '지슬',
-    '은성',
-    '수민',
-    '영원',
-    '소현',
-    '쌈디',
-  ]);
-  console.log('⭐⭐⭐⭐픽원 : ', pickone);
+  const { subscribers, storeSession, publisher } = useSelector(
+    state => state.MeetingRoom
+  );
+  const dispatch = useDispatch();
+  const randomoneperson = Input => dispatch(randomResult(Input));
+  // const Subs = Input => dispatch(randomSub(Input));
+  //
+
   const [sec, setSec] = useState(5);
   const time = useRef(5);
   const timerId = useRef(null);
@@ -98,57 +65,120 @@ export default function RandomChoiceMain() {
     }
   }, [sec]);
   let i = 0;
+
   const onShuffle = e => {
-    console.log(e);
-    // 아래 리스트만 바뀐 로직은 두세요 추데이터 받아왔을때 실험합니다.
-    // const rand = Math.floor(Math.random() * subscribers.length);
-    const rand = Math.floor(Math.random() * UserList.length);
-    // const randomresult = subscribers[rand];
-    const randomresult = UserList[rand];
-    setResult(randomresult);
-    storeSession.signal({
-      data: randomresult,
-      to: [],
-      type: 'random',
+    const rand = Math.floor(Math.random() * subscribers.length);
+    const randomresult = subscribers[rand];
+    const ran = randomresult.stream.connection.data;
+    const usersNick = subscribers.map((sub, idx) => {
+      const obj = JSON.parse(sub.stream.connection.data);
+      return obj.clientData;
     });
+
+    const ranList = JSON.stringify(usersNick);
+
+    storeSession.signal({
+      data: `${ranList}/${ran}`,
+      to: [],
+      type: 'randomresult',
+    });
+    const ranparse = JSON.parse(ran);
+    const nickoflucky = ranparse.clientData;
+    console.log(nickoflucky, '당첨자 닉네임');
+    randomoneperson(nickoflucky);
+    setSomeone(randomresult);
   };
 
-  storeSession.on('signal:random', event => {
-    console.log(event, '========랜덤정보 수신');
+  storeSession.on('signal:randomresult', event => {
+    console.log('이벤트 받음!');
+    const arr = event.data.split('/');
+    const dangchum = JSON.parse(arr[1]);
+    const Lists = JSON.parse(arr[0]);
+    if (me.code === 3) {
+      if (me.nick === dangchum.clientData) {
+        console.log('이건내가당첨정보오오⭐⭐⭐⭐');
+        setSomeone(publisher);
+      } else {
+        subscribers.map((sub, idx) => {
+          console.log(sub.stream.connection.data, '서브정보오오⭐⭐⭐⭐');
+          const user = JSON.parse(sub.stream.connection.data);
+          const userid = user.clientdata;
+          if (userid === dangchum.clientData) {
+            setSomeone(sub);
+          }
+        });
+      }
+    }
+
     swal({
-      buttons: false,
-      timer: 5000,
-      className: '.countDown',
+      className: 'countdown',
+      timer: 3000,
+      button: false,
       content: (
-        <div>
-          {pickone !== undefined && (
+        <>
+          {Lists !== undefined && (
             <>
               <div className="rolling">
                 <div className="slider">
                   <div className="caption">
-                    행운의 주인공은?!
+                    <p>행운의 주인공은?!</p>
                     <div className="text-box">
-                      <div>{studentsName[i]}</div>
-                      <div>{studentsName[(i + 1) % studentsName.length]}</div>
-                      <div>{studentsName[(i + 2) % studentsName.length]}</div>
-                      <div>{studentsName[(i + 3) % studentsName.length]}</div>
-                      <div>{studentsName[(i + 4) % studentsName.length]}</div>
-                      <div>{studentsName[(i + 5) % studentsName.length]}</div>
-                      {/* <div>{studentsName[(i + 6) % studentsName.length]}</div>
-                      <div>{studentsName[(i + 7) % studentsName.length]}</div>
-                      <div>{studentsName[(i + 8) % studentsName.length]}</div> */}
-                      <div>{pickone}</div>
+                      <div>{Lists[i]}</div>
+                      <div>{Lists[(i + 1) % Lists.length]}</div>
+                      <div>{Lists[(i + 2) % Lists.length]}</div>
+                      <div>{Lists[(i + 3) % Lists.length]}</div>
+                      <div>{Lists[(i + 4) % Lists.length]}</div>
+                      <div>{Lists[(i + 5) % Lists.length]}</div>
+                      <div>{Lists[(i + 6) % Lists.length]}</div>
+                      <div>{Lists[(i + 7) % Lists.length]}</div>
+                      <div>{Lists[(i + 8) % Lists.length]}</div>
+                      <div>{randomPerson}</div>
                     </div>
                   </div>
                 </div>
               </div>
             </>
           )}
-        </div>
+        </>
       ),
     });
+    setTimeout(function () {
+      swal({
+        buttons: false,
+        timer: 500,
+        className: 'number',
+        content: <div className="ment">행운의 당첨자가 곧 나타납니다!</div>,
+      }); // 틀렸을 때 게임 다시하기위해 호출하는 함수
+    }, 3500);
+    setTimeout(function () {
+      swal({
+        buttons: false,
+        timer: 500,
+        className: 'number',
+        content: <div className="number">3</div>,
+      }); // 틀렸을 때 게임 다시하기위해 호출하는 함수
+    }, 4500);
+    setTimeout(function () {
+      swal({
+        buttons: false,
+        timer: 500,
+        className: 'number',
+        content: <div className="number">2</div>,
+      }); // 틀렸을 때 게임 다시하기위해 호출하는 함수
+    }, 5500);
+    setTimeout(function () {
+      swal({
+        buttons: false,
+        timer: 500,
+        className: 'number',
+        content: <div className="number">1</div>,
+      }); // 틀렸을 때 게임 다시하기위해 호출하는 함수
+    }, 6500);
+    setTimeout(function () {
+      setUserScreen(true);
+    }, 7500);
   });
-
+  console.log(somone, '당첨자정보오~⭐⭐⭐⭐');
   return (
     <MainDiv>
       <MainGrid>
@@ -162,8 +192,8 @@ export default function RandomChoiceMain() {
             <button onClick={onShuffle}>돌려돌려 돌림판!</button>
           ) : null}
           {/* 유저 정보가 들어오면 띄워주기 */}
-          {randomUser && (
-            <UserVideoComponent streamManager={randomUser}></UserVideoComponent>
+          {userscreen && (
+            <UserVideoComponent streamManager={somone}></UserVideoComponent>
           )}
         </RandomChoiceSc>
       </MainGrid>

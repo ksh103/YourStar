@@ -155,11 +155,8 @@ export default function Concert() {
   return (
     <BackgroundDiv>
       <ConcertWrapper>
-        <ConcertDisplayBox>
-          {mainStreamManager && (
-            <StarVideoComponent streamManager={mainStreamManager} />
-          )}
-        </ConcertDisplayBox>
+        <ConcertDisplayBox></ConcertDisplayBox>
+
         <EmoziBox>
           {emoziList.map((emozi, idx) => {
             return (
@@ -177,8 +174,11 @@ export default function Concert() {
         </HolePlace>
       </ConcertWrapper>
 
+      {mainStreamManager && (
+        <StarVideoComponent streamManager={mainStreamManager} />
+      )}
       {me.code === 3 ? (
-        <>
+        <HalfSideDiv1>
           <ConcertChattingBox></ConcertChattingBox>
           <ConcertChattingInputBox
             onKeyPress={SendMessage}
@@ -198,7 +198,7 @@ export default function Concert() {
             })}
             <div ref={messagesEndRef}></div> {/**채팅 스크롤 아래로 내려주기 */}
           </ConcertChattingListBox>
-        </>
+        </HalfSideDiv1>
       ) : (
         <>
           <ScheduleListSelect></ScheduleListSelect>

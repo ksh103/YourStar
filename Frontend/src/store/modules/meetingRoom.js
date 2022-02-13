@@ -21,7 +21,22 @@ const CHECK_OUT = 'CHECK_OUT';
 const CHOSONANT_QUIZ = 'CHOSONANT_QUIZ';
 const PUBLISHER_AUDIO_CHANGE = 'PUBLISHER_AUDIO_CHANGE';
 const UPDATE_ONEBYONESTREAM = 'UPDATE_ONEBYONESTREAM';
+const ADD_RANDOM_RESULT = 'ADD_RANDOM_RESULT';
+const ADD_RANDOM_SUBSCRIBERS = 'ADD_RANDOM_SUBSCRIBERS';
 // 여기까지 =========
+
+export const randomResult = result => {
+  return {
+    type: ADD_RANDOM_RESULT,
+    payload: result,
+  };
+};
+export const randomSub = sub => {
+  return {
+    type: ADD_RANDOM_SUBSCRIBERS,
+    payload: sub,
+  };
+};
 
 // QnA 모드를 변경하기위한 action
 // 스타가 의 조작에 대한 action이라고 이해하면 된다.
@@ -219,10 +234,22 @@ const initialState = {
   nowEmozi: -1,
   chosonantQuiz: [],
   onebyoneStream: undefined,
+  randomPerson: null,
+  randomSubscribers: null,
 };
 
 const MeetingRoom = (state = initialState, action) => {
   switch (action.type) {
+    case ADD_RANDOM_RESULT:
+      return {
+        ...state,
+        randomPerson: action.payload,
+      };
+    case ADD_RANDOM_SUBSCRIBERS:
+      return {
+        ...state,
+        randomSubscribers: action.payload,
+      };
     case CHANGE_QNA_MODE:
       return {
         ...state,
