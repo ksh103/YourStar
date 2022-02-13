@@ -6,6 +6,10 @@ import {
   ConcertChattingBox,
   ConcertChattingInputBox,
   ConcertChattingListBox,
+  StarSmallChattingListBox,
+  StarSmallChattingInputBox,
+  StarSmallBox,
+  HalfSideDiv2,
 } from '../CommonComponents/RightSideItems/Chatting/Chatting.style';
 import { useSelector, useDispatch } from 'react-redux';
 import {
@@ -14,6 +18,7 @@ import {
   ScreenChange,
 } from '../../../store/modules/meetingRoom';
 import StarVideoComponent from '../../../pages/Room/StarVideoComponent';
+import ScheduleListSelect from '../CommonComponents/RightSideItems/Star/ScheduleListSelect';
 
 const ConcertWrapper = styled.div`
   position: absolute;
@@ -148,6 +153,7 @@ export default function Concert() {
             <StarVideoComponent streamManager={mainStreamManager} />
           )}
         </ConcertDisplayBox>
+
         <EmoziBox>
           {emoziList.map((emozi, idx) => {
             return (
@@ -164,27 +170,40 @@ export default function Concert() {
           🎁
         </HolePlace>
       </ConcertWrapper>
-      <HalfSideDiv1>
-        <ConcertChattingBox></ConcertChattingBox>
-        <ConcertChattingInputBox
-          onKeyPress={SendMessage}
-          value={testInput}
-          onChange={handleChatMessageChange}
-          color={backgroundColor}
-        ></ConcertChattingInputBox>
-        <ConcertChattingListBox>
-          {chattingList.map((value, idx) => {
-            return (
-              <div key={idx + value.text}>
-                <p style={{ margin: '0' }}>
-                  {value.userName} : {value.text}
-                </p>
-              </div>
-            );
-          })}
-          <div ref={messagesEndRef}></div> {/**채팅 스크롤 아래로 내려주기 */}
-        </ConcertChattingListBox>
-      </HalfSideDiv1>
+
+      {me.code === 3 ? (
+        <HalfSideDiv1>
+          <ConcertChattingBox></ConcertChattingBox>
+          <ConcertChattingInputBox
+            onKeyPress={SendMessage}
+            value={testInput}
+            onChange={handleChatMessageChange}
+            color={backgroundColor}
+          ></ConcertChattingInputBox>
+          <ConcertChattingListBox>
+            {chattingList.map((value, idx) => {
+              return (
+                <div key={idx + value.text}>
+                  <p style={{ margin: '0' }}>
+                    {value.userName} : {value.text}
+                  </p>
+                </div>
+              );
+            })}
+            <div ref={messagesEndRef}></div> {/**채팅 스크롤 아래로 내려주기 */}
+          </ConcertChattingListBox>
+        </HalfSideDiv1>
+      ) : (
+        <>
+          <ScheduleListSelect></ScheduleListSelect>
+          <HalfSideDiv2>
+            <StarSmallBox></StarSmallBox>
+            <StarSmallChattingListBox></StarSmallChattingListBox>
+            <StarSmallChattingInputBox></StarSmallChattingInputBox>
+          </HalfSideDiv2>
+        </>
+      )}
+
       <EmoziBar></EmoziBar>
       <button onClick={() => SetSelect(0)}>홈으로</button>
     </div>

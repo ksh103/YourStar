@@ -195,7 +195,6 @@ export default function Stanby() {
   };
 
   testSession.on('publisherStopSpeaking', event => {
-    // 감지가 될 때 효과 줘버리깅
     Speaking(false);
   });
 

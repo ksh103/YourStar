@@ -1,12 +1,12 @@
-video {
+/* video {
   width: 13vw;
   height: 19vh;
-  /* cursor: pointer; */
-  border-radius: 2vw;
+  cursor: pointer;
+  border-radius: 0px;
   float: left;
   margin: 1vw;
   object-fit: cover;
-}
+} */
 
 .Star {
   width: 80.541vw;
@@ -34,4 +34,78 @@ video {
   z-index: 1;
   color: white;
   margin: 1vw;
+}
+
+.StarAdmin {
+  position: absolute;
+  /* width: 58.041vw;
+  height: 61.5vh; */
+  width: 60.041vw;
+  height: 66.5vh;
+  border-radius: 3.0643vh;
+  margin: 0;
+}
+
+.StarConcert {
+  position: absolute;
+  /* border: solid red; */
+  border-radius: 1vw;
+  height: 75vh;
+  width: 60vw;
+  background-color: white;
+  margin: 0;
+}
+
+.StarQnA {
+  position: relative;
+  width: 60.041vw;
+  height: 58.0725vh;
+  background-color: white;
+  border-radius: 3.0643vh;
+  margin: 0;
+}
+
+.StarRandom {
+  position: relative;
+  width: 28.041vw;
+  height: 66.5vh;
+  background-color: white;
+  border-radius: 3.0643vh;
+  box-shadow: 0.306vh 0.306vh gray;
+  margin-right: 4vw;
+  margin: 0;
+}
+
+.UserRandom {
+  position: relative;
+  width: 28.041vw;
+  height: 66.5vh;
+  background-color: white;
+  border-radius: 3.0643vh;
+  box-shadow: 0.306vh 0.306vh gray;
+  margin-right: 4vw;
+  margin: 0;
+}
+
+.StarOXGame {
+  position: relative;
+  width: 83.541vw;
+  height: 66.5vh;
+  background-color: white;
+  border-radius: 3.0643vh;
+  box-shadow: 0.306vh 0.306vh gray;
+  margin: 0;
+}
+/* 
+position: relative;
+  width: 60.041vw;
+  height: 58.0725vh;
+  background-color: white;
+  border-radius: 3.0643vh;
+  box-shadow: 0.306vh 0.306vh gray; */
+
+.StarConsonantGame {
+}
+
+.StarOneOnOne {
 }

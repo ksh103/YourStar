@@ -13,11 +13,11 @@ const BackgroundDiv = styled.div`
 
 export default function Admin() {
   return (
-    <BackgroundDiv>
+    <>
       <DefaultStarScreen></DefaultStarScreen>
       <ScheduleListSelect></ScheduleListSelect>
       <SmallChatting></SmallChatting>
       <LongStick></LongStick>
-    </BackgroundDiv>
+    </>
   );
 }
