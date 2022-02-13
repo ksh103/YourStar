@@ -243,10 +243,11 @@ class Room extends Component {
           mySession.on('signal:Cho', event => {
             let chodata = event.data.split(',');
             if (chodata[0] !== this.props.chosonantQuiz) {
-              this.props.dochosonantQuiz(chodata[1]);
+              this.props.dochosonantQuiz(chodata[1], chodata[2]);
             }
           });
         }
+
         if (this.props.userCode === 4) {
           // 스타일 때
           mySession.on('signal:ChoUserAns', event => {
@@ -771,7 +772,7 @@ const mapDispatchToProps = dispatch => {
     doemoziListAdd: emozi => dispatch(emoziListAdd(emozi)),
     doAddQnaList: QnAText => dispatch(AddQnaList(QnAText)),
     doDeleteSubscriber: subscribers => dispatch(UserDelete(subscribers)),
-    dochosonantQuiz: text => dispatch(choQuiz(text)),
+    dochosonantQuiz: (problem, answer) => dispatch(choQuiz(problem, answer)),
     doaudioChange: () => dispatch(audioChange()),
     doWarningToMemberAPI: (memberId, meetingId) =>
       WarningToMemberAPI({ memberId, meetingId }),
