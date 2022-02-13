@@ -4,7 +4,6 @@ import swal from 'sweetalert';
 import DefaultStarScreen from '../../CommonComponents/MainItems/DefaultStarScreen';
 import MyScreen from '../../CommonComponents/MainItems/MyScreens/MyScreen';
 import OtherPersonScreen from '../../CommonComponents/MainItems/OtherScreen/OtherPersonScreen';
-import ConsonantAllRank from '../../CommonComponents/RightSideItems/Game/ConsonantGame/ConsonantAllRank';
 import ConsonantUserInput from '../../CommonComponents/RightSideItems/Game/ConsonantGame/ConsonantUserInput';
 
 // 포지션작업
@@ -29,7 +28,6 @@ export default function UserConsonantGameStart() {
   return (
     <BackgroundDiv>
       <DefaultStarScreen></DefaultStarScreen>
-      <ConsonantAllRank></ConsonantAllRank>
       <ConsonantUserInput></ConsonantUserInput>
       <MyScreen></MyScreen>
       <OtherPersonScreen></OtherPersonScreen>
