@@ -36,30 +36,14 @@ export default function ScheduleListSelect() {
     state => state.MeetingRoom
   );
   const { endMeetingDone } = useSelector(state => state.meeting);
-  const OPENVIDU_SERVER_URL = 'https://i6e204.p.ssafy.io:8443';
-  const OPENVIDU_SERVER_SECRET = 'YOURSTAR';
 
   useEffect(() => {
     if (endMeetingDone) {
-      const sessionId = storeSession.sessionId;
-      const data = {
-        session: sessionId,
-        to: [],
-        type: 'signal:end',
+      storeSession.signal({
         data: '0',
-      };
-      axios
-        .post(OPENVIDU_SERVER_URL + '/openvidu/api/signal', data, {
-          headers: {
-            Authorization:
-              'Basic ' + btoa('OPENVIDUAPP:' + OPENVIDU_SERVER_SECRET),
-            'Content-Type': 'application/json',
-          },
-        })
-        .then(response => {
-          console.log(response);
-        })
-        .catch(error => console.error(error));
+        to: [],
+        type: 'end',
+      });
       storeSession.disconnect();
       history.push(`/schedule/${id}`);
     }

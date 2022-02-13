@@ -29,7 +29,6 @@ import { AddGameScoreAPI, CallGameRankAPI } from '../../store/apis/Room/game';
 import RoomComponent from './RoomComponent';
 import { BASE_URL } from '../../utils/contants';
 import Warning from '../../components/room/CommonComponents/Alert/Warning';
-import { useHistory } from 'react-router';
 // import { BackgroundDiv } from '../../../components/room/styles/roomGlobal';
 
 const OPENVIDU_SERVER_URL = 'https://i6e204.p.ssafy.io:8443';
@@ -407,22 +406,24 @@ class Room extends Component {
 
         // 경고창
         mySession.on('signal:warning', event => {
-          const history = useHistory();
-          this.setState({
-            warningCnt: event.data,
-          });
+          const url =
+            window.location.protocol +
+            '//' +
+            window.location.host +
+            `/schedule/${this.state.mySessionId}`;
           setTimeout(() => this.setState({ warningCnt: 0 }), 10000);
           if (parseInt(event.data) > 1) {
-            setTimeout(
-              () => history.push(`/schedule/${this.state.mySessionId}`),
-              10000
-            );
+            setTimeout(() => window.location.replace(url), 10000);
           }
         });
 
         // 종료 알림
         mySession.on('signal:end', event => {
-          const history = useHistory();
+          const url =
+            window.location.protocol +
+            '//' +
+            window.location.host +
+            `/schedule/${this.state.mySessionId}`;
           mySession.disconnect();
           swal({
             title: '미팅 종료 알림',
@@ -433,7 +434,7 @@ class Room extends Component {
             closeOnEsc: false,
             timer: 1500,
           }).then(() => {
-            history.push(`/schedule/${this.state.mySessionId}`);
+            window.location.replace(url);
           });
         });
 
