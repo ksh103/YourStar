@@ -76,31 +76,31 @@ export default function RandomChoiceMain() {
     });
 
     const ranList = JSON.stringify(usersNick);
+    const ranparse = JSON.parse(ran);
+    const nickoflucky = ranparse.clientData;
 
     storeSession.signal({
-      data: `${ranList}/${ran}`,
+      data: `${ranList}/${ran}/${nickoflucky}`,
       to: [],
       type: 'randomresult',
     });
-    const ranparse = JSON.parse(ran);
-    const nickoflucky = ranparse.clientData;
     console.log(nickoflucky, '당첨자 닉네임');
     randomoneperson(nickoflucky);
     setSomeone(randomresult);
   };
 
   storeSession.on('signal:randomresult', event => {
-    console.log('이벤트 받음!');
     const arr = event.data.split('/');
     const dangchum = JSON.parse(arr[1]);
     const Lists = JSON.parse(arr[0]);
+    const luckyUser = arr[2];
+    console.log(luckyUser, randomPerson, '☆☆☆☆☆☆☆☆☆');
+    randomoneperson(luckyUser);
     if (me.code === 3) {
       if (me.nick === dangchum.clientData) {
-        console.log('이건내가당첨정보오오⭐⭐⭐⭐');
         setSomeone(publisher);
       } else {
         subscribers.map((sub, idx) => {
-          console.log(sub.stream.connection.data, '서브정보오오⭐⭐⭐⭐');
           const user = JSON.parse(sub.stream.connection.data);
           const userid = user.clientdata;
           if (userid === dangchum.clientData) {
@@ -178,7 +178,7 @@ export default function RandomChoiceMain() {
       setUserScreen(true);
     }, 7500);
   });
-  console.log(somone, '당첨자정보오~⭐⭐⭐⭐');
+
   return (
     <MainDiv>
       <MainGrid>
