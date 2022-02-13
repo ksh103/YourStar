@@ -15,13 +15,6 @@ import {
 } from '../../../store/modules/meetingRoom';
 import StarVideoComponent from '../../../pages/Room/StarVideoComponent';
 
-// 포지션작업
-const BackgroundDiv = styled.div`
-  width: 100%;
-  height: 100%;
-  background-color: #e2d8ff;
-`;
-
 const ConcertWrapper = styled.div`
   position: absolute;
   top: 4.5%;
@@ -148,7 +141,7 @@ export default function Concert() {
   }, [chattingList]);
 
   return (
-    <BackgroundDiv>
+    <div>
       <ConcertWrapper>
         <ConcertDisplayBox>
           {mainStreamManager && (
@@ -194,6 +187,6 @@ export default function Concert() {
       </HalfSideDiv1>
       <EmoziBar></EmoziBar>
       <button onClick={() => SetSelect(0)}>홈으로</button>
-    </BackgroundDiv>
+    </div>
   );
 }

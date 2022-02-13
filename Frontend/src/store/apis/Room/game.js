@@ -12,7 +12,9 @@ export async function AddGameScoreAPI(meetingId, memberId) {
 
 // 게임 순위 불러오기
 export async function CallGameRankAPI(meetingId) {
-  const result = await axios.get(`${BASE_URL}meetings/game-result/admin/85`);
+  const result = await axios.get(
+    `${BASE_URL}meetings/game-result/admin/${meetingId}`
+  );
   console.log(result);
   return result;
 }

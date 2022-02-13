@@ -1,8 +1,10 @@
+import { CircularProgress } from '@mui/material';
 import React from 'react';
-import { useSelector } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import styled from 'styled-components';
 import swal from 'sweetalert';
-import { pointColor } from '../../../../styles/variables';
+import { CallGameRankAPI } from '../../../../store/apis/Room/game';
+import { ScreenChange } from '../../../../store/modules/meetingRoom';
 
 const StartButtonDiv = styled.div`
   position: absolute;
@@ -56,9 +58,9 @@ function cho_hangul(str) {
 }
 
 export default function GameButton() {
-  const { chosonantQuiz, storeSession } = useSelector(
-    state => state.MeetingRoom
-  );
+  const dispatch = useDispatch();
+  const { storeSession } = useSelector(state => state.MeetingRoom);
+  const { meeting } = useSelector(state => state.meeting);
   const { me } = useSelector(state => state.mypage);
 
   const onStartButton = () => {
@@ -85,11 +87,14 @@ export default function GameButton() {
   };
 
   const onEndButton = e => {
+    // 게임 등수 먼저 알려주기!
     storeSession.signal({
-      data: '', // 정답 신호 보내주기
+      // 종료 버튼 클릭
+      data: '0',
+      to: [],
       type: 'endCho',
     });
-  }; // 종료 클릭 시 대기화면으로 넘어가게 처리하기!
+  };
 
   return (
     <>
