@@ -2,7 +2,7 @@ import React from 'react';
 import styled from 'styled-components';
 import { OtherPersonDiv } from '../Main.style';
 import { useSelector, useDispatch } from 'react-redux';
-import UserVideoComponent from '../../../../../pages/Room/DongJun/UserVideoComponent';
+import UserVideoComponent from '../../../../../pages/Room/UserVideoComponent';
 import ConsonantAllRank from '../../RightSideItems/Game/ConsonantGame/ConsonantAllRank';
 
 const OtherPersonSc = styled.div`
@@ -27,15 +27,6 @@ export default function OtherPersonScreen() {
     storeSession: state.MeetingRoom.storeSession,
   }));
 
-  // const forceMicOff = sub => {
-  //   console.log(sub.stream.connection.connectionId, '커넥션id');
-  //   const connectionId = sub.stream.connection.connectionId;
-  //   storeSession.signal({
-  //     data: 'off your mic',
-  //     to: [connectionId],
-  //     type: 'mic',
-  //   });
-  // };
   return (
     <OtherPersonDiv>
       <OtherPersonSc>
