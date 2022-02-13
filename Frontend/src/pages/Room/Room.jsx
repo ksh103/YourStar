@@ -5,7 +5,6 @@ import React, { Component } from 'react';
 import './App.css';
 import { connect } from 'react-redux';
 import swal from 'sweetalert';
-import sweetAlertStyles from '../../styles/sweetAlert.module.css';
 
 // action 호출
 import {
@@ -25,9 +24,11 @@ import {
   UpdateOneByOneStream,
 } from '../../store/modules/meetingRoom';
 import { WarningToMemberAPI } from '../../store/apis/Main/meeting';
+import { AddGameScoreAPI, CallGameRankAPI } from '../../store/apis/Room/game';
 // 컴포넌트
 import RoomComponent from './RoomComponent';
 import { BASE_URL } from '../../utils/contants';
+import { data } from '@tensorflow/tfjs';
 
 const OPENVIDU_SERVER_URL = 'https://i6e204.p.ssafy.io:8443';
 const OPENVIDU_SERVER_SECRET = 'YOURSTAR';
@@ -235,9 +236,10 @@ class Room extends Component {
         }
 
         if (this.props.userCode === 4) {
-          // 맞춘 유저 수가 3명보다 적다면
+          // 스타일 때
           mySession.on('signal:ChoUserAns', event => {
             if (this.state.choAnsUserCnt < 4) {
+              // 맞춘 유저 수가 3명보다 적다면
               // 세션 받와와서 처리해주기
               let chodata = event.data.split(',');
               swal(
@@ -245,19 +247,8 @@ class Room extends Component {
                 '축하합니다',
                 { timer: 1800, button: false }
               );
-              switch (this.state.choAnsUserCnt) {
-                case 1: // 1등이면
-                  // 100점 axios 추가하기
-                  break;
-                case 2: // 2등이면
-                  // 80점 axios 추가하기
-                  break;
-                case 3: // 3등이면
-                  // 50점 axios 추가하기
-                  break;
-                default:
-                  break;
-              }
+              // DB에 넣어주기 chodata[1] -> memberId
+              AddGameScoreAPI(this.props.meetingId, chodata[1]);
               this.setState({ choAnsUserCnt: this.state.choAnsUserCnt + 1 }); // 맞춘 사람 수 1 늘리기
             }
             if (this.state.choAnsUserCnt === 4) {
@@ -268,16 +259,15 @@ class Room extends Component {
                 swal('🎇3명의 정답자가 나왔습니다.🎇', '게임이 초기화됩니다.', {
                   button: false,
                   timer: 2000,
+                }).then(() => {
+                  mySession.signal({
+                    // 초기화 신호 보내기
+                    data: '5',
+                    to: [],
+                    type: 'endConsonant',
+                  });
                 });
               }, 2000);
-              setTimeout(function () {
-                mySession.signal({
-                  // 초기화 신호 보내기
-                  data: '5',
-                  to: [],
-                  type: 'endConsonant',
-                });
-              }, 4000);
             }
           });
         }
@@ -294,6 +284,7 @@ class Room extends Component {
 
         // 초성게임 종료
         mySession.on('signal:endCho', () => {
+          CallGameRankAPI(this.props.meetingId); // 게임정보 호출
           this.props.doScreenChange(0);
           this.props.publisher.publishVideo(true);
         });
