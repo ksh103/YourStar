@@ -29,15 +29,11 @@ import { AddGameScoreAPI, CallGameRankAPI } from '../../store/apis/Room/game';
 import RoomComponent from './RoomComponent';
 import { BASE_URL } from '../../utils/contants';
 import Warning from '../../components/room/CommonComponents/Alert/Warning';
+// import { BackgroundDiv } from '../../../components/room/styles/roomGlobal';
 
 const OPENVIDU_SERVER_URL = 'https://i6e204.p.ssafy.io:8443';
 const OPENVIDU_SERVER_SECRET = 'YOURSTAR';
-const BackgroundDiv = styled.div`
-  width: 100%;
-  height: 100%;
-  background-color: #e2d8ff;
-  color: 'white';
-`;
+
 const List = [
   '대기화면',
   '공연모드',
@@ -300,9 +296,93 @@ class Room extends Component {
 
         // 초성게임 종료
         mySession.on('signal:endCho', () => {
-          CallGameRankAPI(this.props.meetingId); // 게임정보 호출
-          this.props.doScreenChange(0);
-          this.props.publisher.publishVideo(true);
+          CallGameRankAPI(85); // 1. 점수 집계 중입니다 먼저 띄워주기 (API 받아오기) 1초
+          //this.props.meetingId
+          swal({
+            title: '점수 집계중',
+            icon: 'https://www.gjstec.or.kr/img/loading.gif',
+            text: '잠시만 기다려 주세요',
+            timer: 3000,
+            button: false,
+            closeOnClickOutside: false,
+            closeOnEsc: false,
+          }).then(() => {
+            swal(
+              '현재까지 게임 순위 결과 \n 축하합니다!🎉',
+              '🥇: 손은성\n 🥈: 박동준 \n 🥉: 안영원',
+              {
+                // 2. 점수 띄워주기 (최종 등수 알려주기) 3초
+                timer: 3000,
+                button: false,
+                closeOnClickOutside: false,
+                closeOnEsc: false,
+              }
+            ).then(() => {
+              swal({
+                // 3. 게임 종료 알려주기 세션으로 돌아가기 (종료) 2초
+                title: '초성 게임 세션 종료',
+                text: '대기화면으로 이동합니다',
+                icon: 'info',
+                buttons: false,
+                closeOnClickOutside: false,
+                closeOnEsc: false,
+                timer: 2000,
+              }).then(() => {
+                mySession.signal({
+                  data: '0',
+                  to: [],
+                  type: 'screen',
+                });
+                this.props.doScreenChange(0);
+              });
+            });
+          });
+        });
+
+        // OX게임 종료
+        mySession.on('signal:endOX', () => {
+          CallGameRankAPI(85); // 1. 점수 집계 중입니다 먼저 띄워주기 (API 받아오기) 1초
+          //this.props.meetingId
+          swal({
+            title: '점수 집계중',
+            icon: 'https://www.gjstec.or.kr/img/loading.gif',
+            text: '잠시만 기다려 주세요',
+            timer: 3000,
+            button: false,
+            closeOnClickOutside: false,
+            closeOnEsc: false,
+          }).then(() => {
+            swal(
+              '현재까지 게임 순위 결과 \n 축하합니다!🎉',
+              '🥇: 손은성 \n 🥈: 박동준 \n 🥉: 안영원',
+              {
+                // 2. 점수 띄워주기 (최종 등수 알려주기) 3초
+
+                timer: 3000,
+                button: false,
+                closeOnClickOutside: false,
+                closeOnEsc: false,
+              }
+            ).then(() => {
+              swal({
+                // 3. 게임 종료 알려주기 세션으로 돌아가기 (종료) 2초
+                title: 'OX게임 세션 종료',
+                text: '대기화면으로 이동합니다',
+                icon: 'info',
+                buttons: false,
+                closeOnClickOutside: false,
+                closeOnEsc: false,
+                timer: 2000,
+              }).then(() => {
+                mySession.signal({
+                  data: '0',
+                  to: [],
+                  type: 'screen',
+                });
+                this.props.doScreenChange(0);
+              });
+            });
+          });
         });
 
         mySession.on('signal:audio', event => {
@@ -323,14 +403,17 @@ class Room extends Component {
           }
         });
 
-        // 경고창 
+        // 경고창
         mySession.on('signal:warning', event => {
           this.setState({
-            warningCnt: event.data
-          })
-          setTimeout(() => this.setState({warningCnt: 0}), 10000)
+            warningCnt: event.data,
+          });
+          setTimeout(() => this.setState({ warningCnt: 0 }), 10000);
           if (parseInt(event.data) > 1) {
-            setTimeout(() => window.location.replace('https://i6e204.p.ssafy.io/'), 10000)
+            setTimeout(
+              () => window.location.replace('https://i6e204.p.ssafy.io/'),
+              10000
+            );
           }
         });
 
@@ -341,7 +424,7 @@ class Room extends Component {
               // 추가로 넘겨주고 싶은 데이터가 있으면 여기에 추가
               clientData: this.state.me.nick,
               memberCode: this.state.me.code,
-              memberId: this.state.me.memberId
+              memberId: this.state.me.memberId,
             })
             .then(() => {
               // 연결 후에 내 정보를 담기
@@ -512,7 +595,7 @@ class Room extends Component {
   }
 
   stopRecording() {
-    console.log('recordid -------- ',this.state.recordId);
+    console.log('recordid -------- ', this.state.recordId);
     axios
       .post(BASE_URL + 'meetings/recording', {
         meetingId: this.state.mySessionId,
@@ -542,9 +625,11 @@ class Room extends Component {
 
   render() {
     return (
-      <BackgroundDiv>
+      <div>
         {/* 경고창 */}
-        {this.state.warningCnt !== 0 ? (<Warning warningCnt={this.state.warningCnt}></Warning>) : null}
+        {this.state.warningCnt !== 0 ? (
+          <Warning warningCnt={this.state.warningCnt}></Warning>
+        ) : null}
         {/* 컴포넌트는 들고왔을 때 잘 작동함 */}
         <div className="container">
           {this.state.session === undefined ? (
@@ -555,7 +640,7 @@ class Room extends Component {
             </div>
           )}
         </div>
-      </BackgroundDiv>
+      </div>
     );
   }
 

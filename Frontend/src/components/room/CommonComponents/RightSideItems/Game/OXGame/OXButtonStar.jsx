@@ -37,6 +37,35 @@ const XButton = styled.div`
   height: 13vh;
   width: 18vw;
 `;
+
+const RecogButtonDiv = styled.div`
+  position: absolute;
+  top: 90vh;
+  left: 42vw;
+  background-color: #f5f5f5;
+  border-radius: 1vw;
+  padding: 10px;
+  font-size: 1.4vw;
+  width: 6vw;
+  text-align: center;
+`;
+const StartButtonDiv = styled.div`
+  position: absolute;
+  top: 90vh;
+  left: 51vw;
+  background-color: #f5f5f5;
+  border-radius: 1vw;
+  padding: 10px;
+`;
+const EndButtonDiv = styled.div`
+  position: absolute;
+  top: 90vh;
+  left: 60vw;
+  background-color: #f5f5f5;
+  border-radius: 1vw;
+  padding: 10px;
+`;
+
 export default function OXButtonStar() {
   const [isStart, setIsStart] = useState(false);
   const [doneCnt, setDoneCnt] = useState(0);
@@ -103,19 +132,11 @@ export default function OXButtonStar() {
 
   // 스타가 OX게임 세션종료
   const oxStop = e => {
-    swal({
-      title: 'OX 게임 세션 종료',
-      text: '대기화면으로 이동합니다',
-      icon: 'info',
-      buttons: false,
-      timer: 3000,
-    }).then(() => {
-      storeSession.signal({
-        data: '0',
-        to: [],
-        type: 'screen',
-      });
-      dispatch(ScreenChange(0));
+    storeSession.signal({
+      // 종료 버튼 클릭
+      data: '0',
+      to: [],
+      type: 'endOX',
     });
   };
 
@@ -129,19 +150,25 @@ export default function OXButtonStar() {
       <HalfSideDiv2>
         <SmallBox>
           {console.log(doneCnt + ' / ' + subscribers.length)}
-          {isStart ? (
-            <div>
-              <OButton onClick={OXClick}>O</OButton>
-              <XButton onClick={OXClick}>X</XButton>
-            </div>
-          ) : (
-            <>
-              <button onClick={start}>Start</button>
-              <button onClick={oxStop}>OX게임세션 종료</button>
-            </>
-          )}
+          <div>
+            <OButton onClick={OXClick}>O</OButton>
+            <XButton onClick={OXClick}>X</XButton>
+          </div>
         </SmallBox>
       </HalfSideDiv2>
+      <RecogButtonDiv>
+        {doneCnt} / {subscribers.length}
+      </RecogButtonDiv>
+      <StartButtonDiv>
+        <button style={{ fontSize: '1.4vw' }} onClick={start}>
+          게임시작
+        </button>
+      </StartButtonDiv>
+      <EndButtonDiv>
+        <button style={{ fontSize: '1.4vw' }} onClick={oxStop}>
+          게임종료
+        </button>
+      </EndButtonDiv>
     </>
   );
 }
