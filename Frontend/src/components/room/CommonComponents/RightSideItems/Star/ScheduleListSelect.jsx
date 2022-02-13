@@ -13,6 +13,7 @@ import { blockColor } from '../../../../../styles/variables';
 import swal from 'sweetalert';
 import { useHistory, useParams } from 'react-router';
 import { END_MEETING_REQUEST } from '../../../../../store/modules/meeting';
+import axios from 'axios';
 
 const List = [
   '대기화면',
@@ -35,16 +36,37 @@ export default function ScheduleListSelect() {
     state => state.MeetingRoom
   );
   const { endMeetingDone } = useSelector(state => state.meeting);
+  const OPENVIDU_SERVER_URL = 'https://i6e204.p.ssafy.io:8443';
+  const OPENVIDU_SERVER_SECRET = 'YOURSTAR';
 
   useEffect(() => {
     if (endMeetingDone) {
+      const sessionId = storeSession.sessionId;
+      const data = {
+        session: sessionId,
+        to: [],
+        type: 'signal:end',
+        data: '0',
+      };
+      axios
+        .post(OPENVIDU_SERVER_URL + '/openvidu/api/signal', data, {
+          headers: {
+            Authorization:
+              'Basic ' + btoa('OPENVIDUAPP:' + OPENVIDU_SERVER_SECRET),
+            'Content-Type': 'application/json',
+          },
+        })
+        .then(response => {
+          console.log(response);
+        })
+        .catch(error => console.error(error));
       storeSession.disconnect();
       history.push(`/schedule/${id}`);
     }
   }, [endMeetingDone, history, id, storeSession]);
 
   const SetSelect = selectNum => {
-    if (selectNum === 4) dispatch(ResetIndex());
+    if (selectNum === 6) dispatch(ResetIndex());
 
     storeSession.signal({
       data: `${selectNum}`,

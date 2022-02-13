@@ -52,6 +52,6 @@ public class SwaggerConfig {
                 .termsOfServiceUrl("https://edu.ssafy.com")
                 .contact(new Contact("SSAFY", "https://edu.ssafy.com", "ssafy@ssafy.com"))
                 .license("SSAFY License")
-                .licenseUrl("ssafy@ssafy.com").version("2.7").build();
+                .licenseUrl("ssafy@ssafy.com").version("2.8").build();
     }
 }
