@@ -64,7 +64,7 @@ export default function UserQnA() {
 
   const reQnASwal = event => {
     swal({
-      text: '여러분의 스타에게 궁금하거나 하고 싶었던 말을 적어주세요 !',
+      text: '💌 여러분의 스타에게 궁금하거나 하고 싶었던 말을 적어 전송해주세요 !',
       content: "input",
       button: '전송'
     }).then( value => {

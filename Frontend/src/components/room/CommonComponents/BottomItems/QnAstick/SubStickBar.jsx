@@ -5,6 +5,7 @@ import {
   changeQnAMode,
   changeQnAtoggle,
 } from '../../../../../store/modules/meetingRoom';
+import swal from 'sweetalert';
 
 // dispatch action 사용하기! 이때는 넘겨주는 값이 있어야합니다.
 // useSelectot  -> state의 정보 받아오기
@@ -66,15 +67,43 @@ export default function SubStickBar() {
   const QnAChange = str => {
     if (str === 'list') { // 리스트면 화면 바뀌기 
       dispatch(changeQnAtoggle(false));
-    } else {  // 시작 또는 중지 신호라면 사용자들에게 신호 보내기 
-      storeSession.signal({
-        data: `${str}`,
-        to: [],
-        type: 'QnAmode',
-      });
+    } else {  
+      if (str === 'start'){
+        swal({
+          text: '💌 팬분들이 궁금했던 것들이나 하고 싶었던 말을 받아볼까요 ?',
+          buttons: {
+            cancel: true,
+            confirm: true,
+          }
+        }).then(event => {
+          if (event === true) {
+            storeSession.signal({ // 사용자에게 시작 신호 보내기 
+              data: `${str}`,
+              to: [],
+              type: 'QnAmode',
+            });
+          }
+        })
+      } else {
+        swal({
+          text: '💌 포스트잇 받기를 중단할까요 ? \n (Q&A 시작 버튼을 통해 언제든 다시 포스트잇을 받을 수 있습니다.)',
+          buttons: {
+            cancel: true,
+            confirm: true,
+          }
+        }).then(event => {
+          if (event === true) {
+            storeSession.signal({ // 사용자에게 종료 신호 보내기 
+              data: `${str}`,
+              to: [],
+              type: 'QnAmode',
+            });
+          }
+        })
+      }
       dispatch(changeQnAtoggle(true)) // start나 stop으로 다시 돌아갈 수 있도록 
     }
-    dispatch(changeQnAMode(str));
+    dispatch(changeQnAMode(str)); // 모드 변경 
   };
 
   return (
