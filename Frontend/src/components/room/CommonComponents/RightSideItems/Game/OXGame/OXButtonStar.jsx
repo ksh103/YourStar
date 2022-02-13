@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import styled from 'styled-components';
 import { SmallBox, HalfSideDiv2 } from '../../Chatting/Chatting.style';
 import { useSelector, useDispatch } from 'react-redux';
@@ -9,6 +9,7 @@ import {
 
 import { ScreenChange } from '../../../../../../store/modules/meetingRoom';
 import swal from 'sweetalert';
+import { AddGameScoreAPI } from '../../../../../../store/apis/Room/game';
 const OButton = styled.div`
   position: absolute;
   background-color: #2525ff;
@@ -37,8 +38,38 @@ const XButton = styled.div`
   height: 13vh;
   width: 18vw;
 `;
+
+const RecogButtonDiv = styled.div`
+  position: absolute;
+  top: 90vh;
+  left: 42vw;
+  background-color: #f5f5f5;
+  border-radius: 1vw;
+  padding: 10px;
+  font-size: 1.4vw;
+  width: 6vw;
+  text-align: center;
+`;
+const StartButtonDiv = styled.div`
+  position: absolute;
+  top: 90vh;
+  left: 51vw;
+  background-color: #f5f5f5;
+  border-radius: 1vw;
+  padding: 10px;
+`;
+const EndButtonDiv = styled.div`
+  position: absolute;
+  top: 90vh;
+  left: 60vw;
+  background-color: #f5f5f5;
+  border-radius: 1vw;
+  padding: 10px;
+`;
+
 export default function OXButtonStar() {
   const [isStart, setIsStart] = useState(false);
+  const [doneCnt, setDoneCnt] = useState(0);
 
   const { storeSession, subscribers } = useSelector(state => ({
     storeSession: state.MeetingRoom.storeSession,
@@ -51,8 +82,8 @@ export default function OXButtonStar() {
 
   const dispatch = useDispatch();
 
+  // 스타가 OX 끝남
   const OXClick = e => {
-    console.log('==== 스타가 OX게임 끝냄 ====');
     setIsStart(false);
     dispatch(oxGameRound());
     storeSession.signal({
@@ -62,16 +93,27 @@ export default function OXButtonStar() {
     });
     dispatch(signalOX(e.target.innerText));
 
+    var meetingId = storeSession.sessionId;
+    for (var i = 0; i < subscribers.length; i++) {
+      if (subscribers[i].stream.videoActive) {
+        var memberId = JSON.parse(
+          subscribers[i].stream.connection.data
+        ).memberId;
+        AddGameScoreAPI(meetingId, memberId); // 살아남은 사람 점수 추가 API
+      }
+    }
+
     swal({
       title: OXgameCount + '라운드 종료',
-      text: '정답을 맞추지 못한 유저의 화면이 꺼집니다',
+      text: '정답을 맞추지 못한 유저의 화면이 꺼집니다\n점수가 DB에 반영되었습니다',
       buttons: false,
-      timer: 1500,
+      timer: 2000,
     });
   };
 
+  // 스타가 OX게임 시작시킴
   const start = e => {
-    console.log('==== 스타가 OX게임 시작 ====');
+    setDoneCnt(0);
     setIsStart(true);
     storeSession.signal({
       data: 'Start OX Game',
@@ -86,52 +128,44 @@ export default function OXButtonStar() {
     });
   };
 
+  // 스타가 OX게임 세션종료
   const oxStop = e => {
-    console.log('==== OX게임세션 종료 ====');
-    var meetingId = storeSession.sessionId;
-    for (var i = 0; i < subscribers.length; i++) {
-      if (subscribers[i].stream.videoActive) {
-        var memberId = JSON.parse(
-          subscribers[i].stream.connection.data
-        ).memberId;
-        console.log(
-          '미팅룸 ' + meetingId + '번에서 ' + memberId + '가 살아남았습니다.'
-        );
-      }
-    }
-    swal({
-      title: 'OX 게임 세션 종료',
-      text: '우승자가 DB에 저장되었습니다',
-      icon: 'info',
-      buttons: false,
-      timer: 3000,
-    }).then(() => {
-      storeSession.signal({
-        data: '0',
-        to: [],
-        type: 'screen',
-      });
-      dispatch(ScreenChange(0));
+    storeSession.signal({
+      // 종료 버튼 클릭
+      data: '0',
+      to: [],
+      type: 'endOX',
     });
   };
+
+  // OX 게임 인식 완료 신호 수신
+  storeSession.on('signal:OXDone', event => {
+    setDoneCnt(doneCnt + 1);
+  });
 
   return (
     <>
       <HalfSideDiv2>
         <SmallBox>
-          {isStart ? (
-            <div>
-              <OButton onClick={OXClick}>O</OButton>
-              <XButton onClick={OXClick}>X</XButton>
-            </div>
-          ) : (
-            <>
-              <button onClick={start}>Start</button>
-              <button onClick={oxStop}>OX게임세션 종료</button>
-            </>
-          )}
+          <div>
+            <OButton onClick={OXClick}>O</OButton>
+            <XButton onClick={OXClick}>X</XButton>
+          </div>
         </SmallBox>
       </HalfSideDiv2>
+      <RecogButtonDiv>
+        {doneCnt} / {subscribers.length}
+      </RecogButtonDiv>
+      <StartButtonDiv>
+        <button style={{ fontSize: '1.4vw' }} onClick={start}>
+          게임시작
+        </button>
+      </StartButtonDiv>
+      <EndButtonDiv>
+        <button style={{ fontSize: '1.4vw' }} onClick={oxStop}>
+          게임종료
+        </button>
+      </EndButtonDiv>
     </>
   );
 }

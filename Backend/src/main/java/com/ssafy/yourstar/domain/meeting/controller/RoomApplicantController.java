@@ -2,6 +2,7 @@ package com.ssafy.yourstar.domain.meeting.controller;
 
 import com.ssafy.yourstar.domain.meeting.db.entity.Meeting;
 import com.ssafy.yourstar.domain.meeting.request.MeetingApplyByStarPostReq;
+import com.ssafy.yourstar.domain.meeting.request.MeetingRoomEndByStarPostReq;
 import com.ssafy.yourstar.domain.meeting.service.MeetingService;
 import com.ssafy.yourstar.global.model.response.BaseResponseBody;
 import io.swagger.annotations.Api;
@@ -15,6 +16,7 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartHttpServletRequest;
 
 import java.io.IOException;
+import java.time.LocalDateTime;
 
 @Api("미팅룸 관계자 관련 API")
 @Slf4j
@@ -74,4 +76,15 @@ public class RoomApplicantController {
             return ResponseEntity.status(400).body(BaseResponseBody.of(400, "This MeetingId doesn't exist"));
         }
     }
-}
+
+    @ApiOperation(value = "팬미팅 종료")
+    @PutMapping("/room-close")
+    public ResponseEntity<? extends BaseResponseBody> meetingEndByStar (@ApiParam(value = "팬미팅 번호")MeetingRoomEndByStarPostReq meetingRoomEndByStarPostReq) {
+
+        log.info("meetingEndByStar - Call");
+
+        meetingService.meetingEndByStar(meetingRoomEndByStarPostReq, LocalDateTime.now().plusHours(9).minusMinutes(1));
+
+        return ResponseEntity.status(200).body(BaseResponseBody.of(200, "Success"));
+    }
+ }

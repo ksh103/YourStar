@@ -5,20 +5,20 @@ import OtherPersonScreen from '../../CommonComponents/MainItems/OtherScreen/Othe
 import MyScreen from '../../CommonComponents/MainItems/MyScreens/MyScreen';
 
 import * as tmPose from '@teachablemachine/pose';
+import axios from 'axios';
 
 // 추가
 import swal from 'sweetalert';
 import { useSelector } from 'react-redux';
+import { TM_URL } from '../../../../utils/contants';
+import { AddGameScoreAPI } from '../../../../store/apis/Room/game';
 
-// 포지션작업
-const BackgroundDiv = styled.div`
-  width: 100%;
-  height: 100%;
-  background-color: #e2d8ff;
-`;
+const OPENVIDU_SERVER_URL = 'https://i6e204.p.ssafy.io:8443';
+const OPENVIDU_SERVER_SECRET = 'YOURSTAR';
 
 export default function UserOXGame() {
   const [isCorrect, setIsCorrect] = useState(true); // 탈락 여부
+  const [recognize, setRecognize] = useState(0); // 인식 여부
   const { storeSession, publisher } = useSelector(state => ({
     storeSession: state.MeetingRoom.storeSession,
     publisher: state.MeetingRoom.publisher,
@@ -32,11 +32,12 @@ export default function UserOXGame() {
     loopPredict: undefined,
     maxPredictions: null,
     model: null,
-    URL: 'https://teachablemachine.withgoogle.com/models/2c2rSxbLy/',
+    URL: TM_URL,
   };
 
   storeSession.on('signal:OXStart', event => {
     console.log('=== 유저가 OX게임 시작 신호 받음 ===');
+    setRecognize(0);
     start();
   });
 
@@ -49,7 +50,7 @@ export default function UserOXGame() {
     if (state.userAnswer === starAnswer) {
       swal({
         title: round + '라운드 종료',
-        text: '정답',
+        text: '정답 50point 적립!',
         icon: 'success',
         buttons: false,
         timer: 1500,
@@ -118,16 +119,18 @@ export default function UserOXGame() {
     const prediction = await state.model.predict(posenetOutput);
 
     for (let i = 0; i < state.maxPredictions; i++) {
-      swal({
-        text:
-          (state.answer === 0 ? '' : '❌') +
-          ' 인식 ' +
-          state.cnt +
-          '% 진행중...!',
-        buttons: false,
-        timer: 1000,
-        customClass: 'sweet-color',
-      }).then(() => {});
+      if (state.cnt % 10 === 0) {
+        swal({
+          text:
+            (state.answer === 0 ? '⭕' : '❌') +
+            ' 인식 ' +
+            state.cnt +
+            '% 진행중...!',
+          buttons: false,
+          timer: 1000,
+        });
+      }
+
       if (
         prediction[0].probability.toFixed(2) >= 0.5 &&
         state.userAnswer === ''
@@ -154,12 +157,40 @@ export default function UserOXGame() {
     if (state.cnt >= 100 && isCorrect) {
       state.userAnswer = state.answer === 0 ? 'O' : 'X';
       swal({
-        title: (state.userAnswer === 'O' ? '⭕' : '❌') + ' 인식 성공!',
-        text: '잠시만 기다려 주세요!',
-        timer: 2000,
-        button: false,
-      }).then(() => {});
+        text:
+          (state.answer === 0 ? '⭕' : '❌') + ' 인식 ' + 100 + '% 진행중...!',
+        buttons: false,
+        timer: 300,
+      }).then(() => {
+        swal({
+          title: (state.userAnswer === 'O' ? '⭕' : '❌') + ' 인식 성공!',
+          text: '잠시만 기다려 주세요!',
+          timer: 2000,
+          button: false,
+        }).then(() => {
+          // 인식완료시 스타에게 정보 보냄
+          const sessionId = storeSession.sessionId;
 
+          const data = {
+            session: sessionId,
+            to: [],
+            type: 'signal:OXDone',
+            data: '0',
+          };
+          axios
+            .post(OPENVIDU_SERVER_URL + '/openvidu/api/signal', data, {
+              headers: {
+                Authorization:
+                  'Basic ' + btoa('OPENVIDUAPP:' + OPENVIDU_SERVER_SECRET),
+                'Content-Type': 'application/json',
+              },
+            })
+            .then(response => {
+              console.log(response);
+            })
+            .catch(error => console.error(error));
+        });
+      });
       stopMission();
     }
   }
@@ -172,13 +203,13 @@ export default function UserOXGame() {
   };
 
   return (
-    <BackgroundDiv>
+    <div>
       <OXUserScreen></OXUserScreen>
       <MyScreen></MyScreen>
       <OtherPersonScreen></OtherPersonScreen>
-      {/* <button type="button" onClick={() => start()}>
+      <button type="button" onClick={() => start()}>
         Start
-      </button> */}
-    </BackgroundDiv>
+      </button>
+    </div>
   );
 }

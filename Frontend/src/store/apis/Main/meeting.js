@@ -12,6 +12,16 @@ export async function MeetingDetailAPI({ meetingId, memberId }) {
     .then(res => res.data.content);
   const applicantCnt = applicant.length;
   const isReserve = applicant.some(a => a.memberId === memberId);
+  const warningCount = isReserve
+    ? await axios
+        .get(`${BASE_URL}meetings/warning/${memberId}/${meetingId}`)
+        .then(res => {
+          if (res.data.message === 'Success') {
+            return res.data.applicant.applicantWarnCount;
+          }
+        })
+    : 0;
+
   return {
     id: result.meetingId,
     code: result.managerCode,
@@ -27,6 +37,7 @@ export async function MeetingDetailAPI({ meetingId, memberId }) {
     approve: result.approve,
     applicantCnt,
     isReserve,
+    warningCount,
   };
 }
 
@@ -61,7 +72,7 @@ export async function ApprovedMeetingListAPI({ page, size }) {
       startDate: data.meetingStartDate,
       endDate: data.meetingEndDate,
       approve: data.approve,
-      image: data.meetingImgPath,
+      image: data.meetingImgPath.fileId,
     };
   });
 }
@@ -107,6 +118,11 @@ export async function WarningToMemberAPI({ memberId, meetingId }) {
   return result;
 }
 
+// 미팅 종료
+export async function EndMeetingAPI(meetingId) {
+  await axios.put(`${BASE_URL}meetings/room-close?meetingId=${meetingId}`);
+}
+
 // 스타가 팬미팅 신청
 export async function InsertMeetingAPI({
   code,
@@ -144,29 +160,4 @@ export async function InsertMeetingAPI({
       'Content-Type': `multipart/form-data`,
     },
   });
-}
-
-// 스타가 팬미팅 수정
-export async function UpdateMeetingAPI({
-  meetingCnt,
-  meetingDescription,
-  meetingEndDate,
-  meetingOpenDate,
-  meetingPrice,
-  meetingStartDate,
-}) {
-  const result = await axios.put(`${BASE_URL}meeting/room-application`, {
-    meetingCnt,
-    meetingDescription,
-    meetingEndDate,
-    meetingOpenDate,
-    meetingPrice,
-    meetingStartDate,
-  });
-  return result;
-}
-
-// 스타가 팬미팅 제거
-export async function DeleteMeetingAPI(meetingId) {
-  await axios.delete(`${BASE_URL}meeting/room-applicant/${meetingId}`);
 }

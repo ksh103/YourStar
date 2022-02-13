@@ -1,0 +1,113 @@
+import { CircularProgress } from '@mui/material';
+import React from 'react';
+import { useDispatch, useSelector } from 'react-redux';
+import styled from 'styled-components';
+import swal from 'sweetalert';
+import { CallGameRankAPI } from '../../../../store/apis/Room/game';
+import { ScreenChange } from '../../../../store/modules/meetingRoom';
+
+const StartButtonDiv = styled.div`
+  position: absolute;
+  top: 90vh;
+  left: 51vw;
+  background-color: #f5f5f5;
+  border-radius: 1vw;
+  padding: 10px;
+`;
+const EndButtonDiv = styled.div`
+  position: absolute;
+  top: 90vh;
+  left: 60vw;
+  background-color: #f5f5f5;
+  border-radius: 1vw;
+  padding: 10px;
+`;
+
+function cho_hangul(str) {
+  const cho = [
+    'ㄱ',
+    'ㄲ',
+    'ㄴ',
+    'ㄷ',
+    'ㄸ',
+    'ㄹ',
+    'ㅁ',
+    'ㅂ',
+    'ㅃ',
+    'ㅅ',
+    'ㅆ',
+    'ㅇ',
+    'ㅈ',
+    'ㅉ',
+    'ㅊ',
+    'ㅋ',
+    'ㅌ',
+    'ㅍ',
+    'ㅎ',
+  ];
+  let result = '';
+  for (let i = 0; i < str.length; i++) {
+    let code = str.charCodeAt(i) - 44032;
+    if (code > -1 && code < 11172) {
+      result += cho[Math.floor(code / 588)];
+    } else {
+      result += str.charAt(i);
+    }
+  }
+  return result;
+}
+
+export default function GameButton() {
+  const dispatch = useDispatch();
+  const { storeSession } = useSelector(state => state.MeetingRoom);
+  const { meeting } = useSelector(state => state.meeting);
+  const { me } = useSelector(state => state.mypage);
+
+  const onStartButton = () => {
+    swal(
+      '🔔초성게임🔔',
+      '팬들에게 제출할 문제를 입력해주세요! 문제는 초성으로 자동 변경되어 제출됩니다.',
+      {
+        closeOnClickOutside: false,
+        content: 'input',
+        button: '제출',
+      }
+    ).then(answer => {
+      const problem = cho_hangul(answer);
+      storeSession.signal({
+        data: `${me.nick},${problem},${answer}`, // 정답 신호 보내주기
+        type: 'Cho',
+      });
+      swal(
+        '문제가 출제되었습니다.',
+        '선착순으로 정답을 맞춘 3명의 정보가 나타납니다.',
+        'success'
+      );
+    });
+  };
+
+  const onEndButton = e => {
+    // 게임 등수 먼저 알려주기!
+    storeSession.signal({
+      // 종료 버튼 클릭
+      data: '0',
+      to: [],
+      type: 'endCho',
+    });
+  };
+
+  return (
+    <>
+      <StartButtonDiv>
+        <button style={{ fontSize: '1.4vw' }} onClick={onStartButton}>
+          게임시작
+        </button>
+      </StartButtonDiv>
+      <EndButtonDiv>
+        <button style={{ fontSize: '1.4vw' }} onClick={onEndButton}>
+          게임종료
+        </button>
+      </EndButtonDiv>
+    </>
+  );
+}

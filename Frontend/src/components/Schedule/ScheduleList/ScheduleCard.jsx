@@ -21,10 +21,7 @@ export default function ScheduleCard({ meeting }) {
             {meeting.image === null ? (
               <img src="/images/noimg.gif" alt="no_image" />
             ) : (
-              <img
-                src={`${IMAGE_URL}${meeting.image.fileId}`}
-                alt="사진 없노"
-              />
+              <img src={`${IMAGE_URL}${meeting.image}`} alt="사진 없노" />
             )}
           </Link>
         </ScheduleCardImage>

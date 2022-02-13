@@ -1,14 +1,7 @@
 import React, { useEffect, useState } from 'react';
-import {
-  HalfSideDiv2,
-  SmallBox,
-  SmallChattingInputBox,
-  SmallChattingListBox,
-} from '../../Chatting/Chatting.style';
 import { useSelector } from 'react-redux';
 import swal from 'sweetalert';
-import { BsSlack } from 'react-icons/bs';
-import SmallChatting from '../../Chatting/SmallChatting';
+import LongChatting from '../../Chatting/LongChatting';
 export default function ConsonantUserInput() {
   const [userConsungInputValue, setUserConsungInputValue] = useState('');
 
@@ -97,7 +90,7 @@ export default function ConsonantUserInput() {
 
   return (
     <>
-      <SmallChatting></SmallChatting>
+      <LongChatting></LongChatting>
     </>
   );
 }

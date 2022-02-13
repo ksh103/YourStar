@@ -9,8 +9,9 @@ const AlertParentDiv = styled.div`
   background-color: white;
   border-radius: 3vh;
   box-shadow: 0.306vh 0.306vh gray;
+  z-index: 99999999999;
    {
-    animation: 2s ease-in-out loadEffect1;
+    animation: 1s ease-in-out loadEffect1;
   }
 
   @keyframes loadEffect1 {

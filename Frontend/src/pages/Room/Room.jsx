@@ -24,18 +24,25 @@ import {
   UpdateOneByOneStream,
 } from '../../store/modules/meetingRoom';
 import { WarningToMemberAPI } from '../../store/apis/Main/meeting';
+import { AddGameScoreAPI, CallGameRankAPI } from '../../store/apis/Room/game';
 // 컴포넌트
 import RoomComponent from './RoomComponent';
 import { BASE_URL } from '../../utils/contants';
+import Warning from '../../components/room/CommonComponents/Alert/Warning';
+// import { BackgroundDiv } from '../../../components/room/styles/roomGlobal';
 
 const OPENVIDU_SERVER_URL = 'https://i6e204.p.ssafy.io:8443';
 const OPENVIDU_SERVER_SECRET = 'YOURSTAR';
-const BackgroundDiv = styled.div`
-  width: 100%;
-  height: 100%;
-  background-color: #e2d8ff;
-  color: 'white';
-`;
+
+const List = [
+  '대기화면',
+  '공연모드',
+  'QnA모드',
+  '랜덤추첨',
+  'O/X게임',
+  '초성게임',
+  '1:1팬미팅',
+];
 
 class Room extends Component {
   constructor(props) {
@@ -47,7 +54,8 @@ class Room extends Component {
       session: undefined,
       me: this.props.me, // Store에 저장된 내 정보 입력
       recordId: null,
-      choAnsUserCnt: 0, // 초성게임 맞춘 유저 수
+      warningCnt: 0,
+      choAnsUserCnt: 1, // 초성게임 맞춘 유저 수
     };
   }
 
@@ -146,6 +154,13 @@ class Room extends Component {
           // 일반 유저가 변화를 감지하는 부분          let changeNum = parseInt(event.data);
           let changeNum = parseInt(event.data);
           if (changeNum !== this.props.selectNum) {
+            swal({
+              title: '세션 이동 알림',
+              text: List[changeNum] + ' 세션으로 이동',
+              icon: 'info',
+              buttons: false,
+              timer: 2000,
+            });
             if (changeNum !== 6) {
               this.props.doScreenChange(changeNum);
               this.props.publisher.publishVideo(true);
@@ -204,11 +219,12 @@ class Room extends Component {
           }
         });
 
-        mySession.on('signal:wait', event => {
-          console.log('대기 순번 알림', event.data);
+        // 대기 순번 알리기
+        mySession.on('signal:userwait', event => {
           swal({
             title: '1대1미팅 대기시간 알림',
             text: '약 ' + event.data + '분 뒤 입장 됩니다.',
+            timer: 5000,
           });
         });
 
@@ -233,25 +249,143 @@ class Room extends Component {
         }
 
         if (this.props.userCode === 4) {
-          if (this.state.choAnsUserCnt < 4) {
-            // 맞춘 유저 수가 3명보다 적다면
-            mySession.on('signal:ChoUserAns', event => {
+          // 스타일 때
+          mySession.on('signal:ChoUserAns', event => {
+            if (this.state.choAnsUserCnt < 4) {
+              // 맞춘 유저 수가 3명보다 적다면
               // 세션 받와와서 처리해주기
               let chodata = event.data.split(',');
-              console.log(
-                '초성게임 정답자!!!!!!!!!!!!',
-                this.state.choAnsUserCnt,
-                '.',
-                chodata[1]
+              swal(
+                `🎇${this.state.choAnsUserCnt}등 정답자 : ${chodata[0]}🎇`,
+                '축하합니다',
+                { timer: 1800, button: false }
               );
-            });
-            if (this.state.choAnsUserCnt === 3) {
+              // DB에 넣어주기 chodata[1] -> memberId
+              AddGameScoreAPI(this.props.meetingId, chodata[1]);
+              this.setState({ choAnsUserCnt: this.state.choAnsUserCnt + 1 }); // 맞춘 사람 수 1 늘리기
+            }
+            if (this.state.choAnsUserCnt === 4) {
               // 마지막 정답자라면
               // 게임 reset or 다시 하기
-              // this.setState({ choAnsUserCnt: 0 }); // 만약 reset 시 게임이 choAnsUserCnt가 초기화가 안되면 맞춘 정답 user 수 초기화
+              this.setState({ choAnsUserCnt: 1 }); // 맞춘 사람 수 초기화
+              setTimeout(function () {
+                swal('🎇3명의 정답자가 나왔습니다.🎇', '게임이 초기화됩니다.', {
+                  button: false,
+                  timer: 2000,
+                }).then(() => {
+                  mySession.signal({
+                    // 초기화 신호 보내기
+                    data: '5',
+                    to: [],
+                    type: 'endConsonant',
+                  });
+                });
+              }, 2000);
             }
-          }
+          });
         }
+
+        // 초성게임 초기화
+        mySession.on('signal:endConsonant', () => {
+          this.props.doScreenChange(5);
+          this.props.publisher.publishVideo(true);
+          swal('🎇3명의 정답자가 나왔습니다!!🎇', '다음 라운드로 넘어갑니다', {
+            timer: 2000,
+            button: false,
+          });
+        });
+
+        // 초성게임 종료
+        mySession.on('signal:endCho', () => {
+          CallGameRankAPI(85); // 1. 점수 집계 중입니다 먼저 띄워주기 (API 받아오기) 1초
+          //this.props.meetingId
+          swal({
+            title: '점수 집계중',
+            icon: 'https://www.gjstec.or.kr/img/loading.gif',
+            text: '잠시만 기다려 주세요',
+            timer: 3000,
+            button: false,
+            closeOnClickOutside: false,
+            closeOnEsc: false,
+          }).then(() => {
+            swal(
+              '현재까지 게임 순위 결과 \n 축하합니다!🎉',
+              '🥇: 손은성\n 🥈: 박동준 \n 🥉: 안영원',
+              {
+                // 2. 점수 띄워주기 (최종 등수 알려주기) 3초
+                timer: 3000,
+                button: false,
+                closeOnClickOutside: false,
+                closeOnEsc: false,
+              }
+            ).then(() => {
+              swal({
+                // 3. 게임 종료 알려주기 세션으로 돌아가기 (종료) 2초
+                title: '초성 게임 세션 종료',
+                text: '대기화면으로 이동합니다',
+                icon: 'info',
+                buttons: false,
+                closeOnClickOutside: false,
+                closeOnEsc: false,
+                timer: 2000,
+              }).then(() => {
+                mySession.signal({
+                  data: '0',
+                  to: [],
+                  type: 'screen',
+                });
+                this.props.doScreenChange(0);
+              });
+            });
+          });
+        });
+
+        // OX게임 종료
+        mySession.on('signal:endOX', () => {
+          CallGameRankAPI(85); // 1. 점수 집계 중입니다 먼저 띄워주기 (API 받아오기) 1초
+          //this.props.meetingId
+          swal({
+            title: '점수 집계중',
+            icon: 'https://www.gjstec.or.kr/img/loading.gif',
+            text: '잠시만 기다려 주세요',
+            timer: 3000,
+            button: false,
+            closeOnClickOutside: false,
+            closeOnEsc: false,
+          }).then(() => {
+            swal(
+              '현재까지 게임 순위 결과 \n 축하합니다!🎉',
+              '🥇: 손은성 \n 🥈: 박동준 \n 🥉: 안영원',
+              {
+                // 2. 점수 띄워주기 (최종 등수 알려주기) 3초
+
+                timer: 3000,
+                button: false,
+                closeOnClickOutside: false,
+                closeOnEsc: false,
+              }
+            ).then(() => {
+              swal({
+                // 3. 게임 종료 알려주기 세션으로 돌아가기 (종료) 2초
+                title: 'OX게임 세션 종료',
+                text: '대기화면으로 이동합니다',
+                icon: 'info',
+                buttons: false,
+                closeOnClickOutside: false,
+                closeOnEsc: false,
+                timer: 2000,
+              }).then(() => {
+                mySession.signal({
+                  data: '0',
+                  to: [],
+                  type: 'screen',
+                });
+                this.props.doScreenChange(0);
+              });
+            });
+          });
+        });
+
         mySession.on('signal:audio', event => {
           console.log('===== 오디오 상태 변경 =====');
           if (event.data === 'true') {
@@ -270,20 +404,39 @@ class Room extends Component {
           }
         });
 
+        // 경고창
         mySession.on('signal:warning', event => {
-          console.log(event, '======경고정보수신======');
-          console.log(this.props.me.memberId, '멤버아이디');
-          console.log(this.state.session.sessionId, '세션아이디');
-          // 경고주기
-          this.props.doWarningToMemberAPI(
-            this.props.me.memberId,
-            this.state.session.sessionId
-          );
-          // 경고횟수 2회 이상이면 강퇴
-          // this.state.session.forceDisconnect(event.data);
+          const url =
+            window.location.protocol +
+            '//' +
+            window.location.host +
+            `/schedule/${this.state.mySessionId}`;
+          setTimeout(() => this.setState({ warningCnt: 0 }), 10000);
+          if (parseInt(event.data) > 1) {
+            setTimeout(() => window.location.replace(url), 10000);
+          }
         });
 
-        // 여기에 스티커 신호 받아주면 됩니다.
+        // 종료 알림
+        mySession.on('signal:end', event => {
+          const url =
+            window.location.protocol +
+            '//' +
+            window.location.host +
+            `/schedule/${this.state.mySessionId}`;
+          mySession.disconnect();
+          swal({
+            title: '미팅 종료 알림',
+            text: '미팅 상세 페이지로 이동됩니다',
+            icon: 'info',
+            buttons: false,
+            closeOnClickOutside: false,
+            closeOnEsc: false,
+            timer: 1500,
+          }).then(() => {
+            window.location.replace(url);
+          });
+        });
 
         // 세션과 연결하는 부분
         this.getToken(this.state.mySessionId).then(token => {
@@ -291,8 +444,8 @@ class Room extends Component {
             .connect(token, {
               // 추가로 넘겨주고 싶은 데이터가 있으면 여기에 추가
               clientData: this.state.me.nick,
-              memberId: this.state.me.memberId,
               memberCode: this.state.me.code,
+              memberId: this.state.me.memberId,
             })
             .then(() => {
               // 연결 후에 내 정보를 담기
@@ -356,7 +509,6 @@ class Room extends Component {
         .connect(token, {
           // 추가로 넘겨주고 싶은 데이터가 있으면 여기에 추가
           clientData: this.state.me.nick,
-          memberId: this.state.me.memberId,
           memberCode: this.state.me.code,
         })
         .then(() => {
@@ -403,7 +555,6 @@ class Room extends Component {
         .connect(token, {
           // 추가로 넘겨주고 싶은 데이터가 있으면 여기에 추가
           clientData: this.state.me.nick,
-          memberId: this.state.me.memberId,
           memberCode: this.state.me.code,
           memberInfo: 'one',
         })
@@ -437,7 +588,8 @@ class Room extends Component {
     // 녹화 시작
     var data = {
       session: onebyoneSessionId,
-      name: mySession.sessionId + this.state.me.nick,
+      name:
+        'room-' + mySession.sessionId + '_memberId-' + this.state.me.memberId,
       hasAudio: true,
       hasVideo: true,
       outputMode: 'COMPOSED',
@@ -464,6 +616,7 @@ class Room extends Component {
   }
 
   stopRecording() {
+    console.log('recordid -------- ', this.state.recordId);
     axios
       .post(BASE_URL + 'meetings/recording', {
         meetingId: this.state.mySessionId,
@@ -493,7 +646,11 @@ class Room extends Component {
 
   render() {
     return (
-      <BackgroundDiv>
+      <div>
+        {/* 경고창 */}
+        {this.state.warningCnt !== 0 ? (
+          <Warning warningCnt={this.state.warningCnt}></Warning>
+        ) : null}
         {/* 컴포넌트는 들고왔을 때 잘 작동함 */}
         <div className="container">
           {this.state.session === undefined ? (
@@ -504,7 +661,7 @@ class Room extends Component {
             </div>
           )}
         </div>
-      </BackgroundDiv>
+      </div>
     );
   }
 
@@ -635,10 +792,10 @@ const mapDispatchToProps = dispatch => {
     doemoziListAdd: emozi => dispatch(emoziListAdd(emozi)),
     doAddQnaList: QnAText => dispatch(AddQnaList(QnAText)),
     doDeleteSubscriber: subscribers => dispatch(UserDelete(subscribers)),
-    dochosonantQuiz: (question, answer) => dispatch(choQuiz(question, answer)),
+    dochosonantQuiz: (problem, answer) => dispatch(choQuiz(problem, answer)),
     doaudioChange: () => dispatch(audioChange()),
     doWarningToMemberAPI: (memberId, meetingId) =>
-      dispatch(WarningToMemberAPI({ memberId, meetingId })),
+      WarningToMemberAPI({ memberId, meetingId }),
     doUpdateOneByOne: stream => dispatch(UpdateOneByOneStream(stream)),
   };
 };
