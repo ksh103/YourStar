@@ -55,8 +55,6 @@ export default function UserOXGame() {
         buttons: false,
         timer: 1500,
       });
-      // 정답 API 넣기
-      // AddGameScoreAPI(this.props.meetingId, chodata[1]);  // 멤버아이디랑 미팅아이디 어디서 불러오노!
     } else {
       swal({
         title: round + '라운드 종료',

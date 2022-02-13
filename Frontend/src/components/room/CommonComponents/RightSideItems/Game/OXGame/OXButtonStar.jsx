@@ -9,6 +9,7 @@ import {
 
 import { ScreenChange } from '../../../../../../store/modules/meetingRoom';
 import swal from 'sweetalert';
+import { AddGameScoreAPI } from '../../../../../../store/apis/Room/game';
 const OButton = styled.div`
   position: absolute;
   background-color: #2525ff;
@@ -98,10 +99,7 @@ export default function OXButtonStar() {
         var memberId = JSON.parse(
           subscribers[i].stream.connection.data
         ).memberId;
-        // api 추가하면 이 콘솔 지우면됨
-        console.log(
-          '미팅룸 ' + meetingId + '번에서 ' + memberId + '가 살아남았습니다.'
-        );
+        AddGameScoreAPI(meetingId, memberId); // 살아남은 사람 점수 추가 API
       }
     }
 
@@ -149,7 +147,6 @@ export default function OXButtonStar() {
     <>
       <HalfSideDiv2>
         <SmallBox>
-          {console.log(doneCnt + ' / ' + subscribers.length)}
           <div>
             <OButton onClick={OXClick}>O</OButton>
             <XButton onClick={OXClick}>X</XButton>
