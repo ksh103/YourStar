@@ -38,8 +38,6 @@ export default function ScheduleListSelect() {
 
   useEffect(() => {
     if (endMeetingDone) {
-      // 본인 카메라 종료하고 넘어가기
-      // 시그널 보내야함
       storeSession.disconnect();
       history.push(`/schedule/${id}`);
     }
@@ -62,13 +60,10 @@ export default function ScheduleListSelect() {
       buttons: true,
     }).then(end => {
       if (end) {
-        // 테스트 해야함
-        // dispatch({
-        //   type: END_MEETING_REQUEST,
-        //   data: id,
-        // });
-        storeSession.disconnect();
-        history.push(`/schedule/${id}`);
+        dispatch({
+          type: END_MEETING_REQUEST,
+          data: id,
+        });
       }
     });
   };
