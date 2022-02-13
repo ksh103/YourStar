@@ -31,6 +31,7 @@ export default function StarQnA() {
   const dispatch = useDispatch();
 
   storeSession.on('signal:QnAFromUser', event => {
+    console.log('------------------------')
     dispatch(AddQnaList({text : event.data}))
   })
 

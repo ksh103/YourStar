@@ -22,8 +22,7 @@ export default function UserQnA() {
     if (event.data.length > 1) {  // qna 모달창 여는 신호 받음(값이 있는 경우)
       swal({
         text: event.data,
-        button: false,
-        closeOnClickOutside: false, // 사용자가 모달창 못닫게 
+        button: true, 
       })
     } else {  // qna 모달창 닫는 신호 받았을 경우 
       swal.close()

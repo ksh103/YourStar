@@ -18,7 +18,6 @@ import {
   changeQnAMode,
   SetMySession,
   emoziListAdd,
-  AddQnaList,
   UserDelete,
   choQuiz,
   audioChange,
@@ -172,15 +171,6 @@ class Room extends Component {
           }
         });
 
-        // mySession.on('signal:QnAmode', event => {
-        //   let Modedata = event.data.split(',');
-        //   const QAmode = Modedata[1];
-        //   console.log(QAmode);
-        //   if (QAmode !== this.props.QnAmode) {
-        //     this.props.dochangeQnAMode(QAmode);
-        //   }
-        // });
-
         mySession.on('signal:emozi', event => {
           let emozidata = event.data.split(',');
           if (emozidata[0] !== this.props.me.nick) {
@@ -231,17 +221,6 @@ class Room extends Component {
             timer: 5000,
           });
         });
-
-        // mySession.on('signal:UserQnA', event => {
-        //   let QnAdata = event.data.split(',');
-        //   if (QnAdata[0] !== this.props.me.nick) {
-        //     const inputValue = {
-        //       userName: QnAdata[0],
-        //       text: QnAdata[1],
-        //     };
-        //     this.props.doAddQnaList(inputValue);
-        //   }
-        // });
 
         if (this.props.userCode === 3) {
           mySession.on('signal:Cho', event => {
@@ -691,10 +670,8 @@ const mapDispatchToProps = dispatch => {
     doScreenChange: selectNum => dispatch(ScreenChange(selectNum)),
     doChattingInputChange: testinput =>
       dispatch(ChattingInputChange(testinput)),
-    dochangeQnAMode: QnAmode => dispatch(changeQnAMode(QnAmode)),
     doSetMySession: storeSession => dispatch(SetMySession(storeSession)),
     doemoziListAdd: emozi => dispatch(emoziListAdd(emozi)),
-    doAddQnaList: QnAText => dispatch(AddQnaList(QnAText)),
     doDeleteSubscriber: subscribers => dispatch(UserDelete(subscribers)),
     dochosonantQuiz: text => dispatch(choQuiz(text)),
     doaudioChange: () => dispatch(audioChange()),
