@@ -61,7 +61,7 @@ export async function ApprovedMeetingListAPI({ page, size }) {
       startDate: data.meetingStartDate,
       endDate: data.meetingEndDate,
       approve: data.approve,
-      image: data.meetingImgPath,
+      image: data.meetingImgPath.fileId,
     };
   });
 }
