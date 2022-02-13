@@ -20,7 +20,6 @@ export default function ScheduleDetailLeft() {
   const { me } = useSelector(state => state.mypage);
   const history = useHistory();
   const dispatch = useDispatch();
-
   const state = {
     next_redirect_pc_url: '',
     tid: '',
@@ -54,12 +53,12 @@ export default function ScheduleDetailLeft() {
 
   // 입장 시 경고횟수 확인
   useEffect(() => {
-    console.log(meeting.id);
-    dispatch({
-      type: WARNING_COUNT_REQUEST,
-      data: { memberId: me.memberId, meetingId: meeting.id },
-    });
-  }, [dispatch, me.memberId, meeting.id]);
+    if (meeting.isReserve)
+      dispatch({
+        type: WARNING_COUNT_REQUEST,
+        data: { memberId: me.memberId, meetingId: meeting.id },
+      });
+  }, [dispatch, me.memberId, meeting.id, meeting.isReserve]);
 
   const showButton = () => {
     const now = new Date();
@@ -100,14 +99,15 @@ export default function ScheduleDetailLeft() {
           <div>종료</div>
         </ScheduleDetailButton>
       );
-    } else if (new Date(meeting.startDate) <= now)
-      if (meeting.isReserve) {
+    } else if (new Date(meeting.startDate) <= now) {
+      if (
+        me.code === 1 ||
+        ((me.code === 2 || me.code === 4) && me.managerCode === meeting.code) ||
+        meeting.isReserve
+      ) {
         return (
           <ScheduleDetailButton color="3">
-            <div onClick={enterButton}>
-              입장하기
-              {/* <Link to={`/pledge/${meeting.id}`}>입장하기</Link> */}
-            </div>
+            <div onClick={enterButton}>입장하기</div>
           </ScheduleDetailButton>
         );
       } else {
@@ -117,8 +117,8 @@ export default function ScheduleDetailLeft() {
           </ScheduleDetailButton>
         );
       }
-    else if (new Date(meeting.openDate) <= now) {
-      if (meeting.isReserve) {
+    } else if (new Date(meeting.openDate) <= now) {
+      if (meeting.isReserve || me.code === 3) {
         return (
           <ScheduleDetailButton color="2">
             <div onClick={cancelMeeting}>예매취소</div>
@@ -151,7 +151,7 @@ export default function ScheduleDetailLeft() {
   return (
     <ScheduleDetailLeftWrapper>
       <ScheduleDetailImage>
-        {detailMeetingDone && meeting && meeting.image === null ? (
+        {detailMeetingDone && meeting.image === null ? (
           <img src={'/images/noimg.gif'} alt="noimage" />
         ) : (
           <img src={`${IMAGE_URL}${meeting.image}`} alt={meeting.image} />
