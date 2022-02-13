@@ -261,7 +261,10 @@ class Room extends Component {
                 { timer: 1800, button: false }
               );
               // DB에 넣어주기 chodata[1] -> memberId
-              AddGameScoreAPI(this.props.meetingId, chodata[1]);
+              const result = axios.put(
+                `${BASE_URL}meetings/game-score/${mySession.sessionId}/${chodata[1]}`
+              );
+              console.log('DB넣은 데이터 받아온 데이터', result);
               this.setState({ choAnsUserCnt: this.state.choAnsUserCnt + 1 }); // 맞춘 사람 수 1 늘리기
             }
             if (this.state.choAnsUserCnt === 4) {
@@ -297,7 +300,11 @@ class Room extends Component {
 
         // 초성게임 종료
         mySession.on('signal:endCho', () => {
-          CallGameRankAPI(85); // 1. 점수 집계 중입니다 먼저 띄워주기 (API 받아오기) 1초
+          const result = axios.get(
+            // 1. 점수 집계 중입니다 먼저 띄워주기 (API 받아오기) 1초
+            `${BASE_URL}meetings/game-result/admin/${mySession.sessionId}`
+          );
+          console.log('게임 종합 점수!!!!!!!!!!!!!!!!!!!!!!!', result);
           //this.props.meetingId
           swal({
             title: '점수 집계중',

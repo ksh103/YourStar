@@ -18,3 +18,8 @@ export async function CallGameRankAPI(meetingId) {
   console.log(result);
   return result;
 }
+
+const initialState = {
+  gameList: [],
+};
+export const GET_GAME_LIST = 'GET_GAME_LIST'; // 게임 리스트 받아오기
