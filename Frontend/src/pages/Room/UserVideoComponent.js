@@ -3,6 +3,7 @@ import './UserVideo.css';
 import { UserDelete } from '../../store/modules/meetingRoom';
 import { connect } from 'react-redux';
 import OpenViduVideoComponent from './OvVideo';
+import { WarningToMemberAPI } from '../../store/apis/Main/meeting';
 
 import {
   BsFillMicFill,
@@ -16,9 +17,10 @@ class UserVideoComponent extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      // 마이크, 비디오, 화면공유 상태
+      // 마이크, 비디오
       audioState: false,
       videoState: true,
+      isSpeaking: false,
     };
   }
   getNicknameTag() {
@@ -67,18 +69,57 @@ class UserVideoComponent extends Component {
 
   // 경고 주기
   warning(connection) {
-    console.log('connection 정보', connection);
-    this.props.storeSession.signal({
-      // 해당 사용자에게 경고 신호주기
-      data: connection,
-      to: [connection],
-      type: 'warning',
-    });
+    
+    const userData = JSON.parse(connection.data)
+    this.props.doWarningToMemberAPI(  // 경고 횟수 +1 db 저장 
+      userData.memberId,
+      connection.session.sessionId
+    ).then(event => { // 경고 2회 이상이면 퇴장 
+      this.props.storeSession.signal({
+        // 해당 사용자에게 경고 신호주기
+        data: event.data.applicant.applicantWarnCount,  // 경고 횟수 
+        to: [connection],
+        type: 'warning',
+      });
+      if (event.data.applicant.applicantWarnCount > 1) {
+        this.props.storeSession.forceDisconnect(connection);
+      }
+    })
   }
+
+  // controllSpeakingState(){
+  //   console.log('------------')
+  //   console.log(this.props.publisher)
+  //   this.props.streamManager.on('publisherStartSpeaking', () => 
+  //   this.setState({
+  //     isSpeaking : true,
+  //   })
+  //   );
+  //   console.log('hererjldfjaklsdfjaskldfjlaksjdfkl')
+  //   console.log(this.props.storeSession)
+  //   this.props.storeSession.on('signal:isSpeaking', event => {
+  //     if (event.data === "true") {
+  //       this.setState({
+  //         isSpeaking : true
+  //       })
+  //       console.log('말하는중')
+  //     } else {
+  //       this.setState({
+  //         isSpeaking : false
+  //       })
+  //       console.log('멈춤')
+  //     }
+  //   });
+  // }
 
   render() {
     return (
-      <div className="hiddenConsole">
+      <div className={"hiddenConsole" + (this.state.isSpeaking ? "speakingUser" : "")} 
+      style={
+        this.state.isSpeaking
+          ? { backgroundColor: 'green' }
+          : { backgroundColor: 'red' }
+      }>
         {this.props.me.code !== 3 ? (
           <div className="son">
             <p>{this.getNicknameTag()}</p>
@@ -167,6 +208,8 @@ const mapStateToProps = state => ({
 const mapDispatchToProps = dispatch => {
   return {
     doUpdateSubscriber: subscribers => dispatch(UserDelete(subscribers)),
+    doWarningToMemberAPI: (memberId, meetingId) =>
+    WarningToMemberAPI({ memberId, meetingId }),
   };
 };
 export default connect(mapStateToProps, mapDispatchToProps)(UserVideoComponent);

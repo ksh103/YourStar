@@ -13,7 +13,8 @@ import ExitButton from './ExitButton';
 import YelloCard from './YelloCard';
 import RedCard from './RedCard';
 
-export default function Warning() {
+export default function Warning(props) {
+  console.log(props.warningCnt)
   return (
     <AlertParentDiv>
       {/* head 부분 */}
@@ -30,7 +31,11 @@ export default function Warning() {
       </AlertHead>
       {/* 내용물 */}
       <AlertBody>
-        <YelloCard></YelloCard>
+        {props.warningCnt === "1" ? (
+          <YelloCard></YelloCard>
+        ) : (
+          <RedCard></RedCard>
+      )}
       </AlertBody>
     </AlertParentDiv>
   );
