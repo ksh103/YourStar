@@ -44,7 +44,6 @@ export default function UserQnA() {
             button: true
           }).then(() => reQnASwal(event)); // 다시 입력창 띄우기 
         } else {
-          console.log(event)
           storeSession.signal({
             data: value,
             to: [event.from],

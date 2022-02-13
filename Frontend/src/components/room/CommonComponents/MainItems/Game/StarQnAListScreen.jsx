@@ -10,16 +10,21 @@ const StarScreen = styled.div`
   overflow: auto;
   position: relative;
   width: 60.041vw;
-  height: 66.5vh;
+  height: 60.5vh;
   background-color: white;
   border-radius: 3.0643vh;
   box-shadow: 0.306vh 0.306vh gray;
 `;
 
 const PerScPosition = styled.div`
-  position: relative;
-  top: 2%;
-  left: 4%;
+  display: grid;
+  // align-items: center;
+  margin: 2%;
+  grid-template-columns: repeat(4, 1fr);
+	grid-template-rows: repeat(4, 100px);
+  column-gap: 10px;
+  row-gap: 10px;
+  overflow: hidden;
 `;
 
 export default function StarQnAListScreen() {
