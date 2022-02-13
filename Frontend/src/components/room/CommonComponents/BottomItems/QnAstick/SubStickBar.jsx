@@ -87,7 +87,7 @@ export default function SubStickBar() {
   // 모드 변경
   const QnAChange = str => {
     storeSession.signal({
-      data: `${me.nick},${str}`,
+      data: `${str}`,
       to: [],
       type: 'QnAmode',
     });
@@ -102,11 +102,10 @@ export default function SubStickBar() {
   const UserQnAMessageByEnter = e => {
     if (e.key === 'Enter') {
       const QnAValue = {
-        userName: me.nick,
         text: QnAText,
       };
       storeSession.signal({
-        data: `${me.nick},${QnAText}`,
+        data: `${QnAText}`,
         to: [],
         type: 'UserQnA',
       });
@@ -121,7 +120,7 @@ export default function SubStickBar() {
       text: QnAText,
     };
     storeSession.signal({
-      data: `${me.nick},${QnAText}`,
+      data: `${QnAText}`,
       to: [],
       type: 'UserQnA',
     });
@@ -129,14 +128,15 @@ export default function SubStickBar() {
     setQnAText('');
   };
 
+  const UserQnASave = () => {
+    storeSession.on('signal:QnAFromUser', event => {
+      dispatch(AddQnaList(event.data))
+    })
+  }
+
   if (me.code !== 3) {
     return (
       <>
-        <h2>Q.</h2>
-        {/* <TestInput>
-          <input type="text" onChange={valueChange} value={QnAText} />
-          <button onClick={UserQnAMessageByClick}>제출하기</button>
-        </TestInput> */}
         <StickBarDiv>
           <StickBar>
             <GridDiv>

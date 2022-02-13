@@ -1,8 +1,11 @@
 import React from 'react';
 import styled from 'styled-components';
 import { MainDiv } from '../Main.style';
-// 51 ->
+import StarVideoComponent from  '../../../../../pages/Room/StarVideoComponent'
+import { useSelector} from 'react-redux';
+
 const QuestionMain = styled.div`
+  overflow: auto; 
   position: relative;
   width: 60.041vw;
   height: 58.0725vh;
@@ -12,9 +15,13 @@ const QuestionMain = styled.div`
 `;
 
 export default function QuestionMainScreen() {
+  const { mainStreamManager } = useSelector(state => state.MeetingRoom);
+
   return (
     <MainDiv>
-      <QuestionMain></QuestionMain>
+      <QuestionMain>
+        <StarVideoComponent streamManager={mainStreamManager}></StarVideoComponent>
+      </QuestionMain>
     </MainDiv>
   );
 }

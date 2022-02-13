@@ -5,8 +5,10 @@ import SubStickBar from '../CommonComponents/BottomItems/QnAstick/SubStickBar';
 import MyScreen from '../CommonComponents/MainItems/MyScreens/MyScreen';
 import OtherPersonScreen from '../CommonComponents/MainItems/OtherScreen/OtherPersonScreen';
 import LongChatting from '../CommonComponents/RightSideItems/Chatting/LongChatting';
-import { useSelector } from 'react-redux';
+import { useSelector, useDispatch } from 'react-redux';
 import swal from 'sweetalert';
+
+import { AddQnaList } from '../../../store/modules/meetingRoom';
 
 // 포지션작업
 const BackgroundDiv = styled.div`
@@ -17,6 +19,7 @@ const BackgroundDiv = styled.div`
 
 export default function UserQnA() {
   const { storeSession } = useSelector(state => state.MeetingRoom);
+  const dispatch = useDispatch();
 
   storeSession.on('signal:qnaContents', event => {
     if (event.data.length > 1) {  // qna 모달창 여는 신호 받음(값이 있는 경우)
@@ -29,6 +32,27 @@ export default function UserQnA() {
       swal.close()
     }
   });
+
+  storeSession.on('signal:QnAmode', event => {
+    if (event.data === 'start') {
+      swal({
+        text: '스타에게 궁금하거나 하고 싶었던 말을 적어 보내보세요 !',
+        content: "input",
+        button: '전송'
+      }).then( value => {
+        storeSession.signal({
+          data: value,
+          to: [event.from],
+          type: 'QnAFromUser'
+        })
+        swal({
+          text: '전송 완료 ! 다른 분들이 포스트잇을 적을 때까지 잠시만 기다려주세요 !',
+          icon: 'success',
+          button: 'ok!'
+      })
+      })
+    }
+  })
 
   return (
     <BackgroundDiv>
