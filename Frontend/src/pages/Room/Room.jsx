@@ -28,7 +28,7 @@ import { AddGameScoreAPI, CallGameRankAPI } from '../../store/apis/Room/game';
 // 컴포넌트
 import RoomComponent from './RoomComponent';
 import { BASE_URL } from '../../utils/contants';
-import { data } from '@tensorflow/tfjs';
+import Warning from '../../components/room/CommonComponents/Alert/Warning';
 
 const OPENVIDU_SERVER_URL = 'https://i6e204.p.ssafy.io:8443';
 const OPENVIDU_SERVER_SECRET = 'YOURSTAR';
@@ -38,6 +38,15 @@ const BackgroundDiv = styled.div`
   background-color: #e2d8ff;
   color: 'white';
 `;
+const List = [
+  '대기화면',
+  '공연모드',
+  'QnA모드',
+  '랜덤추첨',
+  'O/X게임',
+  '초성게임',
+  '1:1팬미팅',
+];
 
 class Room extends Component {
   constructor(props) {
@@ -49,6 +58,7 @@ class Room extends Component {
       session: undefined,
       me: this.props.me, // Store에 저장된 내 정보 입력
       recordId: null,
+      warningCnt: 0,
       choAnsUserCnt: 1, // 초성게임 맞춘 유저 수
     };
   }
@@ -148,6 +158,13 @@ class Room extends Component {
           // 일반 유저가 변화를 감지하는 부분          let changeNum = parseInt(event.data);
           let changeNum = parseInt(event.data);
           if (changeNum !== this.props.selectNum) {
+            swal({
+              title: '세션 이동 알림',
+              text: List[changeNum] + ' 세션으로 이동',
+              icon: 'info',
+              buttons: false,
+              timer: 2000,
+            });
             if (changeNum !== 6) {
               this.props.doScreenChange(changeNum);
               this.props.publisher.publishVideo(true);
@@ -230,11 +247,10 @@ class Room extends Component {
           mySession.on('signal:Cho', event => {
             let chodata = event.data.split(',');
             if (chodata[0] !== this.props.chosonantQuiz) {
-              this.props.dochosonantQuiz(chodata[1], chodata[2]);
+              this.props.dochosonantQuiz(chodata[1]);
             }
           });
         }
-
         if (this.props.userCode === 4) {
           // 스타일 때
           mySession.on('signal:ChoUserAns', event => {
@@ -307,20 +323,16 @@ class Room extends Component {
           }
         });
 
+        // 경고창 
         mySession.on('signal:warning', event => {
-          console.log(event, '======경고정보수신======');
-          console.log(this.props.me.memberId, '멤버아이디');
-          console.log(this.state.session.sessionId, '세션아이디');
-          // 경고주기
-          this.props.doWarningToMemberAPI(
-            this.props.me.memberId,
-            this.state.session.sessionId
-          );
-          // 경고횟수 2회 이상이면 강퇴
-          // this.state.session.forceDisconnect(event.data);
+          this.setState({
+            warningCnt: event.data
+          })
+          setTimeout(() => this.setState({warningCnt: 0}), 10000)
+          if (parseInt(event.data) > 1) {
+            setTimeout(() => window.location.replace('https://i6e204.p.ssafy.io/'), 10000)
+          }
         });
-
-        // 여기에 스티커 신호 받아주면 됩니다.
 
         // 세션과 연결하는 부분
         this.getToken(this.state.mySessionId).then(token => {
@@ -328,8 +340,8 @@ class Room extends Component {
             .connect(token, {
               // 추가로 넘겨주고 싶은 데이터가 있으면 여기에 추가
               clientData: this.state.me.nick,
-              memberId: this.state.me.memberId,
               memberCode: this.state.me.code,
+              memberId: this.state.me.memberId
             })
             .then(() => {
               // 연결 후에 내 정보를 담기
@@ -393,7 +405,6 @@ class Room extends Component {
         .connect(token, {
           // 추가로 넘겨주고 싶은 데이터가 있으면 여기에 추가
           clientData: this.state.me.nick,
-          memberId: this.state.me.memberId,
           memberCode: this.state.me.code,
         })
         .then(() => {
@@ -440,7 +451,6 @@ class Room extends Component {
         .connect(token, {
           // 추가로 넘겨주고 싶은 데이터가 있으면 여기에 추가
           clientData: this.state.me.nick,
-          memberId: this.state.me.memberId,
           memberCode: this.state.me.code,
           memberInfo: 'one',
         })
@@ -502,6 +512,7 @@ class Room extends Component {
   }
 
   stopRecording() {
+    console.log('recordid -------- ',this.state.recordId);
     axios
       .post(BASE_URL + 'meetings/recording', {
         meetingId: this.state.mySessionId,
@@ -532,6 +543,8 @@ class Room extends Component {
   render() {
     return (
       <BackgroundDiv>
+        {/* 경고창 */}
+        {this.state.warningCnt !== 0 ? (<Warning warningCnt={this.state.warningCnt}></Warning>) : null}
         {/* 컴포넌트는 들고왔을 때 잘 작동함 */}
         <div className="container">
           {this.state.session === undefined ? (
@@ -673,10 +686,10 @@ const mapDispatchToProps = dispatch => {
     doemoziListAdd: emozi => dispatch(emoziListAdd(emozi)),
     doAddQnaList: QnAText => dispatch(AddQnaList(QnAText)),
     doDeleteSubscriber: subscribers => dispatch(UserDelete(subscribers)),
-    dochosonantQuiz: (question, answer) => dispatch(choQuiz(question, answer)),
+    dochosonantQuiz: text => dispatch(choQuiz(text)),
     doaudioChange: () => dispatch(audioChange()),
     doWarningToMemberAPI: (memberId, meetingId) =>
-      dispatch(WarningToMemberAPI({ memberId, meetingId })),
+      WarningToMemberAPI({ memberId, meetingId }),
     doUpdateOneByOne: stream => dispatch(UpdateOneByOneStream(stream)),
   };
 };
