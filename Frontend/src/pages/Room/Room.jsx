@@ -232,16 +232,16 @@ class Room extends Component {
           });
         });
 
-        mySession.on('signal:UserQnA', event => {
-          let QnAdata = event.data.split(',');
-          if (QnAdata[0] !== this.props.me.nick) {
-            const inputValue = {
-              userName: QnAdata[0],
-              text: QnAdata[1],
-            };
-            this.props.doAddQnaList(inputValue);
-          }
-        });
+        // mySession.on('signal:UserQnA', event => {
+        //   let QnAdata = event.data.split(',');
+        //   if (QnAdata[0] !== this.props.me.nick) {
+        //     const inputValue = {
+        //       userName: QnAdata[0],
+        //       text: QnAdata[1],
+        //     };
+        //     this.props.doAddQnaList(inputValue);
+        //   }
+        // });
 
         if (this.props.userCode === 3) {
           mySession.on('signal:Cho', event => {

@@ -23,20 +23,11 @@ const PerScPosition = styled.div`
 `;
 
 export default function StarQnAListScreen() {
-  const { StarQnAtoggle, QnAList } = useSelector(state => state.MeetingRoom);
-
-  const dispatch = useDispatch();
-
-  const toggleChange = tf => {
-    dispatch(changeQnAtoggle(tf));
-  };
+  const { QnAList } = useSelector(state => state.MeetingRoom);
 
   return (
     <MainDiv>
       <StarScreen>
-        <button onClick={() => toggleChange(StarQnAtoggle)}>
-          다시 작은화면
-        </button>
         <PerScPosition>
           {QnAList &&
             QnAList.map((value, idx) => {
