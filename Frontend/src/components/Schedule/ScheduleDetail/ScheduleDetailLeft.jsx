@@ -105,11 +105,19 @@ export default function ScheduleDetailLeft() {
         ((me.code === 2 || me.code === 4) && me.managerCode === meeting.code) ||
         meeting.isReserve
       ) {
-        return (
-          <ScheduleDetailButton color="3">
-            <div onClick={enterButton}>입장하기</div>
-          </ScheduleDetailButton>
-        );
+        if (meeting.warningCount >= 2) {
+          return (
+            <ScheduleDetailButton>
+              <div>입장불가</div>
+            </ScheduleDetailButton>
+          );
+        } else {
+          return (
+            <ScheduleDetailButton color="3">
+              <div onClick={enterButton}>입장하기</div>
+            </ScheduleDetailButton>
+          );
+        }
       } else {
         return (
           <ScheduleDetailButton>

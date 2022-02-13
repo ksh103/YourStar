@@ -12,6 +12,16 @@ export async function MeetingDetailAPI({ meetingId, memberId }) {
     .then(res => res.data.content);
   const applicantCnt = applicant.length;
   const isReserve = applicant.some(a => a.memberId === memberId);
+  const warningCount = isReserve
+    ? await axios
+        .get(`${BASE_URL}meetings/warning/${memberId}/${meetingId}`)
+        .then(res => {
+          if (res.data.message === 'Success') {
+            return res.data.applicant.applicantWarnCount;
+          }
+        })
+    : 0;
+
   return {
     id: result.meetingId,
     code: result.managerCode,
@@ -27,6 +37,7 @@ export async function MeetingDetailAPI({ meetingId, memberId }) {
     approve: result.approve,
     applicantCnt,
     isReserve,
+    warningCount,
   };
 }
 
