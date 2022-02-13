@@ -5,6 +5,7 @@ import React, { Component } from 'react';
 import './App.css';
 import { connect } from 'react-redux';
 import swal from 'sweetalert';
+import sweetAlertStyles from '../../styles/sweetAlert.module.css';
 
 // action 호출
 import {
@@ -37,6 +38,15 @@ const BackgroundDiv = styled.div`
   background-color: #e2d8ff;
   color: 'white';
 `;
+const List = [
+  '대기화면',
+  '공연모드',
+  'QnA모드',
+  '랜덤추첨',
+  'O/X게임',
+  '초성게임',
+  '1:1팬미팅',
+];
 
 class Room extends Component {
   constructor(props) {
@@ -49,6 +59,7 @@ class Room extends Component {
       me: this.props.me, // Store에 저장된 내 정보 입력
       recordId: null,
       warningCnt: 0,
+      choAnsUserCnt: 1, // 초성게임 맞춘 유저 수
     };
   }
 
@@ -147,6 +158,13 @@ class Room extends Component {
           // 일반 유저가 변화를 감지하는 부분          let changeNum = parseInt(event.data);
           let changeNum = parseInt(event.data);
           if (changeNum !== this.props.selectNum) {
+            swal({
+              title: '세션 이동 알림',
+              text: List[changeNum] + ' 세션으로 이동',
+              icon: 'info',
+              buttons: false,
+              timer: 2000,
+            });
             if (changeNum !== 6) {
               this.props.doScreenChange(changeNum);
               this.props.publisher.publishVideo(true);
@@ -205,11 +223,12 @@ class Room extends Component {
           }
         });
 
-        mySession.on('signal:wait', event => {
-          console.log('대기 순번 알림', event.data);
+        // 대기 순번 알리기
+        mySession.on('signal:userwait', event => {
           swal({
             title: '1대1미팅 대기시간 알림',
             text: '약 ' + event.data + '분 뒤 입장 됩니다.',
+            timer: 5000,
           });
         });
 
@@ -232,6 +251,69 @@ class Room extends Component {
             }
           });
         }
+        if (this.props.userCode === 4) {
+          // 맞춘 유저 수가 3명보다 적다면
+          mySession.on('signal:ChoUserAns', event => {
+            if (this.state.choAnsUserCnt < 4) {
+              // 세션 받와와서 처리해주기
+              let chodata = event.data.split(',');
+              swal(
+                `🎇${this.state.choAnsUserCnt}등 정답자 : ${chodata[0]}🎇`,
+                '축하합니다',
+                { timer: 1800, button: false }
+              );
+              switch (this.state.choAnsUserCnt) {
+                case 1: // 1등이면
+                  // 100점 axios 추가하기
+                  break;
+                case 2: // 2등이면
+                  // 80점 axios 추가하기
+                  break;
+                case 3: // 3등이면
+                  // 50점 axios 추가하기
+                  break;
+                default:
+                  break;
+              }
+              this.setState({ choAnsUserCnt: this.state.choAnsUserCnt + 1 }); // 맞춘 사람 수 1 늘리기
+            }
+            if (this.state.choAnsUserCnt === 4) {
+              // 마지막 정답자라면
+              // 게임 reset or 다시 하기
+              this.setState({ choAnsUserCnt: 1 }); // 맞춘 사람 수 초기화
+              setTimeout(function () {
+                swal('🎇3명의 정답자가 나왔습니다.🎇', '게임이 초기화됩니다.', {
+                  button: false,
+                  timer: 2000,
+                });
+              }, 2000);
+              setTimeout(function () {
+                mySession.signal({
+                  // 초기화 신호 보내기
+                  data: '5',
+                  to: [],
+                  type: 'endConsonant',
+                });
+              }, 4000);
+            }
+          });
+        }
+
+        // 초성게임 초기화
+        mySession.on('signal:endConsonant', () => {
+          this.props.doScreenChange(5);
+          this.props.publisher.publishVideo(true);
+          swal('🎇3명의 정답자가 나왔습니다!!🎇', '다음 라운드로 넘어갑니다', {
+            timer: 2000,
+            button: false,
+          });
+        });
+
+        // 초성게임 종료
+        mySession.on('signal:endCho', () => {
+          this.props.doScreenChange(0);
+          this.props.publisher.publishVideo(true);
+        });
 
         mySession.on('signal:audio', event => {
           console.log('===== 오디오 상태 변경 =====');
@@ -412,7 +494,8 @@ class Room extends Component {
     // 녹화 시작
     var data = {
       session: onebyoneSessionId,
-      name: mySession.sessionId + this.state.me.nick,
+      name:
+        'room-' + mySession.sessionId + '_memberId-' + this.state.me.memberId,
       hasAudio: true,
       hasVideo: true,
       outputMode: 'COMPOSED',

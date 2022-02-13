@@ -31,7 +31,7 @@ export default function LongChatting() {
   const { me } = useSelector(state => state.mypage);
 
   const SendMessage = e => {
-    if (e.key === 'Enter') {
+    if (e.key === 'Enter' && testInput !== '') {
       if (checkText(testInput)) {
         const inputValue = {
           userName: me.nick,

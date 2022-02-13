@@ -1,13 +1,18 @@
-import React, { useState } from 'react';
+import React, { useEffect } from 'react';
 import { HalfSideDiv1, SmallBox } from '../Chatting/Chatting.style';
 import { useSelector, useDispatch } from 'react-redux';
-// import { changeList } from '../../../../../store/modules/selectList';
-import { ScreenChange } from '../../../../../store/modules/meetingRoom';
+import {
+  ResetIndex,
+  ScreenChange,
+} from '../../../../../store/modules/meetingRoom';
 import {
   ScheduleListBox,
   ScheduleListWrapper,
 } from './ScheduleListSelect.style';
 import { blockColor } from '../../../../../styles/variables';
+import swal from 'sweetalert';
+import { useHistory, useParams } from 'react-router';
+import { END_MEETING_REQUEST } from '../../../../../store/modules/meeting';
 
 const List = [
   '대기화면',
@@ -20,25 +25,52 @@ const List = [
 ];
 
 export default function ScheduleListSelect() {
-  // const { selectNum } = useSelector(state => ({
-  //   selectNum: state.selectmode.selectNum,
-  // }));
-
+  const id = useParams().id;
+  const history = useHistory();
+  const dispatch = useDispatch();
   const { storeSession } = useSelector(state => ({
     storeSession: state.MeetingRoom.storeSession,
   }));
   const { selectNum, backgroundColor } = useSelector(
     state => state.MeetingRoom
   );
-  const dispatch = useDispatch();
+  const { endMeetingDone } = useSelector(state => state.meeting);
+
+  useEffect(() => {
+    if (endMeetingDone) {
+      // 본인 카메라 종료하고 넘어가기
+      // 시그널 보내야함
+      storeSession.disconnect();
+      history.push(`/schedule/${id}`);
+    }
+  }, [endMeetingDone, history, id, storeSession]);
 
   const SetSelect = selectNum => {
+    if (selectNum === 4) dispatch(ResetIndex());
+
     storeSession.signal({
       data: `${selectNum}`,
       to: [],
       type: 'screen',
     });
     dispatch(ScreenChange(selectNum));
+  };
+
+  const endButton = () => {
+    swal({
+      text: '팬미팅을 종료하시겠습니까?',
+      buttons: true,
+    }).then(end => {
+      if (end) {
+        // 테스트 해야함
+        // dispatch({
+        //   type: END_MEETING_REQUEST,
+        //   data: id,
+        // });
+        storeSession.disconnect();
+        history.push(`/schedule/${id}`);
+      }
+    });
   };
 
   return (
@@ -56,6 +88,13 @@ export default function ScheduleListSelect() {
                 {list}
               </ScheduleListBox>
             ))}
+            <ScheduleListBox
+              onClick={() => endButton()}
+              check={'0'}
+              color={blockColor}
+            >
+              팬미팅종료
+            </ScheduleListBox>
           </ScheduleListWrapper>
         </SmallBox>
       </HalfSideDiv1>
