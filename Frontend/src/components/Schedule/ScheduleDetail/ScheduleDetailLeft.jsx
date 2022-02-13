@@ -118,7 +118,7 @@ export default function ScheduleDetailLeft() {
         );
       }
     } else if (new Date(meeting.openDate) <= now) {
-      if (meeting.isReserve || me.code === 3) {
+      if (meeting.isReserve) {
         return (
           <ScheduleDetailButton color="2">
             <div onClick={cancelMeeting}>예매취소</div>
@@ -131,7 +131,7 @@ export default function ScheduleDetailLeft() {
               <div>매진</div>
             </ScheduleDetailButton>
           );
-        } else {
+        } else if (me.code === 3) {
           return (
             <ScheduleDetailButton color="1">
               <div onClick={reserveMeeting}>예매하기</div>
