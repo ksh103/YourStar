@@ -99,40 +99,38 @@ export default function SubStickBar() {
     dispatch(changeQnAtoggle());
   };
 
-  const UserQnAMessageByEnter = e => {
-    if (e.key === 'Enter') {
-      const QnAValue = {
-        text: QnAText,
-      };
-      storeSession.signal({
-        data: `${QnAText}`,
-        to: [],
-        type: 'UserQnA',
-      });
-      dispatch(AddQnaList(QnAValue));
-      setQnAText('');
-    }
-  };
+  // const UserQnAMessageByEnter = e => {
+  //   if (e.key === 'Enter') {
+  //     const QnAValue = {
+  //       text: QnAText,
+  //     };
+  //     storeSession.signal({
+  //       data: `${QnAText}`,
+  //       to: [],
+  //       type: 'UserQnA',
+  //     });
+  //     dispatch(AddQnaList(QnAValue));
+  //     setQnAText('');
+  //   }
+  // };
 
-  const UserQnAMessageByClick = e => {
-    const QnAValue = {
-      userName: me.nick,
-      text: QnAText,
-    };
-    storeSession.signal({
-      data: `${QnAText}`,
-      to: [],
-      type: 'UserQnA',
-    });
-    dispatch(AddQnaList(QnAValue));
-    setQnAText('');
-  };
+  // const UserQnAMessageByClick = e => {
+  //   const QnAValue = {
+  //     userName: me.nick,
+  //     text: QnAText,
+  //   };
+  //   storeSession.signal({
+  //     data: `${QnAText}`,
+  //     to: [],
+  //     type: 'UserQnA',
+  //   });
+  //   dispatch(AddQnaList(QnAValue));
+  //   setQnAText('');
+  // };
 
-  const UserQnASave = () => {
-    storeSession.on('signal:QnAFromUser', event => {
-      dispatch(AddQnaList(event.data))
-    })
-  }
+  // storeSession.on('signal:QnAFromUser', event => {
+  //   dispatch(AddQnaList({text : event.data}))
+  // })
 
   if (me.code !== 3) {
     return (
@@ -152,64 +150,65 @@ export default function SubStickBar() {
         {/* 유저ui 확인 */}
       </>
     );
-  }
+  } 
   // 유저라면?
   else {
-    if (QnAmode === 'ready') {
-      return (
-        <StickBarDiv>
-          <StickBar>
-            <GridDiv>
-              <>
-                <div style={{ color: 'black' }}>
-                  스타가 시작하기를 눌리면 입력창이 나타납니다.
-                </div>
-              </>
-            </GridDiv>
-          </StickBar>
-        </StickBarDiv>
-      );
-    } else if (QnAmode === 'start') {
-      return (
-        <StickBarDiv>
-          <StickBar>
-            <GridDiv>
-              <h2>Q.</h2>
-              <UserInput type="text" onChange={valueChange} onKeyPress={UserQnAMessageByEnter} value={QnAText} ></UserInput>
-              <button onClick={UserQnAMessageByClick}>제출하기</button>
-            </GridDiv>
-          </StickBar>
-        </StickBarDiv>
-      );
-    } else if (QnAmode === 'end') {
-      return (
-        <StickBarDiv>
-          <StickBar>
-            <GridDiv>
-              <>
-                <div style={{ color: 'black' }}>
-                  기다리시면 채택된 질문이 나옵니다.
-                </div>
-                <button>다시 작성하기</button>
-              </>
-            </GridDiv>
-          </StickBar>
-        </StickBarDiv>
-      );
-    } else if (QnAmode === 'list') {
-      return (
-        <StickBarDiv>
-          <StickBar>
-            <GridDiv>
-              <>
-                <div style={{ color: 'black' }}>
-                  여러분들이 보내주신 질문들을 확인하고있어요..!
-                </div>
-              </>
-            </GridDiv>
-          </StickBar>
-        </StickBarDiv>
-      );
+    return <></>
+    // if (QnAmode === 'ready') {
+    //   return (
+    //     <StickBarDiv>
+    //       <StickBar>
+    //         <GridDiv>
+    //           <>
+    //             <div style={{ color: 'black' }}>
+    //               스타가 시작하기를 눌리면 입력창이 나타납니다.
+    //             </div>
+    //           </>
+    //         </GridDiv>
+    //       </StickBar>
+    //     </StickBarDiv>
+    //   );
+    // } else if (QnAmode === 'start') {
+    //   return (
+    //     <StickBarDiv>
+    //       <StickBar>
+    //         <GridDiv>
+    //           <h2>Q.</h2>
+    //           <UserInput type="text" onChange={valueChange} onKeyPress={UserQnAMessageByEnter} value={QnAText} ></UserInput>
+    //           <button onClick={UserQnAMessageByClick}>제출하기</button>
+    //         </GridDiv>
+    //       </StickBar>
+    //     </StickBarDiv>
+    //   );
+    // } else if (QnAmode === 'end') {
+    //   return (
+    //     <StickBarDiv>
+    //       <StickBar>
+    //         <GridDiv>
+    //           <>
+    //             <div style={{ color: 'black' }}>
+    //               기다리시면 채택된 질문이 나옵니다.
+    //             </div>
+    //             <button>다시 작성하기</button>
+    //           </>
+    //         </GridDiv>
+    //       </StickBar>
+    //     </StickBarDiv>
+    //   );
+    // } else if (QnAmode === 'list') {
+    //   return (
+    //     <StickBarDiv>
+    //       <StickBar>
+    //         <GridDiv>
+    //           <>
+    //             <div style={{ color: 'black' }}>
+    //               여러분들이 보내주신 질문들을 확인하고있어요..!
+    //             </div>
+    //           </>
+    //         </GridDiv>
+    //       </StickBar>
+    //     </StickBarDiv>
+    //   );
     }
 
     // return (
@@ -255,4 +254,4 @@ export default function SubStickBar() {
     //   </>
     // );
   }
-}
+// }

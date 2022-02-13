@@ -172,14 +172,14 @@ class Room extends Component {
           }
         });
 
-        mySession.on('signal:QnAmode', event => {
-          let Modedata = event.data.split(',');
-          const QAmode = Modedata[1];
-          console.log(QAmode);
-          if (QAmode !== this.props.QnAmode) {
-            this.props.dochangeQnAMode(QAmode);
-          }
-        });
+        // mySession.on('signal:QnAmode', event => {
+        //   let Modedata = event.data.split(',');
+        //   const QAmode = Modedata[1];
+        //   console.log(QAmode);
+        //   if (QAmode !== this.props.QnAmode) {
+        //     this.props.dochangeQnAMode(QAmode);
+        //   }
+        // });
 
         mySession.on('signal:emozi', event => {
           let emozidata = event.data.split(',');

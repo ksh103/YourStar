@@ -19,7 +19,7 @@ const BackgroundDiv = styled.div`
 
 export default function UserQnA() {
   const { storeSession } = useSelector(state => state.MeetingRoom);
-  const dispatch = useDispatch();
+  // const dispatch = useDispatch(/);
 
   storeSession.on('signal:qnaContents', event => {
     if (event.data.length > 1) {  // qna 모달창 여는 신호 받음(값이 있는 경우)
@@ -40,24 +40,51 @@ export default function UserQnA() {
         content: "input",
         button: '전송'
       }).then( value => {
-        storeSession.signal({
-          data: value,
-          to: [event.from],
-          type: 'QnAFromUser'
-        })
-        swal({
-          text: '전송 완료 ! 다른 분들이 포스트잇을 적을 때까지 잠시만 기다려주세요 !',
-          icon: 'success',
-          button: 'ok!'
-      })
-      })
+        if (value.trim() === "") {
+          swal({
+            text: "내용을 입력해주세요",
+            icon: "warning",
+            button: true
+          }).then(() => reQnASwal());; // 다시 입력창 띄우기 
+        } else {
+          console.log(event)
+          storeSession.signal({
+            data: value,
+            to: [event.from],
+            type: 'QnAFromUser'
+          })
+          swal({
+            text: '전송 완료 ! 다른 분들이 포스트잇을 적을 때까지 잠시만 기다려주세요 !',
+            icon: 'success',
+            button: 'ok!'
+        });
+        }
+      });
+    } else {
+      swal.stopLoading();
+      swal.close()
     }
   })
+
+  const reQnASwal = () => {
+    swal({
+      text: '스타에게 궁금하거나 하고 싶었던 말을 적어 보내보세요 !',
+      content: "input",
+      button: '전송'
+    }).then( value => {
+      if (value.trim() === "") {
+        swal({
+          text: "내용을 입력해주세요",
+          icon: "warning",
+          button: true
+        }).then(() => reQnASwal());
+     }
+    });
+  }
 
   return (
     <BackgroundDiv>
       <QuestionMainScreen></QuestionMainScreen>
-      <SubStickBar></SubStickBar>
       <LongChatting></LongChatting>
       <MyScreen></MyScreen>
       <OtherPersonScreen></OtherPersonScreen>

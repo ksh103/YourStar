@@ -8,6 +8,9 @@ import SmallChatting from '../CommonComponents/RightSideItems/Chatting/SmallChat
 import { useSelector, useDispatch } from 'react-redux';
 import StarQnAListScreen from '../CommonComponents/MainItems/Game/StarQnAListScreen';
 import { changeQnAtoggle } from '../../../store/modules/meetingRoom';
+import {
+  AddQnaList,
+} from '../../../store/modules/meetingRoom';
 // 포지션작업
 const BackgroundDiv = styled.div`
   width: 100%;
@@ -19,6 +22,15 @@ export default function StarQnA() {
   const { StarQnAtoggle } = useSelector(state => ({
     StarQnAtoggle: state.MeetingRoom.StarQnAtoggle,
   }));
+  const { storeSession } = useSelector(state => ({
+    storeSession: state.MeetingRoom.storeSession,
+  }));
+
+  const dispatch = useDispatch();
+
+  storeSession.on('signal:QnAFromUser', event => {
+    dispatch(AddQnaList({text : event.data}))
+  })
 
   return (
     <BackgroundDiv>
