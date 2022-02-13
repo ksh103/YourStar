@@ -5,6 +5,7 @@ import styled from 'styled-components';
 import { IoIosAlarm, IoMdCreate, IoIosAperture } from 'react-icons/io';
 import { pointColor } from '../../../../styles/variables';
 import axios from 'axios';
+import swal from 'sweetalert';
 
 const HeaderBox = styled.div`
   /* border: solid red; */
@@ -92,6 +93,7 @@ export default function Header() {
       }
     }
 
+    // 다음 사람 데려오기
     if (idx < subscribers.length) {
       const sessionId = storeSession.sessionId;
       const data = {
@@ -115,7 +117,7 @@ export default function Header() {
     }
 
     // 스타 돌려 보내기
-    if (idx > subscribers.length) {
+    if (idx >= subscribers.length) {
       const sessionId = storeSession.sessionId;
 
       const data = {
@@ -140,6 +142,19 @@ export default function Header() {
   };
 
   const signalToCurUserOut = () => {
+    // 스타 퇴장 알림
+    if (index === subscribers.length) {
+      swal({
+        closeOnClickOutside: false,
+        closeOnEsc: false,
+        title: '미팅룸 이동 알림',
+        text: '대기 시간 이후 미팅룸으로 자동 이동됩니다',
+        icon: 'info',
+        buttons: false,
+        timer: 5000,
+      });
+    }
+
     // 다시 이전 세션으로 보내기
     setPrevCnt(checkCnt);
     const sessionId = storeSession.sessionId;
