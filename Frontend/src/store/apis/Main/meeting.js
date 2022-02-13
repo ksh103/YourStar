@@ -109,9 +109,7 @@ export async function WarningToMemberAPI({ memberId, meetingId }) {
 
 // 미팅 종료
 export async function EndMeetingAPI(meetingId) {
-  await axios.post(`${BASE_URL}meetings/warning`, {
-    meetingId: meetingId,
-  });
+  await axios.put(`${BASE_URL}meetings/room-close?meetingId=${meetingId}`);
 }
 
 // 스타가 팬미팅 신청
