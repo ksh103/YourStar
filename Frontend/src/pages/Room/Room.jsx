@@ -29,6 +29,7 @@ import { AddGameScoreAPI, CallGameRankAPI } from '../../store/apis/Room/game';
 import RoomComponent from './RoomComponent';
 import { BASE_URL } from '../../utils/contants';
 import Warning from '../../components/room/CommonComponents/Alert/Warning';
+import { useHistory } from 'react-router';
 // import { BackgroundDiv } from '../../../components/room/styles/roomGlobal';
 
 const OPENVIDU_SERVER_URL = 'https://i6e204.p.ssafy.io:8443';
@@ -406,16 +407,34 @@ class Room extends Component {
 
         // 경고창
         mySession.on('signal:warning', event => {
+          const history = useHistory();
           this.setState({
             warningCnt: event.data,
           });
           setTimeout(() => this.setState({ warningCnt: 0 }), 10000);
           if (parseInt(event.data) > 1) {
             setTimeout(
-              () => window.location.replace('https://i6e204.p.ssafy.io/'),
+              () => history.push(`/schedule/${this.state.mySessionId}`),
               10000
             );
           }
+        });
+
+        // 종료 알림
+        mySession.on('signal:end', event => {
+          const history = useHistory();
+          mySession.disconnect();
+          swal({
+            title: '미팅 종료 알림',
+            text: '미팅 상세 페이지로 이동됩니다',
+            icon: 'info',
+            buttons: false,
+            closeOnClickOutside: false,
+            closeOnEsc: false,
+            timer: 1500,
+          }).then(() => {
+            history.push(`/schedule/${this.state.mySessionId}`);
+          });
         });
 
         // 세션과 연결하는 부분
