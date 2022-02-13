@@ -36,7 +36,7 @@ function App() {
           <PrivateRoute exact path="/login" component={Login} code={[0]} />
           <PrivateRoute exact path="/signup" component={Signup} code={[0]} />
           <Route exact path="/faq" component={FAQ} />
-          <PrivateRoute exact path="/apply" component={Apply} code={[2]} />
+          <PrivateRoute exact path="/apply" component={Apply} code={[2, 4]} />
           <PrivateRoute
             exact
             path="/admin/:id"
