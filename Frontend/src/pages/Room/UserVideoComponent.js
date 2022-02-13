@@ -162,6 +162,7 @@ const mapStateToProps = state => ({
   subscribers: state.MeetingRoom.subscribers,
   me: state.mypage.me,
   meetingId: state.meeting.meeting.id,
+  selectNUm: state.MeetingRoom.selectNum,
 });
 
 const mapDispatchToProps = dispatch => {

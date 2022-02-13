@@ -1,6 +1,8 @@
 import React from 'react';
 import styled from 'styled-components';
 import { MainDiv } from '../Main.style';
+import { useSelector } from 'react-redux';
+import StarVideoComponent from '../../../../../pages/Room/StarVideoComponent';
 // 51 ->
 const QuestionMain = styled.div`
   position: relative;
@@ -12,9 +14,15 @@ const QuestionMain = styled.div`
 `;
 
 export default function QuestionMainScreen() {
+  const { mainStreamManager } = useSelector(state => state.MeetingRoom);
+
   return (
     <MainDiv>
-      <QuestionMain></QuestionMain>
+      <QuestionMain>
+        {mainStreamManager && (
+          <StarVideoComponent streamManager={mainStreamManager} />
+        )}
+      </QuestionMain>
     </MainDiv>
   );
 }

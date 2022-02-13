@@ -155,7 +155,11 @@ export default function Concert() {
   return (
     <BackgroundDiv>
       <ConcertWrapper>
-        <ConcertDisplayBox></ConcertDisplayBox>
+        <ConcertDisplayBox>
+          {mainStreamManager && (
+            <StarVideoComponent streamManager={mainStreamManager} />
+          )}
+        </ConcertDisplayBox>
 
         <EmoziBox>
           {emoziList.map((emozi, idx) => {
@@ -174,9 +178,6 @@ export default function Concert() {
         </HolePlace>
       </ConcertWrapper>
 
-      {mainStreamManager && (
-        <StarVideoComponent streamManager={mainStreamManager} />
-      )}
       {me.code === 3 ? (
         <HalfSideDiv1>
           <ConcertChattingBox></ConcertChattingBox>
