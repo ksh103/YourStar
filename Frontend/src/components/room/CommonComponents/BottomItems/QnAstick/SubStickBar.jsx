@@ -13,17 +13,17 @@ const StickBar = styled.div`
   width: 60.1416vw;
   height: 5.517vh;
   background-color: white;
-  border-radius: 0.5vh;
+  border-radius: 2vh;
   box-shadow: 0.306vh 0.306vh gray;
 `;
 
 const StickBarDiv = styled.div`
   position: absolute;
-  top: 66.5%;
+  top: 66.7%;
   left: 8%;
 `;
 
-const GridDiv = styled.ul`
+const GridDiv = styled.div`
   width: 100%;
   height: 100%;
   display: grid;
@@ -32,15 +32,17 @@ const GridDiv = styled.ul`
   overflow: hidden;
 `;
 
-const InnerDiv = styled.li`
+const InnerDiv = styled.div`
   grid-colum: 4;
   grid-row: 1;
-  text-align: center;
-  border-radius: 1vh;
-  overflow:hidden;
+  height: 100%;
+  border-radius: 2vh;
   cursor: pointer;
   background-color: ${props => props.color};
   font-weight: ${props => (props.color.length > 1 ? 'bold' : 'none')};
+  display:flex;
+  justify-content: center;
+  align-items: center;
 `;
 
 // 필요한 state
@@ -115,15 +117,15 @@ export default function SubStickBar() {
               <InnerDiv 
                 onClick={() => QnAChange('start')} 
                 color = {QnAmode === 'start'? backgroundColor : ''}
-              ><p>Q&A 시작</p></InnerDiv>
+              ><div>Q&A 시작</div></InnerDiv>
               <InnerDiv 
                 onClick={() => QnAChange('end')}
                 color = {QnAmode === 'end'? backgroundColor : ''}
-              ><p>Q&A 종료</p></InnerDiv>
+              ><div>Q&A 종료</div></InnerDiv>
               <InnerDiv 
                 onClick={() => QnAChange('list')}
                 color = {QnAmode === 'list'? backgroundColor : ''}
-              ><p>Q&A 리스트</p></InnerDiv>
+              ><div>Q&A 리스트</div></InnerDiv>
             </GridDiv>
           </StickBar>
         </StickBarDiv>
