@@ -15,7 +15,7 @@ public interface MeetingGameRepository extends JpaRepository<MeetingGame, Intege
     @Query("select m.meetingName, a.applicantGameScore from Applicant a left join Meeting m on m.meetingId = a.meetingId where a.memberId = :memberId")
     List<String> fintMeetingResultListByMemberId(int memberId);
 
-    @Query("select m.memberNick, a.applicantGameScore from Applicant a " +
+    @Query("select m.memberName, a.applicantGameScore from Applicant a " +
             "left join Member m on m.memberId = a.memberId " +
             "where a.meetingId = :meetingId "+
             "order by a.applicantGameScore desc")
