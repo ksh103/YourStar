@@ -2,6 +2,7 @@ package com.ssafy.yourstar.domain.meeting.controller;
 
 import com.ssafy.yourstar.domain.meeting.db.entity.Meeting;
 import com.ssafy.yourstar.domain.meeting.db.entity.MeetingRecordImgPath;
+import com.ssafy.yourstar.domain.meeting.request.MeetingRecordImgPathPostReq;
 import com.ssafy.yourstar.domain.meeting.response.MeetingRecordImgDetailGetRes;
 import com.ssafy.yourstar.domain.meeting.response.MeetingRecordListGetRes;
 import com.ssafy.yourstar.domain.meeting.service.MeetingRecordService;
@@ -17,6 +18,7 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.io.IOException;
 import java.util.List;
 
 @Api("추억 보관함 API")
@@ -41,8 +43,25 @@ public class MeetingRecordController {
         return ResponseEntity.status(200).body(MeetingRecordListGetRes.of(200, "Success", meetingRecordPage));
     }
 
+    @ApiOperation(value = "추억 보관함 사진 저장")
+    @PostMapping(value = "/record-img")
+    public ResponseEntity<? extends BaseResponseBody> meetingRecordImgSave(@RequestBody MeetingRecordImgPathPostReq meetingRecordImgPathPostReq) {
+
+        try {
+            if (meetingRecordService.meetingRecordImgSave(meetingRecordImgPathPostReq) == 1) {
+                return ResponseEntity.status(201).body(BaseResponseBody.of(201, "Success"));
+            } else {
+                return ResponseEntity.status(400).body(BaseResponseBody.of(400, "Failed"));
+            }
+        } catch (IOException e) {
+            log.error(e.getMessage());
+            return ResponseEntity.status(400).body(BaseResponseBody.of(400, "Failed"));
+        }
+    }
+
+
     @ApiOperation(value = "추억 보관함 사진 다운로드")
-    @GetMapping("/record-list/{meetingId}/{memberId}")
+    @GetMapping("/record-img/{meetingId}/{memberId}")
     public ResponseEntity<MeetingRecordImgDetailGetRes> meetingRecordImgDownload(@ApiParam(value = "팬미팅 구분 번호") @PathVariable(value = "meetingId") int meetingId, @ApiParam(value = "회원 구분 번호") @PathVariable(value = "memberId") int memberId) {
         log.info("meetingRecordImgDownload - Call");
 

@@ -7,7 +7,7 @@ import lombok.Setter;
 
 @Getter
 @Setter
-@ApiModel(value = "MeetingJoinPostReq", description = "미팅룸 입장시 필요한 정보")
+@ApiModel(value = "MeetingRecordingPostReq", description = "팬미팅 영상 녹화 정보")
 public class MeetingRecordingPostReq {
     @ApiModelProperty(value = "팬미팅 구분 번호", required = true, example = "3")
     int meetingId;
