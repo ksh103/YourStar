@@ -7,7 +7,7 @@ import StarVideoComponent from '../../../../../pages/Room/StarVideoComponent';
 const QuestionMain = styled.div`
   position: relative;
   width: 60.041vw;
-  height: 58.0725vh;
+  height: 60.5vh;
   background-color: white;
   border-radius: 3.0643vh;
   box-shadow: 0.306vh 0.306vh gray;

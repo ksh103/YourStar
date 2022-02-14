@@ -2,8 +2,8 @@ import React, { Component } from 'react';
 import './UserVideo.css';
 import { UserDelete } from '../../store/modules/meetingRoom';
 import { connect } from 'react-redux';
+import ChoicedOpenViduVideoComponent from './ChoicedVideo';
 import { WarningToMemberAPI } from '../../store/apis/Main/meeting';
-import swal from 'sweetalert';
 import {
   BsFillMicFill,
   BsFillMicMuteFill,
@@ -11,8 +11,8 @@ import {
   BsFillCameraVideoOffFill,
 } from 'react-icons/bs';
 import { RiAlarmWarningLine } from 'react-icons/ri';
-import OpenViduVideoComponent from './OvVideo';
-class UserVideoComponent extends Component {
+
+class ChoiceUserVideoComponent extends Component {
   constructor(props) {
     super(props);
     this.state = {
@@ -69,53 +69,63 @@ class UserVideoComponent extends Component {
   // 경고 주기
   warning(connection) {
     const userData = JSON.parse(connection.data);
-    swal({
-      text: '' + userData.clientData + '님에게 경고를 부여하시겠습니까?',
-      icon: 'warning',
-      buttons: {
-        cancel: '아니오',
-        confirm: '네',
-      },
-    }).then(event => {
-      if (event === true) {
-        this.props
-          .doWarningToMemberAPI(
-            // 경고 횟수 +1 db 저장
-            userData.memberId,
-            connection.session.sessionId
-          )
-          .then(event => {
-            swal({
-              text: userData.clientData + '님에게 경고 1회 부여했습니다.',
-              icon: 'success',
-              button: 'OK',
-            }).then(() => {
-              if (event.data.applicant.applicantWarnCount > 1) {
-                // 경고 2회 이상이면 퇴장
-                this.props.storeSession.forceDisconnect(connection);
-                swal({
-                  text:
-                    userData.clientData +
-                    '님은 누적 경고 2회 이상으로 퇴장 조치되었습니다.',
-                  icon: 'info',
-                  button: 'OK',
-                });
-              }
-            });
-            this.props.storeSession.signal({
-              // 해당 사용자에게 경고 신호주기
-              data: event.data.applicant.applicantWarnCount, // 경고 횟수
-              to: [connection],
-              type: 'warning',
-            });
-          });
-      }
-    });
+    this.props
+      .doWarningToMemberAPI(
+        // 경고 횟수 +1 db 저장
+        userData.memberId,
+        connection.session.sessionId
+      )
+      .then(event => {
+        // 경고 2회 이상이면 퇴장
+        this.props.storeSession.signal({
+          // 해당 사용자에게 경고 신호주기
+          data: event.data.applicant.applicantWarnCount, // 경고 횟수
+          to: [connection],
+          type: 'warning',
+        });
+        if (event.data.applicant.applicantWarnCount > 1) {
+          this.props.storeSession.forceDisconnect(connection);
+        }
+      });
   }
+
+  // controllSpeakingState(){
+  //   console.log('------------')
+  //   console.log(this.props.publisher)
+  //   this.props.streamManager.on('publisherStartSpeaking', () =>
+  //   this.setState({
+  //     isSpeaking : true,
+  //   })
+  //   );
+  //   console.log('hererjldfjaklsdfjaskldfjlaksjdfkl')
+  //   console.log(this.props.storeSession)
+  //   this.props.storeSession.on('signal:isSpeaking', event => {
+  //     if (event.data === "true") {
+  //       this.setState({
+  //         isSpeaking : true
+  //       })
+  //       console.log('말하는중')
+  //     } else {
+  //       this.setState({
+  //         isSpeaking : false
+  //       })
+  //       console.log('멈춤')
+  //     }
+  //   });
+  // }
 
   render() {
     return (
-      <div className={'hiddenConsole'}>
+      <div
+        className={
+          'hiddenConsole' + (this.state.isSpeaking ? 'speakingUser' : '')
+        }
+        style={
+          this.state.isSpeaking
+            ? { backgroundColor: 'green' }
+            : { backgroundColor: 'red' }
+        }
+      >
         {this.props.me.code !== 3 ? (
           <div className="son">
             <p>{this.getNicknameTag()}</p>
@@ -186,7 +196,9 @@ class UserVideoComponent extends Component {
         ) : null}
         {this.props.streamManager !== undefined ? (
           <>
-            <OpenViduVideoComponent streamManager={this.props.streamManager} />
+            <ChoicedOpenViduVideoComponent
+              streamManager={this.props.streamManager}
+            />
           </>
         ) : null}
       </div>
@@ -209,4 +221,7 @@ const mapDispatchToProps = dispatch => {
       WarningToMemberAPI({ memberId, meetingId }),
   };
 };
-export default connect(mapStateToProps, mapDispatchToProps)(UserVideoComponent);
+export default connect(
+  mapStateToProps,
+  mapDispatchToProps
+)(ChoiceUserVideoComponent);

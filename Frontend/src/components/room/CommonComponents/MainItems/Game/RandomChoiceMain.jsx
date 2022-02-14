@@ -4,7 +4,7 @@ import { MainDiv } from '../Main.style';
 import { useDispatch, useSelector } from 'react-redux';
 import StarVideoComponent from '../../../../../pages/Room/StarVideoComponent';
 // import './alertCss.css';
-import UserVideoComponent from '../../../../../pages/Room/UserVideoComponent';
+import ChoiceUserVideoComponent from '../../../../../pages/Room/ChoiceUserVideoComponent';
 import swal from '@sweetalert/with-react';
 import './rolling.scss';
 import {
@@ -44,7 +44,7 @@ export default function RandomChoiceMain() {
   const dispatch = useDispatch();
   const randomoneperson = Input => dispatch(randomResult(Input));
   // const Subs = Input => dispatch(randomSub(Input));
-  //
+  const [choiced, setChoiced] = useState(false);
 
   const [sec, setSec] = useState(5);
   const time = useRef(5);
@@ -99,6 +99,7 @@ export default function RandomChoiceMain() {
     if (me.code === 3) {
       if (me.nick === dangchum.clientData) {
         setSomeone(publisher);
+        setChoiced(true);
       } else {
         subscribers.map((sub, idx) => {
           const user = JSON.parse(sub.stream.connection.data);
@@ -193,7 +194,9 @@ export default function RandomChoiceMain() {
           ) : null}
           {/* 유저 정보가 들어오면 띄워주기 */}
           {userscreen && (
-            <UserVideoComponent streamManager={somone}></UserVideoComponent>
+            <ChoiceUserVideoComponent
+              streamManager={somone}
+            ></ChoiceUserVideoComponent>
           )}
         </RandomChoiceSc>
       </MainGrid>

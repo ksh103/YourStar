@@ -21,7 +21,7 @@
   border-radius: 2vw;
   z-index: 1;
   background-color: black;
-  color: red;
+  /* color: red; */
 }
 
 .hiddenConsole:hover .son {
@@ -36,6 +36,17 @@
   margin: 1vw;
 }
 
+.Ready {
+  position: relative;
+  width: 98%;
+  height: 64.5vh;
+  background-color: white;
+  border-radius: 3.0643vh;
+  box-shadow: 0.306vh 0.306vh gray;
+  margin: 1vh;
+  object-fit: cover;
+}
+
 .StarAdmin {
   position: absolute;
   /* width: 58.041vw;
@@ -44,6 +55,7 @@
   height: 66.5vh;
   border-radius: 3.0643vh;
   margin: 0;
+  object-fit: cover;
 }
 
 .StarConcert {
@@ -54,15 +66,17 @@
   width: 60vw;
   background-color: white;
   margin: 0;
+  object-fit: cover;
 }
 
 .StarQnA {
   position: relative;
   width: 60.041vw;
-  height: 58.0725vh;
+  height: 60.5vh;
   background-color: white;
   border-radius: 3.0643vh;
   margin: 0;
+  object-fit: cover;
 }
 
 .StarRandom {
@@ -74,9 +88,10 @@
   box-shadow: 0.306vh 0.306vh gray;
   margin-right: 4vw;
   margin: 0;
+  object-fit: cover;
 }
 
-.UserRandom {
+/* .UserRandom {
   position: relative;
   width: 28.041vw;
   height: 66.5vh;
@@ -85,7 +100,7 @@
   box-shadow: 0.306vh 0.306vh gray;
   margin-right: 4vw;
   margin: 0;
-}
+} */
 
 .StarOXGame {
   position: relative;
@@ -95,6 +110,7 @@
   border-radius: 3.0643vh;
   box-shadow: 0.306vh 0.306vh gray;
   margin: 0;
+  object-fit: cover;
 }
 /* 
 position: relative;
@@ -108,4 +124,97 @@ position: relative;
 }
 
 .StarOneOnOne {
+  position: relative;
+  width: 28.041vw;
+  height: 66.5vh;
+  background-color: white;
+  border-radius: 3.0643vh;
+  box-shadow: 0.306vh 0.306vh gray;
+  margin-right: 4vw;
+  margin: 0;
+  object-fit: cover;
+}
+
+.User {
+  width: 13vw;
+  height: 19vh;
+  cursor: pointer;
+  border-radius: 3.0643vh;
+  float: left;
+  margin: 1vw;
+  object-fit: cover;
+}
+
+.UserQnA {
+  width: 13vw;
+  height: 19vh;
+  cursor: pointer;
+  border-radius: 3.0643vh;
+  float: left;
+  margin: 1vw;
+  object-fit: cover;
+}
+
+.UserChoiced {
+  position: relative;
+  width: 28.041vw;
+  height: 66.5vh;
+  background-color: white;
+  border-radius: 3.0643vh;
+  box-shadow: 0.306vh 0.306vh gray;
+  margin-right: 4vw;
+  margin: 0;
+  object-fit: cover;
+}
+
+.UserRandom {
+  width: 13vw;
+  height: 19vh;
+  cursor: pointer;
+  border-radius: 3.0643vh;
+  float: left;
+  margin: 1vw;
+  object-fit: cover;
+}
+
+.UserOXGame {
+  width: 13vw;
+  height: 19vh;
+  cursor: pointer;
+  border-radius: 3.0643vh;
+  float: left;
+  margin: 1vw;
+  object-fit: cover;
+}
+
+.UserConsonantGame {
+  width: 13vw;
+  height: 19vh;
+  cursor: pointer;
+  border-radius: 3.0643vh;
+  float: left;
+  margin: 1vw;
+  object-fit: cover;
+}
+.UserOneOnOne {
+  position: relative;
+  width: 28.041vw;
+  height: 66.5vh;
+  background-color: white;
+  border-radius: 3.0643vh;
+  box-shadow: 0.306vh 0.306vh gray;
+  margin-right: 4vw;
+  margin: 0;
+}
+
+.UserConsonantGameToStarScreen {
+  position: relative;
+  width: 25vw;
+  height: 27vh;
+  background-color: white;
+  border-radius: 3.0643vh;
+  box-shadow: 0.306vh 0.306vh gray;
+  margin-right: 4vw;
+  margin: 0;
+  object-fit: cover;
 }
