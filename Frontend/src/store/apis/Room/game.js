@@ -12,14 +12,12 @@ export async function AddGameScoreAPI(meetingId, memberId) {
 
 // 게임 순위 불러오기
 export async function CallGameRankAPI(meetingId) {
-  const result = await axios.get(
-    `${BASE_URL}meetings/game-result/admin/${meetingId}`
-  );
-  console.log(result);
-  return result;
+  let data = [];
+  const result = await axios
+    .get(`${BASE_URL}meetings/game-result/admin/${meetingId}`)
+    .then(function (response) {
+      data = response;
+    });
+  console.log(data);
+  return data;
 }
-
-const initialState = {
-  gameList: [],
-};
-export const GET_GAME_LIST = 'GET_GAME_LIST'; // 게임 리스트 받아오기

@@ -16,15 +16,23 @@ import swal from 'sweetalert';
 import { useState } from 'react';
 import { useHistory } from 'react-router';
 import { useSelector } from 'react-redux';
+import axios from 'axios';
+import { BASE_URL } from '../../../../utils/contants';
 
 export default function Pledge(props) {
   const history = useHistory();
 
   const { meeting } = useSelector(state => state.meeting);
+  const { me } = useSelector(state => state.mypage);
   const [message, setMessage] = useState('');
 
   const onClicksubmit = () => {
     if (message === '본인은 위 사항을 지킬것을 동의합니다') {
+      const result = axios // 1. 점수 집계 중입니다 먼저 띄워주기 (API 받아오기) 1초
+        .post(
+          `${BASE_URL}meetings/oath?meetingId=${meeting.id}&memberId=${me.memberId}`
+        );
+      // 보안서약서 내역 저장
       swal(
         '서약서 제출이 완료되었습니다',
         '미팅 대기 페이지로 이동합니다.',
@@ -33,8 +41,9 @@ export default function Pledge(props) {
           buttons: false,
           timer: 1800,
         }
-      );
-      history.push(`/stanby/${meeting.id}`); // 미팅 대기화면으로 이동
+      ).then(() => {
+        history.push(`/stanby/${meeting.id}`);
+      }); // 미팅 대기화면으로 이동
     } else {
       swal('', '서약서 서명이 일치하지 않습니다.', 'error', {
         buttons: false,

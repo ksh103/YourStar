@@ -18,7 +18,7 @@ export default function MypageProfile() {
           <div id="profileIcon">
             <MypageIconBlock>
               {me.code === 3 && <MdPerson />}
-              {me.code === 2 && <MdStar />}
+              {me.code === 4 && <MdStar />}
               {me.code === 1 && <MdSettings />}
             </MypageIconBlock>
           </div>

@@ -12,7 +12,7 @@ import {
   MEETING_GAME_RESULT_FAILURE,
 } from '../modules/meetingList';
 
-function* meetingApply(action) {
+function* meetingGame(action) {
   try {
     const result = yield call(MeetingGameListAPI, action.data);
     yield put({
@@ -26,11 +26,11 @@ function* meetingApply(action) {
   }
 }
 
-function* watchMeetingApply() {
-  yield takeLatest(MEETING_APPLY_REQUEST, meetingApply);
+function* watchMeetingGame() {
+  yield takeLatest(MEETING_GAME_RESULT_REQUEST, meetingGame);
 }
 
-function* meetingGame(action) {
+function* meetingApply(action) {
   try {
     const result = yield call(MeetingApplyListAPI, action.data);
     yield put({
@@ -44,9 +44,10 @@ function* meetingGame(action) {
   }
 }
 
-function* watchMeetingGame() {
-  yield takeLatest(MEETING_GAME_RESULT_REQUEST, meetingGame);
+function* watchMeetingApply() {
+  yield takeLatest(MEETING_APPLY_REQUEST, meetingApply);
 }
+
 export default function* meetingSaga() {
   yield all([fork(watchMeetingApply), fork(watchMeetingGame)]);
 }
