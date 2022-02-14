@@ -101,7 +101,7 @@ export default function ScheduleDetailLeft() {
       );
     } else if (new Date(meeting.startDate) <= now) {
       if (
-        me.code === 1 ||
+        me.code === 3 ||
         ((me.code === 2 || me.code === 4) && me.managerCode === meeting.code) ||
         meeting.isReserve
       ) {

@@ -8,13 +8,18 @@ const mapStateToProps = state => {
 
 const GlobalStyle = createGlobalStyle`
   body {
-    /* background-image: url(${space}); */
     min-width: 480px;
     box-sizing: border-box;
     margin: 0;
     padding: 0;
     background-color: ${props =>
       props.MeetingRoom.backgroundColor}; // redux에 있는 color 값 받아와서 저장
+    background-color: ${props =>
+      props.MeetingRoom.bgToggle === '1'
+        ? props.MeetingRoom.backgroundColor
+        : 'none'};
+    background-image: ${props =>
+      props.MeetingRoom.bgToggle === '0' ? `url(${space})` : 'none'};
     width: 100%;    
     height: 100vh;
     background-size: cover;  
@@ -51,5 +56,3 @@ const GlobalStyle = createGlobalStyle`
 `;
 
 export default connect(mapStateToProps)(GlobalStyle);
-
-// export default GlobalStyle;

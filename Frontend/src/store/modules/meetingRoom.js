@@ -14,6 +14,7 @@ const QNA_TOGGLE_CHANGE = 'QNA_TOGGLE_CHANGE';
 const SIGNAL_OX = 'SIGNAL_OX';
 const OX_GAME_COUNT = 'OX_GAME_COUNT';
 const BACKGROUND_COLOR_CHANGE = 'BACKGROUND_COLOR_CHANGE';
+const BG_TOGGLE_CHANGE = 'BG_TOGGLE_CHANGE';
 const NOW_EMOZI = 'NOW_EMOZI';
 const MEETINGROOM_USER_DELETE = 'MEETINGROOM_USER_DELETE';
 const PLUS_INDEX = 'PLUS_INDEX';
@@ -188,6 +189,14 @@ export const changeBackgroundColor = color => {
   };
 };
 
+export const changeBgToggle = num => {
+  console.log(num);
+  return {
+    type: BG_TOGGLE_CHANGE,
+    payload: num,
+  };
+};
+
 export const changeNowEmozi = num => {
   return {
     type: NOW_EMOZI,
@@ -246,7 +255,8 @@ const initialState = {
   OXgameCount: 1,
   index: -1,
   checkCnt: -1,
-  backgroundColor: '#C4C4C4', // 배경 컬러 22222222222222222222222222
+  backgroundColor: '#C4C4C4', // 배경 컬러
+  bgToggle: '0', // 우주배경 or 컬러배경
   nowEmozi: -1,
   chosonantQuiz: [],
   onebyoneStream: undefined,
@@ -360,11 +370,13 @@ const MeetingRoom = (state = initialState, action) => {
         StarQnAtoggle: !action.payload,
       };
     case BACKGROUND_COLOR_CHANGE:
-      console.log('BACKGROUND_COLOR_CHANGE', action.payload);
       return {
         ...state,
         backgroundColor: action.payload,
       };
+    case BG_TOGGLE_CHANGE:
+      console.log('asdasdasds');
+      return { ...state, bgToggle: action.payload };
     case NOW_EMOZI:
       return { ...state, nowEmozi: action.payload };
     case OX_GAME_COUNT:
