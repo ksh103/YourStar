@@ -5,6 +5,7 @@ import com.ssafy.yourstar.domain.meeting.db.entity.MeetingRecordImgPath;
 import com.ssafy.yourstar.domain.meeting.request.MeetingRecordImgPathPostReq;
 import com.ssafy.yourstar.domain.meeting.response.MeetingRecordImgDetailGetRes;
 import com.ssafy.yourstar.domain.meeting.response.MeetingRecordListGetRes;
+import com.ssafy.yourstar.domain.meeting.response.MeetingRecordVidoeDetailGetRes;
 import com.ssafy.yourstar.domain.meeting.service.MeetingRecordService;
 import com.ssafy.yourstar.domain.meeting.service.MeetingService;
 import com.ssafy.yourstar.global.model.response.BaseResponseBody;
@@ -67,6 +68,20 @@ public class MeetingRecordController {
         }
     }
 
+    @ApiOperation(value = "추억 보관함 녹화 영상 다운로드")
+    @GetMapping("/record-video/{meetingId}/{memberId}")
+    public ResponseEntity<MeetingRecordVidoeDetailGetRes> meetingRecordVideoDownload(@ApiParam(value = "팬미팅 구분 번호") @PathVariable(value = "meetingId") int meetingId, @ApiParam(value = "회원 구분 번호") @PathVariable(value = "memberId") int memberId) {
+        log.info("meetingRecordVideoDownload - Call");
+
+        String meetingRecordVideoFileUrl = meetingRecordService.meetingRecordVideoFileUrl(meetingId, memberId);
+
+        if(meetingRecordVideoFileUrl != null && !meetingRecordVideoFileUrl.isEmpty()) {
+            return ResponseEntity.status(200).body(MeetingRecordVidoeDetailGetRes.of(200, "Success", meetingRecordVideoFileUrl));
+        }else{
+            log.error("meetingRecordImgRemove - No Contents");
+            return ResponseEntity.status(204).body(MeetingRecordVidoeDetailGetRes.of(204, "No Contents", null));
+        }
+    }
 
     @ApiOperation(value = "추억 보관함 사진 저장")
     @GetMapping("/record-img/{meetingId}/{memberId}")

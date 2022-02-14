@@ -3,6 +3,7 @@ package com.ssafy.yourstar.domain.meeting.service;
 import com.ssafy.yourstar.domain.meeting.db.entity.Meeting;
 import com.ssafy.yourstar.domain.meeting.db.entity.MeetingRecordImgPath;
 import com.ssafy.yourstar.domain.meeting.db.repository.MeetingRecordImgPathRepository;
+import com.ssafy.yourstar.domain.meeting.db.repository.MeetingRecordVideoPathRepository;
 import com.ssafy.yourstar.domain.meeting.db.repository.MeetingRepository;
 import com.ssafy.yourstar.domain.meeting.db.repository.MeetingRepositorySpp;
 import com.ssafy.yourstar.domain.meeting.request.MeetingRecordImgPathPostReq;
@@ -28,6 +29,9 @@ public class MeetingRecordServiceImpl implements MeetingRecordService {
 
     @Autowired
     MeetingRecordImgPathRepository meetingRecordImgPathRepository;
+
+    @Autowired
+    MeetingRecordVideoPathRepository meetingRecordVideoPathRepository;
 
     @Autowired
     MeetingRepositorySpp meetingRepositorySpp;
@@ -86,8 +90,14 @@ public class MeetingRecordServiceImpl implements MeetingRecordService {
 
         if(!meetingRecordImgPathRepository.findAllByMeetingIdAndMemberId(meetingId, memberId).isEmpty()){
             return meetingRecordImgPathRepository.findAllByMeetingIdAndMemberId(meetingId, memberId);
-        }
-        return null;
+        }else return null;
+    }
+
+    @Override
+    public String meetingRecordVideoFileUrl(int meetingId, int memberId) {
+        if(!meetingRecordVideoPathRepository.findFileUrlByMeetingIdAndMemberId(meetingId, memberId).isEmpty()) {
+            return meetingRecordVideoPathRepository.findFileUrlByMeetingIdAndMemberId(meetingId, memberId);
+        }else return null;
     }
 
     @Override
