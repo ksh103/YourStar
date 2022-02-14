@@ -218,7 +218,8 @@ public class MeetingServiceImpl implements MeetingService {
 
     @Override
     public Page<Meeting> meetingApproveList(Pageable pageable) {
-        return meetingRepository.findAllByIsApproveTrue(pageable);
+        LocalDateTime date = LocalDateTime.now().plusHours(9);
+        return meetingRepository.findAllByIsApproveTrueAndMeetingStartDateAfter(date, pageable);
     }
 
     @Override

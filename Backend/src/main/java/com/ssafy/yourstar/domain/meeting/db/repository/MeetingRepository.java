@@ -7,12 +7,13 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Repository;
 
+import java.time.LocalDateTime;
+
 @Repository
 public interface MeetingRepository extends JpaRepository<Meeting, Integer> {
     Page<Meeting> findAllByIsApproveFalse(Pageable pageable);
 
-    @Query("SELECT m FROM Meeting m WHERE m.isApprove = true and m.meetingStartDate >= CURRENT_TIMESTAMP ")
-    Page<Meeting> findAllByIsApproveTrue(Pageable pageable);
+    Page<Meeting> findAllByIsApproveTrueAndMeetingStartDateAfter(LocalDateTime date, Pageable pageable);
     Page<Meeting> findAll(Pageable pageable);
 
     @Query("select m.memberName, m.memberEmail, o.IsOath from Member m " +
