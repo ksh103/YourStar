@@ -6,7 +6,6 @@ import com.ssafy.yourstar.domain.meeting.request.MeetingApplyByStarPostReq;
 import com.ssafy.yourstar.domain.meeting.request.MeetingApplyByUserPostReq;
 import com.ssafy.yourstar.domain.meeting.request.MeetingOathByUserPostReq;
 import com.ssafy.yourstar.domain.meeting.request.MeetingRoomEndByStarPostReq;
-import com.ssafy.yourstar.domain.member.db.entity.Member;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.io.FilenameUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -257,8 +256,8 @@ public class MeetingServiceImpl implements MeetingService {
     }
 
     @Override
-    public Page<Member> meetingApplyList(int meetingId, Pageable pageable) {
-        return meetingRepositorySpp.findAllApplyMeetingListByMeetingId(meetingId, pageable);
+    public Page<String> meetingApplyList(int meetingId, Pageable pageable) {
+        return meetingRepository.findAllApplyMeetingListByMeetingId(meetingId, pageable);
     }
 
     @Override
