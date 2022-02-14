@@ -9,7 +9,6 @@ const PrivateRoute = ({ component: Component, ...rest }) => {
     <Route
       {...rest}
       render={props => {
-        console.log(rest.code);
         return rest.code.includes(me.code) ? (
           <Component {...props} />
         ) : (

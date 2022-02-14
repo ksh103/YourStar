@@ -13,6 +13,7 @@ export default function ScheduleCard({ meeting }) {
     const date = moment(d, 'YYYY-MM-DD HH:mm:ss');
     return date.format('YYYY년 MM월 DD일 HH시 mm분');
   };
+  console.log(meeting);
   return (
     <ScheduleCardRow>
       <ScheduleCardBlock>
@@ -30,6 +31,7 @@ export default function ScheduleCard({ meeting }) {
             <div id="title">{meeting.name}</div>
           </Link>
           <div id="date">{changeDate(meeting.startDate)}</div>
+          <div id="desc">{meeting.description}</div>
         </ScheduleCardContent>
       </ScheduleCardBlock>
     </ScheduleCardRow>
