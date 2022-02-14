@@ -22,6 +22,7 @@ class StarOpenViduVideoComponent extends Component {
       this.props.streamManager.addVideoElement(this.videoRef.current);
     }
     // 클래스명으로 붙여준다
+
     if (this.props.selectNum === 0) {
       this.setState({
         mode: 'StarAdmin',
@@ -52,7 +53,7 @@ class StarOpenViduVideoComponent extends Component {
       });
     } else {
       this.setState({
-        mode: 'Admin',
+        mode: 'StarAdmin',
       });
     }
   }

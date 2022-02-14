@@ -198,8 +198,25 @@ export default function Concert() {
           <ScheduleListSelect></ScheduleListSelect>
           <HalfSideDiv2>
             <StarSmallBox></StarSmallBox>
-            <StarSmallChattingListBox></StarSmallChattingListBox>
-            <StarSmallChattingInputBox></StarSmallChattingInputBox>
+            <StarSmallChattingListBox>
+              {chattingList.map((value, idx) => {
+                return (
+                  <div key={idx + value.text}>
+                    <p style={{ margin: '0' }}>
+                      {value.userName} : {value.text}
+                    </p>
+                  </div>
+                );
+              })}
+              <div ref={messagesEndRef}></div>{' '}
+              {/**채팅 스크롤 아래로 내려주기 */}
+            </StarSmallChattingListBox>
+            <StarSmallChattingInputBox
+              onKeyPress={SendMessage}
+              value={testInput}
+              onChange={handleChatMessageChange}
+              color={backgroundColor}
+            ></StarSmallChattingInputBox>
           </HalfSideDiv2>
         </>
       )}

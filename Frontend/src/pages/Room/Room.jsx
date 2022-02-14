@@ -5,6 +5,7 @@ import React, { Component } from 'react';
 import './App.css';
 import { connect } from 'react-redux';
 import swal from 'sweetalert';
+import './SwalCss.css'
 
 // action 호출
 import {
@@ -29,7 +30,6 @@ import { AddGameScoreAPI, CallGameRankAPI } from '../../store/apis/Room/game';
 // 컴포넌트
 import RoomComponent from './RoomComponent';
 import { BASE_URL } from '../../utils/contants';
-import Warning from '../../components/room/CommonComponents/Alert/Warning';
 // import { BackgroundDiv } from '../../../components/room/styles/roomGlobal';
 
 const OPENVIDU_SERVER_URL = 'https://i6e204.p.ssafy.io:8443';
@@ -55,7 +55,6 @@ class Room extends Component {
       session: undefined,
       me: this.props.me, // Store에 저장된 내 정보 입력
       recordId: null,
-      warningCnt: 0,
       choAnsUserCnt: 1, // 초성게임 맞춘 유저 수
     };
   }
@@ -245,7 +244,7 @@ class Room extends Component {
                 { timer: 1800, button: false }
               );
               // DB에 넣어주기 chodata[1] -> memberId
-              AddGameScoreAPI(this.props.meetingId, chodata[1]);
+              AddGameScoreAPI(mySession.sessionId, chodata[1]);
               this.setState({ choAnsUserCnt: this.state.choAnsUserCnt + 1 }); // 맞춘 사람 수 1 늘리기
             }
             if (this.state.choAnsUserCnt === 4) {
@@ -281,8 +280,12 @@ class Room extends Component {
 
         // 초성게임 종료
         mySession.on('signal:endCho', () => {
-          CallGameRankAPI(85); // 1. 점수 집계 중입니다 먼저 띄워주기 (API 받아오기) 1초
-          //this.props.meetingId
+          let data = [];
+          const result = axios // 1. 점수 집계 중입니다 먼저 띄워주기 (API 받아오기) 1초
+            .get(`${BASE_URL}meetings/game-result/admin/${mySession.sessionId}`)
+            .then(function (response) {
+              data = response.data;
+            });
           swal({
             title: '점수 집계중',
             icon: 'https://www.gjstec.or.kr/img/loading.gif',
@@ -292,9 +295,10 @@ class Room extends Component {
             closeOnClickOutside: false,
             closeOnEsc: false,
           }).then(() => {
+            console.log('1////////////', data.content);
             swal(
               '현재까지 게임 순위 결과 \n 축하합니다!🎉',
-              '🥇: 손은성\n 🥈: 박동준 \n 🥉: 안영원',
+              `🥇: ${data.content[0][0]} : ${data.content[0][1]}점\n 🥈: ${data.content[1][0]} : ${data.content[1][1]}점\n 🥉: ${data.content[2][0]} : ${data.content[2][1]}점`,
               {
                 // 2. 점수 띄워주기 (최종 등수 알려주기) 3초
                 timer: 3000,
@@ -326,7 +330,12 @@ class Room extends Component {
 
         // OX게임 종료
         mySession.on('signal:endOX', () => {
-          CallGameRankAPI(85); // 1. 점수 집계 중입니다 먼저 띄워주기 (API 받아오기) 1초
+          let data = [];
+          const result = axios // 1. 점수 집계 중입니다 먼저 띄워주기 (API 받아오기) 1초
+            .get(`${BASE_URL}meetings/game-result/admin/${mySession.sessionId}`)
+            .then(function (response) {
+              data = response.data;
+            });
           //this.props.meetingId
           swal({
             title: '점수 집계중',
@@ -339,7 +348,7 @@ class Room extends Component {
           }).then(() => {
             swal(
               '현재까지 게임 순위 결과 \n 축하합니다!🎉',
-              '🥇: 손은성 \n 🥈: 박동준 \n 🥉: 안영원',
+              `🥇: ${data.content[0][0]} : ${data.content[0][1]}점\n 🥈: ${data.content[1][0]} : ${data.content[1][1]}점\n 🥉: ${data.content[2][0]} : ${data.content[2][1]}점`,
               {
                 // 2. 점수 띄워주기 (최종 등수 알려주기) 3초
 
@@ -396,13 +405,29 @@ class Room extends Component {
 
         // 경고창
         mySession.on('signal:warning', event => {
-          const url =
+          if (parseInt(event.data) === 1) {
+            swal({
+              icon: 'https://cdn-icons-png.flaticon.com/512/2761/2761896.png',
+              title: '🚨 경고 🚨',
+              text: '부적절한 행위 및 언행으로 경고 1회를 받으셨습니다. \n 경고 2회 누적 시 강퇴 및 재입장이 불가합니다.',
+              className: 'swal-warning'
+            })
+          } else {
+            // 강퇴시 이동할 경로 
+            const url =
             window.location.protocol +
             '//' +
             window.location.host +
             `/schedule/${this.state.mySessionId}`;
-          setTimeout(() => this.setState({ warningCnt: 0 }), 10000);
-          if (parseInt(event.data) > 1) {
+            swal({
+              icon: 'https://cdn-icons-png.flaticon.com/512/2761/2761817.png',
+              title: '🚨 경고 🚨',
+              text: '부적절한 행위 및 언행으로 경고 2회를 받으셨습니다. \n 확인 클릭 또는 10초 뒤 팬미팅에서 자동으로 나가게 되며, 재입장이 불가합니다.',
+              className: 'swal-warning',
+              button: '확인'
+            }).then(() => {
+              window.location.replace(url)
+            })
             setTimeout(() => window.location.replace(url), 10000);
           }
         });
@@ -637,10 +662,6 @@ class Room extends Component {
   render() {
     return (
       <div>
-        {/* 경고창 */}
-        {this.state.warningCnt !== 0 ? (
-          <Warning warningCnt={this.state.warningCnt}></Warning>
-        ) : null}
         {/* 컴포넌트는 들고왔을 때 잘 작동함 */}
         <div className="container">
           {this.state.session === undefined ? (

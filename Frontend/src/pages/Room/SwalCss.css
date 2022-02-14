@@ -1,0 +1,9 @@
+
+.swal-text {
+  text-align: center;
+}
+
+.swal-warning .swal-icon img {
+  width: 300px;
+  height: 300px;
+}

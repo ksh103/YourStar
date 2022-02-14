@@ -12,7 +12,6 @@ import {
   Signup,
   ScheduleDetail,
   FindPassword,
-  RoomDongJun,
   RoomEunSeong,
   RoomSumin,
   AdminMeetingDetail,
@@ -62,9 +61,6 @@ function App() {
           </Route>
           <Route path="/stanby/:id">
             <Stanby />
-          </Route>
-          <Route path="/DongJun">
-            <RoomDongJun />
           </Route>
           <Route path="/EunSeong">
             <RoomEunSeong />

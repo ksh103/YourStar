@@ -48,7 +48,7 @@ export default function BasicModal({ meeting }) {
     state => state.meetingList
   );
   let cnt = 0; // 회원번호 index
-  let gameCnt = 0; // 게임번호 index
+  // let gameCnt = 0; // 게임번호 index
   const FanList = meetingApplyList.map((list, index) => {
     cnt += 1;
     return (
@@ -71,23 +71,16 @@ export default function BasicModal({ meeting }) {
     );
   });
   const GameList = meetingGameList.map((list, index) => {
-    gameCnt += 1;
+    console.log(list[0]);
     return (
       <div key={index}>
         <Grid container>
           <Grid item xs={12}>
-            {gameCnt === 1 && (
-              <div style={{ fontSize: '25px' }}>🏆OX게임 우승자🏆</div>
-            )}
-            {gameCnt === 2 && (
-              <div style={{ fontSize: '25px' }}>🏆초성게임 우승자🏆</div>
-            )}
-            <div style={{ fontSize: '20px', marginTop: '10px' }}>
-              {list.slice(3, 6)}
+            <div style={{ fontSize: '20px', marginTop: '20px' }}>
+              {index + 1}등 : {list[0]}
             </div>
           </Grid>
         </Grid>
-        <br />
       </div>
     );
   });
@@ -177,9 +170,10 @@ export default function BasicModal({ meeting }) {
                 style={{
                   textAlign: 'center',
                   fontSize: '20px',
-                  marginTop: '50px',
+                  marginTop: '10px',
                 }}
               >
+                <div style={{ fontSize: '25px' }}>🏆게임 최종 우승자🏆</div>
                 {GameList}
               </div>
             )}
