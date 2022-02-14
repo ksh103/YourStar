@@ -22,6 +22,7 @@ import {
   choQuiz,
   audioChange,
   UpdateOneByOneStream,
+  SetIsOneByOne,
 } from '../../store/modules/meetingRoom';
 import { WarningToMemberAPI } from '../../store/apis/Main/meeting';
 import { AddGameScoreAPI, CallGameRankAPI } from '../../store/apis/Room/game';
@@ -164,6 +165,9 @@ class Room extends Component {
             if (changeNum !== 6) {
               this.props.doScreenChange(changeNum);
               this.props.publisher.publishVideo(true);
+              this.props.doSetIsOneByOne(false);
+            } else {
+              this.props.doSetIsOneByOne(true);
             }
           }
         });
@@ -797,6 +801,7 @@ const mapDispatchToProps = dispatch => {
     doWarningToMemberAPI: (memberId, meetingId) =>
       WarningToMemberAPI({ memberId, meetingId }),
     doUpdateOneByOne: stream => dispatch(UpdateOneByOneStream(stream)),
+    doSetIsOneByOne: some => dispatch(SetIsOneByOne(some)),
   };
 };
 
