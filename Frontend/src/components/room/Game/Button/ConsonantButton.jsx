@@ -8,19 +8,40 @@ import { ScreenChange } from '../../../../store/modules/meetingRoom';
 
 const StartButtonDiv = styled.div`
   position: absolute;
-  top: 90vh;
-  left: 51vw;
+  top: 86vh;
+  left: 53vw;
+  padding: 20px;
   background-color: #f5f5f5;
-  border-radius: 1vw;
+  border-radius: 1vh;
   padding: 10px;
+  &:active {
+    -webkit-transform: scale(0.9, 0.9);
+    -moz-transform: scale(0.9, 0.9);
+    -ms-transform: scale(0.9, 0.9);
+    -o-transform: scale(0.9, 0.9);
+    transform: scale(0.9, 0.9);
+  }
+  &:hover {
+    background-color: ${props => props.color};
+  }
 `;
 const EndButtonDiv = styled.div`
   position: absolute;
-  top: 90vh;
-  left: 60vw;
+  top: 86vh;
+  left: 62vw;
   background-color: #f5f5f5;
-  border-radius: 1vw;
+  border-radius: 1vh;
   padding: 10px;
+  &:active {
+    -webkit-transform: scale(0.9, 0.9);
+    -moz-transform: scale(0.9, 0.9);
+    -ms-transform: scale(0.9, 0.9);
+    -o-transform: scale(0.9, 0.9);
+    transform: scale(0.9, 0.9);
+  }
+  &:hover {
+    background-color: ${props => props.color};
+  }
 `;
 
 function cho_hangul(str) {
@@ -59,7 +80,11 @@ function cho_hangul(str) {
 
 export default function GameButton() {
   const dispatch = useDispatch();
-  const { storeSession } = useSelector(state => state.MeetingRoom);
+  const { storeSession, backgroundColor } = useSelector(state => ({
+    storeSession: state.MeetingRoom.storeSession,
+    backgroundColor: state.MeetingRoom.backgroundColor,
+  }));
+  console.log(backgroundColor);
   const { meeting } = useSelector(state => state.meeting);
   const { me } = useSelector(state => state.mypage);
 
@@ -99,13 +124,21 @@ export default function GameButton() {
   return (
     <>
       <StartButtonDiv>
-        <button style={{ fontSize: '1.4vw' }} onClick={onStartButton}>
-          게임시작
+        <button
+          style={{ fontSize: '1.4vw' }}
+          onClick={onStartButton}
+          color={backgroundColor}
+        >
+          게임 시작
         </button>
       </StartButtonDiv>
       <EndButtonDiv>
-        <button style={{ fontSize: '1.4vw' }} onClick={onEndButton}>
-          게임종료
+        <button
+          style={{ fontSize: '1.4vw' }}
+          onClick={onEndButton}
+          color={backgroundColor}
+        >
+          게임 종료
         </button>
       </EndButtonDiv>
     </>

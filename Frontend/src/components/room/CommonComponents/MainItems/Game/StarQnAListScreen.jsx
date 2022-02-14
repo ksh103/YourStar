@@ -7,9 +7,9 @@ import { changeQnAtoggle } from '../../../../../store/modules/meetingRoom';
 
 // 포지션작업
 const StarScreen = styled.div`
-  overflow: auto;
+  /* overflow: auto; */
   position: relative;
-  width: 60.041vw;
+  width: 63vw;
   height: 60.5vh;
   background-color: white;
   border-radius: 3.0643vh;
@@ -21,7 +21,7 @@ const PerScPosition = styled.div`
   // align-items: center;
   margin: 2%;
   grid-template-columns: repeat(4, 1fr);
-	grid-template-rows: repeat(4, 100px);
+  grid-template-rows: repeat(4, 100px);
   column-gap: 10px;
   row-gap: 10px;
   overflow: hidden;

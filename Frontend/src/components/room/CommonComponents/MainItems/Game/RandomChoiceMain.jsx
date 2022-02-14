@@ -14,12 +14,12 @@ import {
 // 60vw 가로폭
 const RandomChoiceSc = styled.div`
   position: relative;
-  width: 28.041vw;
-  height: 66.5vh;
+  width: 31.2vw;
+  height: 67.5vh;
   background-color: white;
-  border-radius: 3.0643vh;
+  border-radius: 1vh;
   box-shadow: 0.306vh 0.306vh gray;
-  margin-right: 4vw;
+  margin-right: 0.8vw;
 `;
 
 const MainGrid = styled.div`
@@ -142,42 +142,68 @@ export default function RandomChoiceMain() {
           )}
         </>
       ),
-    });
-    setTimeout(function () {
+    }).then(() => {
       swal({
         buttons: false,
         timer: 500,
         className: 'number',
         content: <div className="ment">행운의 당첨자가 곧 나타납니다!</div>,
-      }); // 틀렸을 때 게임 다시하기위해 호출하는 함수
-    }, 3500);
+      }).then(() => {
+        swal({
+          buttons: false,
+          timer: 500,
+          className: 'number',
+          content: <div className="number">3</div>,
+        }).then(() => {
+          swal({
+            buttons: false,
+            timer: 500,
+            className: 'number',
+            content: <div className="number">1</div>,
+          }).then(() => {
+            setUserScreen(true);
+          }); // 틀렸을 때 게임 다시하기위해 호출하는 함수
+        }); // 틀렸을 때 게임 다시하기위해 호출하는 함수}); // 틀렸을 때 게임 다시하기위해 호출하는 함수
+      });
+    });
+    // setTimeout(function () {
+    //   swal({
+    //     buttons: false,
+    //     timer: 500,
+    //     className: 'number',
+    //     content: <div className="ment">행운의 당첨자가 곧 나타납니다!</div>,
+    //   }); // 틀렸을 때 게임 다시하기위해 호출하는 함수
+    // }, 3500);
+    // setTimeout(function () {
+    //   swal({
+    //     buttons: false,
+    //     timer: 500,
+    //     className: 'number',
+    //     content: <div className="number">3</div>,
+    //   }); // 틀렸을 때 게임 다시하기위해 호출하는 함수
+    // }, 4500);
+    // setTimeout(function () {
+    //   swal({
+    //     buttons: false,
+    //     timer: 500,
+    //     className: 'number',
+    //     content: <div className="number">2</div>,
+    //   }); // 틀렸을 때 게임 다시하기위해 호출하는 함수
+    // }, 5500);
+    // setTimeout(function () {
+    //   swal({
+    //     buttons: false,
+    //     timer: 500,
+    //     className: 'number',
+    //     content: <div className="number">1</div>,
+    //   }); // 틀렸을 때 게임 다시하기위해 호출하는 함수
+    // }, 6500);
+    // setTimeout(function () {
+    //   setUserScreen(true);
+    // }, 7500);
     setTimeout(function () {
-      swal({
-        buttons: false,
-        timer: 500,
-        className: 'number',
-        content: <div className="number">3</div>,
-      }); // 틀렸을 때 게임 다시하기위해 호출하는 함수
-    }, 4500);
-    setTimeout(function () {
-      swal({
-        buttons: false,
-        timer: 500,
-        className: 'number',
-        content: <div className="number">2</div>,
-      }); // 틀렸을 때 게임 다시하기위해 호출하는 함수
-    }, 5500);
-    setTimeout(function () {
-      swal({
-        buttons: false,
-        timer: 500,
-        className: 'number',
-        content: <div className="number">1</div>,
-      }); // 틀렸을 때 게임 다시하기위해 호출하는 함수
-    }, 6500);
-    setTimeout(function () {
-      setUserScreen(true);
-    }, 7500);
+      setUserScreen(false);
+    }, 10000);
   });
 
   return (
@@ -189,7 +215,7 @@ export default function RandomChoiceMain() {
           )}
         </RandomChoiceSc>
         <RandomChoiceSc>
-          {me.code === 4 ? (
+          {me.code === 4 && !userscreen ? (
             <button onClick={onShuffle}>돌려돌려 돌림판!</button>
           ) : null}
           {/* 유저 정보가 들어오면 띄워주기 */}

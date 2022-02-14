@@ -8,7 +8,7 @@ const QuestionMyScreen = styled.div`
   width: 14.843vw;
   height: 22.47vh;
   background-color: white;
-  border-radius: 3vh;
+  border-radius: 1vh;
   box-shadow: 0.306vh 0.306vh gray;
 `;
 
@@ -21,11 +21,11 @@ export default function MyScreen() {
   return (
     <MyScreenDiv>
       <QuestionMyScreen>
-        <div>
-          {publisher === undefined 
-            ? <UserVideoComponent streamManager={mainStreamManager} />
-            : <UserVideoComponent streamManager={publisher} />}
-        </div>
+        {publisher === undefined ? (
+          <UserVideoComponent streamManager={mainStreamManager} />
+        ) : (
+          <UserVideoComponent streamManager={publisher} />
+        )}
       </QuestionMyScreen>
     </MyScreenDiv>
   );

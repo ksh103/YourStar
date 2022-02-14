@@ -3,6 +3,7 @@ import {
   SmallBox,
   SmallChattingInputBox,
   SmallChattingListBox,
+  SmallChattingInputDiv,
   HalfSideDiv1,
   HalfSideDiv2,
 } from './Chatting.style';
@@ -79,12 +80,15 @@ export default function SmallChatting() {
             })}
             <div ref={messagesEndRef}></div> {/**채팅 스크롤 아래로 내려주기 */}
           </SmallChattingListBox>
-          <SmallChattingInputBox
-            onKeyPress={SendMessage}
-            value={testInput}
-            onChange={handleChatMessageChange}
-            color={backgroundColor} // redux에서 받아온 color를 input styled에 넣어주기
-          ></SmallChattingInputBox>
+          <SmallChattingInputDiv>
+            <SmallChattingInputBox
+              onKeyPress={SendMessage}
+              value={testInput}
+              onChange={handleChatMessageChange}
+              color={backgroundColor} // redux에서 받아온 color를 input styled에 넣어주기
+              placeholder="메시지 보내기"
+            ></SmallChattingInputBox>
+          </SmallChattingInputDiv>
         </SmallBox>
       </HalfSideDiv2>
     </>
