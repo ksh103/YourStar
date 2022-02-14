@@ -29,7 +29,7 @@ const CenterMenu = styled.div`
   align-items: center;
   img {
     margin-top: 20px;
-    width: 450px;
+    width: 400px;
   }
   @media ${device.TabletPortrait} {
     img {
@@ -45,11 +45,7 @@ const RightMenu = styled.div`
   align-items: center;
   justify-content: right;
   font-size: 20px;
-  opacity: 1;
   color: white;
-  @media ${device.TabletPortrait} {
-    opacity: 0;
-  }
   width: 30%;
   #name {
     margin-right: 20px;
@@ -58,7 +54,6 @@ const RightMenu = styled.div`
 const NavbarSubBlock = styled.div`
   display: flex;
   justify-content: center;
-  opacity: 0;
   @media ${device.TabletPortrait} {
     display: none;
   }
@@ -67,20 +62,34 @@ const NavbarSubBlock = styled.div`
 const SubMenu = styled.div`
   font-size: 25px;
   display: flex;
-  /* justify-content: space-between; */
   align-items: center;
-  ul li {
-    color: white;
+  /* ul li {
+    color: ${props => (props.check === '1' ? 'white' : 'gray')};
     margin: 20px;
     text-align: center;
     float: left;
+    &:hover {
+      color: white;
+      font-size: bold;
+    }
+  } */
+`;
+const MenuBlock = styled.li`
+  color: ${props => (props.check === '1' ? 'white' : 'gray')};
+  /* color: gray; */
+  margin: 20px;
+  text-align: center;
+  float: left;
+  &:hover {
+    color: white;
+    font-size: bold;
+    transform: scale(1.1);
+  }
+  &.on {
+    color: red;
   }
 `;
 const NavbarWrapper = styled.div`
-  &:hover ${NavbarSubBlock} {
-    opacity: 1;
-    transition: 0.5s;
-  }
   height: 20vh;
   @media ${device.TabletPortrait} {
     height: 10vh;
@@ -111,4 +120,5 @@ export {
   NavbarSubBlock,
   SubMenu,
   DrawerListRow,
+  MenuBlock,
 };

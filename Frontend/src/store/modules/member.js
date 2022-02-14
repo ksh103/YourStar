@@ -1,5 +1,6 @@
 import produce from 'immer';
 const initialState = {
+  menu: 'main',
   logInLoading: false, // 로그인 시도중
   logInDone: false,
   logInError: null,
@@ -46,6 +47,7 @@ export const FIND_PW_REQUEST = 'FIND_PW_REQUEST';
 export const FIND_PW_SUCCESS = 'FIND_PW_SUCCESS';
 export const FIND_PW_FAILURE = 'FIND_PW_FAILURE';
 
+export const SET_MENU = 'SET_MENU';
 const SET_ADDRESS_BUTTON = 'SET_ADDRESS_BUTTON';
 export const setAddressButton = state => ({
   type: SET_ADDRESS_BUTTON,
@@ -142,6 +144,9 @@ const reducer = (state = initialState, action) =>
         break;
       case SET_ADDRESS_BUTTON:
         draft.addressButton = action.state;
+        break;
+      case SET_MENU:
+        draft.menu = action.data;
         break;
       default:
         break;
