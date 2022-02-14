@@ -5,6 +5,7 @@ import React, { Component } from 'react';
 import './App.css';
 import { connect } from 'react-redux';
 import swal from 'sweetalert';
+import './SwalCss.css'
 
 // action 호출
 import {
@@ -22,13 +23,13 @@ import {
   choQuiz,
   audioChange,
   UpdateOneByOneStream,
+  SetIsOneByOne,
 } from '../../store/modules/meetingRoom';
 import { WarningToMemberAPI } from '../../store/apis/Main/meeting';
 import { AddGameScoreAPI, CallGameRankAPI } from '../../store/apis/Room/game';
 // 컴포넌트
 import RoomComponent from './RoomComponent';
 import { BASE_URL } from '../../utils/contants';
-import Warning from '../../components/room/CommonComponents/Alert/Warning';
 // import { BackgroundDiv } from '../../../components/room/styles/roomGlobal';
 
 const OPENVIDU_SERVER_URL = 'https://i6e204.p.ssafy.io:8443';
@@ -54,7 +55,6 @@ class Room extends Component {
       session: undefined,
       me: this.props.me, // Store에 저장된 내 정보 입력
       recordId: null,
-      warningCnt: 0,
       choAnsUserCnt: 1, // 초성게임 맞춘 유저 수
     };
   }
@@ -164,16 +164,10 @@ class Room extends Component {
             if (changeNum !== 6) {
               this.props.doScreenChange(changeNum);
               this.props.publisher.publishVideo(true);
+              this.props.doSetIsOneByOne(false);
+            } else {
+              this.props.doSetIsOneByOne(true);
             }
-          }
-        });
-
-        mySession.on('signal:QnAmode', event => {
-          let Modedata = event.data.split(',');
-          const QAmode = Modedata[1];
-          console.log(QAmode);
-          if (QAmode !== this.props.QnAmode) {
-            this.props.dochangeQnAMode(QAmode);
           }
         });
 
@@ -226,17 +220,6 @@ class Room extends Component {
             text: '약 ' + event.data + '분 뒤 입장 됩니다.',
             timer: 5000,
           });
-        });
-
-        mySession.on('signal:UserQnA', event => {
-          let QnAdata = event.data.split(',');
-          if (QnAdata[0] !== this.props.me.nick) {
-            const inputValue = {
-              userName: QnAdata[0],
-              text: QnAdata[1],
-            };
-            this.props.doAddQnaList(inputValue);
-          }
         });
 
         if (this.props.userCode === 3) {
@@ -396,6 +379,12 @@ class Room extends Component {
           });
         });
 
+        // qna 스티커 받기
+        mySession.on('signal:QnAFromUser', event => {
+          // console.log('------------------------')
+          this.props.doAddQnaList({text : event.data})
+        })
+
         mySession.on('signal:audio', event => {
           console.log('===== 오디오 상태 변경 =====');
           if (event.data === 'true') {
@@ -416,16 +405,52 @@ class Room extends Component {
 
         // 경고창
         mySession.on('signal:warning', event => {
-          this.setState({
-            warningCnt: event.data,
-          });
-          setTimeout(() => this.setState({ warningCnt: 0 }), 10000);
-          if (parseInt(event.data) > 1) {
-            setTimeout(
-              () => window.location.replace('https://i6e204.p.ssafy.io/'),
-              10000
-            );
+          if (parseInt(event.data) === 1) {
+            swal({
+              icon: 'https://cdn-icons-png.flaticon.com/512/2761/2761896.png',
+              title: '🚨 경고 🚨',
+              text: '부적절한 행위 및 언행으로 경고 1회를 받으셨습니다. \n 경고 2회 누적 시 강퇴 및 재입장이 불가합니다.',
+              className: 'swal-warning'
+            })
+          } else {
+            // 강퇴시 이동할 경로 
+            const url =
+            window.location.protocol +
+            '//' +
+            window.location.host +
+            `/schedule/${this.state.mySessionId}`;
+            swal({
+              icon: 'https://cdn-icons-png.flaticon.com/512/2761/2761817.png',
+              title: '🚨 경고 🚨',
+              text: '부적절한 행위 및 언행으로 경고 2회를 받으셨습니다. \n 확인 클릭 또는 10초 뒤 팬미팅에서 자동으로 나가게 되며, 재입장이 불가합니다.',
+              className: 'swal-warning',
+              button: '확인'
+            }).then(() => {
+              window.location.replace(url)
+            })
+            setTimeout(() => window.location.replace(url), 10000);
           }
+        });
+
+        // 종료 알림
+        mySession.on('signal:end', event => {
+          const url =
+            window.location.protocol +
+            '//' +
+            window.location.host +
+            `/schedule/${this.state.mySessionId}`;
+          mySession.disconnect();
+          swal({
+            title: '미팅 종료 알림',
+            text: '미팅 상세 페이지로 이동됩니다',
+            icon: 'info',
+            buttons: false,
+            closeOnClickOutside: false,
+            closeOnEsc: false,
+            timer: 1500,
+          }).then(() => {
+            window.location.replace(url);
+          });
         });
 
         // 세션과 연결하는 부분
@@ -637,10 +662,6 @@ class Room extends Component {
   render() {
     return (
       <div>
-        {/* 경고창 */}
-        {this.state.warningCnt !== 0 ? (
-          <Warning warningCnt={this.state.warningCnt}></Warning>
-        ) : null}
         {/* 컴포넌트는 들고왔을 때 잘 작동함 */}
         <div className="container">
           {this.state.session === undefined ? (
@@ -787,6 +808,7 @@ const mapDispatchToProps = dispatch => {
     doWarningToMemberAPI: (memberId, meetingId) =>
       WarningToMemberAPI({ memberId, meetingId }),
     doUpdateOneByOne: stream => dispatch(UpdateOneByOneStream(stream)),
+    doSetIsOneByOne: some => dispatch(SetIsOneByOne(some)),
   };
 };
 

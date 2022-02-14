@@ -22,6 +22,22 @@ const CHECK_OUT = 'CHECK_OUT';
 const CHOSONANT_QUIZ = 'CHOSONANT_QUIZ';
 const PUBLISHER_AUDIO_CHANGE = 'PUBLISHER_AUDIO_CHANGE';
 const UPDATE_ONEBYONESTREAM = 'UPDATE_ONEBYONESTREAM';
+const ADD_RANDOM_RESULT = 'ADD_RANDOM_RESULT';
+const ADD_RANDOM_SUBSCRIBERS = 'ADD_RANDOM_SUBSCRIBERS';
+const SET_IS_ONEBYONE = 'SET_IS_ONEBYONE';
+
+export const randomResult = result => {
+  return {
+    type: ADD_RANDOM_RESULT,
+    payload: result,
+  };
+};
+export const randomSub = sub => {
+  return {
+    type: ADD_RANDOM_SUBSCRIBERS,
+    payload: sub,
+  };
+};
 
 // QnA 모드를 변경하기위한 action
 // 스타가 의 조작에 대한 action이라고 이해하면 된다.
@@ -80,6 +96,13 @@ export const UpdateOneByOneStream = stream => {
   return {
     type: UPDATE_ONEBYONESTREAM,
     payload: stream,
+  };
+};
+
+export const SetIsOneByOne = some => {
+  return {
+    type: SET_IS_ONEBYONE,
+    payload: some,
   };
 };
 // 여기까지 =================================
@@ -215,10 +238,6 @@ const initialState = {
   publisher: undefined,
   mainStreamManager: undefined,
   selectNum: 0,
-  // 임시로 사용하는 유저아이디
-  userId: 0,
-  // 임시로 사용하는 유저 닉네임
-  testInput: '테스트용',
   // 세션정보
   storeSession: undefined,
   emoziList: [],
@@ -232,10 +251,23 @@ const initialState = {
   chosonantQuiz: [],
   onebyoneStream: undefined,
   signButton: false,
+  randomPerson: null,
+  randomSubscribers: null,
+  isOneByOne: false,
 };
 
 const MeetingRoom = (state = initialState, action) => {
   switch (action.type) {
+    case ADD_RANDOM_RESULT:
+      return {
+        ...state,
+        randomPerson: action.payload,
+      };
+    case ADD_RANDOM_SUBSCRIBERS:
+      return {
+        ...state,
+        randomSubscribers: action.payload,
+      };
     case CHANGE_QNA_MODE:
       return {
         ...state,
@@ -276,6 +308,11 @@ const MeetingRoom = (state = initialState, action) => {
       return {
         ...state,
         onebyoneStream: action.payload,
+      };
+    case SET_IS_ONEBYONE:
+      return {
+        ...state,
+        isOneByOne: action.payload,
       };
     // 여기까지 ============================
     case PUBLISHER_INFO:

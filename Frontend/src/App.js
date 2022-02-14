@@ -12,7 +12,6 @@ import {
   Signup,
   ScheduleDetail,
   FindPassword,
-  RoomDongJun,
   RoomEunSeong,
   RoomSumin,
   AdminMeetingDetail,
@@ -36,7 +35,7 @@ function App() {
           <PrivateRoute exact path="/login" component={Login} code={[0]} />
           <PrivateRoute exact path="/signup" component={Signup} code={[0]} />
           <Route exact path="/faq" component={FAQ} />
-          <PrivateRoute exact path="/apply" component={Apply} code={[2]} />
+          <PrivateRoute exact path="/apply" component={Apply} code={[2, 4]} />
           <PrivateRoute
             exact
             path="/admin/:id"
@@ -62,9 +61,6 @@ function App() {
           </Route>
           <Route path="/stanby/:id">
             <Stanby />
-          </Route>
-          <Route path="/DongJun">
-            <RoomDongJun />
           </Route>
           <Route path="/EunSeong">
             <RoomEunSeong />

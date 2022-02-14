@@ -13,6 +13,7 @@ import { blockColor } from '../../../../../styles/variables';
 import swal from 'sweetalert';
 import { useHistory, useParams } from 'react-router';
 import { END_MEETING_REQUEST } from '../../../../../store/modules/meeting';
+import axios from 'axios';
 
 const List = [
   '대기화면',
@@ -38,13 +39,18 @@ export default function ScheduleListSelect() {
 
   useEffect(() => {
     if (endMeetingDone) {
+      storeSession.signal({
+        data: '0',
+        to: [],
+        type: 'end',
+      });
       storeSession.disconnect();
       history.push(`/schedule/${id}`);
     }
   }, [endMeetingDone, history, id, storeSession]);
 
   const SetSelect = selectNum => {
-    if (selectNum === 4) dispatch(ResetIndex());
+    if (selectNum === 6) dispatch(ResetIndex());
 
     storeSession.signal({
       data: `${selectNum}`,

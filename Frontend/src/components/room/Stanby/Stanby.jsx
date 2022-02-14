@@ -22,7 +22,10 @@ import { useHistory } from 'react-router';
 import { useDispatch, useSelector } from 'react-redux';
 import { useEffect } from 'react';
 import swal from 'sweetalert';
-import { changeBackgroundColor } from '../../../store/modules/meetingRoom';
+import {
+  changeBackgroundColor,
+  ScreenChange,
+} from '../../../store/modules/meetingRoom';
 import { OpenVidu } from 'openvidu-browser';
 import UserVideoComponent from '../../../pages/Room/UserVideoComponent';
 import axios from 'axios';
@@ -46,7 +49,9 @@ export default function Stanby() {
   const dispatch = useDispatch();
   const history = useHistory();
   const { me } = useSelector(state => state.mypage);
-  const { meeting, storeSession } = useSelector(state => state.meeting);
+  const { meeting, storeSession, selectNum } = useSelector(
+    state => state.meeting
+  );
   const [color, SetColor] = useState('#C4C4C4');
   const [video, SetVideo] = useState(0); // 1 ON, 0 OFF
   const [mic, SetMic] = useState(0); // 1 ON, 0 OFF
@@ -195,7 +200,6 @@ export default function Stanby() {
   };
 
   testSession.on('publisherStopSpeaking', event => {
-    // 감지가 될 때 효과 줘버리깅
     Speaking(false);
   });
 
@@ -206,6 +210,7 @@ export default function Stanby() {
   const onClickEnter = () => {
     // 선택한 컬러 전역으로 저장하기
     testSession.disconnect();
+    dispatch(ScreenChange(0));
     dispatch(changeBackgroundColor(color));
     history.push(`/room/${meeting.id}`);
     // history.push(`/room/:`);

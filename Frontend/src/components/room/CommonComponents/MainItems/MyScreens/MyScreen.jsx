@@ -13,19 +13,18 @@ const QuestionMyScreen = styled.div`
 `;
 
 export default function MyScreen() {
-  const { publisher } = useSelector(state => ({
+  const { publisher, mainStreamManager } = useSelector(state => ({
     publisher: state.MeetingRoom.publisher,
+    mainStreamManager: state.MeetingRoom.mainStreamManager,
   }));
-
-  // const { storeSession } = useSelector(state => ({
-  //   storeSession: state.MeetingRoom.storeSession,
-  // }));
 
   return (
     <MyScreenDiv>
       <QuestionMyScreen>
         <div>
-          {publisher && <UserVideoComponent streamManager={publisher} />}
+          {publisher === undefined 
+            ? <UserVideoComponent streamManager={mainStreamManager} />
+            : <UserVideoComponent streamManager={publisher} />}
         </div>
       </QuestionMyScreen>
     </MyScreenDiv>

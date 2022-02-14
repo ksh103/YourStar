@@ -105,11 +105,19 @@ export default function ScheduleDetailLeft() {
         ((me.code === 2 || me.code === 4) && me.managerCode === meeting.code) ||
         meeting.isReserve
       ) {
-        return (
-          <ScheduleDetailButton color="3">
-            <div onClick={enterButton}>입장하기</div>
-          </ScheduleDetailButton>
-        );
+        if (meeting.warningCount >= 2) {
+          return (
+            <ScheduleDetailButton>
+              <div>입장불가</div>
+            </ScheduleDetailButton>
+          );
+        } else {
+          return (
+            <ScheduleDetailButton color="3">
+              <div onClick={enterButton}>입장하기</div>
+            </ScheduleDetailButton>
+          );
+        }
       } else {
         return (
           <ScheduleDetailButton>
@@ -118,7 +126,7 @@ export default function ScheduleDetailLeft() {
         );
       }
     } else if (new Date(meeting.openDate) <= now) {
-      if (meeting.isReserve || me.code === 3) {
+      if (meeting.isReserve) {
         return (
           <ScheduleDetailButton color="2">
             <div onClick={cancelMeeting}>예매취소</div>
@@ -131,7 +139,7 @@ export default function ScheduleDetailLeft() {
               <div>매진</div>
             </ScheduleDetailButton>
           );
-        } else {
+        } else if (me.code === 3) {
           return (
             <ScheduleDetailButton color="1">
               <div onClick={reserveMeeting}>예매하기</div>
