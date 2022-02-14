@@ -297,7 +297,6 @@ public class MeetingServiceImpl implements MeetingService {
     public String getMeetingImgPath(int fileId) {
         MeetingImgPath meetingImgPath = meetingImgPathRepository.findMeetingImgPathByFileId(fileId);
         String path = uploadPath + meetingImgPath.getFileUrl();
-        log.warn("Get Image Path : " + path);
         return path;
     }
 

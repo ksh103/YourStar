@@ -72,7 +72,7 @@ public class MeetingRecordServiceImpl implements MeetingRecordService {
 
             meetingRecordImgPath.setMeetingId(meetingRecordImgPathPostReq.getMeetingId());
             meetingRecordImgPath.setMemberId(meetingRecordImgPathPostReq.getMemberId());
-            meetingRecordImgPath.setFileUrl(File.separator + uploadFolder + File.separator + fileName);
+            meetingRecordImgPath.setFileUrl(uploadPath + File.separator + uploadFolder + File.separator + fileName);
             meetingRecordImgPath.setFileName(fileName);
             meetingRecordImgPathRepository.save(meetingRecordImgPath);
 
