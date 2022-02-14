@@ -168,15 +168,6 @@ class Room extends Component {
           }
         });
 
-        mySession.on('signal:QnAmode', event => {
-          let Modedata = event.data.split(',');
-          const QAmode = Modedata[1];
-          console.log(QAmode);
-          if (QAmode !== this.props.QnAmode) {
-            this.props.dochangeQnAMode(QAmode);
-          }
-        });
-
         mySession.on('signal:emozi', event => {
           let emozidata = event.data.split(',');
           if (emozidata[0] !== this.props.me.nick) {
@@ -226,17 +217,6 @@ class Room extends Component {
             text: '약 ' + event.data + '분 뒤 입장 됩니다.',
             timer: 5000,
           });
-        });
-
-        mySession.on('signal:UserQnA', event => {
-          let QnAdata = event.data.split(',');
-          if (QnAdata[0] !== this.props.me.nick) {
-            const inputValue = {
-              userName: QnAdata[0],
-              text: QnAdata[1],
-            };
-            this.props.doAddQnaList(inputValue);
-          }
         });
 
         if (this.props.userCode === 3) {
@@ -385,6 +365,12 @@ class Room extends Component {
             });
           });
         });
+
+        // qna 스티커 받기
+        mySession.on('signal:QnAFromUser', event => {
+          // console.log('------------------------')
+          this.props.doAddQnaList({text : event.data})
+        })
 
         mySession.on('signal:audio', event => {
           console.log('===== 오디오 상태 변경 =====');
