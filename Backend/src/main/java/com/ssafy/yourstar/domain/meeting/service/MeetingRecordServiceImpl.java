@@ -6,6 +6,7 @@ import com.ssafy.yourstar.domain.meeting.db.repository.MeetingRecordImgPathRepos
 import com.ssafy.yourstar.domain.meeting.db.repository.MeetingRepository;
 import com.ssafy.yourstar.domain.meeting.db.repository.MeetingRepositorySpp;
 import com.ssafy.yourstar.domain.meeting.request.MeetingRecordImgPathPostReq;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.domain.Page;
@@ -18,6 +19,7 @@ import java.io.IOException;
 import java.util.Base64;
 import java.util.List;
 
+@Slf4j
 @Service
 public class MeetingRecordServiceImpl implements MeetingRecordService {
 
@@ -45,34 +47,34 @@ public class MeetingRecordServiceImpl implements MeetingRecordService {
     }
 
     @Override
+    public String getSignImgPath(int fileId) {
+        return meetingRecordImgPathRepository.findById(fileId).get().getFileUrl();
+    }
+
+    @Override
     public int meetingRecordImgSave(MeetingRecordImgPathPostReq meetingRecordImgPathPostReq) throws IOException {
         MeetingRecordImgPath meetingRecordImgPath = new MeetingRecordImgPath();
 
         if(meetingRepository.findById(meetingRecordImgPathPostReq.getMeetingId()).isPresent()){
-
-//            int meetingId = meetingRepository.findById(meetingRecordImgPathPostReq.getMeetingId()).get().getMeetingId();
-
             String fileBase64 = meetingRecordImgPathPostReq.getFileUrl();
-
+            String fileName = meetingRecordImgPathPostReq.getMeetingId() + "_" + meetingRecordImgPathPostReq.getMemberId() + "_.jpg";
             File uploadDir = new File(uploadPath + File.separator + uploadFolder);
             if(!uploadDir.exists()) uploadDir.mkdir();
 
+            File file = new File(uploadPath + File.separator + uploadFolder + File.separator + fileName);
+
+
             byte[] decodedBytes = Base64.getDecoder().decode(fileBase64.split(",")[1]);
 
-//            String decodedFileUrl = new String(decodedBytes);
-
-            // 파일 저장 ? 되나?
-            FileOutputStream fileOutputStream = new FileOutputStream(uploadDir);
+            FileOutputStream fileOutputStream = new FileOutputStream(file);
             fileOutputStream.write(decodedBytes);
-            fileOutputStream.close(); // 안 된다
+            fileOutputStream.close();
 
-
-//            String meetingFileUrl = "/" + uploadFolder + "/" + decodedFileUrl;
-
-//            meetingRecordImgPath.setMeetingId(meetingId);
-//            meetingRecordImgPath.setMemberId(meetingRecordImgPathPostReq.getMemberId());
-//            meetingRecordImgPath.setFileUrl(meetingFileUrl);
-//            meetingRecordImgPath.setFileName(decodedFileUrl);
+            meetingRecordImgPath.setMeetingId(meetingRecordImgPathPostReq.getMeetingId());
+            meetingRecordImgPath.setMemberId(meetingRecordImgPathPostReq.getMemberId());
+            meetingRecordImgPath.setFileUrl(uploadPath + File.separator + uploadFolder + File.separator + fileName);
+            meetingRecordImgPath.setFileName(fileName);
+            meetingRecordImgPathRepository.save(meetingRecordImgPath);
 
             return SUCCESS;
         }
