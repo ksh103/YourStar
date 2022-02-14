@@ -18,6 +18,7 @@ import {
   changeQnAMode,
   SetMySession,
   emoziListAdd,
+  AddQnaList,
   UserDelete,
   choQuiz,
   audioChange,
@@ -293,6 +294,12 @@ class Room extends Component {
           this.props.doScreenChange(0);
           this.props.publisher.publishVideo(true);
         });
+
+        // qna 스티커 받기
+        mySession.on('signal:QnAFromUser', event => {
+          // console.log('------------------------')
+          this.props.doAddQnaList({text : event.data})
+        })
 
         mySession.on('signal:audio', event => {
           console.log('===== 오디오 상태 변경 =====');
@@ -670,8 +677,10 @@ const mapDispatchToProps = dispatch => {
     doScreenChange: selectNum => dispatch(ScreenChange(selectNum)),
     doChattingInputChange: testinput =>
       dispatch(ChattingInputChange(testinput)),
+    dochangeQnAMode: QnAmode => dispatch(changeQnAMode(QnAmode)),
     doSetMySession: storeSession => dispatch(SetMySession(storeSession)),
     doemoziListAdd: emozi => dispatch(emoziListAdd(emozi)),
+    doAddQnaList: QnAText => dispatch(AddQnaList(QnAText)),
     doDeleteSubscriber: subscribers => dispatch(UserDelete(subscribers)),
     dochosonantQuiz: text => dispatch(choQuiz(text)),
     doaudioChange: () => dispatch(audioChange()),
