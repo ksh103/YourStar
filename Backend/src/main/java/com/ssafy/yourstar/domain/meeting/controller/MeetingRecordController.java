@@ -83,7 +83,7 @@ public class MeetingRecordController {
         }
     }
 
-    @ApiOperation(value = "추억 보관함 사진 저장")
+    @ApiOperation(value = "추억 보관함 사진 정보 불러오기")
     @GetMapping("/record-img/{meetingId}/{memberId}")
     public ResponseEntity<MeetingRecordImgDetailGetRes> meetingRecordImgDownload(@ApiParam(value = "팬미팅 구분 번호") @PathVariable(value = "meetingId") int meetingId, @ApiParam(value = "회원 구분 번호") @PathVariable(value = "memberId") int memberId) {
         log.info("meetingRecordImgDownload - Call");
@@ -99,9 +99,9 @@ public class MeetingRecordController {
     }
 
     @ApiOperation(value = "추억 보관함 사진 불러오기")
-    @GetMapping(value = "/image/{fileId}",
+    @GetMapping(value = "/record-img/{fileId}",
             produces = MediaType.IMAGE_JPEG_VALUE)
-    public ResponseEntity<Resource> getImageWithMediaType(@PathVariable("fileId") int fileId) {
+    public ResponseEntity<Resource> getSignImageWithMediaType(@PathVariable("fileId") int fileId) {
         String filePath = meetingRecordService.getSignImgPath(fileId);
 
         Resource resource = new FileSystemResource(filePath);
