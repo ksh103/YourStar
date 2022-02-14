@@ -13,12 +13,20 @@ import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiParam;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.core.io.FileSystemResource;
+import org.springframework.core.io.Resource;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.util.List;
 
 @Api("추억 보관함 API")
@@ -53,14 +61,14 @@ public class MeetingRecordController {
             } else {
                 return ResponseEntity.status(400).body(BaseResponseBody.of(400, "Failed"));
             }
-        } catch (IOException e) {
+        } catch (Exception e) {
             log.error(e.getMessage());
             return ResponseEntity.status(400).body(BaseResponseBody.of(400, "Failed"));
         }
     }
 
 
-    @ApiOperation(value = "추억 보관함 사진 다운로드")
+    @ApiOperation(value = "추억 보관함 사진 저장")
     @GetMapping("/record-img/{meetingId}/{memberId}")
     public ResponseEntity<MeetingRecordImgDetailGetRes> meetingRecordImgDownload(@ApiParam(value = "팬미팅 구분 번호") @PathVariable(value = "meetingId") int meetingId, @ApiParam(value = "회원 구분 번호") @PathVariable(value = "memberId") int memberId) {
         log.info("meetingRecordImgDownload - Call");
@@ -73,6 +81,29 @@ public class MeetingRecordController {
             log.error("meetingRecordImgRemove - No Contents");
             return ResponseEntity.status(204).body(MeetingRecordImgDetailGetRes.of(204, "No Contents", null));
         }
+    }
+
+    @ApiOperation(value = "추억 보관함 사진 불러오기")
+    @GetMapping(value = "/image/{fileId}",
+            produces = MediaType.IMAGE_JPEG_VALUE)
+    public ResponseEntity<Resource> getImageWithMediaType(@PathVariable("fileId") int fileId) {
+        String filePath = meetingRecordService.getSignImgPath(fileId);
+
+        Resource resource = new FileSystemResource(filePath);
+        if (!resource.exists()) return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+
+        HttpHeaders headers = new HttpHeaders();
+        Path path = null;
+
+        try {
+            path = Paths.get(filePath);
+            headers.add("Content-Type", Files.probeContentType(path));
+        } catch (IOException e) {
+            log.error(e.getMessage());
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        }
+
+        return new ResponseEntity<>(resource, headers, HttpStatus.OK);
     }
 
     @ApiOperation(value = "추억 보관함 사진 개별 삭제")
