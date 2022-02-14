@@ -13,7 +13,7 @@ const StarScreen = styled.div`
   height: 66.5vh;
   background-color: white;
   border-radius: 3.0643vh;
-  box-shadow: 0.306vh 0.306vh gray;
+  /* box-shadow: 0.306vh 0.306vh gray; */
 `;
 
 const ColorCircleWrapper = styled.div`
@@ -24,7 +24,9 @@ const ColorCircleWrapper = styled.div`
   height: 4vh;
 `;
 const ColorCircleBox = styled.div`
-  display: flex;
+  /* display: flex; */
+  padding-top: 20px;
+  width: 10vw;
   justify-content: center;
   align-items: center;
   height: 3.8vh;

@@ -2,13 +2,13 @@ import React, { useState } from 'react';
 import { StarScreen } from './Stanby.style';
 import { BackgroundDiv } from '../styles/roomGlobal';
 import {
-  BsFillCircleFill,
   BsFillCameraVideoFill,
   BsFillCameraVideoOffFill,
   BsFillMicFill,
-  BsFillMicMuteFill,
 } from 'react-icons/bs';
+import { RiBrushFill } from 'react-icons/ri';
 import { IoExit } from 'react-icons/io5';
+import { AiFillStar } from 'react-icons/ai';
 import {
   // StanbyBox,
   ColorCircleBox,
@@ -24,6 +24,7 @@ import { useEffect } from 'react';
 import swal from 'sweetalert';
 import {
   changeBackgroundColor,
+  changeBgToggle,
   ScreenChange,
 } from '../../../store/modules/meetingRoom';
 import { OpenVidu } from 'openvidu-browser';
@@ -52,9 +53,9 @@ export default function Stanby() {
   const { meeting, storeSession, selectNum } = useSelector(
     state => state.meeting
   );
+  const { bgToggle } = useSelector(state => state.MeetingRoom); // 0 : 기본 배경화면, // 1 : 선택 색상 배경화면
   const [color, SetColor] = useState('#C4C4C4');
   const [video, SetVideo] = useState(0); // 1 ON, 0 OFF
-  const [mic, SetMic] = useState(0); // 1 ON, 0 OFF
   const [isSpeaking, setIsSpeaking] = useState(false);
   const CircleOnclick = props => {
     SetColor(props);
@@ -219,7 +220,7 @@ export default function Stanby() {
   useEffect(() => {
     swal(
       '반갑습니다',
-      '미팅 대기 페이지에서는 색상을 선택하여 원하는 배경색을 지정할 수 있습니다.',
+      '미팅 대기 페이지에서는 색상을 선택하여 \n 원하는 배경색을 지정할 수 있습니다. \n \n 마이크 테스트를 위해 목소리가 인식이 되면 \n 마이크 아이콘의 색상이 변경됩니다.',
       'success'
     );
   }, []);
@@ -243,68 +244,164 @@ export default function Stanby() {
   //   '==========들어온사람의 비디오 상태 정보========='
   // );
   return (
-    <BackgroundDiv color={color}>
+    <BackgroundDiv color={color} bgToggle={bgToggle}>
       <ColorCircleWrapper>
         <ColorCircleBox>
+          <div
+            style={{
+              textAlign: 'center',
+              fontSize: '20px',
+              paddingBottom: '30px',
+              color: bgToggle === '0' ? 'white' : 'black',
+            }}
+          >
+            🎨ColorPicker
+          </div>
+          <AiFillStar
+            style={{
+              marginLeft: '0.5vw',
+              fontSize: '2vw',
+              cursor: 'pointer',
+              color: 'rgb(0, 0, 0)',
+            }}
+            onClick={() => {
+              dispatch(changeBgToggle('0'));
+            }}
+          />
           {ColorCircle.map((colorCircle, index) => (
-            <BsFillCircleFill
+            <RiBrushFill
               key={index}
               onClick={() => {
                 CircleOnclick(colorCircle);
+                dispatch(changeBgToggle('1'));
               }}
               style={{
                 color: colorCircle,
-                marginLeft: '1vw',
-                fontSize: '0.8vw',
+                marginLeft: '0.5vw',
+                fontSize: '2vw',
                 cursor: 'pointer',
               }}
             />
           ))}
         </ColorCircleBox>
       </ColorCircleWrapper>
-      <StarScreen
-        style={
-          isSpeaking ? { backgroundColor: 'green' } : { backgroundColor: 'red' }
-        }
-      >
+      <StarScreen>
         {pub && <UserVideoComponent streamManager={pub} />}
       </StarScreen>
       <SettingWrapper>
         <SettingBox>
           {video === 0 ? (
-            <BsFillCameraVideoOffFill
-              style={{ cursor: 'pointer' }}
-              onClick={() => {
-                videoControll(0);
-              }}
-            />
+            <div>
+              <div style={{ textAlign: 'center' }}>
+                <BsFillCameraVideoFill
+                  style={{
+                    cursor: 'pointer',
+                    color: 'green',
+                  }}
+                  onClick={() => {
+                    videoControll(1);
+                  }}
+                />
+              </div>
+              <div
+                style={{
+                  fontSize: '20px',
+                  color: bgToggle === '0' ? 'white' : 'black',
+                }}
+              >
+                비디오 중지
+              </div>
+            </div>
           ) : (
-            <BsFillCameraVideoFill
-              style={{ cursor: 'pointer' }}
-              onClick={() => {
-                videoControll(1);
-              }}
-            />
+            <div>
+              <div style={{ textAlign: 'center' }}>
+                <BsFillCameraVideoOffFill
+                  style={{
+                    cursor: 'pointer',
+                    color: bgToggle === '0' ? 'white' : 'black',
+                  }}
+                  onClick={() => {
+                    videoControll(0);
+                  }}
+                />
+              </div>
+              <div
+                style={{
+                  fontSize: '20px',
+                  color: bgToggle === '0' ? 'white' : 'black',
+                }}
+              >
+                비디오 시작
+              </div>
+            </div>
           )}
           <SettingIcons>
-            {mic === 0 ? (
-              <BsFillMicMuteFill
-                onClick={() => {
-                  SetMic(1);
-                }}
-              />
+            {isSpeaking ? (
+              <div>
+                <div style={{ textAlign: 'center' }}>
+                  <BsFillMicFill style={{ color: 'green' }} />
+                </div>
+                <div
+                  style={{
+                    fontSize: '20px',
+                    color: bgToggle === '0' ? 'white' : 'black',
+                  }}
+                >
+                  음성 인식중
+                </div>
+              </div>
             ) : (
-              <BsFillMicFill
-                onClick={() => {
-                  SetMic(0);
-                }}
-              />
+              <div>
+                <div
+                  style={{
+                    textAlign: 'center',
+                    color: bgToggle === '0' ? 'white' : 'black',
+                  }}
+                >
+                  <BsFillMicFill />
+                </div>
+                <div
+                  style={{
+                    fontSize: '20px',
+                    color: bgToggle === '0' ? 'white' : 'black',
+                  }}
+                >
+                  마이크 체크
+                </div>
+              </div>
             )}
           </SettingIcons>
           <SettingIcons>
-            <IoExit onClick={onClickEnter} />
+            <div
+              style={{
+                textAlign: 'center',
+                color: bgToggle === '0' ? 'white' : 'black',
+              }}
+            >
+              <IoExit onClick={onClickEnter} />
+            </div>
+            <div
+              style={{
+                fontSize: '20px',
+                color: bgToggle === '0' ? 'white' : 'black',
+              }}
+            >
+              미팅룸 입장
+            </div>
           </SettingIcons>
         </SettingBox>
+        {/* {isSpeaking && (
+          <Alert
+            severity="success"
+            color="error"
+            sx={{
+              vertical: 'bottom',
+              horizontal: 'center',
+            }}
+          >
+            마이크가 정상적으로 작동하고 있습니다.
+          </Alert>
+        )} */}
       </SettingWrapper>
     </BackgroundDiv>
   );

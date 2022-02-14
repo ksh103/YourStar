@@ -30,9 +30,8 @@ const MainButton = styled.div`
     &:hover {
       color: white;
       background: ${pointColor};
-       {
-        animation: 0.6s ease-in-out loadEffect3;
-      }
+
+      animation: 0.6s ease-in-out loadEffect3;
 
       @keyframes loadEffect3 {
         0% {
