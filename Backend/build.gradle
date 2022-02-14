@@ -77,6 +77,8 @@ dependencies {
 	// Openvidu 의존성
 	implementation group: 'io.openvidu', name: 'openvidu-java-client', version: '2.20.0'
 
+	// https://mvnrepository.com/artifact/commons-codec/commons-codec
+	implementation group: 'commons-codec', name: 'commons-codec', version: '1.9'
 }
 
 test {
