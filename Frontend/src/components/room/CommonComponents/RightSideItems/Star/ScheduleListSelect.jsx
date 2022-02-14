@@ -13,6 +13,7 @@ import { blockColor } from '../../../../../styles/variables';
 import swal from 'sweetalert';
 import { useHistory, useParams } from 'react-router';
 import { END_MEETING_REQUEST } from '../../../../../store/modules/meeting';
+import axios from 'axios';
 
 const List = [
   '대기화면',
@@ -38,15 +39,18 @@ export default function ScheduleListSelect() {
 
   useEffect(() => {
     if (endMeetingDone) {
-      // 본인 카메라 종료하고 넘어가기
-      // 시그널 보내야함
+      storeSession.signal({
+        data: '0',
+        to: [],
+        type: 'end',
+      });
       storeSession.disconnect();
       history.push(`/schedule/${id}`);
     }
   }, [endMeetingDone, history, id, storeSession]);
 
   const SetSelect = selectNum => {
-    if (selectNum === 4) dispatch(ResetIndex());
+    if (selectNum === 6) dispatch(ResetIndex());
 
     storeSession.signal({
       data: `${selectNum}`,
@@ -62,13 +66,10 @@ export default function ScheduleListSelect() {
       buttons: true,
     }).then(end => {
       if (end) {
-        // 테스트 해야함
-        // dispatch({
-        //   type: END_MEETING_REQUEST,
-        //   data: id,
-        // });
-        storeSession.disconnect();
-        history.push(`/schedule/${id}`);
+        dispatch({
+          type: END_MEETING_REQUEST,
+          data: id,
+        });
       }
     });
   };

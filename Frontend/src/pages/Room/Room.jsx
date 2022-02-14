@@ -5,7 +5,6 @@ import React, { Component } from 'react';
 import './App.css';
 import { connect } from 'react-redux';
 import swal from 'sweetalert';
-import sweetAlertStyles from '../../styles/sweetAlert.module.css';
 
 // action 호출
 import {
@@ -25,19 +24,16 @@ import {
   UpdateOneByOneStream,
 } from '../../store/modules/meetingRoom';
 import { WarningToMemberAPI } from '../../store/apis/Main/meeting';
+import { AddGameScoreAPI, CallGameRankAPI } from '../../store/apis/Room/game';
 // 컴포넌트
 import RoomComponent from './RoomComponent';
 import { BASE_URL } from '../../utils/contants';
 import Warning from '../../components/room/CommonComponents/Alert/Warning';
+// import { BackgroundDiv } from '../../../components/room/styles/roomGlobal';
 
 const OPENVIDU_SERVER_URL = 'https://i6e204.p.ssafy.io:8443';
 const OPENVIDU_SERVER_SECRET = 'YOURSTAR';
-const BackgroundDiv = styled.div`
-  width: 100%;
-  height: 100%;
-  background-color: #e2d8ff;
-  color: 'white';
-`;
+
 const List = [
   '대기화면',
   '공연모드',
@@ -227,14 +223,16 @@ class Room extends Component {
           mySession.on('signal:Cho', event => {
             let chodata = event.data.split(',');
             if (chodata[0] !== this.props.chosonantQuiz) {
-              this.props.dochosonantQuiz(chodata[1]);
+              this.props.dochosonantQuiz(chodata[1], chodata[2]);
             }
           });
         }
+
         if (this.props.userCode === 4) {
-          // 맞춘 유저 수가 3명보다 적다면
+          // 스타일 때
           mySession.on('signal:ChoUserAns', event => {
             if (this.state.choAnsUserCnt < 4) {
+              // 맞춘 유저 수가 3명보다 적다면
               // 세션 받와와서 처리해주기
               let chodata = event.data.split(',');
               swal(
@@ -242,19 +240,8 @@ class Room extends Component {
                 '축하합니다',
                 { timer: 1800, button: false }
               );
-              switch (this.state.choAnsUserCnt) {
-                case 1: // 1등이면
-                  // 100점 axios 추가하기
-                  break;
-                case 2: // 2등이면
-                  // 80점 axios 추가하기
-                  break;
-                case 3: // 3등이면
-                  // 50점 axios 추가하기
-                  break;
-                default:
-                  break;
-              }
+              // DB에 넣어주기 chodata[1] -> memberId
+              AddGameScoreAPI(this.props.meetingId, chodata[1]);
               this.setState({ choAnsUserCnt: this.state.choAnsUserCnt + 1 }); // 맞춘 사람 수 1 늘리기
             }
             if (this.state.choAnsUserCnt === 4) {
@@ -265,16 +252,15 @@ class Room extends Component {
                 swal('🎇3명의 정답자가 나왔습니다.🎇', '게임이 초기화됩니다.', {
                   button: false,
                   timer: 2000,
+                }).then(() => {
+                  mySession.signal({
+                    // 초기화 신호 보내기
+                    data: '5',
+                    to: [],
+                    type: 'endConsonant',
+                  });
                 });
               }, 2000);
-              setTimeout(function () {
-                mySession.signal({
-                  // 초기화 신호 보내기
-                  data: '5',
-                  to: [],
-                  type: 'endConsonant',
-                });
-              }, 4000);
             }
           });
         }
@@ -291,8 +277,93 @@ class Room extends Component {
 
         // 초성게임 종료
         mySession.on('signal:endCho', () => {
-          this.props.doScreenChange(0);
-          this.props.publisher.publishVideo(true);
+          CallGameRankAPI(85); // 1. 점수 집계 중입니다 먼저 띄워주기 (API 받아오기) 1초
+          //this.props.meetingId
+          swal({
+            title: '점수 집계중',
+            icon: 'https://www.gjstec.or.kr/img/loading.gif',
+            text: '잠시만 기다려 주세요',
+            timer: 3000,
+            button: false,
+            closeOnClickOutside: false,
+            closeOnEsc: false,
+          }).then(() => {
+            swal(
+              '현재까지 게임 순위 결과 \n 축하합니다!🎉',
+              '🥇: 손은성\n 🥈: 박동준 \n 🥉: 안영원',
+              {
+                // 2. 점수 띄워주기 (최종 등수 알려주기) 3초
+                timer: 3000,
+                button: false,
+                closeOnClickOutside: false,
+                closeOnEsc: false,
+              }
+            ).then(() => {
+              swal({
+                // 3. 게임 종료 알려주기 세션으로 돌아가기 (종료) 2초
+                title: '초성 게임 세션 종료',
+                text: '대기화면으로 이동합니다',
+                icon: 'info',
+                buttons: false,
+                closeOnClickOutside: false,
+                closeOnEsc: false,
+                timer: 2000,
+              }).then(() => {
+                mySession.signal({
+                  data: '0',
+                  to: [],
+                  type: 'screen',
+                });
+                this.props.doScreenChange(0);
+              });
+            });
+          });
+        });
+
+        // OX게임 종료
+        mySession.on('signal:endOX', () => {
+          CallGameRankAPI(85); // 1. 점수 집계 중입니다 먼저 띄워주기 (API 받아오기) 1초
+          //this.props.meetingId
+          swal({
+            title: '점수 집계중',
+            icon: 'https://www.gjstec.or.kr/img/loading.gif',
+            text: '잠시만 기다려 주세요',
+            timer: 3000,
+            button: false,
+            closeOnClickOutside: false,
+            closeOnEsc: false,
+          }).then(() => {
+            swal(
+              '현재까지 게임 순위 결과 \n 축하합니다!🎉',
+              '🥇: 손은성 \n 🥈: 박동준 \n 🥉: 안영원',
+              {
+                // 2. 점수 띄워주기 (최종 등수 알려주기) 3초
+
+                timer: 3000,
+                button: false,
+                closeOnClickOutside: false,
+                closeOnEsc: false,
+              }
+            ).then(() => {
+              swal({
+                // 3. 게임 종료 알려주기 세션으로 돌아가기 (종료) 2초
+                title: 'OX게임 세션 종료',
+                text: '대기화면으로 이동합니다',
+                icon: 'info',
+                buttons: false,
+                closeOnClickOutside: false,
+                closeOnEsc: false,
+                timer: 2000,
+              }).then(() => {
+                mySession.signal({
+                  data: '0',
+                  to: [],
+                  type: 'screen',
+                });
+                this.props.doScreenChange(0);
+              });
+            });
+          });
         });
 
         // qna 스티커 받기
@@ -319,15 +390,38 @@ class Room extends Component {
           }
         });
 
-        // 경고창 
+        // 경고창
         mySession.on('signal:warning', event => {
-          this.setState({
-            warningCnt: event.data
-          })
-          setTimeout(() => this.setState({warningCnt: 0}), 10000)
+          const url =
+            window.location.protocol +
+            '//' +
+            window.location.host +
+            `/schedule/${this.state.mySessionId}`;
+          setTimeout(() => this.setState({ warningCnt: 0 }), 10000);
           if (parseInt(event.data) > 1) {
-            setTimeout(() => window.location.replace('https://i6e204.p.ssafy.io/'), 10000)
+            setTimeout(() => window.location.replace(url), 10000);
           }
+        });
+
+        // 종료 알림
+        mySession.on('signal:end', event => {
+          const url =
+            window.location.protocol +
+            '//' +
+            window.location.host +
+            `/schedule/${this.state.mySessionId}`;
+          mySession.disconnect();
+          swal({
+            title: '미팅 종료 알림',
+            text: '미팅 상세 페이지로 이동됩니다',
+            icon: 'info',
+            buttons: false,
+            closeOnClickOutside: false,
+            closeOnEsc: false,
+            timer: 1500,
+          }).then(() => {
+            window.location.replace(url);
+          });
         });
 
         // 세션과 연결하는 부분
@@ -337,7 +431,7 @@ class Room extends Component {
               // 추가로 넘겨주고 싶은 데이터가 있으면 여기에 추가
               clientData: this.state.me.nick,
               memberCode: this.state.me.code,
-              memberId: this.state.me.memberId
+              memberId: this.state.me.memberId,
             })
             .then(() => {
               // 연결 후에 내 정보를 담기
@@ -508,7 +602,7 @@ class Room extends Component {
   }
 
   stopRecording() {
-    console.log('recordid -------- ',this.state.recordId);
+    console.log('recordid -------- ', this.state.recordId);
     axios
       .post(BASE_URL + 'meetings/recording', {
         meetingId: this.state.mySessionId,
@@ -538,9 +632,11 @@ class Room extends Component {
 
   render() {
     return (
-      <BackgroundDiv>
+      <div>
         {/* 경고창 */}
-        {this.state.warningCnt !== 0 ? (<Warning warningCnt={this.state.warningCnt}></Warning>) : null}
+        {this.state.warningCnt !== 0 ? (
+          <Warning warningCnt={this.state.warningCnt}></Warning>
+        ) : null}
         {/* 컴포넌트는 들고왔을 때 잘 작동함 */}
         <div className="container">
           {this.state.session === undefined ? (
@@ -551,7 +647,7 @@ class Room extends Component {
             </div>
           )}
         </div>
-      </BackgroundDiv>
+      </div>
     );
   }
 
@@ -682,7 +778,7 @@ const mapDispatchToProps = dispatch => {
     doemoziListAdd: emozi => dispatch(emoziListAdd(emozi)),
     doAddQnaList: QnAText => dispatch(AddQnaList(QnAText)),
     doDeleteSubscriber: subscribers => dispatch(UserDelete(subscribers)),
-    dochosonantQuiz: text => dispatch(choQuiz(text)),
+    dochosonantQuiz: (problem, answer) => dispatch(choQuiz(problem, answer)),
     doaudioChange: () => dispatch(audioChange()),
     doWarningToMemberAPI: (memberId, meetingId) =>
       WarningToMemberAPI({ memberId, meetingId }),

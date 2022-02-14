@@ -83,7 +83,7 @@ public class RoomApplicantController {
 
         log.info("meetingEndByStar - Call");
 
-        meetingService.meetingEndByStar(meetingRoomEndByStarPostReq, LocalDateTime.now().minusMinutes(1));
+        meetingService.meetingEndByStar(meetingRoomEndByStarPostReq, LocalDateTime.now().plusHours(9).minusMinutes(1));
 
         return ResponseEntity.status(200).body(BaseResponseBody.of(200, "Success"));
     }

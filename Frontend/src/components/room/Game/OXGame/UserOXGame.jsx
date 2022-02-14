@@ -11,13 +11,7 @@ import axios from 'axios';
 import swal from 'sweetalert';
 import { useSelector } from 'react-redux';
 import { TM_URL } from '../../../../utils/contants';
-
-// 포지션작업
-const BackgroundDiv = styled.div`
-  width: 100%;
-  height: 100%;
-  background-color: #e2d8ff;
-`;
+import { AddGameScoreAPI } from '../../../../store/apis/Room/game';
 
 const OPENVIDU_SERVER_URL = 'https://i6e204.p.ssafy.io:8443';
 const OPENVIDU_SERVER_SECRET = 'YOURSTAR';
@@ -56,7 +50,7 @@ export default function UserOXGame() {
     if (state.userAnswer === starAnswer) {
       swal({
         title: round + '라운드 종료',
-        text: '정답',
+        text: '정답 50point 적립!',
         icon: 'success',
         buttons: false,
         timer: 1500,
@@ -209,13 +203,13 @@ export default function UserOXGame() {
   };
 
   return (
-    <BackgroundDiv>
+    <div>
       <OXUserScreen></OXUserScreen>
       <MyScreen></MyScreen>
       <OtherPersonScreen></OtherPersonScreen>
       <button type="button" onClick={() => start()}>
         Start
       </button>
-    </BackgroundDiv>
+    </div>
   );
 }

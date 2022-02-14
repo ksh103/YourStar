@@ -24,7 +24,7 @@ export default function Pledge(props) {
   const [message, setMessage] = useState('');
 
   const onClicksubmit = () => {
-    if (message === '본인은 위 사항을 지킬것을 동의합니다') {
+    if (message === '본인은 위 사항을 지킬 것을 동의합니다') {
       swal(
         '서약서 제출이 완료되었습니다',
         '미팅 대기 페이지로 이동합니다.',
@@ -88,7 +88,7 @@ export default function Pledge(props) {
             }}
           ></input>
           <PlaceHolderText>
-            본인은 위 사항을 지킬것을 동의합니다
+            본인은 위 사항을 지킬 것을 동의합니다
           </PlaceHolderText>
           <button onClick={onClicksubmit} style={{ fontSize: '20px' }}>
             제출

@@ -1,9 +1,9 @@
 import React from 'react';
 import styled from 'styled-components';
 import { MainDiv } from '../Main.style';
-import StarVideoComponent from  '../../../../../pages/Room/StarVideoComponent'
-import { useSelector} from 'react-redux';
-
+import { useSelector } from 'react-redux';
+import StarVideoComponent from '../../../../../pages/Room/StarVideoComponent';
+// 51 ->
 const QuestionMain = styled.div`
   overflow: auto; 
   position: relative;
@@ -20,7 +20,9 @@ export default function QuestionMainScreen() {
   return (
     <MainDiv>
       <QuestionMain>
-        <StarVideoComponent streamManager={mainStreamManager}></StarVideoComponent>
+        {mainStreamManager && (
+          <StarVideoComponent streamManager={mainStreamManager} />
+        )}
       </QuestionMain>
     </MainDiv>
   );

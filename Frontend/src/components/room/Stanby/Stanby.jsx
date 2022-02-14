@@ -195,7 +195,6 @@ export default function Stanby() {
   };
 
   testSession.on('publisherStopSpeaking', event => {
-    // 감지가 될 때 효과 줘버리깅
     Speaking(false);
   });
 
@@ -233,10 +232,10 @@ export default function Stanby() {
     }
   };
 
-  console.log(
-    pub.stream.videoActive,
-    '==========들어온사람의 비디오 상태 정보========='
-  );
+  // console.log(
+  //   pub.stream.videoActive,
+  //   '==========들어온사람의 비디오 상태 정보========='
+  // );
   return (
     <BackgroundDiv color={color}>
       <ColorCircleWrapper>

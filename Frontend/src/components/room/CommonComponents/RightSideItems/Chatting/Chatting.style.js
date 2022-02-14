@@ -190,6 +190,46 @@ const ConcertChattingListBox = styled.div`
   overflow-y: scroll;
 `;
 
+const StarSmallBox = styled.div`
+  position: relative;
+  width: 20vw;
+  height: 40.5vh;
+  background-color: white;
+  border-radius: 1vw;
+  box-shadow: 0.306vh 0.306vh gray;
+`;
+
+const StarSmallChattingInputBox = styled.input`
+  position: absolute;
+  top: 80%;
+  left: 10%;
+  right: 10%;
+  border-radius: 1vw;
+  width: 75%;
+  height: 5.1vh;
+  background-color: ${props => props.color};
+  border: none;
+  padding-right: 0.52vw;
+  padding-left: 0.52vw;
+  outline: none;
+`;
+
+const StarSmallChattingListBox = styled.div`
+  position: absolute;
+  top: 1%;
+  left: 10%;
+  right: 10%;
+  margin: 1vh auto;
+  border-radius: 1vw;
+  width: 75%;
+  height: 25vh;
+  padding: 1vh;
+  margin-top: 2vh;
+  background-color: #f5f5f5;
+  color: black;
+  overflow-y: scroll;
+`;
+
 export {
   LongChattingInputBox,
   LongChattingListBox,
@@ -208,4 +248,7 @@ export {
   ConcertChattingBox,
   ConcertChattingListBox,
   ConcertChattingInputBox,
+  StarSmallChattingListBox,
+  StarSmallChattingInputBox,
+  StarSmallBox,
 };
