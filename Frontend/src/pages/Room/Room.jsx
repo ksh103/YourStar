@@ -244,7 +244,7 @@ class Room extends Component {
                 { timer: 1800, button: false }
               );
               // DB에 넣어주기 chodata[1] -> memberId
-              AddGameScoreAPI(this.props.meetingId, chodata[1]);
+              AddGameScoreAPI(mySession.sessionId, chodata[1]);
               this.setState({ choAnsUserCnt: this.state.choAnsUserCnt + 1 }); // 맞춘 사람 수 1 늘리기
             }
             if (this.state.choAnsUserCnt === 4) {
@@ -280,8 +280,12 @@ class Room extends Component {
 
         // 초성게임 종료
         mySession.on('signal:endCho', () => {
-          CallGameRankAPI(85); // 1. 점수 집계 중입니다 먼저 띄워주기 (API 받아오기) 1초
-          //this.props.meetingId
+          let data = [];
+          const result = axios // 1. 점수 집계 중입니다 먼저 띄워주기 (API 받아오기) 1초
+            .get(`${BASE_URL}meetings/game-result/admin/${mySession.sessionId}`)
+            .then(function (response) {
+              data = response.data;
+            });
           swal({
             title: '점수 집계중',
             icon: 'https://www.gjstec.or.kr/img/loading.gif',
@@ -291,9 +295,10 @@ class Room extends Component {
             closeOnClickOutside: false,
             closeOnEsc: false,
           }).then(() => {
+            console.log('1////////////', data.content);
             swal(
               '현재까지 게임 순위 결과 \n 축하합니다!🎉',
-              '🥇: 손은성\n 🥈: 박동준 \n 🥉: 안영원',
+              `🥇: ${data.content[0][0]} : ${data.content[0][1]}점\n 🥈: ${data.content[1][0]} : ${data.content[1][1]}점\n 🥉: ${data.content[2][0]} : ${data.content[2][1]}점`,
               {
                 // 2. 점수 띄워주기 (최종 등수 알려주기) 3초
                 timer: 3000,
@@ -325,7 +330,12 @@ class Room extends Component {
 
         // OX게임 종료
         mySession.on('signal:endOX', () => {
-          CallGameRankAPI(85); // 1. 점수 집계 중입니다 먼저 띄워주기 (API 받아오기) 1초
+          let data = [];
+          const result = axios // 1. 점수 집계 중입니다 먼저 띄워주기 (API 받아오기) 1초
+            .get(`${BASE_URL}meetings/game-result/admin/${mySession.sessionId}`)
+            .then(function (response) {
+              data = response.data;
+            });
           //this.props.meetingId
           swal({
             title: '점수 집계중',
@@ -338,7 +348,7 @@ class Room extends Component {
           }).then(() => {
             swal(
               '현재까지 게임 순위 결과 \n 축하합니다!🎉',
-              '🥇: 손은성 \n 🥈: 박동준 \n 🥉: 안영원',
+              `🥇: ${data.content[0][0]} : ${data.content[0][1]}점\n 🥈: ${data.content[1][0]} : ${data.content[1][1]}점\n 🥉: ${data.content[2][0]} : ${data.content[2][1]}점`,
               {
                 // 2. 점수 띄워주기 (최종 등수 알려주기) 3초
 

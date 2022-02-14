@@ -44,7 +44,7 @@ const reducer = (state = initialState, action) =>
       case MEETING_GAME_RESULT_SUCCESS:
         draft.meetingsGameResultLoading = false;
         draft.meetingsGameResultDone = true;
-        draft.meetingGameList = action.data.list;
+        draft.meetingGameList = action.data.content;
         break;
       case MEETING_GAME_RESULT_FAILURE:
         draft.meetingsGameResultLoading = false;

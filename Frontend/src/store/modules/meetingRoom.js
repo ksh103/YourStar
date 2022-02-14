@@ -222,6 +222,12 @@ export const audioChange = fe => {
   };
 };
 
+const SET_SIGN_BUTTON = 'SET_SIGN_BUTTON';
+export const setSignButton = state => ({
+  type: SET_SIGN_BUTTON,
+  payload: state,
+});
+
 // 평소 컴포넌트에서 선언하던 state들!
 const initialState = {
   // 초기에는 시작 안한 상태!
@@ -244,6 +250,7 @@ const initialState = {
   nowEmozi: -1,
   chosonantQuiz: [],
   onebyoneStream: undefined,
+  signButton: false,
   randomPerson: null,
   randomSubscribers: null,
   isOneByOne: false,
@@ -380,6 +387,13 @@ const MeetingRoom = (state = initialState, action) => {
     //   return {
     //     ...state,
     //   };
+
+    case SET_SIGN_BUTTON:
+      return {
+        ...state,
+        signButton: action.payload,
+      };
+      break;
     default:
       return state; // 기본 값 반환!
   }
