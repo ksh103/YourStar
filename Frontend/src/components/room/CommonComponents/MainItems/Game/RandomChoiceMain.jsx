@@ -7,10 +7,7 @@ import StarVideoComponent from '../../../../../pages/Room/StarVideoComponent';
 import ChoiceUserVideoComponent from '../../../../../pages/Room/ChoiceUserVideoComponent';
 import swal from '@sweetalert/with-react';
 import './rolling.scss';
-import {
-  randomResult,
-  randomSub,
-} from '../../../../../store/modules/meetingRoom';
+import { randomResult } from '../../../../../store/modules/meetingRoom';
 // 60vw 가로폭
 const RandomChoiceSc = styled.div`
   position: relative;
@@ -18,14 +15,28 @@ const RandomChoiceSc = styled.div`
   height: 67.5vh;
   background-color: white;
   border-radius: 1vh;
-  box-shadow: 0.306vh 0.306vh gray;
   margin-right: 0.8vw;
+  display: flex;
+  align-items: center;
+  justify-content: center;
 `;
 
 const MainGrid = styled.div`
   width: 100%;
   height: 100%;
   display: inline-flex;
+`;
+
+const RandomIcon = styled.div`
+  width: 100%;
+  height: 100%;
+  transition: all 2s linear;
+  &:hover {
+    /* transform: rotate(720deg); */
+    transform: scale(1.2, 1.2);
+
+    cursor: pointer;
+  }
 `;
 
 //git commit -m "[S06P12E204-261] FE-미팅룸UI: RandomGame생성&미팅룸redux 생성 &  "
@@ -94,7 +105,6 @@ export default function RandomChoiceMain() {
     const dangchum = JSON.parse(arr[1]);
     const Lists = JSON.parse(arr[0]);
     const luckyUser = arr[2];
-    console.log(luckyUser, randomPerson, '☆☆☆☆☆☆☆☆☆');
     randomoneperson(luckyUser);
     if (me.code === 3) {
       if (me.nick === dangchum.clientData) {
@@ -145,65 +155,37 @@ export default function RandomChoiceMain() {
     }).then(() => {
       swal({
         buttons: false,
-        timer: 500,
+        timer: 2000,
         className: 'number',
         content: <div className="ment">행운의 당첨자가 곧 나타납니다!</div>,
       }).then(() => {
         swal({
           buttons: false,
-          timer: 500,
+          timer: 1000,
           className: 'number',
           content: <div className="number">3</div>,
         }).then(() => {
           swal({
             buttons: false,
-            timer: 500,
+            timer: 1000,
             className: 'number',
-            content: <div className="number">1</div>,
+            content: <div className="number">2</div>,
           }).then(() => {
-            setUserScreen(true);
+            swal({
+              buttons: false,
+              timer: 1000,
+              className: 'number',
+              content: <div className="number">1</div>,
+            }).then(() => {
+              setUserScreen(true);
+            });
           }); // 틀렸을 때 게임 다시하기위해 호출하는 함수
         }); // 틀렸을 때 게임 다시하기위해 호출하는 함수}); // 틀렸을 때 게임 다시하기위해 호출하는 함수
       });
     });
-    // setTimeout(function () {
-    //   swal({
-    //     buttons: false,
-    //     timer: 500,
-    //     className: 'number',
-    //     content: <div className="ment">행운의 당첨자가 곧 나타납니다!</div>,
-    //   }); // 틀렸을 때 게임 다시하기위해 호출하는 함수
-    // }, 3500);
-    // setTimeout(function () {
-    //   swal({
-    //     buttons: false,
-    //     timer: 500,
-    //     className: 'number',
-    //     content: <div className="number">3</div>,
-    //   }); // 틀렸을 때 게임 다시하기위해 호출하는 함수
-    // }, 4500);
-    // setTimeout(function () {
-    //   swal({
-    //     buttons: false,
-    //     timer: 500,
-    //     className: 'number',
-    //     content: <div className="number">2</div>,
-    //   }); // 틀렸을 때 게임 다시하기위해 호출하는 함수
-    // }, 5500);
-    // setTimeout(function () {
-    //   swal({
-    //     buttons: false,
-    //     timer: 500,
-    //     className: 'number',
-    //     content: <div className="number">1</div>,
-    //   }); // 틀렸을 때 게임 다시하기위해 호출하는 함수
-    // }, 6500);
-    // setTimeout(function () {
-    //   setUserScreen(true);
-    // }, 7500);
     setTimeout(function () {
       setUserScreen(false);
-    }, 10000);
+    }, 30000);
   });
 
   return (
@@ -216,7 +198,27 @@ export default function RandomChoiceMain() {
         </RandomChoiceSc>
         <RandomChoiceSc>
           {me.code === 4 && !userscreen ? (
-            <button onClick={onShuffle}>돌려돌려 돌림판!</button>
+            <div>
+              <div
+                style={{
+                  textAlign: 'center',
+                  paddingBottom: '3vw',
+                  fontSize: '1.5vw',
+                }}
+              >
+                🎯룰렛을 클릭하여 당첨자를 뽑아주세요🎯
+              </div>
+              <div style={{ textAlign: 'center' }}>
+                <RandomIcon>
+                  <img
+                    style={{ width: '18vw' }}
+                    src="https://images-ext-2.discordapp.net/external/scYd434SR4jsge3NpuRlGVKBKj1jUGXm9RYkGHa3iJE/https/u01.appmifile.com/images/2019/09/10/b3788a8e-24d2-41b3-91c4-131968dab219.gif"
+                    alt="none"
+                    onClick={onShuffle}
+                  />
+                </RandomIcon>
+              </div>
+            </div>
           ) : null}
           {/* 유저 정보가 들어오면 띄워주기 */}
           {userscreen && (
