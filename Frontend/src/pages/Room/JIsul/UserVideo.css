@@ -1,38 +1,37 @@
-video {
-    width: 13vw;
-    height: 19vh;
-    /* cursor: pointer; */
-    border-radius: 2vw;
-    float: left;
-    margin: 1vw;
-    object-fit: cover;
-  }
-  
-  .Star {
-    width: 80.541vw;
-    height: 64.5vh;
-    margin: 1% 2%;
-  }
-  
-  .hiddenConsole > .son {
-    display: none;
-    position: relative;
-    background-color: aqua;
-    border-radius: 2vw;
-    z-index: 1;
-    background-color: black;
-    color: red;
-  }
-  
-  .hiddenConsole:hover .son {
-    display: block;
-    position: absolute;
-    width: 13vw;
-    height: 19vh;
-    background-color: rgba(0, 0, 0, 0.493);
-    border-radius: 2vw;
-    z-index: 1;
-    color: white;
-    margin: 1vw;
-  }
-  
+/* video {
+  width: 13vw;
+  height: 19vh;
+  cursor: pointer;
+  border-radius: 2vw;
+  float: left;
+  margin: 1vw;
+  object-fit: cover;
+}
+
+.Star {
+  width: 80.541vw;
+  height: 64.5vh;
+  margin: 1% 2%;
+}
+
+.hiddenConsole > .son {
+  display: none;
+  position: relative;
+  background-color: aqua;
+  border-radius: 2vw;
+  z-index: 1;
+  background-color: black;
+  color: red;
+}
+
+.hiddenConsole:hover .son {
+  display: block;
+  position: absolute;
+  width: 13vw;
+  height: 19vh;
+  background-color: rgba(0, 0, 0, 0.493);
+  border-radius: 2vw;
+  z-index: 1;
+  color: white;
+  margin: 1vw;
+} */

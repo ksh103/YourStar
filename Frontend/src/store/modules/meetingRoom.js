@@ -232,10 +232,6 @@ const initialState = {
   publisher: undefined,
   mainStreamManager: undefined,
   selectNum: 0,
-  // 임시로 사용하는 유저아이디
-  userId: 0,
-  // 임시로 사용하는 유저 닉네임
-  testInput: '테스트용',
   // 세션정보
   storeSession: undefined,
   emoziList: [],

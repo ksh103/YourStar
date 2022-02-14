@@ -15,13 +15,15 @@ import {
 import swal from 'sweetalert';
 import { useState } from 'react';
 import { useHistory } from 'react-router';
-import { useSelector } from 'react-redux';
+import { useSelector, useDispatch } from 'react-redux';
+import { ScreenChange } from '../../../../store/modules/meetingRoom';
 
 export default function Pledge(props) {
   const history = useHistory();
 
-  const { meeting } = useSelector(state => state.meeting);
+  const { meeting, selectNum } = useSelector(state => state.meeting);
   const [message, setMessage] = useState('');
+  const dispatch = useDispatch();
 
   const onClicksubmit = () => {
     if (message === '본인은 위 사항을 지킬 것을 동의합니다') {
@@ -35,6 +37,7 @@ export default function Pledge(props) {
         }
       );
       history.push(`/stanby/${meeting.id}`); // 미팅 대기화면으로 이동
+      dispatch(ScreenChange(7));
     } else {
       swal('', '서약서 서명이 일치하지 않습니다.', 'error', {
         buttons: false,

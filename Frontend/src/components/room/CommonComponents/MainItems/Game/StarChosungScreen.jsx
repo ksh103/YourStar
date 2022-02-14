@@ -2,7 +2,7 @@ import React from 'react';
 import styled from 'styled-components';
 import { MainDiv } from '../Main.style';
 import { useSelector, useDispatch } from 'react-redux';
-import UserVideoComponent from '../../../../../pages/Room/DongJun/UserVideoComponent';
+import UserVideoComponent from '../../../../../pages/Room/UserVideoComponent';
 
 const StarScreen = styled.div`
   overflow-x: auto;
