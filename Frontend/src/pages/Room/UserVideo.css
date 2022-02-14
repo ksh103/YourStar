@@ -7,6 +7,26 @@
   margin: 1vw;
   object-fit: cover;
 } */
+.center {
+  text-align: center;
+  position: relative;
+}
+
+.WaitText {
+  position: absolute;
+  background-color: white;
+  border: 3px solid black;
+  bottom: 43%;
+  left: 33%;
+  font-size: 50px;
+  padding: 15px;
+  border-radius: 2vw;
+}
+
+.WaitImg {
+  height: 590px;
+  margin: 1% 2%;
+}
 
 .Star {
   width: 80.541vw;

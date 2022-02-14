@@ -24,6 +24,7 @@ const PUBLISHER_AUDIO_CHANGE = 'PUBLISHER_AUDIO_CHANGE';
 const UPDATE_ONEBYONESTREAM = 'UPDATE_ONEBYONESTREAM';
 const ADD_RANDOM_RESULT = 'ADD_RANDOM_RESULT';
 const ADD_RANDOM_SUBSCRIBERS = 'ADD_RANDOM_SUBSCRIBERS';
+const SET_IS_ONEBYONE = 'SET_IS_ONEBYONE';
 
 export const randomResult = result => {
   return {
@@ -95,6 +96,13 @@ export const UpdateOneByOneStream = stream => {
   return {
     type: UPDATE_ONEBYONESTREAM,
     payload: stream,
+  };
+};
+
+export const SetIsOneByOne = some => {
+  return {
+    type: SET_IS_ONEBYONE,
+    payload: some,
   };
 };
 // 여기까지 =================================
@@ -242,6 +250,7 @@ const initialState = {
   onebyoneStream: undefined,
   randomPerson: null,
   randomSubscribers: null,
+  isOneByOne: false,
 };
 
 const MeetingRoom = (state = initialState, action) => {
@@ -296,6 +305,11 @@ const MeetingRoom = (state = initialState, action) => {
       return {
         ...state,
         onebyoneStream: action.payload,
+      };
+    case SET_IS_ONEBYONE:
+      return {
+        ...state,
+        isOneByOne: action.payload,
       };
     // 여기까지 ============================
     case PUBLISHER_INFO:
