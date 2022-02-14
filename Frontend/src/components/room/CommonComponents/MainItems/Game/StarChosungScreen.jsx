@@ -7,12 +7,12 @@ import UserVideoComponent from '../../../../../pages/Room/UserVideoComponent';
 const StarScreen = styled.div`
   overflow-x: auto;
   position: relative;
-  width: 60.041vw;
-  height: 82vh;
-  max-height: 82vh;
+  width: 63vw;
+  height: 90vh;
+  // max-height: 85vh;
   background-color: white;
-  border-radius: 3.0643vh;
-  box-shadow: 0.306vh 0.306vh gray;
+  border-radius: 1vh;
+  // box-shadow: 0.306vh 0.306vh gray;
 `;
 
 const PerScPosition = styled.div`

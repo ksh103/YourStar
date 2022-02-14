@@ -20,8 +20,63 @@ class UserVideoComponent extends Component {
       audioState: false,
       videoState: true,
       isSpeaking: false,
+      mode: '',
     };
   }
+
+  componentDidMount() {
+    if (this.props.selectNum === 0) {
+      this.setState({
+        mode: 'User',
+      });
+    } else if (this.props.selectNum === 1) {
+      this.setState({
+        mode: 'UserConcert',
+      });
+    } else if (this.props.selectNum === 2) {
+      this.setState({
+        mode: 'UserQnA',
+      });
+    } else if (this.props.selectNum === 3) {
+      this.setState({
+        mode: 'UserRandom',
+      });
+    } else if (this.props.selectNum === 4) {
+      if (this.props.me.code === 4) {
+        this.setState({
+          mode: 'UserOXGameToStarScreen',
+        });
+      } else {
+        this.setState({
+          mode: 'UserOXGame',
+        });
+      }
+    } else if (this.props.selectNum === 5) {
+      console.log(this.props.me.code, this.props.me.nick, '가보고있슈');
+      if (this.props.me.code === 4) {
+        this.setState({
+          mode: 'UserConsonantGameToStarScreen',
+        });
+      } else {
+        this.setState({
+          mode: 'UserConsonantGame',
+        });
+      }
+    } else if (this.props.selectNum === 6) {
+      this.setState({
+        mode: 'UserOneOnOne',
+      });
+    } else if (this.props.selectNum === 7) {
+      this.setState({
+        mode: 'Ready',
+      });
+    } else {
+      this.setState({
+        mode: 'User',
+      });
+    }
+  }
+
   getNicknameTag() {
     // Gets the nickName of the user
     return JSON.parse(this.props.streamManager.stream.connection.data)
@@ -115,80 +170,86 @@ class UserVideoComponent extends Component {
 
   render() {
     return (
-      <div className={'hiddenConsole'}>
-        {this.props.me.code !== 3 ? (
-          <div className="son">
-            <p>{this.getNicknameTag()}</p>
-            <div>
-              {this.state.audioState ? (
-                <BsFillMicFill
-                  size="24"
-                  color="#00000"
-                  onClick={() => {
-                    this.forceMicControll(
-                      this.props.streamManager.stream.connection
-                    );
-                    this.setState({
-                      audioState: !this.state.audioState,
-                    });
-                  }}
+      <div style={{ margin: '1vw' }}>
+        <div className={this.state.mode}>
+          <div className="hiddenConsole">
+            {this.props.me.code !== 3 ? (
+              <div className="son">
+                <p>{this.getNicknameTag()}</p>
+                <div>
+                  {this.state.audioState ? (
+                    <BsFillMicFill
+                      size="24"
+                      color="#00000"
+                      onClick={() => {
+                        this.forceMicControll(
+                          this.props.streamManager.stream.connection
+                        );
+                        this.setState({
+                          audioState: !this.state.audioState,
+                        });
+                      }}
+                    />
+                  ) : (
+                    <BsFillMicMuteFill
+                      size="24"
+                      color="#00000"
+                      onClick={() => {
+                        this.forceMicControll(
+                          this.props.streamManager.stream.connection
+                        );
+                        this.setState({
+                          audioState: !this.state.audioState,
+                        });
+                      }}
+                    />
+                  )}
+                  {this.state.videoState ? (
+                    <BsFillCameraVideoFill
+                      size="24"
+                      color="#00000"
+                      onClick={() => {
+                        this.forceVideoControll(
+                          this.props.streamManager.stream.connection
+                        );
+                        this.setState({
+                          videoState: !this.state.videoState,
+                        });
+                      }}
+                    />
+                  ) : (
+                    <BsFillCameraVideoOffFill
+                      size="24"
+                      color="#00000"
+                      onClick={() => {
+                        this.forceVideoControll(
+                          this.props.streamManager.stream.connection
+                        );
+                        this.setState({
+                          videoState: !this.state.videoState,
+                        });
+                      }}
+                    />
+                  )}
+                  <RiAlarmWarningLine
+                    size="24"
+                    color="#00000"
+                    onClick={() => {
+                      this.warning(this.props.streamManager.stream.connection);
+                    }}
+                  />
+                </div>
+              </div>
+            ) : null}
+            {this.props.streamManager !== undefined ? (
+              <>
+                <OpenViduVideoComponent
+                  streamManager={this.props.streamManager}
                 />
-              ) : (
-                <BsFillMicMuteFill
-                  size="24"
-                  color="#00000"
-                  onClick={() => {
-                    this.forceMicControll(
-                      this.props.streamManager.stream.connection
-                    );
-                    this.setState({
-                      audioState: !this.state.audioState,
-                    });
-                  }}
-                />
-              )}
-              {this.state.videoState ? (
-                <BsFillCameraVideoFill
-                  size="24"
-                  color="#00000"
-                  onClick={() => {
-                    this.forceVideoControll(
-                      this.props.streamManager.stream.connection
-                    );
-                    this.setState({
-                      videoState: !this.state.videoState,
-                    });
-                  }}
-                />
-              ) : (
-                <BsFillCameraVideoOffFill
-                  size="24"
-                  color="#00000"
-                  onClick={() => {
-                    this.forceVideoControll(
-                      this.props.streamManager.stream.connection
-                    );
-                    this.setState({
-                      videoState: !this.state.videoState,
-                    });
-                  }}
-                />
-              )}
-              <RiAlarmWarningLine
-                size="24"
-                color="#00000"
-                onClick={() => {
-                  this.warning(this.props.streamManager.stream.connection);
-                }}
-              />
-            </div>
+              </>
+            ) : null}
           </div>
-        ) : null}
-        {this.props.streamManager !== undefined ? (
-          <>
-            <OpenViduVideoComponent streamManager={this.props.streamManager} />
-          </>
-        ) : null}
+        </div>
       </div>
     );
   }
@@ -199,7 +260,7 @@ const mapStateToProps = state => ({
   subscribers: state.MeetingRoom.subscribers,
   me: state.mypage.me,
   meetingId: state.meeting.meeting.id,
-  selectNUm: state.MeetingRoom.selectNum,
+  selectNum: state.MeetingRoom.selectNum,
 });
 
 const mapDispatchToProps = dispatch => {

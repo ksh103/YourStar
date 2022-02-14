@@ -38,7 +38,7 @@
   display: none;
   position: relative;
   background-color: aqua;
-  border-radius: 2vw;
+  border-radius: 1vh;
   z-index: 1;
   background-color: black;
   /* color: red; */
@@ -47,13 +47,12 @@
 .hiddenConsole:hover .son {
   display: block;
   position: absolute;
-  width: 13vw;
-  height: 19vh;
+  width: 100%;
+  height: 100%;
   background-color: rgba(0, 0, 0, 0.493);
-  border-radius: 2vw;
+  border-radius: 1vh;
   z-index: 1;
   color: white;
-  margin: 1vw;
 }
 
 .Ready {
@@ -61,7 +60,7 @@
   width: 98%;
   height: 64.5vh;
   background-color: white;
-  border-radius: 3.0643vh;
+  border-radius: 1vh;
   box-shadow: 0.306vh 0.306vh gray;
   margin: 1vh;
   object-fit: cover;
@@ -69,11 +68,11 @@
 
 .StarAdmin {
   position: absolute;
-  /* width: 58.041vw;
-  height: 61.5vh; */
-  width: 60.041vw;
-  height: 66.5vh;
-  border-radius: 3.0643vh;
+  width: 100%;
+  height: 100%;
+  /* width: 63vw;
+  height: 67.5vh; */
+  border-radius: 1vh;
   margin: 0;
   object-fit: cover;
 }
@@ -82,8 +81,10 @@
   position: absolute;
   /* border: solid red; */
   border-radius: 1vw;
-  height: 75vh;
-  width: 60vw;
+  width: 100%;
+  height: 100%;
+  /* height: 75vh;
+  width: 60vw; */
   background-color: white;
   margin: 0;
   object-fit: cover;
@@ -91,149 +92,175 @@
 
 .StarQnA {
   position: relative;
-  width: 60.041vw;
+  /* width: 100%;
+  height: 100%; */
+  width: 63vw;
   height: 60.5vh;
   background-color: white;
-  border-radius: 3.0643vh;
+  border-radius: 1vh;
+  margin: 0;
+  object-fit: cover;
+}
+
+.StarQnAtoUser {
+  position: relative;
+  /* width: 100%;
+  height: 100%; */
+  width: 63vw;
+  height: 66.5vh;
+  background-color: white;
+  border-radius: 1vh;
   margin: 0;
   object-fit: cover;
 }
 
 .StarRandom {
   position: relative;
-  width: 28.041vw;
-  height: 66.5vh;
+  width: 100%;
+  height: 67.5vh;
   background-color: white;
-  border-radius: 3.0643vh;
-  box-shadow: 0.306vh 0.306vh gray;
+  border-radius: 1vh;
   margin-right: 4vw;
   margin: 0;
   object-fit: cover;
 }
 
-/* .UserRandom {
-  position: relative;
-  width: 28.041vw;
-  height: 66.5vh;
-  background-color: white;
-  border-radius: 3.0643vh;
-  box-shadow: 0.306vh 0.306vh gray;
-  margin-right: 4vw;
-  margin: 0;
-} */
-
-.StarOXGame {
+.StarOXGameToUser {
   position: relative;
   width: 83.541vw;
   height: 66.5vh;
   background-color: white;
-  border-radius: 3.0643vh;
-  box-shadow: 0.306vh 0.306vh gray;
+  border-radius: 1vh;
   margin: 0;
   object-fit: cover;
 }
-/* 
-position: relative;
-  width: 60.041vw;
-  height: 58.0725vh;
+
+.StarOXGame {
+  border-radius: 1vh;
+  width: 20vw;
+  height: 21vh;
   background-color: white;
-  border-radius: 3.0643vh;
-  box-shadow: 0.306vh 0.306vh gray; */
+  object-fit: cover;
+}
+.StarConsonantGameToUser {
+  position: relative;
+  width: 83.541vw;
+  height: 66.5vh;
+  background-color: white;
+  border-radius: 1vh;
+  margin: 0;
+  object-fit: cover;
+}
 
 .StarConsonantGame {
+  border-radius: 1vh;
+  width: 20vw;
+  height: 21vh;
+  background-color: white;
+  object-fit: cover;
 }
 
 .StarOneOnOne {
   position: relative;
-  width: 28.041vw;
-  height: 66.5vh;
+  width: 46vw;
+  height: 80.5vh;
   background-color: white;
-  border-radius: 3.0643vh;
-  box-shadow: 0.306vh 0.306vh gray;
+  border-radius: 1vh;
   margin-right: 4vw;
-  margin: 0;
+  margin: 1%;
   object-fit: cover;
 }
 
 .User {
+  position: relative;
   width: 13vw;
-  height: 19vh;
+  height: 18.5vh;
   cursor: pointer;
-  border-radius: 3.0643vh;
-  float: left;
-  margin: 1vw;
+  border-radius: 1vh;
+  /* float: left; */
+  margin: 0;
   object-fit: cover;
 }
 
 .UserQnA {
+  position: relative;
   width: 13vw;
-  height: 19vh;
+  height: 18.5vh;
   cursor: pointer;
-  border-radius: 3.0643vh;
-  float: left;
-  margin: 1vw;
+  border-radius: 1vh;
+  /* float: left; */
+  margin: 0;
   object-fit: cover;
 }
 
 .UserChoiced {
   position: relative;
-  width: 28.041vw;
-  height: 66.5vh;
+  width: 100%;
+  height: 67.5vh;
   background-color: white;
-  border-radius: 3.0643vh;
-  box-shadow: 0.306vh 0.306vh gray;
+  border-radius: 1vh;
   margin-right: 4vw;
   margin: 0;
   object-fit: cover;
 }
 
 .UserRandom {
+  position: relative;
   width: 13vw;
   height: 19vh;
   cursor: pointer;
-  border-radius: 3.0643vh;
-  float: left;
-  margin: 1vw;
+  border-radius: 1vh;
+  /* float: left; */
   object-fit: cover;
 }
 
 .UserOXGame {
+  position: relative;
   width: 13vw;
   height: 19vh;
   cursor: pointer;
-  border-radius: 3.0643vh;
-  float: left;
-  margin: 1vw;
+  border-radius: 1vh;
+  /* float: left; */
+  object-fit: cover;
+}
+
+.UserOXGameToStarScreen {
+  position: relative;
+  width: 17vw;
+  height: 21vh;
+  background-color: white;
+  border-radius: 1vh;
+  margin: 0;
   object-fit: cover;
 }
 
 .UserConsonantGame {
-  width: 13vw;
-  height: 19vh;
-  cursor: pointer;
-  border-radius: 3.0643vh;
-  float: left;
-  margin: 1vw;
-  object-fit: cover;
-}
-.UserOneOnOne {
   position: relative;
-  width: 28.041vw;
-  height: 66.5vh;
-  background-color: white;
-  border-radius: 3.0643vh;
-  box-shadow: 0.306vh 0.306vh gray;
-  margin-right: 4vw;
+  width: 13vw;
+  height: 18.5vh;
+  cursor: pointer;
+  border-radius: 1vh;
+  /* float: left; */
   margin: 0;
+  object-fit: cover;
 }
 
 .UserConsonantGameToStarScreen {
   position: relative;
-  width: 25vw;
-  height: 27vh;
+  width: 17vw;
+  height: 21vh;
   background-color: white;
-  border-radius: 3.0643vh;
-  box-shadow: 0.306vh 0.306vh gray;
+  border-radius: 1vh;
+  margin: 0;
+  object-fit: cover;
+}
+
+.UserOneOnOne {
+  position: relative;
+  width: 46vw;
+  height: 80.5vh;
+  background-color: white;
+  border-radius: 1vh;
   margin-right: 4vw;
   margin: 0;
   object-fit: cover;

@@ -1,5 +1,8 @@
 import React, { useEffect } from 'react';
-import { HalfSideDiv1, SmallBox } from '../Chatting/Chatting.style';
+import {
+  HalfSideDiv1,
+  SmallBoxSelectSchedule,
+} from '../Chatting/Chatting.style';
 import { useSelector, useDispatch } from 'react-redux';
 import {
   ResetIndex,
@@ -16,13 +19,13 @@ import { END_MEETING_REQUEST } from '../../../../../store/modules/meeting';
 import axios from 'axios';
 
 const List = [
-  '대기화면',
-  '공연모드',
-  'QnA모드',
-  '랜덤추첨',
-  'O/X게임',
-  '초성게임',
-  '1:1팬미팅',
+  '⭐ 대기화면',
+  '🎤 공연모드',
+  '📝 QnA모드',
+  '🎱 랜덤추첨',
+  '🙆‍♂️ O/X게임',
+  '🎮 초성게임',
+  '💞 1:1팬미팅',
 ];
 
 export default function ScheduleListSelect() {
@@ -77,7 +80,7 @@ export default function ScheduleListSelect() {
   return (
     <>
       <HalfSideDiv1>
-        <SmallBox>
+        <SmallBoxSelectSchedule>
           <ScheduleListWrapper>
             {List.map((list, index) => (
               <ScheduleListBox
@@ -94,10 +97,10 @@ export default function ScheduleListSelect() {
               check={'0'}
               color={blockColor}
             >
-              팬미팅종료
+              💣 팬미팅종료
             </ScheduleListBox>
           </ScheduleListWrapper>
-        </SmallBox>
+        </SmallBoxSelectSchedule>
       </HalfSideDiv1>
     </>
   );

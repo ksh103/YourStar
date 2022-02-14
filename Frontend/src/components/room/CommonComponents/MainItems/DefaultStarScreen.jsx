@@ -9,11 +9,11 @@ import '../../../../pages/Room/UserVideo.css';
 const StarScreen = styled.div`
   overflow: auto;
   position: relative;
-  width: 60.041vw;
-  height: 66.5vh;
+  width: 63vw;
+  height: 67.5vh;
   background-color: white;
-  border-radius: 3.0643vh;
-  box-shadow: 0.306vh 0.306vh gray;
+  border-radius: 1vh;
+  // box-shadow: 0.306vh 0.306vh gray;
 `;
 
 export default function DefaultUserScreen() {

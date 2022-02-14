@@ -32,21 +32,39 @@ class StarOpenViduVideoComponent extends Component {
         mode: 'StarConcert',
       });
     } else if (this.props.selectNum === 2) {
-      this.setState({
-        mode: 'StarQnA',
-      });
+      if (this.props.me.code === 3) {
+        this.setState({
+          mode: 'StarQnAtoUser',
+        });
+      } else {
+        this.setState({
+          mode: 'StarQnA',
+        });
+      }
     } else if (this.props.selectNum === 3) {
       this.setState({
         mode: 'StarRandom',
       });
     } else if (this.props.selectNum === 4) {
-      this.setState({
-        mode: 'StarOXGame',
-      });
+      if (this.props.me.code === 3) {
+        this.setState({
+          mode: 'StarOXGameToUser',
+        });
+      } else {
+        this.setState({
+          mode: 'StarOXGame',
+        });
+      }
     } else if (this.props.selectNum === 5) {
-      this.setState({
-        mode: 'StarConsonantGame',
-      });
+      if (this.props.me.code === 3) {
+        this.setState({
+          mode: 'StarConsonantGameToUser',
+        });
+      } else {
+        this.setState({
+          mode: 'StarConsonantGame',
+        });
+      }
     } else if (this.props.selectNum === 6) {
       this.setState({
         mode: 'StarOneOnOne',
@@ -69,6 +87,7 @@ class StarOpenViduVideoComponent extends Component {
 
 const mapStateToProps = state => ({
   selectNum: state.MeetingRoom.selectNum,
+  me: state.mypage.me,
 });
 
 const mapDispatchToProps = dispatch => {

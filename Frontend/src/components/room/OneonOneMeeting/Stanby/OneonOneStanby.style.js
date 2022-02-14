@@ -20,19 +20,19 @@ const WaitingTimeWrapper = styled.div`
   width: 20vw;
   height: 21vh;
   background-color: white;
-  box-shadow: 0.306vh 0.306vh gray;
+  // box-shadow: 0.306vh 0.306vh gray;
 `;
 
 const OneonOneDisplayBox = styled.div`
   /* border: solid red; */
-  border-radius: 1vw;
+  border-radius: 1vh;
   height: 91vh;
   width: 60vw;
   background-color: white;
 `;
 const StanbySelfCamBox = styled.div`
   /* border: solid red; */
-  border-radius: 1vw;
+  border-radius: 1vh;
   background-color: gray;
   color: black;
   position: relative;

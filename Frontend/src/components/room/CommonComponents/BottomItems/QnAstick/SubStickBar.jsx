@@ -10,16 +10,16 @@ import swal from 'sweetalert';
 // dispatch action 사용하기! 이때는 넘겨주는 값이 있어야합니다.
 // useSelectot  -> state의 정보 받아오기
 const StickBar = styled.div`
-  width: 60.1416vw;
+  width: 63vw;
   height: 5.517vh;
   background-color: white;
-  border-radius: 2vh;
+  border-radius: 1vh;
   box-shadow: 0.306vh 0.306vh gray;
 `;
 
 const StickBarDiv = styled.div`
   position: absolute;
-  top: 66.7%;
+  top: 66%;
   left: 8%;
 `;
 
@@ -33,16 +33,18 @@ const GridDiv = styled.div`
 `;
 
 const InnerDiv = styled.div`
-  grid-colum: 4;
   grid-row: 1;
   height: 100%;
-  border-radius: 2vh;
+  border-radius: 0.5vh;
   cursor: pointer;
-  background-color: ${props => props.color};
-  font-weight: ${props => (props.color.length > 1 ? 'bold' : 'none')};
-  display:flex;
+  background-color: ${props => props.clickColor};
+  font-weight: ${props => (props.clickColor.length > 1 ? 'bold' : 'none')};
+  display: flex;
   justify-content: center;
   align-items: center;
+  &:hover {
+    background-color: ${props => props.hoverColor};
+  }
 `;
 
 // 필요한 state
@@ -57,7 +59,7 @@ export default function SubStickBar() {
   }));
 
   const { backgroundColor } = useSelector(
-    state => state.MeetingRoom
+    state => state.MeetingRoom.backgroundColor
   );
 
   const { storeSession } = useSelector(state => ({
@@ -67,68 +69,80 @@ export default function SubStickBar() {
 
   // 모드 변경
   const QnAChange = str => {
-    if (str === 'list') { // 리스트면 화면 바뀌기 
+    if (str === 'list') {
+      // 리스트면 화면 바뀌기
       dispatch(changeQnAtoggle(false));
-    } else {  
-      if (str === 'start'){
+    } else {
+      if (str === 'start') {
         swal({
           text: '💌 팬분들이 궁금했던 것들이나 하고 싶었던 말을 받아볼까요 ?',
           buttons: {
             cancel: true,
             confirm: true,
-          }
+          },
         }).then(event => {
           if (event === true) {
-            storeSession.signal({ // 사용자에게 시작 신호 보내기 
+            storeSession.signal({
+              // 사용자에게 시작 신호 보내기
               data: `${str}`,
               to: [],
               type: 'QnAmode',
             });
           }
-        })
+        });
       } else {
         swal({
           text: '💌 포스트잇 받기를 중단할까요 ? \n (Q&A 시작 버튼을 통해 언제든 다시 포스트잇을 받을 수 있습니다.)',
           buttons: {
             cancel: true,
             confirm: true,
-          }
+          },
         }).then(event => {
           if (event === true) {
-            storeSession.signal({ // 사용자에게 종료 신호 보내기 
+            storeSession.signal({
+              // 사용자에게 종료 신호 보내기
               data: `${str}`,
               to: [],
               type: 'QnAmode',
             });
           }
-        })
+        });
       }
-      dispatch(changeQnAtoggle(true)) // start나 stop으로 다시 돌아갈 수 있도록 
+      dispatch(changeQnAtoggle(true)); // start나 stop으로 다시 돌아갈 수 있도록
     }
-    dispatch(changeQnAMode(str)); // 모드 변경 
+    dispatch(changeQnAMode(str)); // 모드 변경
   };
 
   return (
-      <>
-        <StickBarDiv>
-          <StickBar>
-            <GridDiv>
-              {/* 여기를 스토어로 바꿔주기 */}
-              <InnerDiv 
-                onClick={() => QnAChange('start')} 
-                color = {QnAmode === 'start'? backgroundColor : ''}
-              ><div>Q&A 시작</div></InnerDiv>
-              <InnerDiv 
-                onClick={() => QnAChange('end')}
-                color = {QnAmode === 'end'? backgroundColor : ''}
-              ><div>Q&A 종료</div></InnerDiv>
-              <InnerDiv 
-                onClick={() => QnAChange('list')}
-                color = {QnAmode === 'list'? backgroundColor : ''}
-              ><div>Q&A 리스트</div></InnerDiv>
-            </GridDiv>
-          </StickBar>
-        </StickBarDiv>
-      </>
-    );
-  }
+    <>
+      <StickBarDiv>
+        <StickBar>
+          <GridDiv>
+            {/* 여기를 스토어로 바꿔주기 */}
+            <InnerDiv
+              onClick={() => QnAChange('start')}
+              clickColor={QnAmode === 'start' ? backgroundColor : ''}
+              hoverColor={backgroundColor}
+            >
+              <div>Q&A 시작</div>
+            </InnerDiv>
+            <InnerDiv
+              onClick={() => QnAChange('end')}
+              clickColor={QnAmode === 'end' ? backgroundColor : ''}
+              hoverColor={backgroundColor}
+            >
+              <div>Q&A 종료</div>
+            </InnerDiv>
+            <InnerDiv
+              onClick={() => QnAChange('list')}
+              clickColor={QnAmode === 'list' ? backgroundColor : ''}
+              hoverColor={backgroundColor}
+            >
+              <div>Q&A 리스트</div>
+            </InnerDiv>
+          </GridDiv>
+        </StickBar>
+      </StickBarDiv>
+    </>
+  );
+}

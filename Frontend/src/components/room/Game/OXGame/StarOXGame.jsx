@@ -4,15 +4,16 @@ import StarChosungScreen from '../../CommonComponents/MainItems/Game/StarChosung
 import ScheduleListSelect from '../../CommonComponents/RightSideItems/Star/ScheduleListSelect';
 import OXButtonStar from '../../CommonComponents/RightSideItems/Game/OXGame/OXButtonStar';
 import UserSelfCamRight from '../../CommonComponents/RightSideItems/User/UserSelfCamRight';
+import { BackgroundDiv } from '../../styles/roomGlobal';
 // 포지션작업
 
 export default function StarOXGame() {
   return (
-    <div>
+    <>
       <StarChosungScreen></StarChosungScreen>
       <ScheduleListSelect></ScheduleListSelect>
       <OXButtonStar></OXButtonStar>
       <UserSelfCamRight></UserSelfCamRight>
-    </div>
+    </>
   );
 }

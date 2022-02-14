@@ -22,24 +22,24 @@ import ScheduleListSelect from '../CommonComponents/RightSideItems/Star/Schedule
 
 const ConcertWrapper = styled.div`
   position: absolute;
-  top: 4.5%;
+  top: 4%;
   left: 8%;
 `;
 
 const ConcertDisplayBox = styled.div`
   position: absolute;
   /* border: solid red; */
-  border-radius: 1vw;
+  border-radius: 1vh;
   height: 75vh;
-  width: 60vw;
+  width: 63vw;
   background-color: white;
   box-shadow: 0.306vh 0.306vh gray;
 `;
 
 const HolePlace = styled.div`
   position: absolute;
-  top: 66vh;
-  left: 56vw;
+  top: 64vh;
+  left: 58vw;
   font-size: 3vw;
   z-index: 10;
   animation: 0.6s ease-in-out infinite loadEffect3;
@@ -64,7 +64,7 @@ const EmoziBox = styled.div`
   /* border: solid red; */
   position: absolute;
   bottom: -72vh;
-  margin-left: 56.5vw;
+  margin-left: 58.5vw;
   border-radius: 1vw;
   height: 72vh;
   width: 2vw;
@@ -76,7 +76,7 @@ const EmoziEffect = styled.div`
   /* border: solid red; */
   vertical-align: bottom;
   position: absolute;
-  bottom: 22px;
+  bottom: 21px;
   font-size: 2vw;
   width: 50px;
   height: 20px;
@@ -216,6 +216,7 @@ export default function Concert() {
               value={testInput}
               onChange={handleChatMessageChange}
               color={backgroundColor}
+              placeholder="메시지 보내기"
             ></StarSmallChattingInputBox>
           </HalfSideDiv2>
         </>

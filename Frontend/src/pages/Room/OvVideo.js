@@ -43,9 +43,15 @@ class OpenViduVideoComponent extends Component {
         mode: 'UserRandom',
       });
     } else if (this.props.selectNum === 4) {
-      this.setState({
-        mode: 'UserOXGame',
-      });
+      if (this.props.me.code === 4) {
+        this.setState({
+          mode: 'UserOXGameToStarScreen',
+        });
+      } else {
+        this.setState({
+          mode: 'UserOXGame',
+        });
+      }
     } else if (this.props.selectNum === 5) {
       console.log(this.props.me.code, this.props.me.nick, '가보고있슈');
       if (this.props.me.code === 4) {
@@ -73,9 +79,6 @@ class OpenViduVideoComponent extends Component {
   }
 
   render() {
-    console.log(this.props.choicde, '초이스드');
-    // 여기에 video가 비디오 사이즈를 조절해준다
-
     return (
       <video className={this.state.mode} autoPlay={true} ref={this.videoRef} />
     );
