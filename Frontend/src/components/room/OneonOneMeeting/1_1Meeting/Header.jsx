@@ -181,11 +181,13 @@ export default function Header() {
   };
   const dispatch = useDispatch();
   const { signButton } = useSelector(state => state.MeetingRoom);
-  useEffect(() => {
-    console.log(signButton);
-  }, [signButton]);
 
   const onSignClick = () => {
+    storeSession.signal({
+      data: '0',
+      to: [],
+      type: 'signon',
+    });
     dispatch(setSignButton(true));
   };
   return (

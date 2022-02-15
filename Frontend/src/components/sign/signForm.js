@@ -1,12 +1,12 @@
 import React, { Component } from 'react';
 import sign from '../../../assets/images/sign.JPG';
-import CanvasDraw from '../';
+import CanvasDraw from '.';
 import styled from 'styled-components';
-import { pointColor } from '../../../styles/variables';
+import { pointColor } from '../../styles/variables';
 import swal from 'sweetalert';
 import { connect } from 'react-redux';
-import { setRecordImageAPI } from '../../../store/apis/Main/meeting';
-import { setSignButton } from '../../../store/modules/meetingRoom';
+import { setRecordImageAPI } from '../../store/apis/Main/meeting';
+import { setSignButton } from '../../store/modules/meetingRoom';
 
 const SignButton = styled.div`
   text-align: center;
@@ -19,7 +19,7 @@ const SignButton = styled.div`
   }
 `;
 
-class Demo extends Component {
+class signForm extends Component {
   //meetingid 가져오고 회원정보 가져와라
   state = {
     color: 'black',
@@ -46,6 +46,11 @@ class Demo extends Component {
         ''
       ),
     });
+    this.props.storeSession.signal({
+      data: '0',
+      to: [],
+      type: 'signoff',
+    });
     this.props.doSetSignButton(false);
   };
 
@@ -65,13 +70,6 @@ class Demo extends Component {
           <button
             onClick={() => {
               this.signClick();
-              console.log(
-                this.saveableCanvas.getDataURL(
-                  'jpg',
-                  this.state.backgroundImg,
-                  ''
-                )
-              );
               swal({
                 text: '사인이 등록되었습니다.',
                 button: false,
@@ -96,4 +94,4 @@ const mapDispatchToProps = dispatch => {
     doSetSignButton: inputValue => dispatch(setSignButton(inputValue)),
   };
 };
-export default connect(mapStateToProps, mapDispatchToProps)(Demo);
+export default connect(mapStateToProps, mapDispatchToProps)(signForm);
