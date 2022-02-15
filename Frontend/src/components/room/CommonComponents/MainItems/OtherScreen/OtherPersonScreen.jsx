@@ -8,7 +8,7 @@ import ConsonantAllRank from '../../RightSideItems/Game/ConsonantGame/ConsonantA
 const OtherPersonSc = styled.div`
   width: 67vw;
   height: 22.4719vh;
-  background-color:  rgb(255, 255, 255, 0.5);
+  background-color: rgb(255, 255, 255, 0.5);
   border-radius: 1vh;
   box-shadow: 0.306vh 0.306vh gray;
   overflow-x: auto;

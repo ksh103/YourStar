@@ -106,7 +106,7 @@ const SmallBoxSelectSchedule = styled.div`
 
 const SmallChattingInputBox = styled.input`
   border-radius: 1vh;
-  height:2vh;
+  height: 2vh;
   margin: 0 1vh 1vh 1vh;
   width: 84%;
   border: none;
@@ -277,30 +277,30 @@ const StarSmallBox = styled.div`
   background-color: rgb(255, 255, 255, 0.5);
   border-radius: 1vh;
   // box-shadow: 0.306vh 0.306vh gray;
-  display:flex;
-  flex-direction:column;
-  align-items:center;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
   justify-content: center;
 `;
 
 const StarSmallChattingInputBox = styled.input`
-display:block;
-border-radius: 1vh;
-height: 2vh;
-margin: 0 1vh 1vh 1vh;
-width: 84%;
-border: none;
-padding: 1vw;
-outline: none;
-background-color: ${props => props.color};
+  display: block;
+  border-radius: 1vh;
+  height: 2vh;
+  margin: 0 1vh 1vh 1vh;
+  width: 84%;
+  border: none;
+  padding: 1vw;
+  outline: none;
+  background-color: ${props => props.color};
 `;
 
 const StarSmallChattingListBox = styled.div`
-margin: 1vh;
-padding: 1vw;
-border-radius: 1vh;
-width: 84%;
-height: 31vh;
+  margin: 1vh;
+  padding: 1vw;
+  border-radius: 1vh;
+  width: 84%;
+  height: 31vh;
   background-color: #f5f5f5;
   color: black;
   overflow-y: scroll;

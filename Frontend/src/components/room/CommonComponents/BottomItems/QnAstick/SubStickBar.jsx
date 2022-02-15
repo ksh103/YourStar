@@ -58,10 +58,8 @@ export default function SubStickBar() {
     QnAmode: state.MeetingRoom.QnAmode,
   }));
 
-  const { backgroundColor } = useSelector(
-    state => state.MeetingRoom
-  );
-  console.log(backgroundColor)
+  const { backgroundColor } = useSelector(state => state.MeetingRoom);
+  console.log(backgroundColor);
   const { storeSession } = useSelector(state => ({
     storeSession: state.MeetingRoom.storeSession,
   }));

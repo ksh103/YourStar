@@ -5,14 +5,14 @@ import swal from 'sweetalert';
 
 //margin: 3.125vh 2vh;
 const OtherAngelStyle = styled.div`
- box-shadow: 2px 2px 4px rgba(0, 0, 0, 0.4);
- text-align : center;
- padding: 5% 5% 5% 5%;
- word-wrap: break-word;
- text-overflow:ellipsis;
- overflow: hidden;
- background-color: #F9F8B9;
- cursor: pointer;
+  box-shadow: 2px 2px 4px rgba(0, 0, 0, 0.4);
+  text-align: center;
+  padding: 5% 5% 5% 5%;
+  word-wrap: break-word;
+  text-overflow: ellipsis;
+  overflow: hidden;
+  background-color: #f9f8b9;
+  cursor: pointer;
 `;
 
 export default function OtherScreenAngle(props) {
@@ -24,33 +24,38 @@ export default function OtherScreenAngle(props) {
       text: props.text,
       buttons: {
         cancel: '아니오',
-        confirm: '네 !'
-      }
-    }).then(event =>{
+        confirm: '네 !',
+      },
+    }).then(event => {
       if (event === true) {
-        storeSession.signal({ // 사용자에게 포스트잇 보여주기 (text 전달)
+        storeSession.signal({
+          // 사용자에게 포스트잇 보여주기 (text 전달)
           data: props.text,
           to: [],
           type: 'qnaContents',
         });
-        swal({ 
+        swal({
           text: props.text,
-          button: "close",
-        }).then(() => { // 스타가 모달 창 닫았을 경우 사용자에게도 닫으라는 신호 보내기 
+          button: 'close',
+        }).then(() => {
+          // 스타가 모달 창 닫았을 경우 사용자에게도 닫으라는 신호 보내기
           storeSession.signal({
-            data: "",
+            data: '',
             to: [],
             type: 'qnaContents',
           });
-        })
+        });
       }
-    })
-  }
+    });
+  };
 
   return (
-    <OtherAngelStyle onClick={() => {
-      sendQnaContents();}}>
+    <OtherAngelStyle
+      onClick={() => {
+        sendQnaContents();
+      }}
+    >
       {props.text}
     </OtherAngelStyle>
   );
-};
+}

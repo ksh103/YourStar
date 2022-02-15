@@ -119,11 +119,12 @@ class ChoiceUserVideoComponent extends Component {
       <div className={'hiddenConsole'}>
         {this.props.me.code !== 3 ? (
           <div className="son">
-            <p>{this.getNicknameTag()}</p>
+            <div style={{ fontSize: '2vw' }}>{this.getNicknameTag()}</div>
             <div>
               {this.state.audioState ? (
                 <BsFillMicFill
-                  size="24"
+                  style={{ margin: '0.3vw' }}
+                  size="30"
                   color="#00000"
                   onClick={() => {
                     this.forceMicControll(
@@ -136,7 +137,8 @@ class ChoiceUserVideoComponent extends Component {
                 />
               ) : (
                 <BsFillMicMuteFill
-                  size="24"
+                  style={{ margin: '0.3vw' }}
+                  size="30"
                   color="#00000"
                   onClick={() => {
                     this.forceMicControll(
@@ -150,7 +152,8 @@ class ChoiceUserVideoComponent extends Component {
               )}
               {this.state.videoState ? (
                 <BsFillCameraVideoFill
-                  size="24"
+                  style={{ margin: '0.3vw' }}
+                  size="30"
                   color="#00000"
                   onClick={() => {
                     this.forceVideoControll(
@@ -163,7 +166,8 @@ class ChoiceUserVideoComponent extends Component {
                 />
               ) : (
                 <BsFillCameraVideoOffFill
-                  size="24"
+                  style={{ margin: '0.3vw' }}
+                  size="30"
                   color="#00000"
                   onClick={() => {
                     this.forceVideoControll(
@@ -176,7 +180,8 @@ class ChoiceUserVideoComponent extends Component {
                 />
               )}
               <RiAlarmWarningLine
-                size="24"
+                style={{ margin: '0.3vw' }}
+                size="30"
                 color="#00000"
                 onClick={() => {
                   this.warning(this.props.streamManager.stream.connection);

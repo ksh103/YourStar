@@ -148,77 +148,86 @@ class StarVideoComponent extends Component {
           {this.props.me.code !== 3 ? (
             <div className="son">
               {/* 마이크 */}
-              {this.state.audioState ? (
-                <BsFillMicFill
-                  size="24"
-                  color="#FFFFFF"
-                  onClick={() => {
-                    this.props.mainStreamManager.publishAudio(
-                      !this.state.audioState
-                    );
-                    this.setState({ audioState: !this.state.audioState });
-                  }}
-                />
-              ) : (
-                <BsFillMicMuteFill
-                  size="24"
-                  color="#FFFFFF"
-                  onClick={() => {
-                    this.props.mainStreamManager.publishAudio(
-                      !this.state.audioState
-                    );
-                    this.setState({ audioState: !this.state.audioState });
-                  }}
-                />
-              )}
-              {/* 비디오 */}
-              {this.state.videoState ? (
-                <BsFillCameraVideoFill
-                  size="24"
-                  color="#FFFFFF"
-                  onClick={() => {
-                    this.props.mainStreamManager.publishVideo(
-                      !this.state.videoState
-                    );
-                    this.setState({ videoState: !this.state.videoState });
-                  }}
-                />
-              ) : (
-                <BsFillCameraVideoOffFill
-                  size="24"
-                  color="#FFFFFF"
-                  onClick={() => {
-                    this.props.mainStreamManager.publishVideo(
-                      !this.state.videoState
-                    );
-                    this.setState({ videoState: !this.state.videoState });
-                  }}
-                />
-              )}
-              {/* 화면 공유 */}
-              {this.state.screenShareState ? (
-                <MdStopScreenShare
-                  size="24"
-                  color="#FFFFFF"
-                  onClick={() => {
-                    this.stopScreenShare();
-                    this.setState({
-                      screenShareState: !this.state.screenShareState,
-                    });
-                  }}
-                />
-              ) : (
-                <MdScreenShare
-                  size="24"
-                  color="#FFFFFF"
-                  onClick={() => {
-                    this.screenShare();
-                    this.setState({
-                      screenShareState: !this.state.screenShareState,
-                    });
-                  }}
-                />
-              )}
+              <div style={{ fontSize: '2vw' }}>내화면</div>
+              <div>
+                {this.state.audioState ? (
+                  <BsFillMicFill
+                    style={{ margin: '1vw' }}
+                    size="30"
+                    color="#FFFFFF"
+                    onClick={() => {
+                      this.props.mainStreamManager.publishAudio(
+                        !this.state.audioState
+                      );
+                      this.setState({ audioState: !this.state.audioState });
+                    }}
+                  />
+                ) : (
+                  <BsFillMicMuteFill
+                    style={{ margin: '1vw' }}
+                    size="30"
+                    color="#FFFFFF"
+                    onClick={() => {
+                      this.props.mainStreamManager.publishAudio(
+                        !this.state.audioState
+                      );
+                      this.setState({ audioState: !this.state.audioState });
+                    }}
+                  />
+                )}
+                {/* 비디오 */}
+                {this.state.videoState ? (
+                  <BsFillCameraVideoFill
+                    style={{ margin: '1vw' }}
+                    size="30"
+                    color="#FFFFFF"
+                    onClick={() => {
+                      this.props.mainStreamManager.publishVideo(
+                        !this.state.videoState
+                      );
+                      this.setState({ videoState: !this.state.videoState });
+                    }}
+                  />
+                ) : (
+                  <BsFillCameraVideoOffFill
+                    style={{ margin: '1vw' }}
+                    size="30"
+                    color="#FFFFFF"
+                    onClick={() => {
+                      this.props.mainStreamManager.publishVideo(
+                        !this.state.videoState
+                      );
+                      this.setState({ videoState: !this.state.videoState });
+                    }}
+                  />
+                )}
+                {/* 화면 공유 */}
+                {this.state.screenShareState ? (
+                  <MdStopScreenShare
+                    style={{ margin: '1vw' }}
+                    size="30"
+                    color="#FFFFFF"
+                    onClick={() => {
+                      this.stopScreenShare();
+                      this.setState({
+                        screenShareState: !this.state.screenShareState,
+                      });
+                    }}
+                  />
+                ) : (
+                  <MdScreenShare
+                    style={{ margin: '1vw' }}
+                    size="30"
+                    color="#FFFFFF"
+                    onClick={() => {
+                      this.screenShare();
+                      this.setState({
+                        screenShareState: !this.state.screenShareState,
+                      });
+                    }}
+                  />
+                )}
+              </div>
             </div>
           ) : null}
 
