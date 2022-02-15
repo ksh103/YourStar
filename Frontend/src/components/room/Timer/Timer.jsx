@@ -4,7 +4,7 @@ import { PlusIndex, CheckOut } from '../../../store/modules/meetingRoom';
 
 export default function Timer() {
   const STAR_WAIT_TIME = 5; // 스타가 다음 미팅까지 대기하는 시간
-  const MEETING_ALL_TIME_SEC = 10; // 미팅 진행시간 총합을 초로계산한 합
+  const MEETING_ALL_TIME_SEC = 60; // 미팅 진행시간 총합을 초로계산한 합
 
   const [isCome, setIsCome] = useState(true);
   const [min, setMin] = useState(0);

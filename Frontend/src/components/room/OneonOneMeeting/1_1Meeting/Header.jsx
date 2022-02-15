@@ -1,12 +1,13 @@
-import React, { useSelector } from 'react-redux';
-import { useState } from 'react';
+import React, { useDispatch, useSelector } from 'react-redux';
+import { useEffect, useState } from 'react';
 import Timer from '../../Timer/Timer';
 import styled from 'styled-components';
 import { IoIosAlarm, IoMdCreate, IoIosAperture } from 'react-icons/io';
 import { pointColor } from '../../../../styles/variables';
 import axios from 'axios';
 import swal from 'sweetalert';
-
+import { setSignButton } from '../../../../store/modules/meetingRoom';
+import ModalSign from '../../../utils/modal/modalSign';
 const HeaderBox = styled.div`
   /* border: solid red; */
   margin-bottom: 3vh;
@@ -178,7 +179,15 @@ export default function Header() {
       })
       .catch(error => console.error(error));
   };
+  const dispatch = useDispatch();
+  const { signButton } = useSelector(state => state.MeetingRoom);
+  useEffect(() => {
+    console.log(signButton);
+  }, [signButton]);
 
+  const onSignClick = () => {
+    dispatch(setSignButton(true));
+  };
   return (
     <>
       <div>
@@ -217,8 +226,9 @@ export default function Header() {
               </div>
             </StarBox>
             <SignIcon>
-              <IoMdCreate />
+              <IoMdCreate onClick={() => onSignClick()} />
             </SignIcon>
+            {signButton && <ModalSign />}
             <CaptureIcon>
               <IoIosAperture />
             </CaptureIcon>

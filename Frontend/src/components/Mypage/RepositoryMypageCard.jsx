@@ -8,13 +8,19 @@ import {
   setNowId,
 } from '../../store/modules/mypage';
 import { IMAGE_URL } from '../../utils/contants';
+import { GET_RECORD_REQUEST } from '../../store/modules/meeting';
 
 export default function MypageCard({ meeting }) {
   const dispatch = useDispatch();
+  const { me } = useSelector(state => state.mypage);
   const { meetingRepositoryState, nowId } = useSelector(state => state.mypage);
   const onClickButton = () => {
     dispatch(setMeetingRepositoryState(true));
     dispatch(setNowId(meeting.meetingId));
+    dispatch({
+      type: GET_RECORD_REQUEST,
+      data: { meetingId: meeting.meetingId, memberId: me.memberId },
+    });
   };
   return (
     <>
