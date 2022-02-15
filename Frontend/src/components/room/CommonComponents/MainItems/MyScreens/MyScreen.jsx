@@ -5,7 +5,7 @@ import { useSelector } from 'react-redux';
 import UserVideoComponent from '../../../../../pages/Room/UserVideoComponent';
 
 const QuestionMyScreen = styled.div`
-  width: 16vw;
+  width: 15vw;
   height: 23vh;
   background-color: rgb(255, 255, 255, 0.5);
   border-radius: 1vh;
@@ -14,6 +14,7 @@ const QuestionMyScreen = styled.div`
   direction: row;
   align-items: center;
   justify-content: center;
+  padding-left: 1vw;
 `;
 
 export default function MyScreen() {

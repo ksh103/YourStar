@@ -5,9 +5,9 @@ import { OtherPersonDiv } from '../MainItems/Main.style';
 import { useSelector, useDispatch } from 'react-redux';
 import UserVideoComponent from '../../../../pages/Room/UserVideoComponent';
 const OtherPersonSc = styled.div`
-  max-width: 84vw;
-  width: 84vw;
+  width: 83vw;
   height: 24vh;
+  padding-left: 1vw;
   background-color: rgb(255, 255, 255, 0.5);
   border-radius: 1vh;
   // box-shadow: 0.306vh 0.306vh gray;

@@ -11,7 +11,7 @@ const StarScreen = styled.div`
   position: relative;
   width: 63vw;
   height: 67.5vh;
-  // background-color: white;
+  background-color: rgb(255, 255, 255, 0.5);
   border-radius: 1vh;
   // box-shadow: 0.306vh 0.306vh gray;
 `;
@@ -37,22 +37,22 @@ export default function DefaultUserScreen() {
           <StarVideoComponent streamManager={mainStreamManager} />
         ) : (
           <div className="center">
-            <div className="WaitText">{innerText}</div>
-            <img
+            {/* <div className="WaitText">{innerText}</div> */}
+            {/* <img
               src={`${IMAGE_URL}${FILE_ID}`}
               className="WaitImg"
               alt={FILE_ID}
-            />
+            /> */}
           </div>
         )}
         {isOneByOne ? (
           <div className="center">
-            <div className="WaitText">{innerText}</div>
-            <img
+            {/* <div className="WaitText">{innerText}</div> */}
+            {/* <img
               src={`${IMAGE_URL}${FILE_ID}`}
               className="WaitImg"
               alt={FILE_ID}
-            />
+            /> */}
           </div>
         ) : null}
       </StarScreen>
