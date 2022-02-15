@@ -29,6 +29,7 @@ public class FanApplicantController {
         log.info("meetingApplyByUser - Call");
 
         meetingService.meetingApplyByUser(meetingApplyByUserPostReq);
+        meetingService.meetingApplyOathByUser(meetingApplyByUserPostReq);
 
         return ResponseEntity.status(201).body(BaseResponseBody.of(201, "Success"));
     }

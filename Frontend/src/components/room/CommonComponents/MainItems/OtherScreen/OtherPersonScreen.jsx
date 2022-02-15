@@ -11,7 +11,7 @@ const OtherPersonSc = styled.div`
   background-color: rgb(255, 255, 255, 0.5);
   border-radius: 1vh;
   box-shadow: 0.306vh 0.306vh gray;
-  overflow-x: auto;
+  overflow-x: hidden;
   white-space: nowrap;
   margin: 0 0;
   display: Flex;

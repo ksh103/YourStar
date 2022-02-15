@@ -116,87 +116,89 @@ class ChoiceUserVideoComponent extends Component {
 
   render() {
     return (
-      <div className={'hiddenConsole'}>
-        {this.props.me.code !== 3 ? (
-          <div className="son">
-            <div style={{ fontSize: '2vw' }}>{this.getNicknameTag()}</div>
-            <div>
-              {this.state.audioState ? (
-                <BsFillMicFill
+      <div className="UserChoiced">
+        <div className={'hiddenConsole'}>
+          {this.props.me.code !== 3 ? (
+            <div className="son">
+              <div style={{ fontSize: '2vw' }}>{this.getNicknameTag()}</div>
+              <div>
+                {this.state.audioState ? (
+                  <BsFillMicFill
+                    style={{ margin: '0.3vw' }}
+                    size="30"
+                    color="#00000"
+                    onClick={() => {
+                      this.forceMicControll(
+                        this.props.streamManager.stream.connection
+                      );
+                      this.setState({
+                        audioState: !this.state.audioState,
+                      });
+                    }}
+                  />
+                ) : (
+                  <BsFillMicMuteFill
+                    style={{ margin: '0.3vw' }}
+                    size="30"
+                    color="#00000"
+                    onClick={() => {
+                      this.forceMicControll(
+                        this.props.streamManager.stream.connection
+                      );
+                      this.setState({
+                        audioState: !this.state.audioState,
+                      });
+                    }}
+                  />
+                )}
+                {this.state.videoState ? (
+                  <BsFillCameraVideoFill
+                    style={{ margin: '0.3vw' }}
+                    size="30"
+                    color="#00000"
+                    onClick={() => {
+                      this.forceVideoControll(
+                        this.props.streamManager.stream.connection
+                      );
+                      this.setState({
+                        videoState: !this.state.videoState,
+                      });
+                    }}
+                  />
+                ) : (
+                  <BsFillCameraVideoOffFill
+                    style={{ margin: '0.3vw' }}
+                    size="30"
+                    color="#00000"
+                    onClick={() => {
+                      this.forceVideoControll(
+                        this.props.streamManager.stream.connection
+                      );
+                      this.setState({
+                        videoState: !this.state.videoState,
+                      });
+                    }}
+                  />
+                )}
+                <RiAlarmWarningLine
                   style={{ margin: '0.3vw' }}
                   size="30"
                   color="#00000"
                   onClick={() => {
-                    this.forceMicControll(
-                      this.props.streamManager.stream.connection
-                    );
-                    this.setState({
-                      audioState: !this.state.audioState,
-                    });
+                    this.warning(this.props.streamManager.stream.connection);
                   }}
                 />
-              ) : (
-                <BsFillMicMuteFill
-                  style={{ margin: '0.3vw' }}
-                  size="30"
-                  color="#00000"
-                  onClick={() => {
-                    this.forceMicControll(
-                      this.props.streamManager.stream.connection
-                    );
-                    this.setState({
-                      audioState: !this.state.audioState,
-                    });
-                  }}
-                />
-              )}
-              {this.state.videoState ? (
-                <BsFillCameraVideoFill
-                  style={{ margin: '0.3vw' }}
-                  size="30"
-                  color="#00000"
-                  onClick={() => {
-                    this.forceVideoControll(
-                      this.props.streamManager.stream.connection
-                    );
-                    this.setState({
-                      videoState: !this.state.videoState,
-                    });
-                  }}
-                />
-              ) : (
-                <BsFillCameraVideoOffFill
-                  style={{ margin: '0.3vw' }}
-                  size="30"
-                  color="#00000"
-                  onClick={() => {
-                    this.forceVideoControll(
-                      this.props.streamManager.stream.connection
-                    );
-                    this.setState({
-                      videoState: !this.state.videoState,
-                    });
-                  }}
-                />
-              )}
-              <RiAlarmWarningLine
-                style={{ margin: '0.3vw' }}
-                size="30"
-                color="#00000"
-                onClick={() => {
-                  this.warning(this.props.streamManager.stream.connection);
-                }}
-              />
+              </div>
             </div>
-          </div>
-        ) : null}
-        {this.props.streamManager !== undefined ? (
-          <>
-            <ChoicedOpenViduVideoComponent
-              streamManager={this.props.streamManager}
-            />
-          </>
-        ) : null}
+          ) : null}
+          {this.props.streamManager !== undefined ? (
+            <>
+              <ChoicedOpenViduVideoComponent
+                streamManager={this.props.streamManager}
+              />
+            </>
+          ) : null}
+        </div>
       </div>
     );
   }

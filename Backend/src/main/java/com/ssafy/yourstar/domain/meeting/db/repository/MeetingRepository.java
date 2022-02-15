@@ -16,9 +16,7 @@ public interface MeetingRepository extends JpaRepository<Meeting, Integer> {
     Page<Meeting> findAllByIsApproveTrueAndMeetingStartDateAfter(LocalDateTime date, Pageable pageable);
     Page<Meeting> findAll(Pageable pageable);
 
-    @Query("select m.memberName, m.memberEmail, o.IsOath from Member m " +
-            "left join Applicant a on m.memberId = a.memberId " +
-            "left join MeetingOath o on m.memberId = o.memberId " +
-            "where a.meetingId = :meetingId and o.meetingId = :meetingId")
+    @Query("select m.memberName, m.memberEmail, o.IsOath from Member m left join Applicant a on m.memberId = a.memberId left join MeetingOath o on m.memberId = o.memberId where a.meetingId = :meetingId and o.meetingId = :meetingId")
     Page<String> findAllApplyMeetingListByMeetingId(int meetingId, Pageable pageable);
+
 }

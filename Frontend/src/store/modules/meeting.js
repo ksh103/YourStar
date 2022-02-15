@@ -1,6 +1,7 @@
 import produce from 'immer';
 const initialState = {
   meeting: {},
+  record: {},
   totalMeetings: [],
   approvedMeetings: [],
   warningAccount: 0, // 경고횟수
@@ -28,6 +29,9 @@ const initialState = {
   endMeetingLoading: false, // 미팅 종료
   endMeetingDone: false,
   endMeetingError: null,
+  getRecordLoading: false, // 추억보관함 사진, 비디오 불러오기
+  getRecordDone: false,
+  getRecordError: null,
 };
 
 export const DETAIL_MEETING_REQUEST = 'DETAIL_MEETING_REQUEST'; // 상세정보 미팅
@@ -61,6 +65,10 @@ export const INSERT_MEETING_FAILURE = 'INSERT_MEETING_FAILURE';
 export const END_MEETING_REQUEST = 'END_MEETING_REQUEST'; // 미팅 종료(스타)
 export const END_MEETING_SUCCESS = 'END_MEETING_SUCCESS';
 export const END_MEETING_FAILURE = 'END_MEETING_FAILURE';
+
+export const GET_RECORD_REQUEST = 'GET_RECORD_REQUEST'; // 추억보관함 가져오기
+export const GET_RECORD_SUCCESS = 'GET_RECORD_SUCCESS';
+export const GET_RECORD_FAILURE = 'GET_RECORD_FAILURE';
 
 export const ADD_APPLICANT_MEMBER = 'ADD_APPLICANT_MEMBER';
 export const REMOVE_APPLICANT_MEMBER = 'REMOVE_APPLICANT_MEMBER';
@@ -180,6 +188,20 @@ const reducer = (state = initialState, action) =>
       case END_MEETING_FAILURE:
         draft.endMeetingLoading = false;
         draft.endMeetingError = action.error;
+        break;
+      case GET_RECORD_REQUEST:
+        draft.getRecordLoading = true;
+        draft.getRecordDone = false;
+        draft.getRecordError = null;
+        break;
+      case GET_RECORD_SUCCESS:
+        draft.getRecordLoading = false;
+        draft.getRecordDone = true;
+        draft.record = action.data;
+        break;
+      case GET_RECORD_FAILURE:
+        draft.getRecordLoading = false;
+        draft.getRecordError = action.error;
         break;
       case ADD_APPLICANT_MEMBER:
         draft.meeting.applicantCnt++;

@@ -8,14 +8,11 @@ import { Link } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
 import { MY_PAGE_REQUEST } from '../../store/modules/mypage';
 import { APPROVED_MEETINGS_REQUEST } from '../../store/modules/meeting';
-import ModalSign from '../../components/utils/modal/modalSign';
-import { setSignButton } from '../../store/modules/meetingRoom';
 export default function Main() {
   const dispatch = useDispatch();
   const { logInDone } = useSelector(state => state.member);
   const { approvedMeetingsDone } = useSelector(state => state.meeting);
 
-  const [sign, setSign] = useState(false);
   useEffect(() => {
     if (!logInDone && sessionStorage.length > 0) {
       // 만약 토큰이 남아 있다면 or 새로고침 되었을 때 동작하도록 해야함
@@ -31,19 +28,10 @@ export default function Main() {
     }
   }, [approvedMeetingsDone, dispatch, logInDone]);
 
-  const onSignClick = () => {
-    setSign(true);
-    dispatch(setSignButton(true));
-  };
-
   return (
     <MainWrapper>
       <Navbar />
       {/* <Universe /> */}
-      <button style={{ color: 'white' }} onClick={onSignClick}>
-        싸인
-      </button>
-      {sign && <ModalSign />}
       <MainPoster />
       <MainSection>
         <div className="one"> 당신의 스타를 만나보세요</div>

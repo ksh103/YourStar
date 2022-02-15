@@ -45,8 +45,7 @@ const EndButtonDiv = styled.div`
     background-color: ${props => props.color};
   }
 `;
-const TestDiv = styled.div`
-`
+const TestDiv = styled.div``;
 
 function cho_hangul(str) {
   const cho = [
@@ -86,9 +85,9 @@ export default function GameButton() {
   const dispatch = useDispatch();
   const { storeSession, backgroundColor } = useSelector(state => ({
     storeSession: state.MeetingRoom.storeSession,
-    backgroundColor: state.MeetingRoom,
+    backgroundColor: state.MeetingRoom.backgroundColor,
   }));
-console.log(storeSession)
+  console.log(storeSession);
   const { meeting } = useSelector(state => state.meeting);
   const { me } = useSelector(state => state.mypage);
 
@@ -128,18 +127,12 @@ console.log(storeSession)
   return (
     <>
       <StartButtonDiv color={backgroundColor}>
-        <button
-          style={{ fontSize: '1.4vw' }}
-          onClick={onStartButton}
-        >
+        <button style={{ fontSize: '1.4vw' }} onClick={onStartButton}>
           게임 시작
         </button>
       </StartButtonDiv>
       <EndButtonDiv color={backgroundColor}>
-        <button
-          style={{ fontSize: '1.4vw' }}
-          onClick={onEndButton}
-        >
+        <button style={{ fontSize: '1.4vw' }} onClick={onEndButton}>
           게임 종료
         </button>
       </EndButtonDiv>

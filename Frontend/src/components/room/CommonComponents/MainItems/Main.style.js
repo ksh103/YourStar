@@ -8,7 +8,7 @@ const MainDiv = styled.div`
 
 const MyScreenDiv = styled.div`
   position: absolute;
-  top: 71%;
+  top: 73%;
   left: 8%;
 `;
 

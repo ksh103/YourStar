@@ -162,3 +162,28 @@ export async function InsertMeetingAPI({
     },
   });
 }
+
+// 추억 보관함 사진 저장하기
+export async function setRecordImageAPI({ meetingId, memberId, fileUrl }) {
+  await axios
+    .post(`${BASE_URL}meetings/record-img`, {
+      fileUrl: fileUrl,
+      meetingId: meetingId,
+      memberId: memberId,
+    })
+    .then(res => console.log(res));
+}
+
+// 추억 보관함 사진,비디오 불러오기
+export async function getRecordAPI({ meetingId, memberId }) {
+  const fileId = await axios
+    .get(`${BASE_URL}meetings/record-img/${meetingId}/${memberId}`)
+    .then(res => res.data.list[0].fileId);
+  const video = await axios
+    .get(`${BASE_URL}meetings/record-video/${meetingId}/${memberId}`)
+    .then(res => res.data.fileUrl);
+  return {
+    image: fileId,
+    video: video,
+  };
+}
