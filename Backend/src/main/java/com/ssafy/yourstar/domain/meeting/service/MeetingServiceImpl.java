@@ -234,6 +234,17 @@ public class MeetingServiceImpl implements MeetingService {
     }
 
     @Override
+    public MeetingOath meetingApplyOathByUser(MeetingApplyByUserPostReq meetingApplyByUserPostReq) {
+        MeetingOath meetingOath = new MeetingOath();
+
+        meetingOath.setMeetingId(meetingApplyByUserPostReq.getMeetingId());
+        meetingOath.setMemberId(meetingApplyByUserPostReq.getMemberId());
+        meetingOath.setIsOath(false);
+
+        return meetingOathRepository.save(meetingOath);
+    }
+
+    @Override
     public boolean meetingRemoveByUser(int memberId, int meetingId) {
         // 복합키이기 때문에 ID에 내용을 등록 후 사용
         ApplicantID applicantID = new ApplicantID();
@@ -320,8 +331,9 @@ public class MeetingServiceImpl implements MeetingService {
 
             meeting.setMeetingId(meetingId);
             meeting.setMeetingEndDate(meetingEndDate);
-            
+
             // 그대로 유지
+            meeting.setManagerCode(meetingRepository.findById(meetingId).get().getManagerCode());
             meeting.setMeetingName(meetingRepository.findById(meetingId).get().getMeetingName());
             meeting.setMeetingOpenDate(meetingRepository.findById(meetingId).get().getMeetingOpenDate());
             meeting.setMeetingStartDate(meetingRepository.findById(meetingId).get().getMeetingStartDate());
