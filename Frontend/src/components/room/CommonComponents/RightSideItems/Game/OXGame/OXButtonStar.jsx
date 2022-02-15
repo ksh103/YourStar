@@ -44,46 +44,76 @@ import { AddGameScoreAPI } from '../../../../../../store/apis/Room/game';
 // `;
 
 const RecogButtonDiv = styled.div`
-  // position: absolute;
-  // top: 90vh;
-  // left: 42vw;
   background-color: #f5f5f5;
   border-radius: 1vw;
   padding: 10px;
   font-size: 1.4vw;
   width: 6vw;
-  text-align: center;
+  margin: 2px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
 `;
 const StartButtonDiv = styled.div`
-  // position: absolute;
-  // top: 50vh;
-  // left: 51vw;
-  background-color: #f5f5f5;
+  background-color: white;
   border-radius: 1vw;
   padding: 10px;
+  margin: 2px;
+  &:active {
+    -webkit-transform: scale(0.9, 0.9);
+    -moz-transform: scale(0.9, 0.9);
+    -ms-transform: scale(0.9, 0.9);
+    -o-transform: scale(0.9, 0.9);
+    transform: scale(0.9, 0.9);
+  }
+  &:hover{
+    background-color: ${props => props.color};
+  }
 `;
 const EndButtonDiv = styled.div`
-  // position: absolute;
-  // top: 30vh;
-  // left: 83vw;
-  background-color: #f5f5f5;
+  background-color: white;
   border-radius: 1vw;
   padding: 10px;
+  margin: 2px;
+  &:active {
+    -webkit-transform: scale(0.9, 0.9);
+    -moz-transform: scale(0.9, 0.9);
+    -ms-transform: scale(0.9, 0.9);
+    -o-transform: scale(0.9, 0.9);
+    transform: scale(0.9, 0.9);
+  }
+  &:hover{
+    background-color: ${props => props.color};
+  }
 `;
-const ImgBox = styled.img`
+const ImgBoxO = styled.img`
   display: block;
-  // max-width: 50px;
-  // max-width: 100%;
+  cursor: pointer;
   max-height: 80%;
+  padding: 5px;
+  &:hover{
+    background-color: green;
+  }
+`;
+
+const ImgBoxX = styled.img`
+  display: block;
+  cursor: pointer;
+  max-height: 80%;
+  padding: 5px;
+  &:hover{
+    background-color: red;
+  }
 `;
 
 export default function OXButtonStar() {
   const [isStart, setIsStart] = useState(false);
   const [doneCnt, setDoneCnt] = useState(0);
 
-  const { storeSession, subscribers } = useSelector(state => ({
+  const { storeSession, subscribers, backgroundColor } = useSelector(state => ({
     storeSession: state.MeetingRoom.storeSession,
     subscribers: state.MeetingRoom.subscribers,
+    backgroundColor: state.MeetingRoom.backgroundColor
   }));
 
   const { OXgameCount } = useSelector(state => ({
@@ -97,11 +127,11 @@ export default function OXButtonStar() {
     setIsStart(false);
     dispatch(oxGameRound());
     storeSession.signal({
-      data: `${OXgameCount},${e.target.innerText}`,
+      data: `${OXgameCount},${e}`,
       to: [],
       type: 'OXEnd',
     });
-    dispatch(signalOX(e.target.innerText));
+    dispatch(signalOX(e));
 
     var meetingId = storeSession.sessionId;
     for (var i = 0; i < subscribers.length; i++) {
@@ -159,15 +189,15 @@ export default function OXButtonStar() {
         <BigBoxOXGame>
           <SmallBoxOXGame>
             <RecogButtonDiv>
-              {doneCnt} / {subscribers.length}
+              <div>{doneCnt} / {subscribers.length}</div>
             </RecogButtonDiv>
-            <StartButtonDiv>
-              <button style={{ fontSize: '1.4vw' }} onClick={start}>
+            <StartButtonDiv color={backgroundColor}>
+              <button style={{ fontSize: '1.3vw' }} onClick={start}>
                 게임시작
               </button>
             </StartButtonDiv>
-            <EndButtonDiv>
-              <button style={{ fontSize: '1.4vw' }} onClick={oxStop}>
+            <EndButtonDiv color={backgroundColor}>
+              <button style={{ fontSize: '1.3vw' }} onClick={oxStop}>
                 게임종료
               </button>
             </EndButtonDiv>
@@ -175,16 +205,16 @@ export default function OXButtonStar() {
           <SmallBoxOXGame>
             {/* <OButton onClick={OXClick}>O</OButton>
             <XButton onClick={OXClick}>X</XButton> */}
-            <ImgBox
-              onClick={'O'}
+            <ImgBoxO
+              onClick={() => OXClick('O')}
               src="https://cdn-icons-png.flaticon.com/512/3570/3570095.png"
               alt="O"
-            ></ImgBox>
-            <ImgBox
-              onClick={'X'}
+            ></ImgBoxO>
+            <ImgBoxX
+              onClick={() => OXClick('O')}
               src="https://cdn-icons-png.flaticon.com/512/3570/3570089.png"
               alt="X"
-            ></ImgBox>
+            ></ImgBoxX>
           </SmallBoxOXGame>
         </BigBoxOXGame>
       </HalfSideDiv2>

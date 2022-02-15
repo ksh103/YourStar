@@ -6,8 +6,8 @@ import UserVideoComponent from '../../../../../pages/Room/UserVideoComponent';
 
 const QuestionMyScreen = styled.div`
   width: 16vw;
-  height: 22.47vh;
-  background-color: rgb(255, 255, 255, 0.5);
+  height: 23vh;
+  background-color:  rgb(255, 255, 255, 0.5);
   border-radius: 1vh;
   // box-shadow: 0.306vh 0.306vh gray;
 `;

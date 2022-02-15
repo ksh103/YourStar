@@ -173,13 +173,7 @@ export default function Concert() {
 
       {me.code === 3 ? (
         <HalfSideDiv1>
-          <ConcertChattingBox></ConcertChattingBox>
-          <ConcertChattingInputBox
-            onKeyPress={SendMessage}
-            value={testInput}
-            onChange={handleChatMessageChange}
-            color={backgroundColor}
-          ></ConcertChattingInputBox>
+          <ConcertChattingBox>
           <ConcertChattingListBox>
             {chattingList.map((value, idx) => {
               return (
@@ -192,6 +186,13 @@ export default function Concert() {
             })}
             <div ref={messagesEndRef}></div> {/**채팅 스크롤 아래로 내려주기 */}
           </ConcertChattingListBox>
+          <ConcertChattingInputBox
+            onKeyPress={SendMessage}
+            value={testInput}
+            onChange={handleChatMessageChange}
+            color={backgroundColor}
+          ></ConcertChattingInputBox>
+          </ConcertChattingBox>
         </HalfSideDiv1>
       ) : (
         <>
