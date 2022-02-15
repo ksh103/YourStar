@@ -8,6 +8,7 @@ import {
   WarningToMemberAPI,
   InsertMeetingAPI,
   EndMeetingAPI,
+  getRecordAPI,
 } from '../apis/Main/meeting';
 import {
   DETAIL_MEETING_FAILURE,
@@ -34,6 +35,9 @@ import {
   END_MEETING_REQUEST,
   END_MEETING_SUCCESS,
   END_MEETING_FAILURE,
+  GET_RECORD_REQUEST,
+  GET_RECORD_SUCCESS,
+  GET_RECORD_FAILURE,
 } from '../modules/meeting';
 import swal from 'sweetalert';
 function* detailMeeting(action) {
@@ -157,6 +161,19 @@ function* endMeeting(action) {
     });
   }
 }
+function* getRecord(action) {
+  try {
+    const result = yield call(getRecordAPI, action.data);
+    yield put({
+      type: GET_RECORD_SUCCESS,
+      data: result,
+    });
+  } catch (err) {
+    yield put({
+      type: GET_RECORD_FAILURE,
+    });
+  }
+}
 
 function* watchDetailMeeting() {
   yield takeLatest(DETAIL_MEETING_REQUEST, detailMeeting);
@@ -182,6 +199,9 @@ function* watchInsertMeeting() {
 function* watchEndMeeting() {
   yield takeLatest(END_MEETING_REQUEST, endMeeting);
 }
+function* watchGetRecord() {
+  yield takeLatest(GET_RECORD_REQUEST, getRecord);
+}
 
 export default function* meetingSaga() {
   yield all([
@@ -193,5 +213,6 @@ export default function* meetingSaga() {
     fork(watchWarningMember),
     fork(watchInsertMeeting),
     fork(watchEndMeeting),
+    fork(watchGetRecord),
   ]);
 }

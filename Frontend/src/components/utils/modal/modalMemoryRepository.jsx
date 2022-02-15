@@ -5,16 +5,18 @@ import Modal from '@mui/material/Modal';
 import { useDispatch, useSelector } from 'react-redux';
 import { setMeetingRepositoryState } from '../../../store/modules/mypage';
 import { Grid } from '@mui/material';
+import { SIGN_URL } from '../../../utils/contants';
+import { RecordImageBlock, RecordVideoBlock } from './modal.style';
 
 const style = {
   position: 'absolute',
   top: '50%',
   left: '50%',
   transform: 'translate(-50%, -50%)',
-  width: 400,
+  width: 700,
   height: 500,
   bgcolor: 'background.paper',
-  border: '2px solid #000',
+  borderRadius: '10px',
   boxShadow: 24,
   p: 4,
   overflow: 'auto',
@@ -26,6 +28,7 @@ export default function BasicModal({ meeting }) {
 
   // useSelector
   const { meetingRepositoryState } = useSelector(state => state.mypage);
+  const { record } = useSelector(state => state.meeting);
 
   const [toggle, setToggle] = useState(0);
 
@@ -102,16 +105,17 @@ export default function BasicModal({ meeting }) {
               </Grid>
             </Grid>
             <br />
-            {toggle === 0 && <div>스타 싸인 사진 api 받아오기</div>}
+            {toggle === 0 && (
+              <RecordImageBlock>
+                <img src={`${SIGN_URL}${record.image}`} alt="사인" />
+              </RecordImageBlock>
+            )}
             {toggle === 1 && (
-              <div>
-                <video autoPlay>
-                  <source
-                    src="https://i6e204.p.ssafy.io:8443/openvidu/recordings/SessionA-1/SessionA-1.mp4"
-                    type="video/mp4"
-                  ></source>
+              <RecordVideoBlock>
+                <video autoPlay loop>
+                  <source src={record.video} type="video/mp4"></source>
                 </video>
-              </div>
+              </RecordVideoBlock>
             )}
           </Typography>
         </Box>

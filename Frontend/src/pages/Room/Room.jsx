@@ -5,7 +5,7 @@ import React, { Component } from 'react';
 import './App.css';
 import { connect } from 'react-redux';
 import swal from 'sweetalert';
-import './SwalCss.css'
+import './SwalCss.css';
 
 // action 호출
 import {
@@ -382,8 +382,8 @@ class Room extends Component {
         // qna 스티커 받기
         mySession.on('signal:QnAFromUser', event => {
           // console.log('------------------------')
-          this.props.doAddQnaList({text : event.data})
-        })
+          this.props.doAddQnaList({ text: event.data });
+        });
 
         mySession.on('signal:audio', event => {
           console.log('===== 오디오 상태 변경 =====');
@@ -410,25 +410,50 @@ class Room extends Component {
               icon: 'https://cdn-icons-png.flaticon.com/512/2761/2761896.png',
               title: '🚨 경고 🚨',
               text: '부적절한 행위 및 언행으로 경고 1회를 받으셨습니다. \n 경고 2회 누적 시 강퇴 및 재입장이 불가합니다.',
-              className: 'swal-warning'
-            })
+              className: 'swal-warning',
+            });
           } else {
-            // 강퇴시 이동할 경로 
+            // 강퇴시 이동할 경로
             const url =
-            window.location.protocol +
-            '//' +
-            window.location.host +
-            `/schedule/${this.state.mySessionId}`;
+              window.location.protocol +
+              '//' +
+              window.location.host +
+              `/schedule/${this.state.mySessionId}`;
             swal({
               icon: 'https://cdn-icons-png.flaticon.com/512/2761/2761817.png',
               title: '🚨 경고 🚨',
               text: '부적절한 행위 및 언행으로 경고 2회를 받으셨습니다. \n 확인 클릭 또는 10초 뒤 팬미팅에서 자동으로 나가게 되며, 재입장이 불가합니다.',
               className: 'swal-warning',
-              button: '확인'
+              button: '확인',
             }).then(() => {
-              window.location.replace(url)
-            })
+              window.location.replace(url);
+            });
             setTimeout(() => window.location.replace(url), 10000);
+          }
+        });
+
+        // 사인 알림
+        mySession.on('signal:signon', event => {
+          if (this.state.me.code !== 4) {
+            swal({
+              title: '사인 알림',
+              text: '스타가 사인을 진행하고 있습니다',
+              buttons: false,
+              timer: 1500,
+              icon: 'info',
+            });
+          }
+        });
+
+        mySession.on('signal:signoff', event => {
+          if (this.state.me.code !== 4) {
+            swal({
+              title: '사인 알림',
+              text: '스타가 사인을 마쳤습니다',
+              buttons: false,
+              timer: 1500,
+              icon: 'info',
+            });
           }
         });
 
@@ -571,6 +596,7 @@ class Room extends Component {
           // 추가로 넘겨주고 싶은 데이터가 있으면 여기에 추가
           clientData: this.state.me.nick,
           memberCode: this.state.me.code,
+          memberId: this.state.me.memberId,
           memberInfo: 'one',
         })
         .then(() => {
