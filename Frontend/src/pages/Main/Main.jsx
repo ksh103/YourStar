@@ -8,6 +8,8 @@ import { Link } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
 import { MY_PAGE_REQUEST } from '../../store/modules/mypage';
 import { APPROVED_MEETINGS_REQUEST } from '../../store/modules/meeting';
+import Header from '../../components/room/OneonOneMeeting/1_1Meeting/Header';
+
 export default function Main() {
   const dispatch = useDispatch();
   const { logInDone } = useSelector(state => state.member);

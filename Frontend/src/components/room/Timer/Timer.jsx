@@ -50,10 +50,19 @@ export default function Timer() {
   }, [sec, dispatch, isCome, me]);
 
   return (
-    <div className="timer">
-      {min} : {sec}
-      {me.code === 4 && isCome ? <div>대기중</div> : <div>미팅중</div>}
-      {me.code === 4 && !isCome ? <div>미팅중</div> : null}
+    <div>
+      <div className="time">
+        ⏳ {min} : {(sec + '').padStart(2, '0')}
+      </div>
+      {me.code === 4 &&
+        (isCome ? (
+          <div className="state">팬 기다리는 중✨</div>
+        ) : (
+          <div className="state">팬과 데이트 중✨</div>
+        ))}
+      {me.code === 3 && isCome ? (
+        <div className="state">스타와 데이트 중✨</div>
+      ) : null}
     </div>
   );
 }

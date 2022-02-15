@@ -3,52 +3,17 @@ import { useEffect, useState } from 'react';
 import Timer from '../../Timer/Timer';
 import styled from 'styled-components';
 import { IoIosAlarm, IoMdCreate, IoIosAperture } from 'react-icons/io';
-import { pointColor } from '../../../../styles/variables';
 import axios from 'axios';
 import swal from 'sweetalert';
 import { setSignButton } from '../../../../store/modules/meetingRoom';
 import ModalSign from '../../../utils/modal/modalSign';
-const HeaderBox = styled.div`
-  /* border: solid red; */
-  margin-bottom: 3vh;
-  height: 15vh;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-`;
-
-const UserBox = styled.div`
-  font-size: 3vw;
-  width: 12vw;
-`;
-
-const StarBox = styled.div`
-  font-size: 3vw;
-  width: 12vw;
-`;
-
-const SignIcon = styled.div`
-  position: absolute;
-  left: 67.7vw;
-  font-size: 2vw;
-  cursor: pointer;
-  &:hover {
-    transform: scale(1.1);
-    transition: 0.5s;
-    color: ${pointColor};
-  }
-`;
-const CaptureIcon = styled.div`
-  position: absolute;
-  left: 1350px;
-  font-size: 2vw;
-  cursor: pointer;
-  &:hover {
-    transform: scale(1.1);
-    transition: 0.5s;
-    color: ${pointColor};
-  }
-`;
+import {
+  HeaderBox,
+  SmallIconWrapper,
+  SmallWrapper,
+  StarBox,
+  UserBox,
+} from './Header.style';
 
 export default function Header() {
   const [prevIdx, setPrevIdx] = useState(-1);
@@ -191,52 +156,61 @@ export default function Header() {
     dispatch(setSignButton(true));
   };
   return (
-    <>
-      <div>
-        {/* 일반 유저 */}
-        {me.code === 3 && (
-          <HeaderBox>
-            <UserBox>
-              <div>
-                <IoIosAlarm
-                  style={{
-                    float: 'left',
-                    marginRight: '20px',
-                    marginTop: '12px',
-                  }}
-                />
-                <Timer style={{ float: 'left' }} />
-              </div>
-            </UserBox>
-          </HeaderBox>
-        )}
-        {/* 스타 */}
-        {me.code !== 3 && (
-          <HeaderBox>
-            <StarBox>
-              <div>
-                <IoIosAlarm
-                  style={{
-                    float: 'left',
-                    marginRight: '20px',
-                    marginTop: '12px',
-                  }}
-                />
-                <Timer style={{ float: 'left' }} />
-                {prevIdx !== index ? signalToNextUser(index) : null}
-                {prevCnt !== checkCnt ? signalToCurUserOut() : null}
-              </div>
-            </StarBox>
-            <SignIcon>
-              <IoMdCreate onClick={() => onSignClick()} />
-            </SignIcon>
-            {signButton && <ModalSign />}
-            <CaptureIcon>
-              <IoIosAperture />
-            </CaptureIcon>
-          </HeaderBox>
-        )}
-      </div>
-    </>
+    <SmallWrapper>
+      <Timer />
+      {me.code !== 3 && (
+        <SmallIconWrapper>
+          {prevIdx !== index ? signalToNextUser(index) : null}
+          {prevCnt !== checkCnt ? signalToCurUserOut() : null}
+          <IoMdCreate onClick={() => onSignClick()} />
+          <IoIosAperture />
+          {signButton && <ModalSign />}
+        </SmallIconWrapper>
+      )}
+    </SmallWrapper>
+    // <HeaderBox>
+    //   {/* 일반 유저 */}
+    //   {me.code === 3 && (
+    //     <UserBox>
+    //       <div>
+    //         <IoIosAlarm
+    //           style={{
+    //             float: 'left',
+    //             marginRight: '20px',
+    //             marginTop: '12px',
+    //           }}
+    //         />
+    //         <Timer style={{ float: 'left' }} />
+    //       </div>
+    //     </UserBox>
+    //   )}
+    //   {/* 스타 */}
+    //   {me.code !== 3 && (
+    //     <StarBox>gdbcbc</StarBox>
+    // <>
+    //   <StarBox>
+    //     <div>
+    //       <IoIosAlarm
+    //         style={{
+    //           float: 'left',
+    //           marginRight: '20px',
+    //           marginTop: '12px',
+    //         }}
+    //       />
+    //       <Timer style={{ float: 'left' }} />
+    //       {prevIdx !== index ? signalToNextUser(index) : null}
+    //       {prevCnt !== checkCnt ? signalToCurUserOut() : null}
+    //     </div>
+    //     <SignIcon>
+    //       <IoMdCreate onClick={() => onSignClick()} />
+    //     </SignIcon>
+    //     {signButton && <ModalSign />}
+    //     <CaptureIcon>
+    //       <IoIosAperture />
+    //     </CaptureIcon>
+    //   </StarBox>
+    // </>
+    //     )}
+    //   </HeaderBox>
   );
 }
