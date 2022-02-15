@@ -12,6 +12,15 @@ const EmoticonsPlace = styled.div`
   display: flex;
   align-items: center;
   justify-content: center;
+  &:active {
+    -webkit-transform: scale(0.9, 0.9);
+    -moz-transform: scale(0.9, 0.9);
+    -ms-transform: scale(0.9, 0.9);
+    -o-transform: scale(0.9, 0.9);
+    transform: scale(0.9, 0.9);
+
+  }
+  -webkit-user-select:none; -moz-user-select:none; -ms-user-select:none; user-select:none
 `;
 // 이모티콘을 클릭했을때, 이모티콘 시그널을 만들어서 보낸다.
 // 스토어에 이모티콘 입력에 대한 리스트를 받아야한다.
