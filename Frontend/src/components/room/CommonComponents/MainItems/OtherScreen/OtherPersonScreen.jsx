@@ -6,12 +6,27 @@ import UserVideoComponent from '../../../../../pages/Room/UserVideoComponent';
 import ConsonantAllRank from '../../RightSideItems/Game/ConsonantGame/ConsonantAllRank';
 
 const OtherPersonSc = styled.div`
-  width: 67vw;
-  height: 22.4719vh;
+padding-left: 1vw;
+  width: 66vw;
+  height: 23vh;
   background-color: rgb(255, 255, 255, 0.5);
   border-radius: 1vh;
-  box-shadow: 0.306vh 0.306vh gray;
-  overflow-x: hidden;
+  // box-shadow: 0.306vh 0.306vh gray;
+  overflow-x: auto;
+  &::-webkit-scrollbar {
+    width: 10px;
+  }
+  &::-webkit-scrollbar-thumb {
+    background-color: #d2d0d0;
+    border-radius: 10px;
+    background-clip: padding-box;
+    border: 2px solid transparent;
+  }
+  &::-webkit-scrollbar-track {
+    background-color: white;
+    border-radius: 10px;
+    box-shadow: inset 0px 0px 5px white;
+  }
   white-space: nowrap;
   margin: 0 0;
   display: Flex;

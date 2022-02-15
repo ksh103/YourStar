@@ -20,8 +20,8 @@ const PerScPosition = styled.div`
   display: flex;
   flex-direction: column;
   flex-wrap: wrap;
-  top: 2%;
-  left: 3%;
+  top: 2.5%;
+  left: 2%;
   height: 82vh;
 `;
 

@@ -33,10 +33,10 @@ const LongChattingInputBox = styled.input`
 
 const LongChattingListBox = styled.div`
   margin: 1vh;
-  padding: 1vw;
+  padding: 1vw 1vw 0 1vw;
   border-radius: 1vh;
   width: 84%;
-  height: 54vh;
+  height: 55vh;
   background-color: #f5f5f5;
   color: black;
   font-size: 18px;
@@ -76,25 +76,7 @@ const SmallBox = styled.div`
   align-items: center;
   flex-direction: column;
 `;
-// 요기
-const BigBoxOXGame = styled.div`
-  position: relative;
-  width: 20vw;
-  height: 36vh;
-  background-color: rgb(255, 255, 255, 0.5);
-  border-radius: 1vh;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  flex-direction: column;
-`;
 
-const SmallBoxOXGame = styled.div`
-  display: flex;
-  max-height: 50%;
-  margin: 2vh 1vh 1vh 1vh;
-`;
-// 요기까지
 const SmallBoxSelectSchedule = styled.div`
   position: relative;
   width: 20vw;
@@ -246,10 +228,10 @@ const ConcertChattingInputBox = styled.input`
 
 const ConcertChattingListBox = styled.div`
   margin: 1vh;
-  padding: 1vw;
+  padding: 1vw 1vw 0vw 1vw;
   border-radius: 1vh;
   width: 84%;
-  height: 60vh;
+  height: 63vh;
   background-color: #f5f5f5;
   color: black;
   font-size: 18px;
@@ -330,8 +312,6 @@ export {
   ThridSideDiv3,
   LongChattingBox,
   SmallBox,
-  SmallBoxOXGame,
-  BigBoxOXGame,
   SmallBoxSelectSchedule,
   SmallChattingListBox,
   SmallChattingInputBox,
