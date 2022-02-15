@@ -23,6 +23,7 @@ public interface MeetingService {
     Page<Meeting> meetingApproveList(Pageable pageable);
     Meeting meetingDetail(int meetingId);
     Applicant meetingApplyByUser(MeetingApplyByUserPostReq meetingApplyByUserPostReq);
+    MeetingOath meetingApplyOathByUser(MeetingApplyByUserPostReq meetingApplyByUserPostReq);
     
     Page<String> meetingApplyList(int meetingId, Pageable pageable); // 팬미팅 신청 명단
     
