@@ -32,15 +32,15 @@ const ConcertDisplayBox = styled.div`
   border-radius: 1vh;
   height: 75vh;
   width: 63vw;
-  background-color: white;
-  box-shadow: 0.306vh 0.306vh gray;
+  // background-color: white;
+  // box-shadow: 0.306vh 0.306vh gray;
 `;
 
 const HolePlace = styled.div`
   position: absolute;
   top: 64vh;
-  left: 58vw;
-  font-size: 3vw;
+  left: 57.5vw;
+  font-size: 4vw;
   z-index: 10;
   animation: 0.6s ease-in-out infinite loadEffect3;
 
@@ -197,27 +197,28 @@ export default function Concert() {
         <>
           <ScheduleListSelect></ScheduleListSelect>
           <HalfSideDiv2>
-            <StarSmallBox></StarSmallBox>
-            <StarSmallChattingListBox>
-              {chattingList.map((value, idx) => {
-                return (
-                  <div key={idx + value.text}>
-                    <p style={{ margin: '0' }}>
-                      {value.userName} : {value.text}
-                    </p>
-                  </div>
-                );
-              })}
-              <div ref={messagesEndRef}></div>{' '}
-              {/**채팅 스크롤 아래로 내려주기 */}
-            </StarSmallChattingListBox>
-            <StarSmallChattingInputBox
-              onKeyPress={SendMessage}
-              value={testInput}
-              onChange={handleChatMessageChange}
-              color={backgroundColor}
-              placeholder="메시지 보내기"
-            ></StarSmallChattingInputBox>
+            <StarSmallBox>
+              <StarSmallChattingListBox>
+                {chattingList.map((value, idx) => {
+                  return (
+                    <div key={idx + value.text}>
+                      <p style={{ margin: '0' }}>
+                        {value.userName} : {value.text}
+                      </p>
+                    </div>
+                  );
+                })}
+                <div ref={messagesEndRef}></div>{' '}
+                {/**채팅 스크롤 아래로 내려주기 */}
+              </StarSmallChattingListBox>
+              <StarSmallChattingInputBox
+                onKeyPress={SendMessage}
+                value={testInput}
+                onChange={handleChatMessageChange}
+                color={backgroundColor}
+                placeholder="메시지 보내기"
+              ></StarSmallChattingInputBox>
+            </StarSmallBox>
           </HalfSideDiv2>
         </>
       )}

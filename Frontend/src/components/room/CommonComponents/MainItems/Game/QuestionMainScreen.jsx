@@ -9,9 +9,9 @@ const QuestionMain = styled.div`
   position: relative;
   width: 63vw;
   height: 60.5vh;
-  background-color: white;
+  // background-color: white;
   border-radius: 1vh;
-  box-shadow: 0.306vh 0.306vh gray;
+  // box-shadow: 0.306vh 0.306vh gray;
 `;
 
 const UserQuestionMain = styled.div`
@@ -21,7 +21,7 @@ const UserQuestionMain = styled.div`
   height: 66.5vh;
   background-color: white;
   border-radius: 1vh;
-  box-shadow: 0.306vh 0.306vh gray;
+  // box-shadow: 0.306vh 0.306vh gray;
 `;
 
 export default function QuestionMainScreen() {

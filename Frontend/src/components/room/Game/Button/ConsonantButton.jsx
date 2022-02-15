@@ -82,7 +82,7 @@ export default function GameButton() {
   const dispatch = useDispatch();
   const { storeSession, backgroundColor } = useSelector(state => ({
     storeSession: state.MeetingRoom.storeSession,
-    backgroundColor: state.MeetingRoom.backgroundColor,
+    backgroundColor: state.MeetingRoom,
   }));
   console.log(backgroundColor);
   const { meeting } = useSelector(state => state.meeting);

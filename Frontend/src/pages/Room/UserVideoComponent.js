@@ -175,10 +175,11 @@ class UserVideoComponent extends Component {
           <div className="hiddenConsole">
             {this.props.me.code !== 3 ? (
               <div className="son">
-                <p>{this.getNicknameTag()}</p>
+                <div>{this.getNicknameTag()}</div>
                 <div>
                   {this.state.audioState ? (
                     <BsFillMicFill
+                      style={{ margin: '0.3vw' }}
                       size="24"
                       color="#00000"
                       onClick={() => {
@@ -192,6 +193,7 @@ class UserVideoComponent extends Component {
                     />
                   ) : (
                     <BsFillMicMuteFill
+                      style={{ margin: '0.3vw' }}
                       size="24"
                       color="#00000"
                       onClick={() => {
@@ -206,6 +208,7 @@ class UserVideoComponent extends Component {
                   )}
                   {this.state.videoState ? (
                     <BsFillCameraVideoFill
+                      style={{ margin: '0.3vw' }}
                       size="24"
                       color="#00000"
                       onClick={() => {
@@ -219,6 +222,7 @@ class UserVideoComponent extends Component {
                     />
                   ) : (
                     <BsFillCameraVideoOffFill
+                      style={{ margin: '0.3vw' }}
                       size="24"
                       color="#00000"
                       onClick={() => {
@@ -232,6 +236,7 @@ class UserVideoComponent extends Component {
                     />
                   )}
                   <RiAlarmWarningLine
+                    style={{ margin: '0.3vw' }}
                     size="24"
                     color="#00000"
                     onClick={() => {
