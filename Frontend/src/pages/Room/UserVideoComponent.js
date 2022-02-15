@@ -170,7 +170,7 @@ class UserVideoComponent extends Component {
 
   render() {
     return (
-      <div style={{ margin: '1vw' }}>
+      <div style={{ margin: '' }}>
         <div className={this.state.mode}>
           <div className="hiddenConsole">
             {this.props.me.code !== 3 ? (

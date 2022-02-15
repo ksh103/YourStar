@@ -9,7 +9,7 @@ import { ScreenChange } from '../../../../store/modules/meetingRoom';
 const StartButtonDiv = styled.div`
   position: absolute;
   top: 86vh;
-  left: 51vw;
+  left: 53.5vw;
   padding: 20px;
   background-color: #f5f5f5;
   border-radius: 1vh;
@@ -29,7 +29,7 @@ const StartButtonDiv = styled.div`
 const EndButtonDiv = styled.div`
   position: absolute;
   top: 86vh;
-  left: 61vw;
+  left: 62vw;
   background-color: #f5f5f5;
   border-radius: 1vh;
   padding: 10px;
@@ -45,7 +45,6 @@ const EndButtonDiv = styled.div`
     background-color: ${props => props.color};
   }
 `;
-const TestDiv = styled.div``;
 
 function cho_hangul(str) {
   const cho = [
@@ -87,7 +86,7 @@ export default function GameButton() {
     storeSession: state.MeetingRoom.storeSession,
     backgroundColor: state.MeetingRoom.backgroundColor,
   }));
-  console.log(storeSession);
+console.log(storeSession)
   const { meeting } = useSelector(state => state.meeting);
   const { me } = useSelector(state => state.mypage);
 
@@ -127,12 +126,18 @@ export default function GameButton() {
   return (
     <>
       <StartButtonDiv color={backgroundColor}>
-        <button style={{ fontSize: '1.4vw' }} onClick={onStartButton}>
+        <button
+          style={{ fontSize: '1.4vw' }}
+          onClick={onStartButton}
+        >
           게임 시작
         </button>
       </StartButtonDiv>
       <EndButtonDiv color={backgroundColor}>
-        <button style={{ fontSize: '1.4vw' }} onClick={onEndButton}>
+        <button
+          style={{ fontSize: '1.4vw' }}
+          onClick={onEndButton}
+        >
           게임 종료
         </button>
       </EndButtonDiv>

@@ -1,112 +1,21 @@
 import React, { useEffect, useState } from 'react';
 import styled from 'styled-components';
 import {
-  BigBoxOXGame,
-  SmallBoxOXGame,
   HalfSideDiv2,
 } from '../../Chatting/Chatting.style';
+import {RecogButtonDiv, ImgBoxO,ImgBoxX, SmallBoxOXGame, BigBoxOXGame, ButtonDiv} from './OXButtonStar.style';
 import { useSelector, useDispatch } from 'react-redux';
 import {
   signalOX,
   oxGameRound,
 } from '../../../../../../store/modules/meetingRoom';
-
 import { ScreenChange } from '../../../../../../store/modules/meetingRoom';
 import swal from 'sweetalert';
 import { AddGameScoreAPI } from '../../../../../../store/apis/Room/game';
-// const OButton = styled.div`
-//   position: absolute;
-//   background-color: #2525ff;
-//   top: 2vh;
-//   left: 0.8vw;
-//   cursor: pointer;
-//   display: flex;
-//   align-items: center;
-//   justify-content: center;
-//   font-size: 4vw;
-//   border-radius: 1vw;
-//   height: 13vh;
-//   width: 18vw;
-// `;
-// const XButton = styled.div`
-//   position: absolute;
-//   background-color: #ff2525;
-//   bottom: 2vh;
-//   left: 0.8vw;
-//   display: flex;
-//   align-items: center;
-//   justify-content: center;
-//   font-size: 4vw;
-//   cursor: pointer;
-//   border-radius: 1vw;
-//   height: 13vh;
-//   width: 18vw;
-// `;
-
-const RecogButtonDiv = styled.div`
-  background-color: #f5f5f5;
-  border-radius: 1vw;
-  padding: 10px;
-  font-size: 1.4vw;
-  width: 6vw;
-  margin: 2px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-`;
-const StartButtonDiv = styled.div`
-  background-color: white;
-  border-radius: 1vw;
-  padding: 10px;
-  margin: 2px;
-  &:active {
-    -webkit-transform: scale(0.9, 0.9);
-    -moz-transform: scale(0.9, 0.9);
-    -ms-transform: scale(0.9, 0.9);
-    -o-transform: scale(0.9, 0.9);
-    transform: scale(0.9, 0.9);
-  }
-  &:hover{
-    background-color: ${props => props.color};
-  }
-`;
-const EndButtonDiv = styled.div`
-  background-color: white;
-  border-radius: 1vw;
-  padding: 10px;
-  margin: 2px;
-  &:active {
-    -webkit-transform: scale(0.9, 0.9);
-    -moz-transform: scale(0.9, 0.9);
-    -ms-transform: scale(0.9, 0.9);
-    -o-transform: scale(0.9, 0.9);
-    transform: scale(0.9, 0.9);
-  }
-  &:hover{
-    background-color: ${props => props.color};
-  }
-`;
-const ImgBoxO = styled.img`
-  display: block;
-  cursor: pointer;
-  max-height: 80%;
-  padding: 5px;
-  &:hover{
-    background-color: green;
-  }
-`;
-
-const ImgBoxX = styled.img`
-  display: block;
-  cursor: pointer;
-  max-height: 80%;
-  padding: 5px;
-  &:hover{
-    background-color: red;
-  }
-`;
 
 export default function OXButtonStar() {
+
+
   const [isStart, setIsStart] = useState(false);
   const [doneCnt, setDoneCnt] = useState(0);
 
@@ -187,36 +96,37 @@ export default function OXButtonStar() {
     <>
       <HalfSideDiv2>
         <BigBoxOXGame>
-          <SmallBoxOXGame>
-            <RecogButtonDiv>
-              <div>{doneCnt} / {subscribers.length}</div>
-            </RecogButtonDiv>
-            <StartButtonDiv color={backgroundColor}>
-              <button style={{ fontSize: '1.3vw' }} onClick={start}>
-                게임시작
-              </button>
-            </StartButtonDiv>
-            <EndButtonDiv color={backgroundColor}>
-              <button style={{ fontSize: '1.3vw' }} onClick={oxStop}>
-                게임종료
-              </button>
-            </EndButtonDiv>
-          </SmallBoxOXGame>
-          <SmallBoxOXGame>
             {/* <OButton onClick={OXClick}>O</OButton>
             <XButton onClick={OXClick}>X</XButton> */}
+            {isStart &&(<><RecogButtonDiv>
+            {subscribers.length}명 중에 {doneCnt}명 인식 되었습니다.
+            </RecogButtonDiv>
+            <SmallBoxOXGame>
             <ImgBoxO
-              onClick={() => OXClick('O')}
-              src="https://cdn-icons-png.flaticon.com/512/3570/3570095.png"
-              alt="O"
-            ></ImgBoxO>
-            <ImgBoxX
-              onClick={() => OXClick('O')}
-              src="https://cdn-icons-png.flaticon.com/512/3570/3570089.png"
-              alt="X"
+                onClick={() => OXClick('O')}
+                src="https://cdn-icons-png.flaticon.com/512/3570/3570095.png"
+                alt="O"
+              ></ImgBoxO>
+              <ImgBoxX
+                onClick={() => OXClick('X')}
+                src="https://cdn-icons-png.flaticon.com/512/3570/3570089.png"
+                alt="X"
             ></ImgBoxX>
-          </SmallBoxOXGame>
+            </SmallBoxOXGame></>)}
+           
         </BigBoxOXGame>
+        <ButtonDiv color={backgroundColor}>
+        <div>
+            <button style={{ fontSize: '1.4vw' }} onClick={start}>
+              게임시작
+            </button>
+          </div>
+          <div>
+            <button style={{ fontSize: '1.4vw' }} onClick={oxStop}>
+              게임종료
+            </button>
+          </div>
+          </ButtonDiv>
       </HalfSideDiv2>
     </>
   );
