@@ -1,33 +1,26 @@
 import styled from 'styled-components';
 
 const StarSelfCamBox = styled.div`
-  // position: relative;
-  width: 95%;
-  height: 67.5vh;
+position: relative;
+  width: 100%;
+  height: 80.5vh;
   border-radius: 1vh;
-  // margin-right: 0.8vw;
-  // display: flex;
-  // align-items: center;
-  // justify-content: center;
+  background-color: rgb(255, 255, 255, 0.5);
 `;
 const UserSelfCamBox = styled.div`
-  // position: relative;
-  margin-top: -2vh;
-  width: 95%;
-  height: 67.5vh;
+  position: relative;
+  // margin-top: -1.5vh;
+  // padding: -1vw;
+  width: 100%;
+  height: 80.5vh;
   border-radius: 1vh;
-  // margin-right: 0.8vw;
-  // display: flex;
-  // align-items: center;
-  // justify-content: center;
+  background-color: rgb(255, 255, 255, 0.5);
 `;
 
 const MainDiv = styled.div`
   position: absolute;
-  // top: 12%;
-  // left: 4%;
-  // right: 4%;
-  padding: 100px;
+  top: 10%;
+  left: 4%;
 `;
 const MainGrid = styled.div`
   width: 100%;
@@ -37,11 +30,51 @@ const MainGrid = styled.div`
 
 const SmallBox = styled.div`
   position: relative;
+  margin-top: 1vh;
   width: 20vw;
-  height: 30vh;
+  height: 49.5vh;
   background-color: rgb(255, 255, 255, 0.5);
   border-radius: 1vh;
-  // box-shadow: 0.306vh 0.306vh gray;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
 `;
 
-export { StarSelfCamBox, UserSelfCamBox, MainDiv, MainGrid, SmallBox };
+const ChattingInputBox = styled.input`
+  border-radius: 1vh;
+  height: 2vh;
+  margin: 0 1vh 1vh 1vh;
+  width: 84%;
+  border: none;
+  padding: 1vw;
+  outline: none;
+  background-color: ${props => props.color};
+`;
+
+const ChattingListBox = styled.div`
+  margin: 1vh;
+  padding: 1vw;
+  border-radius: 1vh;
+  width: 84%;
+  height: 35vh;
+  background-color: #f5f5f5;
+  color: black;
+  overflow-y: scroll;
+  &::-webkit-scrollbar {
+    width: 10px;
+  }
+  &::-webkit-scrollbar-thumb {
+    background-color: #d2d0d0;
+    border-radius: 10px;
+    background-clip: padding-box;
+    border: 2px solid transparent;
+  }
+  &::-webkit-scrollbar-track {
+    background-color: white;
+    border-radius: 10px;
+    box-shadow: inset 0px 0px 5px white;
+  }
+`;
+
+export { StarSelfCamBox, UserSelfCamBox, MainDiv, MainGrid, SmallBox, ChattingInputBox, ChattingListBox };

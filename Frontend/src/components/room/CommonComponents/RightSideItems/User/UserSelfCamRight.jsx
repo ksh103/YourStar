@@ -23,12 +23,12 @@ export default function UserSelfCamRight() {
             <StarVideoComponent streamManager={mainStreamManager} />
           ) : (
             <div className="center">
-              <div className="WaitText">{innerText}</div>
-              <img
+              {/* <div className="WaitText">{innerText}</div> */}
+              {/* <img
                 src={`${IMAGE_URL}${FILE_ID}`}
                 className="WaitImg"
                 alt={FILE_ID}
-              />
+              /> */}
             </div>
           )}
         </WaitingTimeWrapper>

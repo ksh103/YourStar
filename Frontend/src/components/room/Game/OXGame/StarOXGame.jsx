@@ -14,6 +14,7 @@ export default function StarOXGame() {
       <ScheduleListSelect></ScheduleListSelect>
       <OXButtonStar></OXButtonStar>
       <UserSelfCamRight></UserSelfCamRight>
+      
     </>
   );
 }
