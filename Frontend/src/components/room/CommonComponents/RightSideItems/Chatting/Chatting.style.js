@@ -20,24 +20,24 @@ const LongChattingBox = styled.div`
 `;
 
 const LongChattingInputBox = styled.input`
-border-radius: 1vh;
-height:2vh;
-margin: 0 1vh 1vh 1vh;
-width: 84%;
-border: none;
-padding: 1vw;
-outline: none;
-font-size:18px;
-background-color: ${props => props.color};
+  border-radius: 1vh;
+  height: 2vh;
+  margin: 0 1vh 1vh 1vh;
+  width: 84%;
+  border: none;
+  padding: 1vw;
+  outline: none;
+  font-size: 18px;
+  background-color: ${props => props.color};
 `;
 
 const LongChattingListBox = styled.div`
-margin: 1vh;
-padding: 1vw;
-border-radius: 1vh;
-width: 84%;
-height: 54vh;
-background-color: #f5f5f5;
+  margin: 1vh;
+  padding: 1vw;
+  border-radius: 1vh;
+  width: 84%;
+  height: 54vh;
+  background-color: #f5f5f5;
   color: black;
   font-size: 18px;
   overflow-y: scroll;
@@ -76,7 +76,7 @@ const SmallBox = styled.div`
   align-items: center;
   flex-direction: column;
 `;
-// 요기 
+// 요기
 const BigBoxOXGame = styled.div`
   position: relative;
   width: 20vw;
@@ -94,7 +94,7 @@ const SmallBoxOXGame = styled.div`
   max-height: 50%;
   margin: 2vh 1vh 1vh 1vh;
 `;
-// 요기까지 
+// 요기까지
 const SmallBoxSelectSchedule = styled.div`
   position: relative;
   width: 20vw;
@@ -167,7 +167,7 @@ const MiddleChattingBox = styled.div`
   background-color: white;
   border-radius: 1vh;
   box-shadow: 0.306vh 0.306vh gray;
-    display: flex;
+  display: flex;
   justify-content: center;
   align-items: center;
   flex-direction: column;
@@ -232,25 +232,25 @@ const ConcertChattingBox = styled.div`
 `;
 
 const ConcertChattingInputBox = styled.input`
-display:block;
-border-radius: 1vh;
-height:2vh;
-margin: 0 1vh 1vh 1vh;
-width: 84%;
-border: none;
-padding: 1vw;
-outline: none;
-font-size:18px;
-background-color: ${props => props.color};
+  display: block;
+  border-radius: 1vh;
+  height: 2vh;
+  margin: 0 1vh 1vh 1vh;
+  width: 84%;
+  border: none;
+  padding: 1vw;
+  outline: none;
+  font-size: 18px;
+  background-color: ${props => props.color};
 `;
 
 const ConcertChattingListBox = styled.div`
-margin: 1vh;
-padding: 1vw;
-border-radius: 1vh;
-width: 84%;
-height: 60vh;
-background-color: #f5f5f5;
+  margin: 1vh;
+  padding: 1vw;
+  border-radius: 1vh;
+  width: 84%;
+  height: 60vh;
+  background-color: #f5f5f5;
   color: black;
   font-size: 18px;
   overflow-y: scroll;
