@@ -247,11 +247,9 @@ class UserVideoComponent extends Component {
               </div>
             ) : null}
             {this.props.streamManager !== undefined ? (
-              <>
-                <OpenViduVideoComponent
-                  streamManager={this.props.streamManager}
-                />
-              </>
+              <OpenViduVideoComponent
+                streamManager={this.props.streamManager}
+              />
             ) : null}
           </div>
         </div>
