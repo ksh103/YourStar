@@ -434,23 +434,27 @@ class Room extends Component {
 
         // 사인 알림
         mySession.on('signal:signon', event => {
-          swal({
-            title: '사인 알림',
-            text: '스타가 사인을 진행하고 있습니다',
-            buttons: false,
-            timer: 1500,
-            icon: 'info',
-          });
+          if (this.state.me.code !== 4) {
+            swal({
+              title: '사인 알림',
+              text: '스타가 사인을 진행하고 있습니다',
+              buttons: false,
+              timer: 1500,
+              icon: 'info',
+            });
+          }
         });
 
         mySession.on('signal:signoff', event => {
-          swal({
-            title: '사인 알림',
-            text: '스타가 사인을 마쳤습니다',
-            buttons: false,
-            timer: 1500,
-            icon: 'info',
-          });
+          if (this.state.me.code !== 4) {
+            swal({
+              title: '사인 알림',
+              text: '스타가 사인을 마쳤습니다',
+              buttons: false,
+              timer: 1500,
+              icon: 'info',
+            });
+          }
         });
 
         // 종료 알림

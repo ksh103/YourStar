@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import sign from '../../../assets/images/sign.JPG';
+import sign from '../../assets/images/sign.JPG';
 import CanvasDraw from '.';
 import styled from 'styled-components';
 import { pointColor } from '../../styles/variables';
