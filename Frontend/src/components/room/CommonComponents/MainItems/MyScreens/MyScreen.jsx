@@ -7,9 +7,13 @@ import UserVideoComponent from '../../../../../pages/Room/UserVideoComponent';
 const QuestionMyScreen = styled.div`
   width: 16vw;
   height: 23vh;
-  background-color:  rgb(255, 255, 255, 0.5);
+  background-color: rgb(255, 255, 255, 0.5);
   border-radius: 1vh;
   // box-shadow: 0.306vh 0.306vh gray;
+  display: Flex;
+  direction: row;
+  align-items: center;
+  justify-content: center;
 `;
 
 export default function MyScreen() {

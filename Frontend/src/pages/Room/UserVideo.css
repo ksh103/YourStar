@@ -133,7 +133,7 @@
 .StarOXGameToUser {
   position: relative;
   width: 83.541vw;
-  height: 66.5vh;
+  height: 67.5vh;
   background-color: white;
   border-radius: 1vh;
   margin: 0;
@@ -149,8 +149,8 @@
 }
 .StarConsonantGameToUser {
   position: relative;
-  width: 83.541vw;
-  height: 66.5vh;
+  width: 63vw;
+  height: 67.5vh;
   background-color: white;
   border-radius: 1vh;
   margin: 0;
@@ -171,26 +171,23 @@
   height: 80.5vh;
   background-color: white;
   border-radius: 1vh;
-  margin-right: 4vw;
-  margin: 1%;
   object-fit: cover;
 }
 
 .User {
   position: relative;
   width: 13vw;
-  height: 18.5vh;
+  height: 18vh;
   cursor: pointer;
   border-radius: 1vh;
   /* float: left; */
-  margin: 0;
   object-fit: cover;
 }
 
 .UserQnA {
   position: relative;
   width: 13vw;
-  height: 18.5vh;
+  height: 18vh;
   cursor: pointer;
   border-radius: 1vh;
   /* float: left; */
@@ -212,7 +209,7 @@
 .UserRandom {
   position: relative;
   width: 13vw;
-  height: 19vh;
+  height: 18vh;
   cursor: pointer;
   border-radius: 1vh;
   /* float: left; */
@@ -222,7 +219,7 @@
 .UserOXGame {
   position: relative;
   width: 13vw;
-  height: 19vh;
+  height: 18vh;
   cursor: pointer;
   border-radius: 1vh;
   /* float: left; */
@@ -266,7 +263,5 @@
   height: 80.5vh;
   background-color: white;
   border-radius: 1vh;
-  margin-right: 4vw;
-  margin: 0;
   object-fit: cover;
 }

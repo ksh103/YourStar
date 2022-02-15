@@ -7,7 +7,7 @@ import { IMAGE_URL } from '../../../../utils/contants';
 import '../../../../pages/Room/UserVideo.css';
 
 const StarScreen = styled.div`
-  overflow: auto;
+  /* overflow: auto; */
   position: relative;
   width: 63vw;
   height: 67.5vh;
