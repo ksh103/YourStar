@@ -6,11 +6,10 @@ import UserVideoComponent from '../../../../../pages/Room/UserVideoComponent';
 import ConsonantAllRank from '../../RightSideItems/Game/ConsonantGame/ConsonantAllRank';
 
 const OtherPersonSc = styled.div`
-  max-width: 65.041vw;
-  width: 65.041vw;
+  width: 67vw;
   height: 22.4719vh;
-  background-color: white;
-  border-radius: 3.0643vh;
+  background-color:  rgb(255, 255, 255, 0.5);
+  border-radius: 1vh;
   box-shadow: 0.306vh 0.306vh gray;
   overflow-x: auto;
   white-space: nowrap;

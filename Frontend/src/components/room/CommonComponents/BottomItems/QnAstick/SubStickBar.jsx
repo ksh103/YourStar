@@ -38,7 +38,7 @@ const InnerDiv = styled.div`
   border-radius: 0.5vh;
   cursor: pointer;
   background-color: ${props => props.clickColor};
-  font-weight: ${props => (props.clickColor.length > 1 ? 'bold' : 'none')};
+  font-weight: ${props => (props.clickColor !== undefined ? 'bold' : 'none')};
   display: flex;
   justify-content: center;
   align-items: center;
@@ -59,9 +59,9 @@ export default function SubStickBar() {
   }));
 
   const { backgroundColor } = useSelector(
-    state => state.MeetingRoom.backgroundColor
+    state => state.MeetingRoom
   );
-
+  console.log(backgroundColor)
   const { storeSession } = useSelector(state => ({
     storeSession: state.MeetingRoom.storeSession,
   }));
@@ -92,7 +92,7 @@ export default function SubStickBar() {
         });
       } else {
         swal({
-          text: '💌 포스트잇 받기를 중단할까요 ? \n (Q&A 시작 버튼을 통해 언제든 다시 포스트잇을 받을 수 있습니다.)',
+          text: '💌 포스트잇 받기를 중단할까요 ? \n ( Q&A 시작 버튼을 통해 언제든 다시 포스트잇을 받을 수 있습니다. )',
           buttons: {
             cancel: true,
             confirm: true,

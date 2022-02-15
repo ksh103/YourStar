@@ -32,15 +32,15 @@ const ConcertDisplayBox = styled.div`
   border-radius: 1vh;
   height: 75vh;
   width: 63vw;
-  background-color: white;
-  box-shadow: 0.306vh 0.306vh gray;
+  // background-color: white;
+  // box-shadow: 0.306vh 0.306vh gray;
 `;
 
 const HolePlace = styled.div`
   position: absolute;
   top: 64vh;
-  left: 58vw;
-  font-size: 3vw;
+  left: 57.5vw;
+  font-size: 4vw;
   z-index: 10;
   animation: 0.6s ease-in-out infinite loadEffect3;
 
@@ -173,13 +173,7 @@ export default function Concert() {
 
       {me.code === 3 ? (
         <HalfSideDiv1>
-          <ConcertChattingBox></ConcertChattingBox>
-          <ConcertChattingInputBox
-            onKeyPress={SendMessage}
-            value={testInput}
-            onChange={handleChatMessageChange}
-            color={backgroundColor}
-          ></ConcertChattingInputBox>
+          <ConcertChattingBox>
           <ConcertChattingListBox>
             {chattingList.map((value, idx) => {
               return (
@@ -192,12 +186,19 @@ export default function Concert() {
             })}
             <div ref={messagesEndRef}></div> {/**채팅 스크롤 아래로 내려주기 */}
           </ConcertChattingListBox>
+          <ConcertChattingInputBox
+            onKeyPress={SendMessage}
+            value={testInput}
+            onChange={handleChatMessageChange}
+            color={backgroundColor}
+          ></ConcertChattingInputBox>
+          </ConcertChattingBox>
         </HalfSideDiv1>
       ) : (
         <>
           <ScheduleListSelect></ScheduleListSelect>
           <HalfSideDiv2>
-            <StarSmallBox></StarSmallBox>
+            <StarSmallBox>
             <StarSmallChattingListBox>
               {chattingList.map((value, idx) => {
                 return (
@@ -218,6 +219,7 @@ export default function Concert() {
               color={backgroundColor}
               placeholder="메시지 보내기"
             ></StarSmallChattingInputBox>
+            </StarSmallBox>
           </HalfSideDiv2>
         </>
       )}

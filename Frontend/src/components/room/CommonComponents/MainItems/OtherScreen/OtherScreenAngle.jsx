@@ -7,7 +7,9 @@ import swal from 'sweetalert';
 const OtherAngelStyle = styled.div`
  box-shadow: 2px 2px 4px rgba(0, 0, 0, 0.4);
  text-align : center;
- padding: 10% 5% 5% 5%;
+ padding: 5% 5% 5% 5%;
+ word-wrap: break-word;
+ text-overflow:ellipsis;
  overflow: hidden;
  background-color: #F9F8B9;
  cursor: pointer;

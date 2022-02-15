@@ -9,11 +9,12 @@ import { ScreenChange } from '../../../../store/modules/meetingRoom';
 const StartButtonDiv = styled.div`
   position: absolute;
   top: 86vh;
-  left: 53vw;
+  left: 51vw;
   padding: 20px;
   background-color: #f5f5f5;
   border-radius: 1vh;
   padding: 10px;
+  border: 2px solid ${props => props.color};
   &:active {
     -webkit-transform: scale(0.9, 0.9);
     -moz-transform: scale(0.9, 0.9);
@@ -28,10 +29,11 @@ const StartButtonDiv = styled.div`
 const EndButtonDiv = styled.div`
   position: absolute;
   top: 86vh;
-  left: 62vw;
+  left: 61vw;
   background-color: #f5f5f5;
   border-radius: 1vh;
   padding: 10px;
+  border: 2px solid ${props => props.color};
   &:active {
     -webkit-transform: scale(0.9, 0.9);
     -moz-transform: scale(0.9, 0.9);
@@ -43,6 +45,8 @@ const EndButtonDiv = styled.div`
     background-color: ${props => props.color};
   }
 `;
+const TestDiv = styled.div`
+`
 
 function cho_hangul(str) {
   const cho = [
@@ -84,14 +88,14 @@ export default function GameButton() {
     storeSession: state.MeetingRoom.storeSession,
     backgroundColor: state.MeetingRoom.backgroundColor,
   }));
-  console.log(backgroundColor);
+console.log(storeSession)
   const { meeting } = useSelector(state => state.meeting);
   const { me } = useSelector(state => state.mypage);
 
   const onStartButton = () => {
     swal(
       '🔔초성게임🔔',
-      '팬들에게 제출할 문제를 입력해주세요! 문제는 초성으로 자동 변경되어 제출됩니다.',
+      '팬들에게 제출할 문제를 입력해주세요! \n 문제는 초성으로 자동 변경되어 제출됩니다.',
       {
         closeOnClickOutside: false,
         content: 'input',
@@ -123,20 +127,18 @@ export default function GameButton() {
 
   return (
     <>
-      <StartButtonDiv>
+      <StartButtonDiv color={backgroundColor}>
         <button
           style={{ fontSize: '1.4vw' }}
           onClick={onStartButton}
-          color={backgroundColor}
         >
           게임 시작
         </button>
       </StartButtonDiv>
-      <EndButtonDiv>
+      <EndButtonDiv color={backgroundColor}>
         <button
           style={{ fontSize: '1.4vw' }}
           onClick={onEndButton}
-          color={backgroundColor}
         >
           게임 종료
         </button>

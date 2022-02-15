@@ -81,6 +81,7 @@ export default function LongChatting() {
             value={testInput}
             onChange={handleChatMessageChange}
             color={backgroundColor} // redux에서 받아온 color를 input styled에 넣어주기
+            placeholder="메시지 보내기"
           ></LongChattingInputBox>
         </LongChattingBox>
       </HalfSideDiv1>

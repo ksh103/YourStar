@@ -9,41 +9,37 @@ const HalfSideDiv1 = styled.div`
 const LongChattingBox = styled.div`
   position: relative;
   width: 20vw;
-  height: 66.39vh;
-  background-color: white;
+  height: 67.5vh;
+  background-color: rgb(255, 255, 255, 0.5);
   border-radius: 1vh;
-  box-shadow: 0.306vh 0.306vh gray;
+  // box-shadow: 0.306vh 0.306vh gray;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
 `;
 
 const LongChattingInputBox = styled.input`
-  position: absolute;
-  top: 90%;
-  left: 10%;
-  right: 10%;
-  border-radius: 1vh;
-  width: 75%;
-  height: 5.1vh;
-  background-color: ${props => props.color};
-  border: none;
-  padding-right: 0.52vw;
-  padding-left: 0.52vw;
-  outline: none;
+border-radius: 1vh;
+height:2vh;
+margin: 0 1vh 1vh 1vh;
+width: 84%;
+border: none;
+padding: 1vw;
+outline: none;
+font-size:18px;
+background-color: ${props => props.color};
 `;
 
 const LongChattingListBox = styled.div`
-  position: absolute;
-  top: 1%;
-  left: 10%;
-  right: 10%;
-  margin: 1vh auto;
-  border-radius: 1vh;
-  width: 75%;
-  height: 54vh;
-  padding: 1vh;
-  margin-top: 2vh;
-  background-color: #f5f5f5;
+margin: 1vh;
+padding: 1vw;
+border-radius: 1vh;
+width: 84%;
+height: 54vh;
+background-color: #f5f5f5;
   color: black;
-  font-size: 20px;
+  font-size: 18px;
   overflow-y: scroll;
   &::-webkit-scrollbar {
     width: 10px;
@@ -80,7 +76,7 @@ const SmallBox = styled.div`
   align-items: center;
   flex-direction: column;
 `;
-
+// 요기 
 const BigBoxOXGame = styled.div`
   position: relative;
   width: 20vw;
@@ -96,10 +92,9 @@ const BigBoxOXGame = styled.div`
 const SmallBoxOXGame = styled.div`
   display: flex;
   max-height: 50%;
-  // flex-direction: column;
-  // align-items: center;
+  margin: 2vh 1vh 1vh 1vh;
 `;
-
+// 요기까지 
 const SmallBoxSelectSchedule = styled.div`
   position: relative;
   width: 20vw;
@@ -111,11 +106,11 @@ const SmallBoxSelectSchedule = styled.div`
 
 const SmallChattingInputBox = styled.input`
   border-radius: 1vh;
-  height: 5.1vh;
-  margin: 0 1vh 1vh 1.5vh;
-  width: 87%;
+  height:2vh;
+  margin: 0 1vh 1vh 1vh;
+  width: 84%;
   border: none;
-  padding-left: 1vw;
+  padding: 1vw;
   outline: none;
   background-color: ${props => props.color};
 `;
@@ -126,10 +121,10 @@ const SmallChattingInputDiv = styled.div`
 
 const SmallChattingListBox = styled.div`
   margin: 1vh;
+  padding: 1vw;
   border-radius: 1vh;
-  width: 87%;
+  width: 84%;
   height: 25vh;
-  padding: 1vh;
   background-color: #f5f5f5;
   color: black;
   overflow-y: scroll;
@@ -172,6 +167,10 @@ const MiddleChattingBox = styled.div`
   background-color: white;
   border-radius: 1vh;
   box-shadow: 0.306vh 0.306vh gray;
+    display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
 `;
 
 const MiddleChattingInputBox = styled.input`
@@ -223,40 +222,37 @@ const ConcertChattingBox = styled.div`
   position: relative;
   width: 20vw;
   height: 75vh;
-  background-color: white;
+  background-color: rgb(255, 255, 255, 0.5);
   border-radius: 1vh;
-  box-shadow: 0.306vh 0.306vh gray;
+  // box-shadow: 0.306vh 0.306vh gray;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
 `;
 
 const ConcertChattingInputBox = styled.input`
-  position: absolute;
-  top: 90%;
-  left: 10%;
-  right: 10%;
-  border-radius: 1vh;
-  width: 75%;
-  height: 5.1vh;
-  background-color: ${props => props.color};
-  border: none;
-  padding-right: 0.52vw;
-  padding-left: 0.52vw;
-  outline: none;
+display:block;
+border-radius: 1vh;
+height:2vh;
+margin: 0 1vh 1vh 1vh;
+width: 84%;
+border: none;
+padding: 1vw;
+outline: none;
+font-size:18px;
+background-color: ${props => props.color};
 `;
 
 const ConcertChattingListBox = styled.div`
-  position: absolute;
-  top: 1%;
-  left: 10%;
-  right: 10%;
-  margin: 1vh auto;
-  border-radius: 1vh;
-  width: 75%;
-  height: 63vh;
-  padding: 1vh;
-  margin-top: 2vh;
-  background-color: #f5f5f5;
+margin: 1vh;
+padding: 1vw;
+border-radius: 1vh;
+width: 84%;
+height: 60vh;
+background-color: #f5f5f5;
   color: black;
-  overflow-y: auto;
+  font-size: 18px;
   overflow-y: scroll;
   &::-webkit-scrollbar {
     width: 10px;
@@ -281,34 +277,30 @@ const StarSmallBox = styled.div`
   background-color: rgb(255, 255, 255, 0.5);
   border-radius: 1vh;
   // box-shadow: 0.306vh 0.306vh gray;
+  display:flex;
+  flex-direction:column;
+  align-items:center;
+  justify-content: center;
 `;
 
 const StarSmallChattingInputBox = styled.input`
-  position: absolute;
-  top: 84%;
-  left: 2%;
-  right: 2%;
-  margin: 0 1vh 1vh 1vh;
-  padding-left: 1vw;
-  width: 85%;
-  height: 5.1vh;
-  border: none;
-  border-radius: 1vh;
-  background-color: ${props => props.color};
-  outline: none;
+display:block;
+border-radius: 1vh;
+height: 2vh;
+margin: 0 1vh 1vh 1vh;
+width: 84%;
+border: none;
+padding: 1vw;
+outline: none;
+background-color: ${props => props.color};
 `;
 
 const StarSmallChattingListBox = styled.div`
-  position: absolute;
-  margin: 1vh;
-  top: 1%;
-  left: 2%;
-  right: 2%;
-  // margin: 1vh auto;
-  border-radius: 1vh;
-  width: 85%;
-  height: 32vh;
-  padding: 1vh;
+margin: 1vh;
+padding: 1vw;
+border-radius: 1vh;
+width: 84%;
+height: 31vh;
   background-color: #f5f5f5;
   color: black;
   overflow-y: scroll;

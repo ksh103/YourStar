@@ -12,16 +12,15 @@ const StarScreen = styled.div`
   width: 63vw;
   height: 60.5vh;
   background-color: white;
-  border-radius: 3.0643vh;
+  border-radius: 1vh;
   box-shadow: 0.306vh 0.306vh gray;
 `;
 
 const PerScPosition = styled.div`
   display: grid;
-  // align-items: center;
-  margin: 2%;
+  padding: 2vh;
   grid-template-columns: repeat(4, 1fr);
-  grid-template-rows: repeat(4, 100px);
+  grid-template-rows: repeat(4, 150px);
   column-gap: 10px;
   row-gap: 10px;
   overflow: hidden;
