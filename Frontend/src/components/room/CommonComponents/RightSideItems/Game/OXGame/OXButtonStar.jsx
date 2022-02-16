@@ -12,11 +12,8 @@ import { useSelector, useDispatch } from 'react-redux';
 import {
   signalOX,
   oxGameRound,
-  oxIncorrectCnt,
-  resetCnt,
 } from '../../../../../../store/modules/meetingRoom';
 import swal from 'sweetalert';
-import axios from 'axios';
 
 export default function OXButtonStar() {
   const [isStart, setIsStart] = useState(false);
@@ -28,40 +25,26 @@ export default function OXButtonStar() {
     backgroundColor: state.MeetingRoom.backgroundColor,
   }));
 
-  const { OXgameCount, OXincorrectCnt } = useSelector(
-    state => state.MeetingRoom
-  );
-  const { me } = useSelector(state => state.mypage);
+  const { OXgameCount } = useSelector(state => ({
+    OXgameCount: state.MeetingRoom.OXgameCount,
+  }));
 
   const [length, setLength] = useState(subscribers.length);
   const dispatch = useDispatch();
-  const OPENVIDU_SERVER_URL = 'https://i6e204.p.ssafy.io:8443';
-  const OPENVIDU_SERVER_SECRET = 'YOURSTAR';
+
+  storeSession.on('signal:OXIncorrect', () => {
+    setLength(length - 1);
+  });
 
   // 스타가 OX 끝남
   const OXClick = e => {
     setIsStart(false);
     dispatch(oxGameRound());
-    const sessionId = storeSession.sessionId;
-
-    const data = {
-      session: sessionId,
-      to: [],
-      type: 'signal:OXEnd',
+    storeSession.signal({
       data: `${OXgameCount},${e}`,
-    };
-    axios
-      .post(OPENVIDU_SERVER_URL + '/openvidu/api/signal', data, {
-        headers: {
-          Authorization:
-            'Basic ' + btoa('OPENVIDUAPP:' + OPENVIDU_SERVER_SECRET),
-          'Content-Type': 'application/json',
-        },
-      })
-      .then(response => {
-        console.log(response);
-      })
-      .catch(error => console.error(error));
+      to: [],
+      type: 'OXEnd',
+    });
     dispatch(signalOX(e));
 
     swal({
@@ -76,26 +59,11 @@ export default function OXButtonStar() {
   const start = e => {
     setDoneCnt(0);
     setIsStart(true);
-    const sessionId = storeSession.sessionId;
-
-    const data = {
-      session: sessionId,
+    storeSession.signal({
+      data: 'Start OX Game',
       to: [],
-      type: 'signal:OXStart',
-      data: '',
-    };
-    axios
-      .post(OPENVIDU_SERVER_URL + '/openvidu/api/signal', data, {
-        headers: {
-          Authorization:
-            'Basic ' + btoa('OPENVIDUAPP:' + OPENVIDU_SERVER_SECRET),
-          'Content-Type': 'application/json',
-        },
-      })
-      .then(response => {
-        console.log(response);
-      })
-      .catch(error => console.error(error));
+      type: 'OXStart',
+    });
     swal({
       title: OXgameCount + '라운드 시작',
       text: '해당 라운드의 정답을 클릭시 라운드가 종료됩니다',
@@ -106,7 +74,6 @@ export default function OXButtonStar() {
 
   // 스타가 OX게임 세션종료
   const oxStop = e => {
-    dispatch(resetCnt()); // store 틀린인원 수 초기화
     storeSession.signal({
       // 종료 버튼 클릭
       data: '0',
@@ -120,20 +87,14 @@ export default function OXButtonStar() {
     setDoneCnt(doneCnt + 1);
   });
 
-  storeSession.on('signal:OXIncorrect', event => {
-    console.log('탈락11111111');
-    dispatch(oxIncorrectCnt());
-  });
-
   return (
     <>
       <HalfSideDiv2>
         <BigBoxOXGame>
           {isStart && (
             <>
-              {OXincorrectCnt} 다!!<br></br>
               <RecogButtonDiv>
-                {length - OXincorrectCnt}명 중에 {doneCnt}명 인식 되었습니다.
+                {length}명 중에 {doneCnt}명 인식 되었습니다.
               </RecogButtonDiv>
               <SmallBoxOXGame>
                 <ImgBoxO
@@ -152,12 +113,12 @@ export default function OXButtonStar() {
         </BigBoxOXGame>
         <ButtonDiv color={backgroundColor}>
           <div>
-            <button style={{ fontSize: '1.4vw' }} onClick={start}>
+            <button style={{ fontSize: '1.4vw' }} onClick={() => start()}>
               게임 시작
             </button>
           </div>
           <div>
-            <button style={{ fontSize: '1.4vw' }} onClick={oxStop}>
+            <button style={{ fontSize: '1.4vw' }} onClick={() => oxStop()}>
               게임 종료
             </button>
           </div>
