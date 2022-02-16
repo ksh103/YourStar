@@ -148,11 +148,11 @@ class StarVideoComponent extends Component {
           {this.props.me.code !== 3 ? (
             <div className="son">
               {/* 마이크 */}
-              <div style={{ fontSize: '2vw' }}>내화면</div>
-              <div>
+              <div style={{ fontSize: '2vw'}}>내 화면</div>
+              <div style={{ marginRight: '2vw'}}>
                 {this.state.audioState ? (
                   <BsFillMicFill
-                    style={{ margin: '1vw' }}
+                    style={{ margin: '0.5vw' }}
                     size="30"
                     color="#FFFFFF"
                     onClick={() => {
@@ -164,7 +164,7 @@ class StarVideoComponent extends Component {
                   />
                 ) : (
                   <BsFillMicMuteFill
-                    style={{ margin: '1vw' }}
+                    style={{ margin: '0.5vw' }}
                     size="30"
                     color="#FFFFFF"
                     onClick={() => {
@@ -178,7 +178,7 @@ class StarVideoComponent extends Component {
                 {/* 비디오 */}
                 {this.state.videoState ? (
                   <BsFillCameraVideoFill
-                    style={{ margin: '1vw' }}
+                    style={{ margin: '0.5vw' }}
                     size="30"
                     color="#FFFFFF"
                     onClick={() => {
@@ -190,7 +190,7 @@ class StarVideoComponent extends Component {
                   />
                 ) : (
                   <BsFillCameraVideoOffFill
-                    style={{ margin: '1vw' }}
+                    style={{ margin: '0.5vw' }}
                     size="30"
                     color="#FFFFFF"
                     onClick={() => {
@@ -204,7 +204,7 @@ class StarVideoComponent extends Component {
                 {/* 화면 공유 */}
                 {this.state.screenShareState ? (
                   <MdStopScreenShare
-                    style={{ margin: '1vw' }}
+                    style={{ margin: '0.5vw' }}
                     size="30"
                     color="#FFFFFF"
                     onClick={() => {
@@ -216,7 +216,7 @@ class StarVideoComponent extends Component {
                   />
                 ) : (
                   <MdScreenShare
-                    style={{ margin: '1vw' }}
+                    style={{ margin: '0.5vw' }}
                     size="30"
                     color="#FFFFFF"
                     onClick={() => {

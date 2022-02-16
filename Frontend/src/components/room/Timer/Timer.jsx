@@ -2,9 +2,9 @@ import React, { useEffect, useRef, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { PlusIndex, CheckOut } from '../../../store/modules/meetingRoom';
 
-export default function Timer() {
+export default function Timer(props) {
   const STAR_WAIT_TIME = 5; // 스타가 다음 미팅까지 대기하는 시간
-  const MEETING_ALL_TIME_SEC = 1000; // 미팅 진행시간 총합을 초로계산한 합
+  const MEETING_ALL_TIME_SEC = 15; // 미팅 진행시간 총합을 초로계산한 합
 
   const [isCome, setIsCome] = useState(true);
   const [min, setMin] = useState(0);
@@ -20,6 +20,10 @@ export default function Timer() {
   const time = useRef(timeValue);
 
   const dispatch = useDispatch();
+
+  // console.log(props.streamManager)
+
+
 
   useEffect(() => {
     timerId.current = setInterval(() => {
@@ -58,7 +62,7 @@ export default function Timer() {
         (isCome ? (
           <div className="state">팬 기다리는 중✨</div>
         ) : (
-          <div className="state">팬과 데이트 중✨</div>
+          <div className="state">{props.userNick}님과 데이트 중✨</div>
         ))}
       {me.code === 3 && isCome ? (
         <div className="state">스타와 데이트 중✨</div>

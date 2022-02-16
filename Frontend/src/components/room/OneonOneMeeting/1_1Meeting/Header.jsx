@@ -15,7 +15,7 @@ import {
   UserBox,
 } from './Header.style';
 
-export default function Header() {
+export default function Header(props) {
   const [prevIdx, setPrevIdx] = useState(-1);
   const [prevCnt, setPrevCnt] = useState(-1);
   const { me } = useSelector(state => state.mypage);
@@ -157,7 +157,7 @@ export default function Header() {
   };
   return (
     <SmallWrapper>
-      <Timer />
+      <Timer userNick={props.userNick} />
       {me.code !== 3 && (
         <SmallIconWrapper>
           {prevIdx !== index ? signalToNextUser(index) : null}

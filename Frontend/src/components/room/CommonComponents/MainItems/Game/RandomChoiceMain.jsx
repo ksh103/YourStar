@@ -39,6 +39,15 @@ const RandomIcon = styled.div`
   }
 `;
 
+const Img = styled.img`
+  display:block;
+  object-fit: cover;
+  max-width: 100%;
+  height: 67.5vh;
+  border-radius: 1vh;
+  /* max-height: 100%; */
+`
+
 //git commit -m "[S06P12E204-261] FE-미팅룸UI: RandomGame생성&미팅룸redux 생성 &  "
 export default function RandomChoiceMain() {
   const { me } = useSelector(state => state.mypage);
@@ -221,11 +230,15 @@ export default function RandomChoiceMain() {
             </div>
           ) : null}
           {/* 유저 정보가 들어오면 띄워주기 */}
-          {userscreen && (
+          {!userscreen && me.code === 3 ? (
+            // <Img src="http://www.dailytab.co.kr/design/dailytab/m/img/banner/200211random.gif"/>
+            <Img src="https://images.all-free-download.com/images/graphiclarge/gorgeous_curtain_of_red_03_vector_181953.jpg"/>
+            ):null}
+          {userscreen ?(
             <ChoiceUserVideoComponent
               streamManager={somone}
             ></ChoiceUserVideoComponent>
-          )}
+          ):null}
         </RandomChoiceSc>
       </MainGrid>
     </MainDiv>

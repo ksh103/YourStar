@@ -53,11 +53,18 @@
   border-radius: 1vh;
   z-index: 1;
   color: white;
-  justify-content: space-around;
+  justify-content: flex-end;
+  margin-right: 100px;
 }
 
 .son > div {
-  margin-top: 2vh;
+  margin-top: 1vw;
+  margin-right: 1vw
+}
+
+.son > div:first-child {
+  margin-right: 1vw;
+  margin-top: 1.3vw;
 }
 
 .Ready {
@@ -236,11 +243,11 @@
 
 .UserOXGameToStarScreen {
   position: relative;
-  width: 17vw;
-  height: 21vh;
+  width: 20vw;
+  height: 25vh;
   background-color: white;
   border-radius: 1vh;
-  margin: 0 1vw 1vw 0;
+  margin: 0 0.5vw 0.5vw 0;
   object-fit: cover;
 }
 
@@ -258,11 +265,11 @@
 
 .UserConsonantGameToStarScreen {
   position: relative;
-  width: 17vw;
-  height: 21vh;
+  width: 20vw;
+  height: 25vh;
   background-color: white;
   border-radius: 1vh;
-  margin: 0 1vw 1vw 0;
+  margin: 0 0.5vw 0.5vw 0;
   object-fit: cover;
 }
 

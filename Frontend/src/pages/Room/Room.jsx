@@ -155,8 +155,8 @@ class Room extends Component {
           let changeNum = parseInt(event.data);
           if (changeNum !== this.props.selectNum) {
             swal({
-              title: '세션 이동 알림',
-              text: List[changeNum] + ' 세션으로 이동',
+              title: '컨텐츠 이동 알림',
+              text: List[changeNum] + ' 컨텐츠로 이동',
               icon: 'info',
               buttons: false,
               timer: 2000,

@@ -1,36 +1,9 @@
 import styled from 'styled-components';
-// const OButton = styled.div`
-//   position: absolute;
-//   background-color: #2525ff;
-//   top: 2vh;
-//   left: 0.8vw;
-//   cursor: pointer;
-//   display: flex;
-//   align-items: center;
-//   justify-content: center;
-//   font-size: 4vw;
-//   border-radius: 1vw;
-//   height: 13vh;
-//   width: 18vw;
-// `;
-// const XButton = styled.div`
-//   position: absolute;
-//   background-color: #ff2525;
-//   bottom: 2vh;
-//   left: 0.8vw;
-//   display: flex;
-//   align-items: center;
-//   justify-content: center;
-//   font-size: 4vw;
-//   cursor: pointer;
-//   border-radius: 1vw;
-//   height: 13vh;
-//   width: 18vw;
-// `;
+
 const ButtonDiv = styled.div`
 position: absolute;
-  top: 50vh;
-  left: -17vw;
+  top: 133%;
+  left: -96%;
   z-index: 99;
   display: flex;
   div {
@@ -38,7 +11,7 @@ position: absolute;
     border-radius: 1vh;
     padding: 10px;
     border: 2px solid ${props => props.color};
-    margin: 2px;
+    margin: 1vw 1vw 1vw 0;
     &:active {
       -webkit-transform: scale(0.9, 0.9);
       -moz-transform: scale(0.9, 0.9);
@@ -74,7 +47,6 @@ const RecogButtonDiv = styled.div`
 
 const SmallBoxOXGame = styled.div`
   display: flex;
-  
   img{
     width:50%;
     display: block;

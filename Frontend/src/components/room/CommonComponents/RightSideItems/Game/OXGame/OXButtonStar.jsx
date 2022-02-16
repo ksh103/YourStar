@@ -17,6 +17,7 @@ import swal from 'sweetalert';
 import { AddGameScoreAPI } from '../../../../../../store/apis/Room/game';
 
 export default function OXButtonStar() {
+
   const [isStart, setIsStart] = useState(false);
   const [doneCnt, setDoneCnt] = useState(0);
 
@@ -120,12 +121,12 @@ export default function OXButtonStar() {
         <ButtonDiv color={backgroundColor}>
           <div>
             <button style={{ fontSize: '1.4vw' }} onClick={start}>
-              게임시작
+              게임 시작
             </button>
           </div>
           <div>
             <button style={{ fontSize: '1.4vw' }} onClick={oxStop}>
-              게임종료
+              게임 종료
             </button>
           </div>
         </ButtonDiv>

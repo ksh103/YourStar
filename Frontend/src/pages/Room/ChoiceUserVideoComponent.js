@@ -89,31 +89,6 @@ class ChoiceUserVideoComponent extends Component {
       });
   }
 
-  // controllSpeakingState(){
-  //   console.log('------------')
-  //   console.log(this.props.publisher)
-  //   this.props.streamManager.on('publisherStartSpeaking', () =>
-  //   this.setState({
-  //     isSpeaking : true,
-  //   })
-  //   );
-  //   console.log('hererjldfjaklsdfjaskldfjlaksjdfkl')
-  //   console.log(this.props.storeSession)
-  //   this.props.storeSession.on('signal:isSpeaking', event => {
-  //     if (event.data === "true") {
-  //       this.setState({
-  //         isSpeaking : true
-  //       })
-  //       console.log('말하는중')
-  //     } else {
-  //       this.setState({
-  //         isSpeaking : false
-  //       })
-  //       console.log('멈춤')
-  //     }
-  //   });
-  // }
-
   render() {
     return (
       <div className="UserChoiced">
