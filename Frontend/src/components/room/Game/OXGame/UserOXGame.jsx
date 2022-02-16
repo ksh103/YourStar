@@ -1,5 +1,4 @@
 import React, { useState } from 'react';
-import styled from 'styled-components';
 import OXUserScreen from '../../CommonComponents/MainItems/Game/OXUserScreen';
 import OtherPersonScreen from '../../CommonComponents/MainItems/OtherScreen/OtherPersonScreen';
 import MyScreen from '../../CommonComponents/MainItems/MyScreens/MyScreen';
@@ -207,9 +206,9 @@ export default function UserOXGame() {
       <OXUserScreen></OXUserScreen>
       <MyScreen></MyScreen>
       <OtherPersonScreen></OtherPersonScreen>
-      <button type="button" onClick={() => start()}>
+      {/* <button type="button" onClick={() => start()}>
         Start
-      </button>
+      </button> */}
     </div>
   );
 }
