@@ -7,6 +7,7 @@ import { useSelector, useDispatch } from 'react-redux';
 import {
   ResetIndex,
   ScreenChange,
+  SetOneByOneMeetingTime,
 } from '../../../../../store/modules/meetingRoom';
 import {
   ScheduleListBox,
@@ -53,14 +54,27 @@ export default function ScheduleListSelect() {
   }, [endMeetingDone, history, id, storeSession]);
 
   const SetSelect = selectNum => {
-    if (selectNum === 6) dispatch(ResetIndex());
-
-    storeSession.signal({
-      data: `${selectNum}`,
-      to: [],
-      type: 'screen',
-    });
-    dispatch(ScreenChange(selectNum));
+    if (selectNum === 6) {
+      dispatch(ResetIndex());
+      swal({
+        title: '1대1 미팅 시간 입력',
+        text: '초를 기준으로 입력 ex) 1분 -> 60',
+        content: 'input',
+        button: '제출',
+        closeOnClickOutside: false,
+        closeOnEsc: false,
+      }).then(answer => {
+        dispatch(SetOneByOneMeetingTime(answer));
+        dispatch(ScreenChange(selectNum));
+      });
+    } else {
+      storeSession.signal({
+        data: `${selectNum}`,
+        to: [],
+        type: 'screen',
+      });
+      dispatch(ScreenChange(selectNum));
+    }
   };
 
   const endButton = () => {

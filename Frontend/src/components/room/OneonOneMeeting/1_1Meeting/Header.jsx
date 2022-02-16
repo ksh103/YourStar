@@ -19,14 +19,21 @@ export default function Header(props) {
   const [prevIdx, setPrevIdx] = useState(-1);
   const [prevCnt, setPrevCnt] = useState(-1);
   const { me } = useSelector(state => state.mypage);
-  const { index, storeSession, subscribers, onebyoneStream, checkCnt } =
-    useSelector(state => ({
-      index: state.MeetingRoom.index,
-      storeSession: state.MeetingRoom.storeSession,
-      subscribers: state.MeetingRoom.subscribers,
-      onebyoneStream: state.MeetingRoom.onebyoneStream,
-      checkCnt: state.MeetingRoom.checkCnt,
-    }));
+  const {
+    index,
+    storeSession,
+    subscribers,
+    onebyoneStream,
+    checkCnt,
+    oneByOneMeetingTime,
+  } = useSelector(state => ({
+    index: state.MeetingRoom.index,
+    storeSession: state.MeetingRoom.storeSession,
+    subscribers: state.MeetingRoom.subscribers,
+    onebyoneStream: state.MeetingRoom.onebyoneStream,
+    checkCnt: state.MeetingRoom.checkCnt,
+    oneByOneMeetingTime: state.MeetingRoom.oneByOneMeetingTime,
+  }));
 
   const OPENVIDU_SERVER_URL = 'https://i6e204.p.ssafy.io:8443';
   const OPENVIDU_SERVER_SECRET = 'YOURSTAR';
@@ -38,11 +45,12 @@ export default function Header(props) {
     if (idx < subscribers.length - 1) {
       for (let i = idx + 1, order = 1; i < subscribers.length; i++, order++) {
         const sessionId = storeSession.sessionId;
+        const time = order * (oneByOneMeetingTime + 5);
         const data = {
           session: sessionId.substring(0, sessionId.length - 9), // 1-onebyone 일때 1만 뽑아내기
           to: [subscribers[i].stream.connection.connectionId],
           type: 'signal:userwait',
-          data: String(order),
+          data: time,
         };
         axios
           .post(OPENVIDU_SERVER_URL + '/openvidu/api/signal', data, {
@@ -66,7 +74,7 @@ export default function Header(props) {
         session: sessionId.substring(0, sessionId.length - 9), // 1-onebyone 일때 1만 뽑아내기
         to: [subscribers[idx].stream.connection.connectionId],
         type: 'signal:one',
-        data: '6',
+        data: `6, ${oneByOneMeetingTime}`,
       };
       axios
         .post(OPENVIDU_SERVER_URL + '/openvidu/api/signal', data, {
@@ -109,7 +117,7 @@ export default function Header(props) {
 
   const signalToCurUserOut = () => {
     // 스타 퇴장 알림
-    if (index === subscribers.length) {
+    if (index >= subscribers.length - 1) {
       swal({
         closeOnClickOutside: false,
         closeOnEsc: false,
@@ -168,49 +176,5 @@ export default function Header(props) {
         </SmallIconWrapper>
       )}
     </SmallWrapper>
-    // <HeaderBox>
-    //   {/* 일반 유저 */}
-    //   {me.code === 3 && (
-    //     <UserBox>
-    //       <div>
-    //         <IoIosAlarm
-    //           style={{
-    //             float: 'left',
-    //             marginRight: '20px',
-    //             marginTop: '12px',
-    //           }}
-    //         />
-    //         <Timer style={{ float: 'left' }} />
-    //       </div>
-    //     </UserBox>
-    //   )}
-    //   {/* 스타 */}
-    //   {me.code !== 3 && (
-    //     <StarBox>gdbcbc</StarBox>
-    // <>
-    //   <StarBox>
-    //     <div>
-    //       <IoIosAlarm
-    //         style={{
-    //           float: 'left',
-    //           marginRight: '20px',
-    //           marginTop: '12px',
-    //         }}
-    //       />
-    //       <Timer style={{ float: 'left' }} />
-    //       {prevIdx !== index ? signalToNextUser(index) : null}
-    //       {prevCnt !== checkCnt ? signalToCurUserOut() : null}
-    //     </div>
-    //     <SignIcon>
-    //       <IoMdCreate onClick={() => onSignClick()} />
-    //     </SignIcon>
-    //     {signButton && <ModalSign />}
-    //     <CaptureIcon>
-    //       <IoIosAperture />
-    //     </CaptureIcon>
-    //   </StarBox>
-    // </>
-    //     )}
-    //   </HeaderBox>
   );
 }
