@@ -12,6 +12,8 @@ import { useSelector, useDispatch } from 'react-redux';
 import {
   signalOX,
   oxGameRound,
+  oxIncorrectCnt,
+  resetCnt,
 } from '../../../../../../store/modules/meetingRoom';
 import swal from 'sweetalert';
 import { AddGameScoreAPI } from '../../../../../../store/apis/Room/game';
@@ -26,16 +28,12 @@ export default function OXButtonStar() {
     backgroundColor: state.MeetingRoom.backgroundColor,
   }));
 
-  const { OXgameCount } = useSelector(state => ({
-    OXgameCount: state.MeetingRoom.OXgameCount,
-  }));
+  const { OXgameCount, OXincorrectCnt } = useSelector(
+    state => state.MeetingRoom
+  );
 
   const [length, setLength] = useState(subscribers.length);
   const dispatch = useDispatch();
-
-  storeSession.on('signal:OXIncorrect', () => {
-    setLength(length - 1);
-  });
 
   // 스타가 OX 끝남
   const OXClick = e => {
@@ -75,6 +73,7 @@ export default function OXButtonStar() {
 
   // 스타가 OX게임 세션종료
   const oxStop = e => {
+    dispatch(resetCnt()); // store 틀린인원 수 초기화
     storeSession.signal({
       // 종료 버튼 클릭
       data: '0',
@@ -88,14 +87,20 @@ export default function OXButtonStar() {
     setDoneCnt(doneCnt + 1);
   });
 
+  storeSession.on('signal:OXIncorrect', event => {
+    console.log('탈락11111111');
+    dispatch(oxIncorrectCnt());
+  });
+
   return (
     <>
       <HalfSideDiv2>
         <BigBoxOXGame>
           {isStart && (
             <>
+              {OXincorrectCnt} 다!!<br></br>
               <RecogButtonDiv>
-                {length}명 중에 {doneCnt}명 인식 되었습니다.
+                {length - OXincorrectCnt}명 중에 {doneCnt}명 인식 되었습니다.
               </RecogButtonDiv>
               <SmallBoxOXGame>
                 <ImgBoxO

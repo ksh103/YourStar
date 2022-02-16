@@ -59,6 +59,8 @@ export default function UserOXGame() {
         var meetingId = storeSession.sessionId;
         AddGameScoreAPI(meetingId, me.memberId);
       } else {
+        setIsCorrect(false);
+        setTemp('');
         swal({
           title: round + '라운드 종료',
           text: '오답',
@@ -68,11 +70,26 @@ export default function UserOXGame() {
         }).then(() => {
           setIsCorrect(false);
           publisher.publishVideo(false);
-          storeSession.signal({
-            data: '0',
+          const sessionId = storeSession.sessionId;
+
+          const data = {
+            session: sessionId,
             to: [],
-            type: 'OXIncorrect ',
-          });
+            type: 'signal:OXIncorrect',
+            data: '0',
+          };
+          axios
+            .post(OPENVIDU_SERVER_URL + '/openvidu/api/signal', data, {
+              headers: {
+                Authorization:
+                  'Basic ' + btoa('OPENVIDUAPP:' + OPENVIDU_SERVER_SECRET),
+                'Content-Type': 'application/json',
+              },
+            })
+            .then(response => {
+              console.log(response);
+            })
+            .catch(error => console.error(error));
         });
       }
     }

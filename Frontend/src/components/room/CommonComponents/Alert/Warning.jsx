@@ -14,7 +14,6 @@ import YelloCard from './YelloCard';
 import RedCard from './RedCard';
 
 export default function Warning(props) {
-  console.log(props.warningCnt)
   return (
     <AlertParentDiv>
       {/* head 부분 */}
@@ -31,11 +30,11 @@ export default function Warning(props) {
       </AlertHead>
       {/* 내용물 */}
       <AlertBody>
-        {props.warningCnt === "1" ? (
+        {props.warningCnt === '1' ? (
           <YelloCard></YelloCard>
         ) : (
           <RedCard></RedCard>
-      )}
+        )}
       </AlertBody>
     </AlertParentDiv>
   );

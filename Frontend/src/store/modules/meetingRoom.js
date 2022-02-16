@@ -13,6 +13,8 @@ const EMOZI_LIST_ADD = 'EMOZI_LIST_ADD';
 const QNA_TOGGLE_CHANGE = 'QNA_TOGGLE_CHANGE';
 const SIGNAL_OX = 'SIGNAL_OX';
 const OX_GAME_COUNT = 'OX_GAME_COUNT';
+const OX_INCORRECT_COUNT = 'OX_INCORRECT_COUNT';
+const OX_RESET_COUNT = 'OX_RESET_COUNT';
 const BACKGROUND_COLOR_CHANGE = 'BACKGROUND_COLOR_CHANGE';
 const BG_TOGGLE_CHANGE = 'BG_TOGGLE_CHANGE';
 const NOW_EMOZI = 'NOW_EMOZI';
@@ -225,6 +227,18 @@ export const oxGameRound = () => {
   };
 };
 
+export const oxIncorrectCnt = () => {
+  return {
+    type: OX_INCORRECT_COUNT,
+  };
+};
+
+export const resetCnt = () => {
+  return {
+    type: OX_RESET_COUNT,
+  };
+};
+
 export const choQuiz = (question, answer) => {
   return {
     type: CHOSONANT_QUIZ,
@@ -261,6 +275,7 @@ const initialState = {
   StarQnAtoggle: false,
   OXsignal: null,
   OXgameCount: 1,
+  OXincorrectCnt: 0,
   index: -1,
   checkCnt: -1,
   backgroundColor: '#C4C4C4', // 배경 컬러
@@ -398,6 +413,16 @@ const MeetingRoom = (state = initialState, action) => {
       return {
         ...state,
         OXgameCount: prevCount + 1,
+      };
+    case OX_INCORRECT_COUNT:
+      return {
+        ...state,
+        OXincorrectCnt: state.OXincorrectCnt + 1,
+      };
+    case OX_RESET_COUNT:
+      return {
+        ...state,
+        OXincorrectCnt: 0,
       };
     case CHOSONANT_QUIZ:
       return {
