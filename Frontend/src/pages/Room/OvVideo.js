@@ -80,7 +80,12 @@ class OpenViduVideoComponent extends Component {
 
   render() {
     return (
-      <video className={this.state.mode} autoPlay={true} ref={this.videoRef} />
+      <video
+        className={this.state.mode}
+        autoPlay={true}
+        ref={this.videoRef}
+        id="webcam"
+      />
     );
   }
 }
