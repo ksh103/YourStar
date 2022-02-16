@@ -19,7 +19,6 @@ import { AddGameScoreAPI } from '../../../../../../store/apis/Room/game';
 export default function OXButtonStar() {
   const [isStart, setIsStart] = useState(false);
   const [doneCnt, setDoneCnt] = useState(0);
-  const [length, setLength] = useState(0);
 
   const { storeSession, subscribers, backgroundColor } = useSelector(state => ({
     storeSession: state.MeetingRoom.storeSession,
@@ -32,7 +31,6 @@ export default function OXButtonStar() {
   }));
 
   const dispatch = useDispatch();
-  setLength(subscribers.length);
 
   // 스타가 OX 끝남
   const OXClick = e => {
@@ -44,16 +42,6 @@ export default function OXButtonStar() {
       type: 'OXEnd',
     });
     dispatch(signalOX(e));
-
-    var meetingId = storeSession.sessionId;
-    for (var i = 0; i < subscribers.length; i++) {
-      if (subscribers[i].stream.videoActive) {
-        var memberId = JSON.parse(
-          subscribers[i].stream.connection.data
-        ).memberId;
-        AddGameScoreAPI(meetingId, memberId); // 살아남은 사람 점수 추가 API
-      } else setLength(length - 1);
-    }
 
     swal({
       title: OXgameCount + '라운드 종료',
@@ -102,7 +90,7 @@ export default function OXButtonStar() {
           {isStart && (
             <>
               <RecogButtonDiv>
-                {length}명 중에 {doneCnt}명 인식 되었습니다.
+                {subscribers.length}명 중에 {doneCnt}명 인식 되었습니다.
               </RecogButtonDiv>
               <SmallBoxOXGame>
                 <ImgBoxO
