@@ -111,7 +111,12 @@ export default function Navbar() {
                 mypage
               </Link>
             </DrawerListRow>
-            <DrawerListRow onClick={() => changeMenu('main')}>
+            <DrawerListRow
+              onClick={() => {
+                changeMenu('main');
+                LogoutButton();
+              }}
+            >
               <label className="color">Logout</label>
             </DrawerListRow>
           </>

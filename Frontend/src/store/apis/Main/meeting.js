@@ -2,7 +2,7 @@ import axios from 'axios';
 import { BASE_URL } from '../../../utils/contants';
 
 // 팬미팅 상세보기
-export async function MeetingDetailAPI({ meetingId, memberId }) {
+export async function MeetingDetailAPI({ meetingId, memberId, email }) {
   const result = await axios
     .get(`${BASE_URL}meetings/${meetingId}`)
     .then(res => res.data.meeting);
@@ -11,7 +11,7 @@ export async function MeetingDetailAPI({ meetingId, memberId }) {
     .get(`${BASE_URL}meetings/fan-applicant/list/${meetingId}?page=1&size=100`)
     .then(res => res.data.content);
   const applicantCnt = applicant.length;
-  const isReserve = applicant.some(a => a.memberId === memberId);
+  const isReserve = applicant.some(a => a[1] === email);
   const warningCount = isReserve
     ? await axios
         .get(`${BASE_URL}meetings/warning/${memberId}/${meetingId}`)
