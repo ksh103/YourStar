@@ -12,7 +12,7 @@ export default function MypageMenu() {
   return (
     <MypageMenuWrapper>
       <ul>
-        {me.code === 2 && (
+        {me.code === 4 && (
           <div>
             <li>팬미팅 목록</li>
           </div>

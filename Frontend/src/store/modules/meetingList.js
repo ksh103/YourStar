@@ -30,7 +30,7 @@ const reducer = (state = initialState, action) =>
       case MEETING_APPLY_SUCCESS:
         draft.meetingsApplyLoading = false;
         draft.meetingsApplyDone = true;
-        draft.meetingApplyList = action.data.data.content;
+        draft.meetingApplyList = action.data;
         break;
       case MEETING_APPLY_FAILURE:
         draft.meetingsApplyLoading = false;

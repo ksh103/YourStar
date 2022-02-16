@@ -58,13 +58,13 @@ export default function BasicModal({ meeting }) {
             {cnt}.
           </Grid>
           <Grid item xs={2}>
-            {list.memberName}
+            {list[0]}
           </Grid>
           <Grid item xs={6}>
-            {list.memberEmail}
+            {list[1]}
           </Grid>
           <Grid item xs={3.4}>
-            {list.memberPhone}
+            {list[2] && '보안 작성 완료'}
           </Grid>
         </Grid>
       </div>

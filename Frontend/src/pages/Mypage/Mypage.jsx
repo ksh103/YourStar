@@ -29,7 +29,7 @@ export default function Mypage() {
   }, [dispatch, me, selectFanMeetingDone]);
 
   const content = () => {
-    if (me.code === 2) {
+    if (me.code === 4) {
       // 스타(오픈한 팬 미팅)
       if (!totalMeetingsDone && !totalMeetingsLoading) {
         // 전체 미팅 내역 받아오기

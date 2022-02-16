@@ -33,9 +33,10 @@ function* watchMeetingGame() {
 function* meetingApply(action) {
   try {
     const result = yield call(MeetingApplyListAPI, action.data);
+    console.log(result);
     yield put({
       type: MEETING_APPLY_SUCCESS,
-      data: result,
+      data: result.data.content,
     });
   } catch (err) {
     yield put({
