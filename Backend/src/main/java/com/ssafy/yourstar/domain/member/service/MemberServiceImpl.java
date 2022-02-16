@@ -93,21 +93,23 @@ public class MemberServiceImpl implements  MemberService {
     }
 
     @Override
-    public Member memberPasswordInit(MemberPasswordPostReq memberPasswordPostReq) {
+    public boolean memberPasswordInit(MemberPasswordPostReq memberPasswordPostReq, String newMemberPassword) {
         Member member = new Member();
 
         if(memberRepository.findMemberByMemberEmailAndMemberName(memberPasswordPostReq.getMemberEmail(), memberPasswordPostReq.getMemberName()).isPresent()) {
-            String newMemberPassword = MemberPasswordMailUtil.getRandomPassword(12);
 
             member = memberRepository.findMemberByMemberEmailAndMemberName(memberPasswordPostReq.getMemberEmail(), memberPasswordPostReq.getMemberName()).get();
 
-            member.setMemberPassword(passwordEncoder.encode(newMemberPassword));
-
             MemberPasswordMailUtil.sendInitPwEmail(memberPasswordPostReq, newMemberPassword);
 
-            return memberRepository.save(member);
-        }else return null;
+            member.setMemberPassword(passwordEncoder.encode(newMemberPassword));
+
+            memberRepository.save(member);
+
+            return true;
+        }else return false;
     }
+
 
     @Override
     public boolean memberRegisterApprove(String memberEmail) {
