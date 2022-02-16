@@ -511,51 +511,61 @@ class Room extends Component {
           });
         });
 
-        mySession.on('signal:OXEnd', event => {
-          console.log('=== 유저가 OX게임 종료 신호 받음 ===');
-          let data = event.data.split(',');
-          let round = data[0];
-          let starAnswer = data[1];
+        if (this.state.me.code === 3) {
+          mySession.on('signal:OXEnd', event => {
+            let data = event.data.split(',');
+            let round = data[0];
+            let starAnswer = data[1];
 
-          if (this.props.myAnswer === starAnswer) {
-            swal({
-              title: round + '라운드 종료',
-              text: '정답 50point 적립!',
-              icon: 'success',
-              buttons: false,
-              timer: 1500,
-            });
-            AddGameScoreAPI(this.state.mySessionId, this.state.me.memberId);
-          } else {
-            swal({
-              title: round + '라운드 종료',
-              text: '오답',
-              icon: 'error',
-              buttons: false,
-              timer: 1500,
-            }).then(() => {
-              this.state.publisher.publishVideo(false);
-              const data = {
-                session: this.state.mySessionId,
-                to: [],
-                type: 'signal:OXIncorrect',
-                data: '0',
-              };
-              axios
-                .post(OPENVIDU_SERVER_URL + '/openvidu/api/signal', data, {
-                  headers: {
-                    Authorization:
-                      'Basic ' + btoa('OPENVIDUAPP:' + OPENVIDU_SERVER_SECRET),
-                    'Content-Type': 'application/json',
-                  },
-                })
-                .then(response => {
-                  console.log(response);
-                })
-                .catch(error => console.error(error));
-            });
-          }
-        });
+            if (this.props.publisher.stream.videoActive) {
+              if (this.props.myAnswer === starAnswer) {
+                swal({
+                  title: round + '라운드 종료',
+                  text: '정답 50point 적립!',
+                  icon: 'success',
+                  buttons: false,
+                  timer: 1500,
+                });
+                AddGameScoreAPI(this.state.mySessionId, this.state.me.memberId);
+              } else {
+                swal({
+                  title: round + '라운드 종료',
+                  text: '오답',
+                  icon: 'error',
+                  buttons: false,
+                  timer: 1500,
+                }).then(() => {
+                  this.props.publisher.publishVideo(false);
+                  const data = {
+                    session: this.state.mySessionId,
+                    to: [],
+                    type: 'signal:OXIncorrect',
+                    data: '0',
+                  };
+                  axios
+                    .post(OPENVIDU_SERVER_URL + '/openvidu/api/signal', data, {
+                      headers: {
+                        Authorization:
+                          'Basic ' +
+                          btoa('OPENVIDUAPP:' + OPENVIDU_SERVER_SECRET),
+                        'Content-Type': 'application/json',
+                      },
+                    })
+                    .then(response => {
+                      console.log(response);
+                    })
+                    .catch(error => console.error(error));
+                });
+              }
+            } else {
+              swal({
+                title: round + '라운드 종료',
+                buttons: false,
+                timer: 1500,
+              });
+            }
+          });
+        }
 
         // 세션과 연결하는 부분
         this.getToken(this.state.mySessionId).then(token => {
