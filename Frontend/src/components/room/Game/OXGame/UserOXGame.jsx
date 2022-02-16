@@ -8,17 +8,18 @@ import axios from 'axios';
 
 // 추가
 import swal from 'sweetalert';
-import { useSelector } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import { TM_URL } from '../../../../utils/contants';
 import { AddGameScoreAPI } from '../../../../store/apis/Room/game';
+import { SetMyAnswer } from '../../../../store/modules/meetingRoom';
 
 const OPENVIDU_SERVER_URL = 'https://i6e204.p.ssafy.io:8443';
 const OPENVIDU_SERVER_SECRET = 'YOURSTAR';
 
 export default function UserOXGame() {
+  const dispatch = useDispatch();
   const [temp, setTemp] = useState('');
   const [isCorrect, setIsCorrect] = useState(true); // 탈락 여부
-  const [recognize, setRecognize] = useState(0); // 인식 여부
   const { storeSession, publisher, me } = useSelector(state => ({
     storeSession: state.MeetingRoom.storeSession,
     publisher: state.MeetingRoom.publisher,
@@ -38,61 +39,7 @@ export default function UserOXGame() {
 
   storeSession.on('signal:OXStart', event => {
     console.log('=== 유저가 OX게임 시작 신호 받음 ===');
-    setRecognize(0);
     start();
-  });
-
-  storeSession.on('signal:OXEnd', event => {
-    console.log('=== 유저가 OX게임 종료 신호 받음 ===');
-    let data = event.data.split(',');
-    let round = data[0];
-    let starAnswer = data[1];
-    if (isCorrect) {
-      if (temp === starAnswer) {
-        swal({
-          title: round + '라운드 종료',
-          text: '정답 50point 적립!',
-          icon: 'success',
-          buttons: false,
-          timer: 1500,
-        });
-        var meetingId = storeSession.sessionId;
-        AddGameScoreAPI(meetingId, me.memberId);
-      } else {
-        setIsCorrect(false);
-        setTemp('');
-        swal({
-          title: round + '라운드 종료',
-          text: '오답',
-          icon: 'error',
-          buttons: false,
-          timer: 1500,
-        }).then(() => {
-          setIsCorrect(false);
-          publisher.publishVideo(false);
-          const sessionId = storeSession.sessionId;
-
-          const data = {
-            session: sessionId,
-            to: [],
-            type: 'signal:OXIncorrect',
-            data: '0',
-          };
-          axios
-            .post(OPENVIDU_SERVER_URL + '/openvidu/api/signal', data, {
-              headers: {
-                Authorization:
-                  'Basic ' + btoa('OPENVIDUAPP:' + OPENVIDU_SERVER_SECRET),
-                'Content-Type': 'application/json',
-              },
-            })
-            .then(response => {
-              console.log(response);
-            })
-            .catch(error => console.error(error));
-        });
-      }
-    }
   });
 
   function start() {
@@ -182,7 +129,7 @@ export default function UserOXGame() {
 
     if (state.cnt >= 100 && isCorrect) {
       state.userAnswer = state.answer === 0 ? 'O' : 'X';
-      setTemp(state.userAnswer);
+      dispatch(SetMyAnswer(state.userAnswer));
       swal({
         text:
           (state.answer === 0 ? '⭕' : '❌') + ' 인식 ' + 100 + '% 진행중...!',

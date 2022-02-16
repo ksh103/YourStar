@@ -25,6 +25,8 @@ import {
   UpdateOneByOneStream,
   SetIsOneByOne,
   SetOneByOneMeetingTime,
+  oxDoneCnt,
+  oxIncorrectCnt,
 } from '../../store/modules/meetingRoom';
 import { WarningToMemberAPI } from '../../store/apis/Main/meeting';
 import { AddGameScoreAPI, CallGameRankAPI } from '../../store/apis/Room/game';
@@ -246,6 +248,18 @@ class Room extends Component {
             if (chodata[0] !== this.props.chosonantQuiz) {
               this.props.dochosonantQuiz(chodata[1], chodata[2]);
             }
+          });
+        }
+
+        // ox 게임
+        if (this.props.userCode === 4) {
+          // OX 게임 인식 완료 신호 수신
+          mySession.on('signal:OXDone', event => {
+            this.props.doOXDoneCnt();
+          });
+
+          mySession.on('signal:OXIncorrect', event => {
+            this.props.doOXIncorrectCnt();
           });
         }
 
@@ -495,6 +509,52 @@ class Room extends Component {
           }).then(() => {
             window.location.replace(url);
           });
+        });
+
+        mySession.on('signal:OXEnd', event => {
+          console.log('=== 유저가 OX게임 종료 신호 받음 ===');
+          let data = event.data.split(',');
+          let round = data[0];
+          let starAnswer = data[1];
+
+          if (this.props.myAnswer === starAnswer) {
+            swal({
+              title: round + '라운드 종료',
+              text: '정답 50point 적립!',
+              icon: 'success',
+              buttons: false,
+              timer: 1500,
+            });
+            AddGameScoreAPI(this.state.mySessionId, this.state.me.memberId);
+          } else {
+            swal({
+              title: round + '라운드 종료',
+              text: '오답',
+              icon: 'error',
+              buttons: false,
+              timer: 1500,
+            }).then(() => {
+              this.state.publisher.publishVideo(false);
+              const data = {
+                session: this.state.mySessionId,
+                to: [],
+                type: 'signal:OXIncorrect',
+                data: '0',
+              };
+              axios
+                .post(OPENVIDU_SERVER_URL + '/openvidu/api/signal', data, {
+                  headers: {
+                    Authorization:
+                      'Basic ' + btoa('OPENVIDUAPP:' + OPENVIDU_SERVER_SECRET),
+                    'Content-Type': 'application/json',
+                  },
+                })
+                .then(response => {
+                  console.log(response);
+                })
+                .catch(error => console.error(error));
+            });
+          }
         });
 
         // 세션과 연결하는 부분
@@ -830,6 +890,7 @@ const mapStateToProps = state => ({
   userCode: state.mypage.me.code,
   chosonantQuiz: state.MeetingRoom.chosonantQuiz,
   meetingId: state.meeting.meeting.id,
+  myAnswer: state.MeetingRoom.myAnswer,
 });
 
 const mapDispatchToProps = dispatch => {
@@ -855,6 +916,8 @@ const mapDispatchToProps = dispatch => {
     doUpdateOneByOne: stream => dispatch(UpdateOneByOneStream(stream)),
     doSetIsOneByOne: some => dispatch(SetIsOneByOne(some)),
     doSetOneByOneMeetingTime: time => dispatch(SetOneByOneMeetingTime(time)),
+    doOXDoneCnt: () => dispatch(oxDoneCnt()),
+    doOXIncorrectCnt: () => dispatch(oxIncorrectCnt()),
   };
 };
 
