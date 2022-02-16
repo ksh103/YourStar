@@ -2,9 +2,10 @@ import React, { useEffect, useRef, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { PlusIndex, CheckOut } from '../../../store/modules/meetingRoom';
 
-export default function Timer(props) {
+export default function Timer() {
+  const { oneByOneMeetingTime } = useSelector(state => state.MeetingRoom);
   const STAR_WAIT_TIME = 5; // 스타가 다음 미팅까지 대기하는 시간
-  const MEETING_ALL_TIME_SEC = 15; // 미팅 진행시간 총합을 초로계산한 합
+  const MEETING_ALL_TIME_SEC = oneByOneMeetingTime; // 미팅 진행시간 총합을 초로계산한 합
 
   const [isCome, setIsCome] = useState(true);
   const [min, setMin] = useState(0);
@@ -51,7 +52,7 @@ export default function Timer(props) {
         time.current = MEETING_ALL_TIME_SEC;
       }
     }
-  }, [sec, dispatch, isCome, me]);
+  }, [sec, dispatch, isCome, me, MEETING_ALL_TIME_SEC]);
 
   return (
     <div>

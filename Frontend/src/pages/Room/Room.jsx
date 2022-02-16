@@ -24,6 +24,7 @@ import {
   audioChange,
   UpdateOneByOneStream,
   SetIsOneByOne,
+  SetOneByOneMeetingTime,
 } from '../../store/modules/meetingRoom';
 import { WarningToMemberAPI } from '../../store/apis/Main/meeting';
 import { AddGameScoreAPI, CallGameRankAPI } from '../../store/apis/Room/game';
@@ -154,13 +155,16 @@ class Room extends Component {
           // 일반 유저가 변화를 감지하는 부분          let changeNum = parseInt(event.data);
           let changeNum = parseInt(event.data);
           if (changeNum !== this.props.selectNum) {
-            swal({
-              title: '컨텐츠 이동 알림',
-              text: List[changeNum] + ' 컨텐츠로 이동',
-              icon: 'info',
-              buttons: false,
-              timer: 2000,
-            });
+            if (changeNum === 6 && this.state.me.code === 4) {
+            } else {
+              swal({
+                title: '컨텐츠 이동 알림',
+                text: List[changeNum] + ' 컨텐츠로 이동',
+                icon: 'info',
+                buttons: false,
+                timer: 2000,
+              });
+            }
             if (changeNum !== 6) {
               this.props.doScreenChange(changeNum);
               this.props.publisher.publishVideo(true);
@@ -179,8 +183,10 @@ class Room extends Component {
         });
         mySession.on('signal:one', event => {
           // 일반 유저가 1대1 미팅 참여 요구받음
-          let changeNum = parseInt(event.data);
+          let data = event.data.split(',');
+          let changeNum = parseInt(data[0]);
           if (changeNum !== this.props.selectNum) {
+            this.props.doSetOneByOneMeetingTime(data[1]);
             this.props.doScreenChange(changeNum);
             this.userJoinOnebyOne();
           }
@@ -835,6 +841,7 @@ const mapDispatchToProps = dispatch => {
       WarningToMemberAPI({ memberId, meetingId }),
     doUpdateOneByOne: stream => dispatch(UpdateOneByOneStream(stream)),
     doSetIsOneByOne: some => dispatch(SetIsOneByOne(some)),
+    doSetOneByOneMeetingTime: time => dispatch(SetOneByOneMeetingTime(time)),
   };
 };
 
