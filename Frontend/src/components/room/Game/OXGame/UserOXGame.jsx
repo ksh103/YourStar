@@ -91,7 +91,7 @@ export default function UserOXGame() {
 
     state.loopPredict = window.requestAnimationFrame(loop); //동작 인식 반복 시작
 
-    setUserAnswer();
+    setUserAnswer('');
     state.cnt = 0;
 
     // Convenience function to setup a webcam
