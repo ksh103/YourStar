@@ -43,7 +43,7 @@ export default function Header(props) {
           session: sessionId.substring(0, sessionId.length - 9), // 1-onebyone 일때 1만 뽑아내기
           to: [subscribers[i].stream.connection.connectionId],
           type: 'signal:userwait',
-          data: time,
+          data: String(time),
         };
         axios
           .post(OPENVIDU_SERVER_URL + '/openvidu/api/signal', data, {

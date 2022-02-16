@@ -222,7 +222,7 @@ class Room extends Component {
         // 대기 순번 알리기
         mySession.on('signal:userwait', event => {
           let sec = parseInt(event.data);
-          let min = sec / 60;
+          let min = parseInt(sec / 60);
           sec = sec % 60;
 
           if (min === 0) {
