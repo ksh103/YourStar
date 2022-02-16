@@ -31,6 +31,8 @@ export default function Header(props) {
   const OPENVIDU_SERVER_URL = 'https://i6e204.p.ssafy.io:8443';
   const OPENVIDU_SERVER_SECRET = 'YOURSTAR';
 
+  const myAudio = new Audio();
+  
   const signalToNextUser = idx => {
     setPrevIdx(idx);
 
@@ -66,7 +68,8 @@ export default function Header(props) {
       const nextName = JSON.parse(
         subscribers[idx].stream.streamManager.stream.connection.data
       ).clientData;
-
+      myAudio.src = require('../../../../assets/sound effects/pop.mp3')
+      myAudio.play()
       swal({
         title: '유저 입장 알림',
         text: nextName + '님이 입장하고 있습니다.',

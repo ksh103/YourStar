@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import OXUserScreen from '../../CommonComponents/MainItems/Game/OXUserScreen';
 import OtherPersonScreen from '../../CommonComponents/MainItems/OtherScreen/OtherPersonScreen';
 import MyScreen from '../../CommonComponents/MainItems/MyScreens/MyScreen';
+import '../../../../pages/Room/SwalCss.css'
 
 import * as tmPose from '@teachablemachine/pose';
 import axios from 'axios';
@@ -18,6 +19,7 @@ const OPENVIDU_SERVER_SECRET = 'YOURSTAR';
 
 export default function UserOXGame() {
   const dispatch = useDispatch();
+  const myAudio = new Audio();
   const [isCorrect, setIsCorrect] = useState(true); // 탈락 여부
   const { storeSession, publisher, me } = useSelector(state => ({
     storeSession: state.MeetingRoom.storeSession,
@@ -43,6 +45,8 @@ export default function UserOXGame() {
 
   function start() {
     if (publisher.stream.videoActive) {
+      myAudio.src = require('../../../../assets/sound effects/next.mp3')
+      myAudio.play()
       swal('🙆‍♀️ 준비됐나요?  🙅‍♂️', 'O X 동작을 카메라에 보여주세요!', {
         buttons: false,
         timer: 2000,
@@ -50,7 +54,9 @@ export default function UserOXGame() {
         init();
       });
     } else {
-      swal('다음 라운드 시작', {
+      swal({
+        title: '다음 라운드 시작',
+        className: 'oxSwal',
         buttons: false,
         timer: 2000,
       }).then(() => {});
