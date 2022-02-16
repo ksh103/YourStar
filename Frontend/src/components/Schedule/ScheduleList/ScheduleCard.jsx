@@ -13,7 +13,6 @@ export default function ScheduleCard({ meeting }) {
     const date = moment(d, 'YYYY-MM-DD HH:mm:ss');
     return date.format('YYYY년 MM월 DD일 HH시 mm분');
   };
-  console.log(meeting);
   return (
     <ScheduleCardRow>
       <ScheduleCardBlock>
