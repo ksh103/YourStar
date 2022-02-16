@@ -45,26 +45,27 @@ export default function UserOXGame() {
     let data = event.data.split(',');
     let round = data[0];
     let starAnswer = data[1];
-
-    if (temp === starAnswer) {
-      swal({
-        title: round + '라운드 종료',
-        text: '정답 50point 적립!',
-        icon: 'success',
-        buttons: false,
-        timer: 1500,
-      });
-    } else {
-      swal({
-        title: round + '라운드 종료',
-        text: '오답',
-        icon: 'error',
-        buttons: false,
-        timer: 1500,
-      }).then(() => {
-        setIsCorrect(false);
-        publisher.publishVideo(false);
-      });
+    if (isCorrect) {
+      if (temp === starAnswer) {
+        swal({
+          title: round + '라운드 종료',
+          text: '정답 50point 적립!',
+          icon: 'success',
+          buttons: false,
+          timer: 1500,
+        });
+      } else {
+        swal({
+          title: round + '라운드 종료',
+          text: '오답',
+          icon: 'error',
+          buttons: false,
+          timer: 1500,
+        }).then(() => {
+          setIsCorrect(false);
+          publisher.publishVideo(false);
+        });
+      }
     }
   });
 
