@@ -18,7 +18,6 @@ const OPENVIDU_SERVER_SECRET = 'YOURSTAR';
 
 export default function UserOXGame() {
   const dispatch = useDispatch();
-  const [temp, setTemp] = useState('');
   const [isCorrect, setIsCorrect] = useState(true); // 탈락 여부
   const { storeSession, publisher, me } = useSelector(state => ({
     storeSession: state.MeetingRoom.storeSession,
@@ -38,12 +37,12 @@ export default function UserOXGame() {
   };
 
   storeSession.on('signal:OXStart', event => {
-    console.log('=== 유저가 OX게임 시작 신호 받음 ===');
+    console.log('=== 유저가 OX게임 시작 신호 받음 ===', publisher);
     start();
   });
 
   function start() {
-    if (isCorrect) {
+    if (publisher.stream.videoActive) {
       swal('🙆‍♀️ 준비됐나요?  🙅‍♂️', 'O X 동작을 카메라에 보여주세요!', {
         buttons: false,
         timer: 2000,
