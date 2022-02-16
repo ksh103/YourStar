@@ -15,8 +15,9 @@ const OPENVIDU_SERVER_URL = 'https://i6e204.p.ssafy.io:8443';
 const OPENVIDU_SERVER_SECRET = 'YOURSTAR';
 
 export default function UserOXGame() {
+  const [temp, setTemp] = useState('');
   const [isCorrect, setIsCorrect] = useState(true); // 탈락 여부
-  const [userAnswer, setUserAnswer] = useState('');
+  const [recognize, setRecognize] = useState(0); // 인식 여부
   const { storeSession, publisher } = useSelector(state => ({
     storeSession: state.MeetingRoom.storeSession,
     publisher: state.MeetingRoom.publisher,
@@ -24,6 +25,7 @@ export default function UserOXGame() {
 
   const state = {
     cnt: 0,
+    userAnswer: '',
     answer: 0,
     webcam: null,
     loopPredict: undefined,
@@ -34,6 +36,7 @@ export default function UserOXGame() {
 
   storeSession.on('signal:OXStart', event => {
     console.log('=== 유저가 OX게임 시작 신호 받음 ===');
+    setRecognize(0);
     start();
   });
 
@@ -43,7 +46,7 @@ export default function UserOXGame() {
     let round = data[0];
     let starAnswer = data[1];
 
-    if (userAnswer === starAnswer) {
+    if (temp === starAnswer) {
       swal({
         title: round + '라운드 종료',
         text: '정답 50point 적립!',
@@ -91,7 +94,7 @@ export default function UserOXGame() {
 
     state.loopPredict = window.requestAnimationFrame(loop); //동작 인식 반복 시작
 
-    setUserAnswer('');
+    state.userAnswer = '';
     state.cnt = 0;
 
     // Convenience function to setup a webcam
@@ -127,7 +130,10 @@ export default function UserOXGame() {
         });
       }
 
-      if (prediction[0].probability.toFixed(2) >= 0.5 && userAnswer === '') {
+      if (
+        prediction[0].probability.toFixed(2) >= 0.5 &&
+        state.userAnswer === ''
+      ) {
         if (state.answer === 1) {
           state.answer = 0;
           state.cnt = 0;
@@ -136,7 +142,7 @@ export default function UserOXGame() {
         state.cnt++;
       } else if (
         prediction[1].probability.toFixed(2) >= 0.5 &&
-        userAnswer === ''
+        state.userAnswer === ''
       ) {
         if (state.answer === 0) {
           state.answer = 1;
@@ -148,7 +154,8 @@ export default function UserOXGame() {
     }
 
     if (state.cnt >= 100 && isCorrect) {
-      state.answer === 0 ? setUserAnswer('O') : setUserAnswer('X');
+      state.userAnswer = state.answer === 0 ? 'O' : 'X';
+      setTemp(state.userAnswer);
       swal({
         text:
           (state.answer === 0 ? '⭕' : '❌') + ' 인식 ' + 100 + '% 진행중...!',
@@ -156,7 +163,7 @@ export default function UserOXGame() {
         timer: 300,
       }).then(() => {
         swal({
-          title: (userAnswer === 'O' ? '⭕' : '❌') + ' 인식 성공!',
+          title: (state.answer === 0 ? '⭕' : '❌') + ' 인식 성공!',
           text: '잠시만 기다려 주세요!',
           timer: 2000,
           button: false,
