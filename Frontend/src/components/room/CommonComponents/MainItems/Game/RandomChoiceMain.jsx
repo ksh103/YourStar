@@ -152,7 +152,7 @@ export default function RandomChoiceMain() {
                       <div>{Lists[(i + 6) % Lists.length]}</div>
                       <div>{Lists[(i + 7) % Lists.length]}</div>
                       <div>{Lists[(i + 8) % Lists.length]}</div>
-                      <div>{randomPerson}</div>
+                      <div>{luckyUser}</div>
                     </div>
                   </div>
                 </div>
