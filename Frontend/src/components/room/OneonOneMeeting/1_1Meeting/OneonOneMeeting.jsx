@@ -15,14 +15,13 @@ import { SmallBoxSelectSchedule } from '../../CommonComponents/RightSideItems/Ch
 
 export default function OneonOneMeetingStar() {
   const { me } = useSelector(state => state.mypage);
-  const { mainStreamManager, onebyoneStream, backgroundColor } = useSelector(
-    state => ({
+  const { mainStreamManager, onebyoneStream, backgroundColor, publisher } =
+    useSelector(state => ({
       mainStreamManager: state.MeetingRoom.mainStreamManager,
       publisher: state.MeetingRoom.publisher,
       onebyoneStream: state.MeetingRoom.onebyoneStream,
       backgroundColor: state.MeetingRoom.backgroundColor,
-    })
-  );
+    }));
 
   const getNicknameTag = () => {
     if (onebyoneStream !== undefined) {
@@ -47,10 +46,8 @@ export default function OneonOneMeetingStar() {
           </Grid>
           <Grid item xs={4.5}>
             <UserSelfCamBox>
-              {me.code === 3 && (
-                <UserVideoComponent
-                  streamManager={onebyoneStream.stream.session}
-                />
+              {me.code === 3 && publisher && (
+                <UserVideoComponent streamManager={publisher} />
               )}
               {me.code === 4 && onebyoneStream && (
                 <UserVideoComponent streamManager={onebyoneStream} />

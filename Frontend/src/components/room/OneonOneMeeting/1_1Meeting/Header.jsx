@@ -63,6 +63,16 @@ export default function Header(props) {
     // 다음 사람 데려오기
     if (idx < subscribers.length) {
       const sessionId = storeSession.sessionId;
+      const nextName = JSON.parse(
+        subscribers[idx].stream.streamManager.stream.connection.data
+      ).clientData;
+
+      swal({
+        title: '유저 입장 알림',
+        text: nextName + '님이 입장하고 있습니다.',
+        icon: 'info',
+        timer: 2000,
+      });
       const data = {
         session: sessionId.substring(0, sessionId.length - 9), // 1-onebyone 일때 1만 뽑아내기
         to: [subscribers[idx].stream.connection.connectionId],
