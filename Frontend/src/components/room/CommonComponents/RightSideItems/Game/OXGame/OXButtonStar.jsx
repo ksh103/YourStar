@@ -1,8 +1,13 @@
-import React, { useEffect, useState } from 'react';
+import React, { useState } from 'react';
+import { HalfSideDiv2 } from '../../Chatting/Chatting.style';
 import {
-  HalfSideDiv2,
-} from '../../Chatting/Chatting.style';
-import {RecogButtonDiv, ImgBoxO,ImgBoxX, SmallBoxOXGame, BigBoxOXGame, ButtonDiv} from './OXButtonStar.style';
+  RecogButtonDiv,
+  ImgBoxO,
+  ImgBoxX,
+  SmallBoxOXGame,
+  BigBoxOXGame,
+  ButtonDiv,
+} from './OXButtonStar.style';
 import { useSelector, useDispatch } from 'react-redux';
 import {
   signalOX,
@@ -19,7 +24,7 @@ export default function OXButtonStar() {
   const { storeSession, subscribers, backgroundColor } = useSelector(state => ({
     storeSession: state.MeetingRoom.storeSession,
     subscribers: state.MeetingRoom.subscribers,
-    backgroundColor: state.MeetingRoom.backgroundColor
+    backgroundColor: state.MeetingRoom.backgroundColor,
   }));
 
   const { OXgameCount } = useSelector(state => ({
@@ -93,27 +98,28 @@ export default function OXButtonStar() {
     <>
       <HalfSideDiv2>
         <BigBoxOXGame>
-            {/* <OButton onClick={OXClick}>O</OButton>
-            <XButton onClick={OXClick}>X</XButton> */}
-            {isStart &&(<><RecogButtonDiv>
-            {subscribers.length}명 중에 {doneCnt}명 인식 되었습니다.
-            </RecogButtonDiv>
-            <SmallBoxOXGame>
-            <ImgBoxO
-                onClick={() => OXClick('O')}
-                src="https://cdn-icons-png.flaticon.com/512/3570/3570095.png"
-                alt="O"
-              ></ImgBoxO>
-              <ImgBoxX
-                onClick={() => OXClick('X')}
-                src="https://cdn-icons-png.flaticon.com/512/3570/3570089.png"
-                alt="X"
-            ></ImgBoxX>
-            </SmallBoxOXGame></>)}
-           
+          {isStart && (
+            <>
+              <RecogButtonDiv>
+                {subscribers.length}명 중에 {doneCnt}명 인식 되었습니다.
+              </RecogButtonDiv>
+              <SmallBoxOXGame>
+                <ImgBoxO
+                  onClick={() => OXClick('O')}
+                  src="https://cdn-icons-png.flaticon.com/512/3570/3570095.png"
+                  alt="O"
+                ></ImgBoxO>
+                <ImgBoxX
+                  onClick={() => OXClick('X')}
+                  src="https://cdn-icons-png.flaticon.com/512/3570/3570089.png"
+                  alt="X"
+                ></ImgBoxX>
+              </SmallBoxOXGame>
+            </>
+          )}
         </BigBoxOXGame>
         <ButtonDiv color={backgroundColor}>
-        <div>
+          <div>
             <button style={{ fontSize: '1.4vw' }} onClick={start}>
               게임 시작
             </button>
@@ -123,7 +129,7 @@ export default function OXButtonStar() {
               게임 종료
             </button>
           </div>
-          </ButtonDiv>
+        </ButtonDiv>
       </HalfSideDiv2>
     </>
   );
