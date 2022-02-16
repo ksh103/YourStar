@@ -40,6 +40,7 @@ export default function OXButtonStar() {
 
   // 스타가 OX 끝남
   const OXClick = e => {
+    console.log();
     setIsStart(false);
     dispatch(oxGameRound());
     const sessionId = storeSession.sessionId;
