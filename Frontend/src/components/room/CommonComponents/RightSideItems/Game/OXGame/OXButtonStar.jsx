@@ -16,7 +16,7 @@ import {
   resetCnt,
 } from '../../../../../../store/modules/meetingRoom';
 import swal from 'sweetalert';
-import { AddGameScoreAPI } from '../../../../../../store/apis/Room/game';
+import axios from 'axios';
 
 export default function OXButtonStar() {
   const [isStart, setIsStart] = useState(false);
@@ -31,19 +31,37 @@ export default function OXButtonStar() {
   const { OXgameCount, OXincorrectCnt } = useSelector(
     state => state.MeetingRoom
   );
+  const { me } = useSelector(state => state.mypage);
 
   const [length, setLength] = useState(subscribers.length);
   const dispatch = useDispatch();
+  const OPENVIDU_SERVER_URL = 'https://i6e204.p.ssafy.io:8443';
+  const OPENVIDU_SERVER_SECRET = 'YOURSTAR';
 
   // 스타가 OX 끝남
   const OXClick = e => {
     setIsStart(false);
     dispatch(oxGameRound());
-    storeSession.signal({
-      data: `${OXgameCount},${e}`,
+    const sessionId = storeSession.sessionId;
+
+    const data = {
+      session: sessionId,
       to: [],
-      type: 'OXEnd',
-    });
+      type: 'signal:OXEnd',
+      data: `${OXgameCount},${e}`,
+    };
+    axios
+      .post(OPENVIDU_SERVER_URL + '/openvidu/api/signal', data, {
+        headers: {
+          Authorization:
+            'Basic ' + btoa('OPENVIDUAPP:' + OPENVIDU_SERVER_SECRET),
+          'Content-Type': 'application/json',
+        },
+      })
+      .then(response => {
+        console.log(response);
+      })
+      .catch(error => console.error(error));
     dispatch(signalOX(e));
 
     swal({
@@ -58,11 +76,26 @@ export default function OXButtonStar() {
   const start = e => {
     setDoneCnt(0);
     setIsStart(true);
-    storeSession.signal({
-      data: 'Start OX Game',
+    const sessionId = storeSession.sessionId;
+
+    const data = {
+      session: sessionId,
       to: [],
-      type: 'OXStart',
-    });
+      type: 'signal:OXStart',
+      data: '',
+    };
+    axios
+      .post(OPENVIDU_SERVER_URL + '/openvidu/api/signal', data, {
+        headers: {
+          Authorization:
+            'Basic ' + btoa('OPENVIDUAPP:' + OPENVIDU_SERVER_SECRET),
+          'Content-Type': 'application/json',
+        },
+      })
+      .then(response => {
+        console.log(response);
+      })
+      .catch(error => console.error(error));
     swal({
       title: OXgameCount + '라운드 시작',
       text: '해당 라운드의 정답을 클릭시 라운드가 종료됩니다',

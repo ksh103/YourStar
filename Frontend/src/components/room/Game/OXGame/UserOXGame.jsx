@@ -37,60 +37,64 @@ export default function UserOXGame() {
   };
 
   storeSession.on('signal:OXStart', event => {
-    console.log('=== 유저가 OX게임 시작 신호 받음 ===');
-    setRecognize(0);
-    start();
+    if (me.code === 3) {
+      console.log('=== 유저가 OX게임 시작 신호 받음 ===');
+      setRecognize(0);
+      start();
+    }
   });
 
   storeSession.on('signal:OXEnd', event => {
-    console.log('=== 유저가 OX게임 종료 신호 받음 ===');
-    let data = event.data.split(',');
-    let round = data[0];
-    let starAnswer = data[1];
-    if (isCorrect) {
-      if (temp === starAnswer) {
-        swal({
-          title: round + '라운드 종료',
-          text: '정답 50point 적립!',
-          icon: 'success',
-          buttons: false,
-          timer: 1500,
-        });
-        var meetingId = storeSession.sessionId;
-        AddGameScoreAPI(meetingId, me.memberId);
-      } else {
-        setIsCorrect(false);
-        setTemp('');
-        swal({
-          title: round + '라운드 종료',
-          text: '오답',
-          icon: 'error',
-          buttons: false,
-          timer: 1500,
-        }).then(() => {
+    if (me.code === 3) {
+      console.log('=== 유저가 OX게임 종료 신호 받음 ===');
+      let data = event.data.split(',');
+      let round = data[0];
+      let starAnswer = data[1];
+      if (isCorrect) {
+        if (temp === starAnswer) {
+          swal({
+            title: round + '라운드 종료',
+            text: '정답 50point 적립!',
+            icon: 'success',
+            buttons: false,
+            timer: 1500,
+          });
+          var meetingId = storeSession.sessionId;
+          AddGameScoreAPI(meetingId, me.memberId);
+        } else {
           setIsCorrect(false);
-          publisher.publishVideo(false);
-          const sessionId = storeSession.sessionId;
+          setTemp('');
+          swal({
+            title: round + '라운드 종료',
+            text: '오답',
+            icon: 'error',
+            buttons: false,
+            timer: 1500,
+          }).then(() => {
+            setIsCorrect(false);
+            publisher.publishVideo(false);
+            const sessionId = storeSession.sessionId;
 
-          const data = {
-            session: sessionId,
-            to: [],
-            type: 'signal:OXIncorrect',
-            data: '0',
-          };
-          axios
-            .post(OPENVIDU_SERVER_URL + '/openvidu/api/signal', data, {
-              headers: {
-                Authorization:
-                  'Basic ' + btoa('OPENVIDUAPP:' + OPENVIDU_SERVER_SECRET),
-                'Content-Type': 'application/json',
-              },
-            })
-            .then(response => {
-              console.log(response);
-            })
-            .catch(error => console.error(error));
-        });
+            const data = {
+              session: sessionId,
+              to: [],
+              type: 'signal:OXIncorrect',
+              data: '0',
+            };
+            axios
+              .post(OPENVIDU_SERVER_URL + '/openvidu/api/signal', data, {
+                headers: {
+                  Authorization:
+                    'Basic ' + btoa('OPENVIDUAPP:' + OPENVIDU_SERVER_SECRET),
+                  'Content-Type': 'application/json',
+                },
+              })
+              .then(response => {
+                console.log(response);
+              })
+              .catch(error => console.error(error));
+          });
+        }
       }
     }
   });
