@@ -38,7 +38,7 @@ export default function Header(props) {
     if (idx < subscribers.length - 1) {
       for (let i = idx + 1, order = 1; i < subscribers.length; i++, order++) {
         const sessionId = storeSession.sessionId;
-        const time = order * (oneByOneMeetingTime + 5);
+        const time = order * (parseInt(oneByOneMeetingTime) + parseInt(5));
         const data = {
           session: sessionId.substring(0, sessionId.length - 9), // 1-onebyone 일때 1만 뽑아내기
           to: [subscribers[i].stream.connection.connectionId],
