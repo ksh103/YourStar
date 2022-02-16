@@ -15,6 +15,8 @@ const SIGNAL_OX = 'SIGNAL_OX';
 const OX_GAME_COUNT = 'OX_GAME_COUNT';
 const OX_INCORRECT_COUNT = 'OX_INCORRECT_COUNT';
 const OX_RESET_COUNT = 'OX_RESET_COUNT';
+const OX_RESET_DONE = 'OX_RESET_DONE';
+const OX_DONE_CNT = 'OX_DONE_CNT';
 const BACKGROUND_COLOR_CHANGE = 'BACKGROUND_COLOR_CHANGE';
 const BG_TOGGLE_CHANGE = 'BG_TOGGLE_CHANGE';
 const NOW_EMOZI = 'NOW_EMOZI';
@@ -29,6 +31,8 @@ const ADD_RANDOM_RESULT = 'ADD_RANDOM_RESULT';
 const ADD_RANDOM_SUBSCRIBERS = 'ADD_RANDOM_SUBSCRIBERS';
 const SET_IS_ONEBYONE = 'SET_IS_ONEBYONE';
 const SET_ONEBYONE_TIME = 'SET_ONEBYONE_TIME';
+const SET_MY_ANSWER = 'SET_MY_ANSWER';
+const SET_YOUR_ANSWER = 'SET_YOUR_ANSWER';
 
 export const randomResult = result => {
   return {
@@ -114,6 +118,20 @@ export const SetOneByOneMeetingTime = time => {
   return {
     type: SET_ONEBYONE_TIME,
     payload: time,
+  };
+};
+
+export const SetMyAnswer = answer => {
+  return {
+    type: SET_MY_ANSWER,
+    payload: answer,
+  };
+};
+
+export const SetYourAnswer = answer => {
+  return {
+    type: SET_YOUR_ANSWER,
+    payload: answer,
   };
 };
 // 여기까지 =================================
@@ -239,6 +257,18 @@ export const resetCnt = () => {
   };
 };
 
+export const oxDoneCnt = () => {
+  return {
+    type: OX_DONE_CNT,
+  };
+};
+
+export const oxResetDone = () => {
+  return {
+    type: OX_RESET_DONE,
+  };
+};
+
 export const choQuiz = (question, answer) => {
   return {
     type: CHOSONANT_QUIZ,
@@ -276,6 +306,9 @@ const initialState = {
   OXsignal: null,
   OXgameCount: 1,
   OXincorrectCnt: 0,
+  OXdoneCnt: 0,
+  myAnswer: null,
+  yourAnswer: null,
   index: -1,
   checkCnt: -1,
   backgroundColor: '#C4C4C4', // 배경 컬러
@@ -353,6 +386,16 @@ const MeetingRoom = (state = initialState, action) => {
         ...state,
         oneByOneMeetingTime: action.payload,
       };
+    case SET_MY_ANSWER:
+      return {
+        ...state,
+        myAnswer: action.payload,
+      };
+    case SET_YOUR_ANSWER:
+      return {
+        ...state,
+        yourAnswer: action.payload,
+      };
     // 여기까지 ============================
     case PUBLISHER_INFO:
       return {
@@ -423,6 +466,16 @@ const MeetingRoom = (state = initialState, action) => {
       return {
         ...state,
         OXincorrectCnt: 0,
+      };
+    case OX_DONE_CNT:
+      return {
+        ...state,
+        OXdoneCnt: state.OXdoneCnt + 1,
+      };
+    case OX_RESET_DONE:
+      return {
+        ...state,
+        OXdoneCnt: 0,
       };
     case CHOSONANT_QUIZ:
       return {
