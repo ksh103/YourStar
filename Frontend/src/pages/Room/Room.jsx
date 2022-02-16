@@ -559,7 +559,7 @@ class Room extends Component {
               }
             } else {
               swal({
-                title: round + '라운드 종료',
+                text: round + '라운드 종료',
                 buttons: false,
                 timer: 1500,
               });

@@ -123,7 +123,6 @@ export default function OXButtonStar() {
         <BigBoxOXGame>
           {isStart && (
             <>
-              {OXincorrectCnt} 다!!<br></br>
               <RecogButtonDiv>
                 {length - OXincorrectCnt}명 중에 {OXdoneCnt}명 인식 되었습니다.
               </RecogButtonDiv>
