@@ -14,7 +14,7 @@ public interface MemberService {
 
     boolean memberLogout(int memberId); // 로그아웃
 
-    Member memberPasswordInit(MemberPasswordPostReq memberPasswordPostReq); // 비밀번호 초기화
+    boolean memberPasswordInit(MemberPasswordPostReq memberPasswordPostReq, String newMemberPassword); // 비밀번호 초기화
 
     Member memberRegister(MemberRegisterPostReq memberRegisterInfo); // 회원가입
     boolean memberRegisterApprove(String memberEmail); // 회원가입 인증
