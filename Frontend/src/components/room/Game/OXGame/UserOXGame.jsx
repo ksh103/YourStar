@@ -68,6 +68,11 @@ export default function UserOXGame() {
         }).then(() => {
           setIsCorrect(false);
           publisher.publishVideo(false);
+          storeSession.signal({
+            data: '0',
+            to: [],
+            type: 'OXIncorrect ',
+          });
         });
       }
     }

@@ -30,7 +30,12 @@ export default function OXButtonStar() {
     OXgameCount: state.MeetingRoom.OXgameCount,
   }));
 
+  const [length, setLength] = useState(subscribers.length);
   const dispatch = useDispatch();
+
+  storeSession.on('signal:OXIncorrect', () => {
+    setLength(length - 1);
+  });
 
   // 스타가 OX 끝남
   const OXClick = e => {
@@ -90,7 +95,7 @@ export default function OXButtonStar() {
           {isStart && (
             <>
               <RecogButtonDiv>
-                {subscribers.length}명 중에 {doneCnt}명 인식 되었습니다.
+                {length}명 중에 {doneCnt}명 인식 되었습니다.
               </RecogButtonDiv>
               <SmallBoxOXGame>
                 <ImgBoxO

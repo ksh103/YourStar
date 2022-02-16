@@ -395,6 +395,7 @@ class Room extends Component {
               });
             });
           });
+          this.props.publisher.publishVideo(true);
         });
 
         // qna 스티커 받기
