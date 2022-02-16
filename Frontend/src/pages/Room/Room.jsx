@@ -221,11 +221,23 @@ class Room extends Component {
 
         // 대기 순번 알리기
         mySession.on('signal:userwait', event => {
-          swal({
-            title: '1대1미팅 대기시간 알림',
-            text: '약 ' + event.data + '초 뒤 입장 됩니다.',
-            timer: 5000,
-          });
+          let sec = parseInt(event.data);
+          let min = sec / 60;
+          sec = sec % 60;
+
+          if (min === 0) {
+            swal({
+              title: '1대1미팅 대기시간 알림',
+              text: '약 ' + sec + '초 뒤 입장 됩니다.',
+              timer: 5000,
+            });
+          } else {
+            swal({
+              title: '1대1미팅 대기시간 알림',
+              text: '약 ' + min + '분 ' + sec + '초 뒤 입장 됩니다.',
+              timer: 5000,
+            });
+          }
         });
 
         if (this.props.userCode === 3) {
