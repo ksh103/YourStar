@@ -12,16 +12,17 @@ import Grid from '@mui/material/Grid';
 import { useDispatch, useSelector } from 'react-redux';
 import { TOTAL_MEETINGS_REQUEST } from '../../store/modules/meeting';
 import { SELECT_FANMEETING_REQUEST } from '../../store/modules/fan';
+import MypageFan from '../../components/Mypage/MypageFan/MypageFan.jsx';
 
 export default function Mypage() {
   const dispatch = useDispatch();
   const { totalMeetings, totalMeetingsDone, totalMeetingsLoading } =
     useSelector(state => state.meeting);
   const { selectFanMeetingDone, applicant } = useSelector(state => state.fan);
-  const { menu, me } = useSelector(state => state.mypage);
+  const { me } = useSelector(state => state.mypage);
 
   useEffect(() => {
-    if (!selectFanMeetingDone) {
+    if (!selectFanMeetingDone && me.memberId !== 0) {
       dispatch({
         type: SELECT_FANMEETING_REQUEST,
         data: { memberId: me.memberId, page: 1, size: 100 },
@@ -30,7 +31,6 @@ export default function Mypage() {
   }, [dispatch, me, selectFanMeetingDone]);
 
   const content = () => {
-    const now = new Date();
     if (me.code === 2) {
       // 스타(오픈한 팬 미팅)
       if (!totalMeetingsDone && !totalMeetingsLoading) {
@@ -47,24 +47,8 @@ export default function Mypage() {
       return myMeeting.map(meeting => (
         <StarMypageCard meeting={meeting} key={meeting.meetingId} />
       ));
-    } else if (menu === 1) {
-      // 나의 팬미팅
-      return applicant.map(meeting =>
-        new Date(meeting.meetingEndDate) > now ? (
-          <UserMypageCard meeting={meeting} key={meeting.meetingId} />
-        ) : (
-          <div key={meeting.meetingId}></div>
-        )
-      );
-    } else if (menu === 2) {
-      // 추억보관함
-      return applicant.map(meeting =>
-        new Date(meeting.meetingEndDate) <= now ? (
-          <RepositoryMypageCard meeting={meeting} key={meeting.meetingId} />
-        ) : (
-          <div key={meeting.meetingId}></div>
-        )
-      );
+    } else {
+      return <MypageFan />;
     }
   };
 
@@ -80,7 +64,7 @@ export default function Mypage() {
             <MypageContent>
               <MypageMenu />
               <div className="poster">
-                <Grid container>{content()}</Grid>
+                <Grid container>{selectFanMeetingDone && content()}</Grid>
               </div>
             </MypageContent>
           </MypageWrapper>

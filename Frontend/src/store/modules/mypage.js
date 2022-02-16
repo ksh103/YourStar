@@ -13,7 +13,7 @@ const initialState = {
     gender: '',
     isLogin: '',
   },
-  menu: 1, // 1. 나의 팬미팅 2. 추억 보관함
+  mymenu: 1, // 1. 나의 팬미팅 2. 추억 보관함
   meetingDetailState: false, // 이미지 상세보기 modal 버튼
   meetingRepositoryState: false, // 추억보관함 상세보기 modal 버튼
   nowId: 0, // 마이페이지 현재 선택 포스터 아이디
@@ -53,8 +53,7 @@ export const setMeetingRepositoryState = state => ({
   state,
 });
 
-const SET_MENU = 'SET_MENU';
-export const setMenu = menu => ({ type: SET_MENU, menu });
+export const SET_MYMENU = 'SET_MYMENU';
 
 const SET_NOW_ID = 'SET_NOW_ID';
 export const setNowId = nowId => ({ type: SET_NOW_ID, nowId });
@@ -112,8 +111,9 @@ const reducer = (state = initialState, action) =>
         draft.deleteMemberLoading = false;
         draft.deleteMemberError = action.error;
         break;
-      case SET_MENU:
-        draft.menu = action.menu; // 마이페이지 메뉴 변경
+      case SET_MYMENU:
+        console.log(action.data);
+        draft.mymenu = action.data; // 마이페이지 메뉴 변경
         break;
       case SET_NOW_ID:
         draft.nowId = action.nowId; // 현재 선택 포스터
