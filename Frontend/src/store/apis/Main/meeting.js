@@ -88,9 +88,7 @@ export async function PendingMeetingListAPI({ page, size }) {
 
 // 팬미팅 승인
 export async function PendingMeetingAPI(meeting) {
-  await axios
-    .get(`${BASE_URL}meetings/room-applicant/pending/${meeting.id}`)
-    .then(res => console.log(res));
+  await axios.get(`${BASE_URL}meetings/room-applicant/pending/${meeting.id}`);
   return {
     id: meeting.id,
     code: meeting.code,
