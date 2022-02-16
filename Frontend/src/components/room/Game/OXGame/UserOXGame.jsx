@@ -10,6 +10,7 @@ import axios from 'axios';
 import swal from 'sweetalert';
 import { useSelector } from 'react-redux';
 import { TM_URL } from '../../../../utils/contants';
+import { AddGameScoreAPI } from '../../../../store/apis/Room/game';
 
 const OPENVIDU_SERVER_URL = 'https://i6e204.p.ssafy.io:8443';
 const OPENVIDU_SERVER_SECRET = 'YOURSTAR';
@@ -18,9 +19,10 @@ export default function UserOXGame() {
   const [temp, setTemp] = useState('');
   const [isCorrect, setIsCorrect] = useState(true); // 탈락 여부
   const [recognize, setRecognize] = useState(0); // 인식 여부
-  const { storeSession, publisher } = useSelector(state => ({
+  const { storeSession, publisher, me } = useSelector(state => ({
     storeSession: state.MeetingRoom.storeSession,
     publisher: state.MeetingRoom.publisher,
+    me: state.mypage,
   }));
 
   const state = {
@@ -54,6 +56,8 @@ export default function UserOXGame() {
           buttons: false,
           timer: 1500,
         });
+        var meetingId = storeSession.sessionId;
+        AddGameScoreAPI(meetingId, me.memberId);
       } else {
         swal({
           title: round + '라운드 종료',
