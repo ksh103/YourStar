@@ -20,7 +20,7 @@ export default function OtherScreenAngle(props) {
 
   const sendQnaContents = () => {
     swal({
-      title: '아래 내용의 포스트잇을 선택하시겠어요 ?',
+      title: '아래의 질문을 선택하시겠어요 ?',
       text: props.text,
       buttons: {
         cancel: '아니오',

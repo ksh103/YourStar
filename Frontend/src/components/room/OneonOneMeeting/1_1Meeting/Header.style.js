@@ -49,7 +49,7 @@ const SmallWrapper = styled.div`
   height: 100%;
   width: 100%;
   .time {
-    padding: 20px;
+    padding: 10px;
     font-size: 3em;
     justify-content: center;
     align-items: center;
@@ -58,7 +58,7 @@ const SmallWrapper = styled.div`
   .state {
     padding: 10px;
     text-align: center;
-    font-size: 2.2em;
+    font-size: 1.5em;
   }
 `;
 const SmallIconWrapper = styled.div`

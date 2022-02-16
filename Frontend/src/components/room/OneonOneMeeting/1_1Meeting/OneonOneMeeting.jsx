@@ -26,6 +26,14 @@ export default function OneonOneMeetingStar() {
     })
   );
 
+  const getNicknameTag = () => {
+    if (onebyoneStream !== undefined) {
+      return JSON.parse(onebyoneStream.stream.streamManager.stream.connection.data).clientData;
+    } else {
+      return null
+    }
+  }
+
   return (
     <>
       <MainDiv>
@@ -40,7 +48,7 @@ export default function OneonOneMeetingStar() {
           <Grid item xs={4.5}>
             <UserSelfCamBox>
               {me.code === 3 && (
-                <UserVideoComponent streamManager={publisher} />
+                <UserVideoComponent streamManager={onebyoneStream.stream.session} />
               )}
               {me.code === 4 && onebyoneStream && (
                 <UserVideoComponent streamManager={onebyoneStream} />
@@ -49,7 +57,7 @@ export default function OneonOneMeetingStar() {
           </Grid>
           <Grid item xs={2}>
             <SmallBoxSelectSchedule>
-              <Header></Header>
+              <Header userNick={getNicknameTag()}></Header>
             </SmallBoxSelectSchedule>
             <SmallBox>
               <ChattingListBox></ChattingListBox>
