@@ -61,6 +61,7 @@ export default function Pay(props) {
     meetingId,
     props.location.search,
     tid,
+    me.email,
   ]);
 
   return (

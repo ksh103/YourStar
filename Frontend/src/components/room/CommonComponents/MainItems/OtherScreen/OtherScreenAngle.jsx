@@ -3,7 +3,6 @@ import styled from 'styled-components';
 import { useSelector } from 'react-redux';
 import swal from 'sweetalert';
 
-//margin: 3.125vh 2vh;
 const OtherAngelStyle = styled.div`
   box-shadow: 2px 2px 4px rgba(0, 0, 0, 0.4);
   text-align: center;
@@ -29,7 +28,6 @@ export default function OtherScreenAngle(props) {
     }).then(event => {
       if (event === true) {
         storeSession.signal({
-          // 사용자에게 포스트잇 보여주기 (text 전달)
           data: props.text,
           to: [],
           type: 'qnaContents',

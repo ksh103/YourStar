@@ -1,10 +1,7 @@
-import { CircularProgress } from '@mui/material';
 import React from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import styled from 'styled-components';
 import swal from 'sweetalert';
-import { CallGameRankAPI } from '../../../../store/apis/Room/game';
-import { ScreenChange } from '../../../../store/modules/meetingRoom';
 
 const StartButtonDiv = styled.div`
   position: absolute;
@@ -81,13 +78,11 @@ function cho_hangul(str) {
 }
 
 export default function GameButton() {
-  const dispatch = useDispatch();
   const { storeSession, backgroundColor } = useSelector(state => ({
     storeSession: state.MeetingRoom.storeSession,
     backgroundColor: state.MeetingRoom.backgroundColor,
   }));
-console.log(storeSession)
-  const { meeting } = useSelector(state => state.meeting);
+  console.log(storeSession);
   const { me } = useSelector(state => state.mypage);
 
   const onStartButton = () => {
@@ -126,18 +121,12 @@ console.log(storeSession)
   return (
     <>
       <StartButtonDiv color={backgroundColor}>
-        <button
-          style={{ fontSize: '1.4vw' }}
-          onClick={onStartButton}
-        >
+        <button style={{ fontSize: '1.4vw' }} onClick={onStartButton}>
           게임 시작
         </button>
       </StartButtonDiv>
       <EndButtonDiv color={backgroundColor}>
-        <button
-          style={{ fontSize: '1.4vw' }}
-          onClick={onEndButton}
-        >
+        <button style={{ fontSize: '1.4vw' }} onClick={onEndButton}>
           게임 종료
         </button>
       </EndButtonDiv>

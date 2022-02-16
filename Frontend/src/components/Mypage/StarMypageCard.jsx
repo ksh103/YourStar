@@ -1,5 +1,4 @@
 import React from 'react';
-import poster from '../../assets/images/poster1.jpg';
 import Grid from '@mui/material/Grid';
 import { useDispatch, useSelector } from 'react-redux';
 import ModalMeetingDetail from '../utils/modal/modalMeetingDetail';
@@ -45,5 +44,3 @@ export default function StarMypageCard({ meeting }) {
     </>
   );
 }
-
-// meetingId={meetingId}

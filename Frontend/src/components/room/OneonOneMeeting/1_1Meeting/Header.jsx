@@ -1,19 +1,12 @@
 import React, { useDispatch, useSelector } from 'react-redux';
-import { useEffect, useState } from 'react';
+import { useState } from 'react';
 import Timer from '../../Timer/Timer';
-import styled from 'styled-components';
-import { IoIosAlarm, IoMdCreate, IoIosAperture } from 'react-icons/io';
+import { IoMdCreate, IoIosAperture } from 'react-icons/io';
 import axios from 'axios';
 import swal from 'sweetalert';
 import { setSignButton } from '../../../../store/modules/meetingRoom';
 import ModalSign from '../../../utils/modal/modalSign';
-import {
-  HeaderBox,
-  SmallIconWrapper,
-  SmallWrapper,
-  StarBox,
-  UserBox,
-} from './Header.style';
+import { SmallIconWrapper, SmallWrapper } from './Header.style';
 
 export default function Header(props) {
   const [prevIdx, setPrevIdx] = useState(-1);

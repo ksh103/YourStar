@@ -12,7 +12,6 @@ const LongChattingBox = styled.div`
   height: 67.5vh;
   background-color: rgb(255, 255, 255, 0.5);
   border-radius: 1vh;
-  // box-shadow: 0.306vh 0.306vh gray;
   display: flex;
   justify-content: center;
   align-items: center;
@@ -69,8 +68,6 @@ const SmallBox = styled.div`
   height: 36vh;
   background-color: rgb(255, 255, 255, 0.5);
   border-radius: 1vh;
-  // box-shadow: 0.306vh 0.306vh gray;
-  // margin-top: -0.5vh;
   display: flex;
   justify-content: center;
   align-items: center;
@@ -83,7 +80,6 @@ const SmallBoxSelectSchedule = styled.div`
   height: 30vh;
   background-color: rgb(255, 255, 255, 0.5);
   border-radius: 1vh;
-  // box-shadow: 0.306vh 0.306vh gray;
 `;
 
 const SmallChattingInputBox = styled.input`
@@ -206,7 +202,6 @@ const ConcertChattingBox = styled.div`
   height: 75vh;
   background-color: rgb(255, 255, 255, 0.5);
   border-radius: 1vh;
-  // box-shadow: 0.306vh 0.306vh gray;
   display: flex;
   justify-content: center;
   align-items: center;
@@ -258,7 +253,6 @@ const StarSmallBox = styled.div`
   height: 43.5vh;
   background-color: rgb(255, 255, 255, 0.5);
   border-radius: 1vh;
-  // box-shadow: 0.306vh 0.306vh gray;
   display: flex;
   flex-direction: column;
   align-items: center;

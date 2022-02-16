@@ -1,5 +1,4 @@
 import { applyMiddleware, createStore } from 'redux';
-import { composeWithDevTools } from 'redux-devtools-extension';
 import rootReducer from './modules/index';
 import rootSaga from './sagas/index';
 import { createBrowserHistory } from 'history';
@@ -12,10 +11,7 @@ export default function configureStore() {
     },
   });
   const middlewares = [sagaMiddleware];
-  const store = createStore(
-    rootReducer,
-    composeWithDevTools(applyMiddleware(...middlewares))
-  );
+  const store = createStore(rootReducer, applyMiddleware(...middlewares));
   sagaMiddleware.run(rootSaga);
   return { store, customHistory };
 }

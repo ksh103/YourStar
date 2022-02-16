@@ -1,7 +1,7 @@
 import styled from 'styled-components';
 
 const StarSelfCamBox = styled.div`
-position: relative;
+  position: relative;
   width: 100%;
   height: 80.5vh;
   border-radius: 1vh;
@@ -9,8 +9,6 @@ position: relative;
 `;
 const UserSelfCamBox = styled.div`
   position: relative;
-  // margin-top: -1.5vh;
-  // padding: -1vw;
   width: 100%;
   height: 80.5vh;
   border-radius: 1vh;
@@ -77,4 +75,12 @@ const ChattingListBox = styled.div`
   }
 `;
 
-export { StarSelfCamBox, UserSelfCamBox, MainDiv, MainGrid, SmallBox, ChattingInputBox, ChattingListBox };
+export {
+  StarSelfCamBox,
+  UserSelfCamBox,
+  MainDiv,
+  MainGrid,
+  SmallBox,
+  ChattingInputBox,
+  ChattingListBox,
+};

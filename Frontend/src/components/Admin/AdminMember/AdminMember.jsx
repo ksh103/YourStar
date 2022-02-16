@@ -1,5 +1,4 @@
 import React, { useEffect, useState } from 'react';
-import { Grid } from '@mui/material';
 import { useDispatch, useSelector } from 'react-redux';
 import {
   CREATE_MANAGER_FAILURE,
@@ -96,27 +95,7 @@ export default function AdminMember() {
           <button onClick={() => createManager()}>생성하기</button>
         </FindPwContentRow>
       </FindPwContent>
-      {/* {createdAccount.length > 0 && ( */}
-      <AccountWrapper>
-        {/* <div>
-            <Grid container>
-              <Grid
-                xs={12}
-                style={{
-                  textAlign: 'center',
-                  fontSize: '20px',
-                  marginBottom: '10px',
-                }}
-              >
-                생성된 계정{<br />}(star: 스타계정 / manager: 관계자계정)
-              </Grid>
-              <Grid xs={12} style={{ textAlign: 'center' }}>
-                {accountList}
-              </Grid>
-            </Grid>
-          </div> */}
-      </AccountWrapper>
-      {/* )} */}
+      <AccountWrapper />
     </AdminMemberWrapper>
   );
 }

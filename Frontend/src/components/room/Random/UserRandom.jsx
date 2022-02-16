@@ -4,7 +4,7 @@ import RandomChoiceMain from '../CommonComponents/MainItems/Game/RandomChoiceMai
 import MyScreen from '../CommonComponents/MainItems/MyScreens/MyScreen';
 import OtherPersonScreen from '../CommonComponents/MainItems/OtherScreen/OtherPersonScreen';
 import LongChatting from '../CommonComponents/RightSideItems/Chatting/LongChatting';
-import { useSelector, useDispatch } from 'react-redux';
+import { useSelector } from 'react-redux';
 import swal from 'sweetalert';
 // 포지션작업
 const BackgroundDiv = styled.div`
@@ -22,7 +22,6 @@ export default function UserRandom() {
     setTimeout(swal("Here's the title!", "...and here's the text!"), 3000);
   });
 
-  const randomUser = () => {};
   return (
     <BackgroundDiv>
       <RandomChoiceMain></RandomChoiceMain>

@@ -1,5 +1,4 @@
 import React from 'react';
-import QnAList from './QnAList';
 import StarQnA from './StarQnA';
 import UserQnA from './UserQnA';
 import { useSelector } from 'react-redux';

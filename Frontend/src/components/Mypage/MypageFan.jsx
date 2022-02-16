@@ -1,7 +1,7 @@
 import React from 'react';
 import { useSelector } from 'react-redux';
-import UserMypageCard from '../UserMypageCard';
-import RepositoryMypageCard from '../RepositoryMypageCard';
+import UserMypageCard from './UserMypageCard';
+import RepositoryMypageCard from './RepositoryMypageCard';
 export default function MypageFan() {
   const { selectFanMeetingDone, applicant } = useSelector(state => state.fan);
   const { mymenu } = useSelector(state => state.mypage);

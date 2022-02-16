@@ -5,34 +5,34 @@ import {
   MainDiv,
   SmallBox,
   ChattingListBox,
-  ChattingInputBox
+  ChattingInputBox,
 } from './OneonOneMeeting.style';
 import StarVideoComponent from '../../../../pages/Room/StarVideoComponent';
 import UserVideoComponent from '../../../../pages/Room/UserVideoComponent';
 import Grid from '@mui/material/Grid';
 import { useSelector } from 'react-redux';
-import {
-  SmallBoxSelectSchedule,
-} from '../../CommonComponents/RightSideItems/Chatting/Chatting.style';
+import { SmallBoxSelectSchedule } from '../../CommonComponents/RightSideItems/Chatting/Chatting.style';
 
 export default function OneonOneMeetingStar() {
   const { me } = useSelector(state => state.mypage);
-  const { mainStreamManager, publisher, onebyoneStream, backgroundColor } = useSelector(
+  const { mainStreamManager, onebyoneStream, backgroundColor } = useSelector(
     state => ({
       mainStreamManager: state.MeetingRoom.mainStreamManager,
       publisher: state.MeetingRoom.publisher,
       onebyoneStream: state.MeetingRoom.onebyoneStream,
-      backgroundColor: state.MeetingRoom.backgroundColor
+      backgroundColor: state.MeetingRoom.backgroundColor,
     })
   );
 
   const getNicknameTag = () => {
     if (onebyoneStream !== undefined) {
-      return JSON.parse(onebyoneStream.stream.streamManager.stream.connection.data).clientData;
+      return JSON.parse(
+        onebyoneStream.stream.streamManager.stream.connection.data
+      ).clientData;
     } else {
-      return null
+      return null;
     }
-  }
+  };
 
   return (
     <>
@@ -48,7 +48,9 @@ export default function OneonOneMeetingStar() {
           <Grid item xs={4.5}>
             <UserSelfCamBox>
               {me.code === 3 && (
-                <UserVideoComponent streamManager={onebyoneStream.stream.session} />
+                <UserVideoComponent
+                  streamManager={onebyoneStream.stream.session}
+                />
               )}
               {me.code === 4 && onebyoneStream && (
                 <UserVideoComponent streamManager={onebyoneStream} />
@@ -61,9 +63,9 @@ export default function OneonOneMeetingStar() {
             </SmallBoxSelectSchedule>
             <SmallBox>
               <ChattingListBox></ChattingListBox>
-              <ChattingInputBox 
-              placeholder='메시지 보내기'
-              color={backgroundColor}
+              <ChattingInputBox
+                placeholder="메시지 보내기"
+                color={backgroundColor}
               ></ChattingInputBox>
             </SmallBox>
           </Grid>

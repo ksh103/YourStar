@@ -1,5 +1,4 @@
 import React from 'react';
-import styled from 'styled-components';
 import RandomChoiceMain from '../CommonComponents/MainItems/Game/RandomChoiceMain';
 import LongStick from '../CommonComponents/BottomItems/LongStick';
 import ScheduleListSelect from '../CommonComponents/RightSideItems/Star/ScheduleListSelect';

@@ -28,12 +28,9 @@ const ConcertWrapper = styled.div`
 
 const ConcertDisplayBox = styled.div`
   position: absolute;
-  /* border: solid red; */
   border-radius: 1vh;
   height: 75vh;
   width: 63vw;
-  // background-color: white;
-  // box-shadow: 0.306vh 0.306vh gray;
 `;
 
 const HolePlace = styled.div`
@@ -61,7 +58,6 @@ const HolePlace = styled.div`
 `;
 
 const EmoziBox = styled.div`
-  /* border: solid red; */
   position: absolute;
   bottom: -72vh;
   margin-left: 58.5vw;
@@ -69,11 +65,10 @@ const EmoziBox = styled.div`
   height: 72vh;
   width: 2vw;
   background-color: rgba(255, 255, 255, 0);
-  z-index: 1; // box-shadow: 0.306vh 0.306vh gray;
+  z-index: 1;
 `;
 
 const EmoziEffect = styled.div`
-  /* border: solid red; */
   vertical-align: bottom;
   position: absolute;
   bottom: 21px;
@@ -174,24 +169,25 @@ export default function Concert() {
       {me.code === 3 ? (
         <HalfSideDiv1>
           <ConcertChattingBox>
-          <ConcertChattingListBox>
-            {chattingList.map((value, idx) => {
-              return (
-                <div key={idx + value.text}>
-                  <p style={{ margin: '0' }}>
-                    {value.userName} : {value.text}
-                  </p>
-                </div>
-              );
-            })}
-            <div ref={messagesEndRef}></div> {/**채팅 스크롤 아래로 내려주기 */}
-          </ConcertChattingListBox>
-          <ConcertChattingInputBox
-            onKeyPress={SendMessage}
-            value={testInput}
-            onChange={handleChatMessageChange}
-            color={backgroundColor}
-          ></ConcertChattingInputBox>
+            <ConcertChattingListBox>
+              {chattingList.map((value, idx) => {
+                return (
+                  <div key={idx + value.text}>
+                    <p style={{ margin: '0' }}>
+                      {value.userName} : {value.text}
+                    </p>
+                  </div>
+                );
+              })}
+              <div ref={messagesEndRef}></div>{' '}
+              {/**채팅 스크롤 아래로 내려주기 */}
+            </ConcertChattingListBox>
+            <ConcertChattingInputBox
+              onKeyPress={SendMessage}
+              value={testInput}
+              onChange={handleChatMessageChange}
+              color={backgroundColor}
+            ></ConcertChattingInputBox>
           </ConcertChattingBox>
         </HalfSideDiv1>
       ) : (
