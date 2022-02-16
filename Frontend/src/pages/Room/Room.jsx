@@ -223,7 +223,7 @@ class Room extends Component {
         mySession.on('signal:userwait', event => {
           swal({
             title: '1대1미팅 대기시간 알림',
-            text: '약 ' + event.data + '분 뒤 입장 됩니다.',
+            text: '약 ' + event.data + '초 뒤 입장 됩니다.',
             timer: 5000,
           });
         });
