@@ -9,7 +9,6 @@ const EmoziCompo = styled.div`
   height: 8vh;
   background-color: white;
   border-radius: 4vh;
-  // box-shadow: 0.306vh 0.306vh gray;
 `;
 
 const EmoziPs = styled.div`

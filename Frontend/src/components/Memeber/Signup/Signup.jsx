@@ -36,10 +36,7 @@ export default function Signup() {
   const [password, setPassword] = useState('');
   const [passwordCheck, setPasswordCheck] = useState('');
   const [nickName, setNickName] = useState('');
-  // const [address, setAddress] = useState(''); // 주소
   const [gender, setGender] = useState('');
-
-  // useSelector
   const { addressButton, address, emailCheckDone, nickCheckDone, signUpDone } =
     useSelector(state => state.member);
 

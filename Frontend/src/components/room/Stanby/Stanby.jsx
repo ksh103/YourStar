@@ -50,9 +50,7 @@ export default function Stanby() {
   const dispatch = useDispatch();
   const history = useHistory();
   const { me } = useSelector(state => state.mypage);
-  const { meeting, storeSession, selectNum } = useSelector(
-    state => state.meeting
-  );
+  const { meeting } = useSelector(state => state.meeting);
   const { bgToggle } = useSelector(state => state.MeetingRoom); // 0 : 기본 배경화면, // 1 : 선택 색상 배경화면
   const [color, SetColor] = useState('#C4C4C4');
   const [video, SetVideo] = useState(0); // 1 ON, 0 OFF
@@ -61,7 +59,6 @@ export default function Stanby() {
     SetColor(props);
   };
   const [pub, setPub] = useState('');
-  // const [testSession, setTestSession] = useState(null);
   // 오픈비듀 생성
   const OV = new OpenVidu();
   // 세션생성
@@ -81,8 +78,6 @@ export default function Stanby() {
     getToken(StanbySessionId).then(token => {
       StanbySession.connect(token, {
         // 추가로 넘겨주고 싶은 데이터가 있으면 여기에 추가
-        // clientData: this.state.me.nick,
-        // memberCode: this.state.me.code,
       })
         .then(() => {
           // 연결 후에 내 정보를 담기
@@ -100,8 +95,6 @@ export default function Stanby() {
           // 세션에 내 비디오 및 마이크 정보 푸시
           StanbySession.publish(publisher);
           setPub(publisher);
-          // this.props.doSetMySession(StanbySession);
-          // this.props.doMainStreamManagerInfo(publisher);
         })
         .catch(error => {
           console.log(
@@ -214,7 +207,6 @@ export default function Stanby() {
     dispatch(ScreenChange(0));
     dispatch(changeBackgroundColor(color));
     history.push(`/room/${meeting.id}`);
-    // history.push(`/room/:`);
   };
 
   useEffect(() => {
@@ -239,10 +231,6 @@ export default function Stanby() {
     }
   };
 
-  // console.log(
-  //   pub.stream.videoActive,
-  //   '==========들어온사람의 비디오 상태 정보========='
-  // );
   return (
     <BackgroundDiv color={color} bgToggle={bgToggle}>
       <ColorCircleWrapper>
@@ -390,18 +378,6 @@ export default function Stanby() {
             </div>
           </SettingIcons>
         </SettingBox>
-        {/* {isSpeaking && (
-          <Alert
-            severity="success"
-            color="error"
-            sx={{
-              vertical: 'bottom',
-              horizontal: 'center',
-            }}
-          >
-            마이크가 정상적으로 작동하고 있습니다.
-          </Alert>
-        )} */}
       </SettingWrapper>
     </BackgroundDiv>
   );

@@ -1,9 +1,5 @@
 import styled from 'styled-components';
-import {
-  blockColor,
-  pointColor,
-  scheduleColor,
-} from '../../../styles/variables';
+import { pointColor, scheduleColor } from '../../../styles/variables';
 const SchduleCalendarWrapper = styled.div`
   width: 100%;
   height: 100%;

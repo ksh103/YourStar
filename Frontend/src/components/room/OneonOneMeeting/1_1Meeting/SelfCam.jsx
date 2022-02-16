@@ -2,7 +2,6 @@ import React from 'react';
 import styled from 'styled-components';
 
 const SelfCamBox = styled.div`
-  /* border: solid red; */
   border-radius: 5%;
   height: 75vh;
   width: 35vw;

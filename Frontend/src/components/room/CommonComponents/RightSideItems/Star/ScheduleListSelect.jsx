@@ -17,7 +17,6 @@ import { blockColor } from '../../../../../styles/variables';
 import swal from 'sweetalert';
 import { useHistory, useParams } from 'react-router';
 import { END_MEETING_REQUEST } from '../../../../../store/modules/meeting';
-import axios from 'axios';
 
 const List = [
   '⭐ 대기화면',

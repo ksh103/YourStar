@@ -3,9 +3,7 @@ import {
   MiddleChattingBox,
   MiddleChattingInputBox,
   MiddleChattingListBox,
-  ThridSideDiv1,
   ThridSideDiv2,
-  ThridSideDiv3,
 } from './Chatting.style';
 import { useSelector, useDispatch } from 'react-redux';
 import {

@@ -10,7 +10,6 @@ import axios from 'axios';
 import swal from 'sweetalert';
 import { useSelector } from 'react-redux';
 import { TM_URL } from '../../../../utils/contants';
-import { AddGameScoreAPI } from '../../../../store/apis/Room/game';
 
 const OPENVIDU_SERVER_URL = 'https://i6e204.p.ssafy.io:8443';
 const OPENVIDU_SERVER_SECRET = 'YOURSTAR';
@@ -206,9 +205,6 @@ export default function UserOXGame() {
       <OXUserScreen></OXUserScreen>
       <MyScreen></MyScreen>
       <OtherPersonScreen></OtherPersonScreen>
-      {/* <button type="button" onClick={() => start()}>
-        Start
-      </button> */}
     </div>
   );
 }

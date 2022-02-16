@@ -12,13 +12,9 @@ import {
   Signup,
   ScheduleDetail,
   FindPassword,
-  RoomEunSeong,
-  RoomSumin,
   AdminMeetingDetail,
   Login,
   MypageDetail,
-  RoomJisul,
-  RoomSohyun,
   Pledge,
   Stanby,
 } from './pages/index';
@@ -61,18 +57,6 @@ function App() {
           </Route>
           <Route path="/stanby/:id">
             <Stanby />
-          </Route>
-          <Route path="/EunSeong">
-            <RoomEunSeong />
-          </Route>
-          <Route path="/Sumin">
-            <RoomSumin />
-          </Route>
-          <Route path="/Sohyun">
-            <RoomSohyun />
-          </Route>
-          <Route path="/Jisul">
-            <RoomJisul />
           </Route>
         </Switch>
       </BrowserRouter>

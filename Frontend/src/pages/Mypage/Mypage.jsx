@@ -5,20 +5,18 @@ import { Block, Layout, Wrapper } from '../../styles/variables';
 import { MypageContent, MypageHeader, MypageWrapper } from './Mypage.style';
 import MypageProfile from '../../components/Mypage/MypageProfile';
 import MypageMenu from '../../components/Mypage/MypageMenu';
-import RepositoryMypageCard from '../../components/Mypage/RepositoryMypageCard';
 import StarMypageCard from '../../components/Mypage/StarMypageCard';
-import UserMypageCard from '../../components/Mypage/UserMypageCard';
 import Grid from '@mui/material/Grid';
 import { useDispatch, useSelector } from 'react-redux';
 import { TOTAL_MEETINGS_REQUEST } from '../../store/modules/meeting';
 import { SELECT_FANMEETING_REQUEST } from '../../store/modules/fan';
-import MypageFan from '../../components/Mypage/MypageFan/MypageFan.jsx';
+import MypageFan from '../../components/Mypage/MypageFan.jsx';
 
 export default function Mypage() {
   const dispatch = useDispatch();
   const { totalMeetings, totalMeetingsDone, totalMeetingsLoading } =
     useSelector(state => state.meeting);
-  const { selectFanMeetingDone, applicant } = useSelector(state => state.fan);
+  const { selectFanMeetingDone } = useSelector(state => state.fan);
   const { me } = useSelector(state => state.mypage);
 
   useEffect(() => {

@@ -1,5 +1,4 @@
 import React from 'react';
-import poster from '../../assets/images/poster1.jpg';
 import Grid from '@mui/material/Grid';
 import ModalMemoryRepository from '../utils/modal/modalMemoryRepository';
 import { useSelector, useDispatch } from 'react-redux';

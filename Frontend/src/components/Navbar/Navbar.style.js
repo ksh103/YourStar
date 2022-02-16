@@ -63,20 +63,9 @@ const SubMenu = styled.div`
   font-size: 25px;
   display: flex;
   align-items: center;
-  /* ul li {
-    color: ${props => (props.check === '1' ? 'white' : 'gray')};
-    margin: 20px;
-    text-align: center;
-    float: left;
-    &:hover {
-      color: white;
-      font-size: bold;
-    }
-  } */
 `;
 const MenuBlock = styled.li`
   color: ${props => (props.check === '1' ? 'white' : 'gray')};
-  /* color: gray; */
   margin: 20px;
   text-align: center;
   float: left;

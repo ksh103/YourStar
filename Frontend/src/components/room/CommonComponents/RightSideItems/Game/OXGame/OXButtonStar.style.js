@@ -1,7 +1,7 @@
 import styled from 'styled-components';
 
 const ButtonDiv = styled.div`
-position: absolute;
+  position: absolute;
   top: 133%;
   left: -96%;
   z-index: 99;
@@ -19,10 +19,11 @@ position: absolute;
       -o-transform: scale(0.9, 0.9);
       transform: scale(0.9, 0.9);
     }
-    &:hover{
+    &:hover {
       background-color: ${props => props.color};
+    }
   }
-`
+`;
 
 const BigBoxOXGame = styled.div`
   position: relative;
@@ -37,7 +38,6 @@ const BigBoxOXGame = styled.div`
 `;
 
 const RecogButtonDiv = styled.div`
-  // background-color: #f5f5f5;
   border-radius: 1vw;
   padding: 10px;
   margin-bottom: 2vh;
@@ -47,23 +47,30 @@ const RecogButtonDiv = styled.div`
 
 const SmallBoxOXGame = styled.div`
   display: flex;
-  img{
-    width:50%;
+  img {
+    width: 50%;
     display: block;
     cursor: pointer;
   }
 `;
 
 const ImgBoxO = styled.img`
-  &:hover{
+  &:hover {
     background-color: green;
   }
 `;
 
 const ImgBoxX = styled.img`
-  &:hover{
+  &:hover {
     background-color: red;
   }
 `;
 
-export {RecogButtonDiv,ImgBoxO,ImgBoxX, SmallBoxOXGame, BigBoxOXGame, ButtonDiv};
+export {
+  RecogButtonDiv,
+  ImgBoxO,
+  ImgBoxX,
+  SmallBoxOXGame,
+  BigBoxOXGame,
+  ButtonDiv,
+};

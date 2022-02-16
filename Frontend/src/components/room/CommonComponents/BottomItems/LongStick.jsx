@@ -1,8 +1,7 @@
 import React from 'react';
 import styled from 'styled-components';
-import OtherScreenAngle from '../MainItems/OtherScreen/OtherScreenAngle';
 import { OtherPersonDiv } from '../MainItems/Main.style';
-import { useSelector, useDispatch } from 'react-redux';
+import { useSelector } from 'react-redux';
 import UserVideoComponent from '../../../../pages/Room/UserVideoComponent';
 const OtherPersonSc = styled.div`
   width: 83vw;
@@ -10,7 +9,6 @@ const OtherPersonSc = styled.div`
   padding-left: 1vw;
   background-color: rgb(255, 255, 255, 0.5);
   border-radius: 1vh;
-  // box-shadow: 0.306vh 0.306vh gray;
   white-space: nowrap;
   display: Flex;
   direction: row;
@@ -33,14 +31,8 @@ const OtherPersonSc = styled.div`
   }
 `;
 
-const PerScPosition = styled.div`
-  position: relative;
-  top: 4.5%;
-  left: 3%;
-`;
-
 export default function LongStick() {
-  const { subscribers, storeSession } = useSelector(state => ({
+  const { subscribers } = useSelector(state => ({
     subscribers: state.MeetingRoom.subscribers,
     storeSession: state.MeetingRoom.storeSession,
   }));
@@ -50,10 +42,7 @@ export default function LongStick() {
       <OtherPersonSc>
         {subscribers &&
           subscribers.map((sub, i) => (
-            <div
-              // className="stream-container col-md-6 col-xs-6"
-              key={i}
-            >
+            <div key={i}>
               <UserVideoComponent streamManager={sub} />
             </div>
           ))}

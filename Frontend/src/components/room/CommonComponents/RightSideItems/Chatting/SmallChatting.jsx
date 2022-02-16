@@ -4,7 +4,6 @@ import {
   SmallChattingInputBox,
   SmallChattingListBox,
   SmallChattingInputDiv,
-  HalfSideDiv1,
   HalfSideDiv2,
 } from './Chatting.style';
 import { useSelector, useDispatch } from 'react-redux';
@@ -12,7 +11,6 @@ import {
   ChattingInputChange,
   ChattingAction,
 } from '../../../../../store/modules/meetingRoom';
-import swal from 'sweetalert';
 import { checkText } from '../../../../../utils/checkText';
 
 export default function SmallChatting() {

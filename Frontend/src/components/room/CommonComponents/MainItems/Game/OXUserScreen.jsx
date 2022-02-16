@@ -8,9 +8,7 @@ const OXuserSc = styled.div`
   position: relative;
   width: 83.541vw;
   height: 66.5vh;
-  // background-color: white;
   border-radius: 1vh;
-  // box-shadow: 0.306vh 0.306vh gray;
 `;
 
 export default function OXUserScreen() {
@@ -18,7 +16,7 @@ export default function OXUserScreen() {
     mainStreamManager: state.MeetingRoom.mainStreamManager,
   }));
   return (
-    <MainDiv className="아따쥑이네">
+    <MainDiv>
       <OXuserSc>
         {mainStreamManager && (
           <StarVideoComponent streamManager={mainStreamManager} />

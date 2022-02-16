@@ -9,8 +9,7 @@ import { MdStar, MdPerson, MdSettings } from 'react-icons/md';
 import { Link } from 'react-router-dom';
 import { useSelector } from 'react-redux';
 export default function MypageProfile() {
-  const { me, myPageDone } = useSelector(state => state.mypage);
-  // const role = 3;
+  const { me } = useSelector(state => state.mypage);
   return (
     <MypageProfileWrapper>
       <div>
