@@ -17,6 +17,7 @@ export default function Pay(props) {
   const tid = window.localStorage.getItem('tid');
   useEffect(() => {
     if (tid && meetingId) {
+      console.log('결제함 이제 결제 완료 응답 받고 처리해야함');
       const state = {
         params: {
           cid: 'TC0ONETIME',
@@ -39,6 +40,7 @@ export default function Pay(props) {
           params,
         }).then(response => {
           // 결제 승인에 대한 응답 출력
+          console.log('결제 완료 응답 처리 성공');
           if (response.status === 200) {
             dispatch({
               type: INSERT_FANMEETING_REQUEST,
@@ -49,6 +51,7 @@ export default function Pay(props) {
               },
             });
           }
+          console.log('응답 처리 후 세션 정보 삭제');
           window.localStorage.removeItem('tid');
           window.localStorage.removeItem('meetingId');
         });

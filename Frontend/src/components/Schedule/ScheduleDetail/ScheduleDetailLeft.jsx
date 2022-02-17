@@ -66,6 +66,7 @@ export default function ScheduleDetailLeft() {
       if (me.memberId === 0) {
         return history.push('/login');
       }
+      console.log('시작');
       const { params } = state;
       axios({
         url: '/v1/payment/ready',
@@ -76,6 +77,7 @@ export default function ScheduleDetailLeft() {
         },
         params,
       }).then(response => {
+        console.log('성공');
         const {
           data: { next_redirect_pc_url, tid },
         } = response;
