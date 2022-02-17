@@ -75,6 +75,7 @@ export default function ScheduleDetailLeft() {
       },
       params,
     }).then(response => {
+      console.log(response);
       console.log('성공');
       const {
         data: { next_redirect_pc_url, tid },
