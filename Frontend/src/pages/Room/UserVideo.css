@@ -59,7 +59,7 @@
 
 .son > div {
   margin-top: 1vw;
-  margin-right: 1vw
+  margin-right: 1vw;
 }
 
 .son > div:first-child {
@@ -69,12 +69,10 @@
 
 .Ready {
   position: relative;
-  width: 98%;
-  height: 64.5vh;
+  width: 60vw;
+  height: 66.5vh;
   background-color: white;
   border-radius: 1vh;
-  box-shadow: 0.306vh 0.306vh gray;
-  margin: 1vh;
   object-fit: cover;
 }
 
@@ -205,7 +203,6 @@
   /* float: left; */
   /* margin: 0; */
   object-fit: cover;
-  
 }
 
 .UserChoiced {

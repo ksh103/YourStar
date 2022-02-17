@@ -4,10 +4,10 @@ const StarScreen = styled.div`
   position: relative;
   left: 20%;
   top: 10%;
-  width: 60%;
+  /* width: 60%;
   height: 66.5vh;
   background-color: white;
-  border-radius: 3.0643vh;
+  border-radius: 3.0643vh; */
 `;
 
 const ColorCircleWrapper = styled.div`
