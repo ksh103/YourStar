@@ -123,7 +123,7 @@ export async function EndMeetingAPI(meetingId) {
 
 // 스타가 팬미팅 신청
 export async function InsertMeetingAPI({
-  code,
+  managerCode,
   name,
   price,
   cnt,
@@ -139,7 +139,7 @@ export async function InsertMeetingAPI({
     new Blob(
       [
         JSON.stringify({
-          managerCode: code,
+          managerCode: managerCode,
           meetingCnt: cnt,
           meetingDescription: description,
           meetingEndDate: endDate,

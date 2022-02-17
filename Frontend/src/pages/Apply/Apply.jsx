@@ -29,7 +29,6 @@ export default function Apply() {
 
   useEffect(() => {
     if (insertMeetingDone) {
-      console.log('초기화 해줘 ㅠ');
       setName('');
       setDescription('');
       setCnt(null);
@@ -87,7 +86,7 @@ export default function Apply() {
       dispatch({
         type: INSERT_MEETING_REQUEST,
         data: {
-          code: me.manageCode,
+          managerCode: me.managerCode,
           name: name,
           price: price,
           cnt: cnt,

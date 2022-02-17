@@ -1,5 +1,4 @@
 import styled from 'styled-components';
-import { device } from '../../styles/variables';
 
 const FooterBlock = styled.div`
   display: flex;
@@ -8,7 +7,15 @@ const FooterBlock = styled.div`
   height: 10vh;
   justify-content: center;
   align-items: center;
-  @media ${device.TabletPortrait} {
+  flex-direction: column;
+  .email {
+    margin-top: 10px;
+    svg {
+      margin-top: 4px;
+      margin-right: 4px;
+    }
+    display: flex;
+    align-items: center;
   }
 `;
 
