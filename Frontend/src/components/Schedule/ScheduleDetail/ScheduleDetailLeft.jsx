@@ -6,10 +6,12 @@ import {
 } from './ScheduleDetail.style';
 import { useHistory } from 'react-router-dom';
 import { useSelector, useDispatch } from 'react-redux';
-import { DELETE_FANMEETING_REQUEST } from '../../../store/modules/fan';
+import {
+  DELETE_FANMEETING_REQUEST,
+  INSERT_FANMEETING_REQUEST,
+} from '../../../store/modules/fan';
 import axios from 'axios';
-import { KAKAO_ADMIN_KEY } from '../../../utils/dev';
-import { HOME_URL, IMAGE_URL } from '../../../utils/contants';
+import { IMAGE_URL } from '../../../utils/contants';
 import { WARNING_COUNT_REQUEST } from '../../../store/modules/meeting';
 import swal from 'sweetalert';
 
@@ -18,25 +20,9 @@ export default function ScheduleDetailLeft() {
     state => state.meeting
   );
   const { me } = useSelector(state => state.mypage);
+  const { insertFanMeetingDone } = useSelector(state => state.fan);
   const history = useHistory();
   const dispatch = useDispatch();
-  const state = {
-    next_redirect_pc_url: '',
-    tid: '',
-    params: {
-      cid: 'TC0ONETIME',
-      partner_order_id: 'partner_order_id',
-      partner_user_id: 'partner_user_id',
-      item_name: meeting.name,
-      quantity: 1,
-      total_amount: meeting.price,
-      tax_free_amount: 0,
-      // router에 지정한 PayResult의 경로로 수정
-      approval_url: `https://i6e204.p.ssafy.io/pay`,
-      fail_url: `https://i6e204.p.ssafy.io/pay`,
-      cancel_url: `https://i6e204.p.ssafy.io/pay`,
-    },
-  };
 
   const enterButton = () => {
     // 입장버튼 클릭 시 경고횟수가 2 이상이면 못들어가게 처리
@@ -59,33 +45,20 @@ export default function ScheduleDetailLeft() {
         data: { memberId: me.memberId, meetingId: meeting.id },
       });
   }, [dispatch, me.memberId, meeting.id, meeting.isReserve]);
+
   const reserveMeeting = () => {
-    console.log('예매하기');
     if (me.memberId === 0) {
       return history.push('/login');
     }
-    console.log('시작');
-    const { params } = state;
-    axios({
-      url: '/v1/payment/ready',
-      method: 'POST',
-      headers: {
-        Authorization: `KakaoAK 96bfb3817ab96ea563f81c8a5ceca182`,
-        'Content-type': 'application/x-www-form-urlencoded;charset=utf-8',
+    dispatch({
+      type: INSERT_FANMEETING_REQUEST,
+      data: {
+        meetingId: meeting.id,
+        memberId: me.memberId,
+        email: me.email,
       },
-      params,
-    }).then(response => {
-      console.log(response);
-      console.log('성공');
-      const {
-        data: { next_redirect_pc_url, tid },
-      } = response;
-      console.log(next_redirect_pc_url);
-      console.log(tid);
-      window.localStorage.setItem('tid', tid);
-      window.localStorage.setItem('meetingId', meeting.id);
-      window.location = next_redirect_pc_url;
     });
+    history.push('/pay');
   };
   const cancelMeeting = () => {
     dispatch({
