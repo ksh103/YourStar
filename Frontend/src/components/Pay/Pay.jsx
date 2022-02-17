@@ -7,47 +7,62 @@ import Footer from '../Footer/Footer';
 import { INSERT_FANMEETING_REQUEST } from '../../store/modules/fan';
 import { Link } from 'react-router-dom';
 import { PayWrapper, PayBlock } from './Pay.style';
-import { KAKAO_ADMIN_KEY } from '../utils/dev';
+import { KAKAO_ADMIN_KEY } from '../../utils/dev';
 
 export default function Pay(props) {
   const { me, myPageDone } = useSelector(state => state.mypage);
   const { meeting } = useSelector(state => state.meeting);
   const dispatch = useDispatch();
   const meetingId = window.localStorage.getItem('meetingId');
+  const tid = window.localStorage.getItem('tid');
   useEffect(() => {
-    const state = {
-      params: {
-        cid: 'TC0ONETIME',
-        tid: window.localStorage.getItem('tid'),
-        partner_order_id: 'partner_order_id',
-        partner_user_id: 'partner_user_id',
-        pg_token: props.location.search.split('=')[1],
-      },
-    };
-
-    const { params } = state;
-    if (myPageDone) {
-      axios({
-        url: '/v1/payment/approve',
-        method: 'POST',
-        headers: {
-          Authorization: `KakaoAK ${KAKAO_ADMIN_KEY}`,
-          'Content-type': 'application/x-www-form-urlencoded;charset=utf-8',
+    if (tid && meetingId) {
+      const state = {
+        params: {
+          cid: 'TC0ONETIME',
+          tid: tid,
+          partner_order_id: 'partner_order_id',
+          partner_user_id: 'partner_user_id',
+          pg_token: props.location.search.split('=')[1],
         },
-        params,
-      }).then(response => {
-        // 결제 승인에 대한 응답 출력
-        console.log(response);
-        console.log(me.memberId);
-        if (response.status === 200) {
-          dispatch({
-            type: INSERT_FANMEETING_REQUEST,
-            data: { meetingId: meetingId, memberId: me.memberId },
-          });
-        }
-      });
+      };
+
+      const { params } = state;
+      if (myPageDone) {
+        axios({
+          url: '/v1/payment/approve',
+          method: 'POST',
+          headers: {
+            Authorization: `KakaoAK ${KAKAO_ADMIN_KEY}`,
+            'Content-type': 'application/x-www-form-urlencoded;charset=utf-8',
+          },
+          params,
+        }).then(response => {
+          // 결제 승인에 대한 응답 출력
+          if (response.status === 200) {
+            dispatch({
+              type: INSERT_FANMEETING_REQUEST,
+              data: {
+                meetingId: meetingId,
+                memberId: me.memberId,
+                email: me.email,
+              },
+            });
+          }
+          window.localStorage.removeItem('tid');
+          window.localStorage.removeItem('meetingId');
+        });
+      }
     }
-  }, [dispatch, myPageDone, me.memberId, meetingId, props.location.search]);
+  }, [
+    dispatch,
+    myPageDone,
+    me.memberId,
+    meetingId,
+    props.location.search,
+    tid,
+    me.email,
+  ]);
 
   return (
     <Layout>

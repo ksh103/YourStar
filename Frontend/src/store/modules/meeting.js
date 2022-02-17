@@ -1,9 +1,10 @@
 import produce from 'immer';
 const initialState = {
   meeting: {},
+  record: {},
   totalMeetings: [],
   approvedMeetings: [],
-
+  warningAccount: 0, // 경고횟수
   detailMeetingLoading: false, // 미팅 상세정보
   detailMeetingDone: false,
   detailMeetingError: null,
@@ -16,18 +17,21 @@ const initialState = {
   updateApproveLoading: false, // 팬미팅 승인 업데이트
   updateApproveDone: false,
   updateApproveError: null,
+  warningCountLoading: false, // 회원 경고횟수 받아오기
+  warningCountDone: false,
+  warningCountError: null,
   warningMemberLoading: false, // 회원에서 경고주기
   warningMemberDone: false,
   warningMemberError: null,
   insertMeetingLoading: false, // 미팅신청
   insertMeetingDone: false,
   insertMeetingError: null,
-  updateMeetingLoading: false, // 미팅수정
-  updateMeetingDone: false,
-  updateMeetingError: null,
-  deleteMeetingLoading: false, // 미팅 삭제
-  deleteMeetingDone: false,
-  deleteMeetingError: null,
+  endMeetingLoading: false, // 미팅 종료
+  endMeetingDone: false,
+  endMeetingError: null,
+  getRecordLoading: false, // 추억보관함 사진, 비디오 불러오기
+  getRecordDone: false,
+  getRecordError: null,
 };
 
 export const DETAIL_MEETING_REQUEST = 'DETAIL_MEETING_REQUEST'; // 상세정보 미팅
@@ -50,17 +54,21 @@ export const WARNING_MEMBER_REQUEST = 'WARNING_MEMBER_REQUEST'; // 팬에게 경
 export const WARNING_MEMBER_SUCCESS = 'WARNING_MEMBER_SUCCESS';
 export const WARNING_MEMBER_FAILURE = 'WARNING_MEMBER_FAILURE';
 
+export const WARNING_COUNT_REQUEST = 'WARNING_COUNT_REQUEST'; // 팬에게 경고주기
+export const WARNING_COUNT_SUCCESS = 'WARNING_COUNT_SUCCESS';
+export const WARNING_COUNT_FAILURE = 'WARNING_COUNT_FAILURE';
+
 export const INSERT_MEETING_REQUEST = 'INSERT_MEETING_REQUEST'; // 미팅 신청(스타)
 export const INSERT_MEETING_SUCCESS = 'INSERT_MEETING_SUCCESS';
 export const INSERT_MEETING_FAILURE = 'INSERT_MEETING_FAILURE';
 
-export const UPDATE_MEETING_REQUEST = 'UPDATE_MEETING_REQUEST'; // 미팅 수정(스타)
-export const UPDATE_MEETING_SUCCESS = 'UPDATE_MEETING_SUCCESS';
-export const UPDATE_MEETING_FAILURE = 'UPDATE_MEETING_FAILURE';
+export const END_MEETING_REQUEST = 'END_MEETING_REQUEST'; // 미팅 종료(스타)
+export const END_MEETING_SUCCESS = 'END_MEETING_SUCCESS';
+export const END_MEETING_FAILURE = 'END_MEETING_FAILURE';
 
-export const DELETE_MEETING_REQUEST = 'DELETE_MEETING_REQUEST'; // 미팅 취소(스타)
-export const DELETE_MEETING_SUCCESS = 'DELETE_MEETING_SUCCESS';
-export const DELETE_MEETING_FAILURE = 'DELETE_MEETING_FAILURE';
+export const GET_RECORD_REQUEST = 'GET_RECORD_REQUEST'; // 추억보관함 가져오기
+export const GET_RECORD_SUCCESS = 'GET_RECORD_SUCCESS';
+export const GET_RECORD_FAILURE = 'GET_RECORD_FAILURE';
 
 export const ADD_APPLICANT_MEMBER = 'ADD_APPLICANT_MEMBER';
 export const REMOVE_APPLICANT_MEMBER = 'REMOVE_APPLICANT_MEMBER';
@@ -127,6 +135,34 @@ const reducer = (state = initialState, action) =>
         draft.updateApproveLoading = false;
         draft.updateApproveError = action.error;
         break;
+      case WARNING_COUNT_REQUEST:
+        draft.warningCountLoading = true;
+        draft.warningCountDone = false;
+        draft.warningCountError = null;
+        break;
+      case WARNING_COUNT_SUCCESS:
+        draft.warningCountLoading = false;
+        draft.warningCountDone = true;
+        draft.warningAccount = action.data.applicant.applicantWarnCount; //경고횟수 저장하기!!!!!
+        break;
+      case WARNING_COUNT_FAILURE:
+        draft.warningCountLoading = false;
+        draft.warningCountError = action.error;
+        break;
+      case WARNING_MEMBER_REQUEST:
+        draft.warningMemberLoading = true;
+        draft.warningMemberDone = false;
+        draft.warningMemberError = null;
+        break;
+      case WARNING_MEMBER_SUCCESS:
+        draft.warningMemberLoading = false;
+        draft.warningMemberDone = true;
+        console.log(action);
+        break;
+      case WARNING_MEMBER_FAILURE:
+        draft.warningMemberLoading = false;
+        draft.warningMemberError = action.error;
+        break;
       case INSERT_MEETING_REQUEST:
         draft.insertMeetingLoading = true;
         draft.insertMeetingDone = false;
@@ -135,56 +171,37 @@ const reducer = (state = initialState, action) =>
       case INSERT_MEETING_SUCCESS:
         draft.insertMeetingLoading = false;
         draft.insertMeetingDone = true;
-        draft.totalMeetings.push(action.data);
         break;
       case INSERT_MEETING_FAILURE:
         draft.insertMeetingLoading = false;
         draft.insertMeetingError = action.error;
         break;
-      case UPDATE_MEETING_REQUEST:
-        draft.updateMeetingLoading = true;
-        draft.updateMeetingDone = false;
-        draft.updateMeetingError = null;
+      case END_MEETING_REQUEST:
+        draft.endMeetingLoading = true;
+        draft.endMeetingDone = false;
+        draft.endMeetingError = null;
         break;
-      case UPDATE_MEETING_SUCCESS:
-        draft.updateMeetingLoading = false;
-        draft.updateMeetingDone = true;
-        let idx = draft.totalMeetings.findIndex(
-          m => m.meetingId === action.data.meetingId
-        );
-        draft.totalMeetings[idx] = action.data;
-        idx = draft.approvedMeetings.findIndex(
-          m => m.meetingId === action.data.meetingId
-        );
-        draft.approvedMeetings[idx] = action.data;
-        idx = draft.upcomingMeetings.findIndex(
-          m => m.meetingId === action.data.meetingId
-        );
-        draft.upcomingMeetings[idx] = action.data;
+      case END_MEETING_SUCCESS:
+        draft.endMeetingLoading = false;
+        draft.endMeetingDone = true;
         break;
-      case UPDATE_MEETING_FAILURE:
-        draft.updateMeetingLoading = false;
-        draft.updateMeetingError = action.error;
+      case END_MEETING_FAILURE:
+        draft.endMeetingLoading = false;
+        draft.endMeetingError = action.error;
         break;
-      case DELETE_MEETING_REQUEST:
-        draft.deleteMeetingLoading = true;
-        draft.deleteMeetingDone = false;
-        draft.deleteMeetingError = null;
+      case GET_RECORD_REQUEST:
+        draft.getRecordLoading = true;
+        draft.getRecordDone = false;
+        draft.getRecordError = null;
         break;
-      case DELETE_MEETING_SUCCESS:
-        draft.deleteMeetingLoading = false;
-        draft.deleteMeetingDone = true;
-        draft.totalMeetings.filter(m => m.meetingId !== action.data.meetingId);
-        draft.approvedMeetings.filter(
-          m => m.meetingId !== action.data.meetingId
-        );
-        draft.upcomingMeetings.filter(
-          m => m.meetingId !== action.data.meetingId
-        );
+      case GET_RECORD_SUCCESS:
+        draft.getRecordLoading = false;
+        draft.getRecordDone = true;
+        draft.record = action.data;
         break;
-      case DELETE_MEETING_FAILURE:
-        draft.deleteMeetingLoading = false;
-        draft.deleteMeetingError = action.error;
+      case GET_RECORD_FAILURE:
+        draft.getRecordLoading = false;
+        draft.getRecordError = action.error;
         break;
       case ADD_APPLICANT_MEMBER:
         draft.meeting.applicantCnt++;

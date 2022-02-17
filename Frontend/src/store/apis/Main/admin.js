@@ -11,10 +11,17 @@ export async function MemberAllListAPI(page, size) {
 }
 
 // 관계자 계정 생성
-export async function CreateOfficialsAPI(accountCnt, managerCodeName) {
-  const result = await axios.post(`${BASE_URL}admin`, {
+export async function CreateOfficialsAPI({
+  accountCnt,
+  managerCodeName,
+  starAccountCnt,
+  managerEmail,
+}) {
+  const result = await axios.post(`${BASE_URL}admin/create`, {
     accountCnt: accountCnt,
     managerCodeName: managerCodeName,
+    managerEmail: managerEmail,
+    starAccountCnt: starAccountCnt,
   });
   return result;
 }

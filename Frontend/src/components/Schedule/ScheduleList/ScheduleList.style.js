@@ -12,7 +12,7 @@ const ScheduleCardBlock = styled.div`
 `;
 const ScheduleCardImage = styled.div`
   width: 50%;
-  height: 150px;
+  height: 200px;
   border-radius: 8px;
   overflow: hidden;
   background-color: gray;
@@ -30,10 +30,10 @@ const ScheduleCardImage = styled.div`
 
 const ScheduleCardContent = styled.div`
   width: 45%;
-  margin: 10px;
+  height: 100%;
   color: black;
   #title {
-    font-size: 1.3em;
+    font-size: 30px;
     font-weight: bold;
     margin-bottom: 7px;
     cursor: pointer;
@@ -42,8 +42,16 @@ const ScheduleCardContent = styled.div`
     }
   }
   #date {
-    font-size: 1em;
+    margin-bottom: 14px;
+    font-size: 20px;
     color: gray;
+  }
+  #desc {
+    height: 60px;
+    font-size: 20px;
+    text-overflow: ellipsis;
+    overflow: hidden;
+    white-space: nowrap;
   }
 `;
 

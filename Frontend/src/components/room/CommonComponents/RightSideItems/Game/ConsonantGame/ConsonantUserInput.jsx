@@ -1,19 +1,113 @@
-import React from 'react';
-import {
-  HalfSideDiv2,
-  SmallBox,
-  SmallChattingInputBox,
-  SmallChattingListBox,
-} from '../../Chatting/Chatting.style';
-
+import React, { useEffect, useState } from 'react';
+import { useSelector } from 'react-redux';
+import swal from 'sweetalert';
+import LongChatting from '../../Chatting/LongChatting';
 export default function ConsonantUserInput() {
+  const [userConsungInputValue, setUserConsungInputValue] = useState('');
+
+  const changeUserInput = e => {
+    setUserConsungInputValue(e.target.value);
+  };
+
+  const { chosonantQuiz, storeSession } = useSelector(
+    state => state.MeetingRoom
+  );
+
+  const { me } = useSelector(state => state.mypage);
+
+  // 효과음
+  const myAudio = new Audio();
+
+  const soundEffect = v => { 
+    if (v == 1) {
+      myAudio.src = require('../../../../../../assets/sound effects/correct.mp3')
+    } else if (v == 2) {
+      myAudio.src = require('../../../../../../assets/sound effects/wrong.mp3')
+      myAudio.volume = 0.7;
+    }
+    myAudio.play()
+  }
+
+  useEffect(() => {
+    if (chosonantQuiz.length === 0) {
+      // 초성게임에 문제가 없을 때 : 초기 상태일 때
+      return;
+    } else {
+      swal('🔔스타가 내는 문제를 맞춰보세요🔔', chosonantQuiz[0], {
+        closeOnClickOutside: false,
+        content: 'input',
+        button: '제출',
+      }).then(answer => {
+        if (answer === chosonantQuiz[1]) {
+          soundEffect(1)  // 정답 효과음
+          swal(
+            '축하합니다 정답입니다🎉',
+            '정답 정보가 스타에게 제공됩니다',
+            'success',
+            {
+              buttons: false,
+              timer: 3000,
+              closeOnClickOutside: false,
+            }
+          );
+          storeSession.signal({
+            data: `${me.nick},${me.memberId}`, // 정답 신호 보내주기
+            type: 'ChoUserAns',
+          });
+        } else {
+          soundEffect (2) // 오답 효과음
+          swal('틀렸습니다', '다시한번 풀어보세요!', 'error', {
+            buttons: false,
+            timer: 2800,
+            closeOnClickOutside: false,
+          });
+          setTimeout(function () {
+            regame(); // 틀렸을 때 게임 다시하기위해 호출하는 함수
+          }, 3000);
+        }
+      });
+    }
+  }, [chosonantQuiz, me.nick, me.memberId, storeSession]);
+
+  const regame = () => {
+    swal('🔔스타가 내는 문제를 맞춰보세요🔔', chosonantQuiz[0], {
+      closeOnClickOutside: false,
+      content: 'input',
+      button: '제출',
+    }).then(answer => {
+      if (answer === chosonantQuiz[1]) {
+        soundEffect(1)  // 정답 효과음
+        swal(
+          '축하합니다 정답입니다🎉',
+          '정답 정보가 스타에게 제공됩니다',
+          'success',
+          {
+            buttons: false,
+            timer: 3000,
+            closeOnClickOutside: false,
+          }
+        );
+        storeSession.signal({
+          data: `${me.nick},${me.memberId}`, // 정답 신호 보내주기
+          type: 'ChoUserAns',
+        });
+      } else {
+        soundEffect (2) // 오답 효과음
+        swal('틀렸습니다', '다시한번 풀어보세요!', 'error', {
+          buttons: false,
+          timer: 2800,
+          closeOnClickOutside: false,
+        });
+        setTimeout(function () {
+          regame(); // 틀렸을 때 게임 다시하기위해 호출하는 함수
+        }, 3000);
+      }
+    });
+  };
+
   return (
     <>
-      <HalfSideDiv2>
-        <SmallBox>유저 입력창</SmallBox>
-        <SmallChattingListBox> ㄱ ㅎ ㅇ ㄹ ㄴ</SmallChattingListBox>
-        <SmallChattingInputBox></SmallChattingInputBox>
-      </HalfSideDiv2>
+      <LongChatting></LongChatting>
     </>
   );
 }

@@ -5,4 +5,10 @@ const AdminMemberWrapper = styled.div`
   overflow-y: auto;
 `;
 
-export { AdminMemberWrapper };
+const AccountWrapper = styled.div`
+  display: flex;
+  align-content: center;
+  justify-content: center;
+`;
+
+export { AdminMemberWrapper, AccountWrapper };

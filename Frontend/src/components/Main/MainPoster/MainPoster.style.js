@@ -1,7 +1,9 @@
 import styled from 'styled-components';
 import { device } from '../../../styles/variables';
 const MainPosterWrapper = styled.div`
-  padding: 5% 10%;
+  padding: 10%;
+  padding-top: 20px;
+  padding-bottom: 5%;
 `;
 
 const MainPosterCard = styled.div`
@@ -17,6 +19,7 @@ const MainPosterCard = styled.div`
       width: 60vw;
       height: 60vw;
     }
+    background-color: gray;
   }
 `;
 export { MainPosterWrapper, MainPosterCard };

@@ -5,10 +5,9 @@ import {
   ScheduleCardImage,
   ScheduleCardContent,
 } from './ScheduleList.style';
-import poster from '../poster1.jpg';
 import { Link } from 'react-router-dom';
 import moment from 'moment';
-
+import { IMAGE_URL } from '../../../utils/contants';
 export default function ScheduleCard({ meeting }) {
   const changeDate = d => {
     const date = moment(d, 'YYYY-MM-DD HH:mm:ss');
@@ -19,7 +18,11 @@ export default function ScheduleCard({ meeting }) {
       <ScheduleCardBlock>
         <ScheduleCardImage>
           <Link to={{ pathname: `/schedule/${meeting.id}` }}>
-            <img src={poster} alt="poster" />
+            {meeting.image === null ? (
+              <img src="/images/noimg.gif" alt="no_image" />
+            ) : (
+              <img src={`${IMAGE_URL}${meeting.image}`} alt="사진 없노" />
+            )}
           </Link>
         </ScheduleCardImage>
         <ScheduleCardContent>
@@ -27,6 +30,7 @@ export default function ScheduleCard({ meeting }) {
             <div id="title">{meeting.name}</div>
           </Link>
           <div id="date">{changeDate(meeting.startDate)}</div>
+          <div id="desc">{meeting.description}</div>
         </ScheduleCardContent>
       </ScheduleCardBlock>
     </ScheduleCardRow>

@@ -4,59 +4,44 @@ import OtherScreenAngle from '../OtherScreen/OtherScreenAngle';
 import { MainDiv } from '../Main.style';
 import { useSelector, useDispatch } from 'react-redux';
 import { changeQnAtoggle } from '../../../../../store/modules/meetingRoom';
-// 포지션작업
 
+// 포지션작업
 const StarScreen = styled.div`
-  overflow: auto;
+  /* overflow: auto; */
   position: relative;
-  width: 60.041vw;
-  height: 66.5vh;
+  width: 63vw;
+  height: 60.5vh;
   background-color: white;
-  border-radius: 3.0643vh;
+  border-radius: 1vh;
   box-shadow: 0.306vh 0.306vh gray;
 `;
 
 const PerScPosition = styled.div`
-  position: relative;
-  top: 2%;
-  left: 4%;
+  display: grid;
+  padding: 2vh;
+  grid-template-columns: repeat(4, 1fr);
+  grid-template-rows: repeat(4, 150px);
+  column-gap: 10px;
+  row-gap: 10px;
+  overflow: hidden;
 `;
 
 export default function StarQnAListScreen() {
-  const { StarQnAtoggle } = useSelector(state => ({
-    StarQnAtoggle: state.MeetingRoom.StarQnAtoggle,
-  }));
-
-  const dispatch = useDispatch();
-
-  const toggleChange = tf => {
-    dispatch(changeQnAtoggle(tf));
-  };
+  const { QnAList } = useSelector(state => state.MeetingRoom);
 
   return (
     <MainDiv>
       <StarScreen>
-        <button onClick={StarQnAtoggle => toggleChange(StarQnAtoggle)}>
-          다시 작은화면
-        </button>
         <PerScPosition>
-          <OtherScreenAngle></OtherScreenAngle>
-          <OtherScreenAngle></OtherScreenAngle>
-          <OtherScreenAngle></OtherScreenAngle>
-          <OtherScreenAngle></OtherScreenAngle>
-          <OtherScreenAngle></OtherScreenAngle>
-          <OtherScreenAngle></OtherScreenAngle>
-          <OtherScreenAngle></OtherScreenAngle>
-          <OtherScreenAngle></OtherScreenAngle>
-          <OtherScreenAngle></OtherScreenAngle>
-          <OtherScreenAngle></OtherScreenAngle>
-          <OtherScreenAngle></OtherScreenAngle>
-          <OtherScreenAngle></OtherScreenAngle>
-          <OtherScreenAngle></OtherScreenAngle>
-          <OtherScreenAngle></OtherScreenAngle>
-          <OtherScreenAngle></OtherScreenAngle>
-          <OtherScreenAngle></OtherScreenAngle>
-          <OtherScreenAngle></OtherScreenAngle>
+          {QnAList &&
+            QnAList.map((value, idx) => {
+              return (
+                <OtherScreenAngle
+                  key={idx + value.text}
+                  text={value.text}
+                ></OtherScreenAngle>
+              );
+            })}
         </PerScPosition>
       </StarScreen>
     </MainDiv>

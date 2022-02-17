@@ -1,21 +1,25 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import {
   ScheduleDetailButton,
   ScheduleDetailImage,
   ScheduleDetailLeftWrapper,
 } from './ScheduleDetail.style';
-import poster from '../../../assets/images/poster1.jpg';
-import { Link, useHistory } from 'react-router-dom';
+import { useHistory } from 'react-router-dom';
 import { useSelector, useDispatch } from 'react-redux';
 import { DELETE_FANMEETING_REQUEST } from '../../../store/modules/fan';
 import axios from 'axios';
 import { KAKAO_ADMIN_KEY } from '../../../utils/dev';
+import { IMAGE_URL } from '../../../utils/contants';
+import { WARNING_COUNT_REQUEST } from '../../../store/modules/meeting';
+import swal from 'sweetalert';
+
 export default function ScheduleDetailLeft() {
-  const { meeting } = useSelector(state => state.meeting);
+  const { meeting, detailMeetingDone, warningAccount } = useSelector(
+    state => state.meeting
+  );
   const { me } = useSelector(state => state.mypage);
   const history = useHistory();
   const dispatch = useDispatch();
-
   const state = {
     next_redirect_pc_url: '',
     tid: '',
@@ -33,6 +37,28 @@ export default function ScheduleDetailLeft() {
       cancel_url: `http://localhost:3000/pay`,
     },
   };
+
+  const enterButton = () => {
+    // 입장버튼 클릭 시 경고횟수가 2 이상이면 못들어가게 처리
+    if (warningAccount < 2) {
+      history.push(`/pledge/${meeting.id}`);
+    } else {
+      swal(
+        '경고횟수 2회 누적',
+        '귀하는 미팅 진행 시 욕설 및 비방으로 경고횟수 2회가 누적되어 입장하실 수 없습니다.',
+        'error'
+      );
+    }
+  };
+
+  // 입장 시 경고횟수 확인
+  useEffect(() => {
+    if (meeting.isReserve)
+      dispatch({
+        type: WARNING_COUNT_REQUEST,
+        data: { memberId: me.memberId, meetingId: meeting.id },
+      });
+  }, [dispatch, me.memberId, meeting.id, meeting.isReserve]);
 
   const showButton = () => {
     const now = new Date();
@@ -73,15 +99,25 @@ export default function ScheduleDetailLeft() {
           <div>종료</div>
         </ScheduleDetailButton>
       );
-    } else if (new Date(meeting.startDate) <= now)
-      if (meeting.isReserve) {
-        return (
-          <ScheduleDetailButton color="3">
-            <div>
-              <Link to={`/room/${meeting.id}`}>입장하기</Link>
-            </div>
-          </ScheduleDetailButton>
-        );
+    } else if (new Date(meeting.startDate) <= now) {
+      if (
+        me.code === 1 ||
+        ((me.code === 2 || me.code === 4) && me.managerCode === meeting.code) ||
+        meeting.isReserve
+      ) {
+        if (meeting.warningCount >= 2) {
+          return (
+            <ScheduleDetailButton>
+              <div>입장불가</div>
+            </ScheduleDetailButton>
+          );
+        } else {
+          return (
+            <ScheduleDetailButton color="3">
+              <div onClick={enterButton}>입장하기</div>
+            </ScheduleDetailButton>
+          );
+        }
       } else {
         return (
           <ScheduleDetailButton>
@@ -89,7 +125,7 @@ export default function ScheduleDetailLeft() {
           </ScheduleDetailButton>
         );
       }
-    else if (new Date(meeting.openDate) <= now) {
+    } else if (new Date(meeting.openDate) <= now) {
       if (meeting.isReserve) {
         return (
           <ScheduleDetailButton color="2">
@@ -103,7 +139,7 @@ export default function ScheduleDetailLeft() {
               <div>매진</div>
             </ScheduleDetailButton>
           );
-        } else {
+        } else if (me.code === 3) {
           return (
             <ScheduleDetailButton color="1">
               <div onClick={reserveMeeting}>예매하기</div>
@@ -123,7 +159,11 @@ export default function ScheduleDetailLeft() {
   return (
     <ScheduleDetailLeftWrapper>
       <ScheduleDetailImage>
-        <img src={poster} alt="postesr" />
+        {detailMeetingDone && meeting.image === null ? (
+          <img src={'/images/noimg.gif'} alt="noimage" />
+        ) : (
+          <img src={`${IMAGE_URL}${meeting.image}`} alt={meeting.image} />
+        )}
       </ScheduleDetailImage>
       {showButton()}
     </ScheduleDetailLeftWrapper>

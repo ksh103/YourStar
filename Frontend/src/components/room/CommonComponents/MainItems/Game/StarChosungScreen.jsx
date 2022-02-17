@@ -1,51 +1,48 @@
 import React from 'react';
 import styled from 'styled-components';
-import OtherScreenAngle from '../OtherScreen/OtherScreenAngle';
 import { MainDiv } from '../Main.style';
+import { useSelector, useDispatch } from 'react-redux';
+import UserVideoComponent from '../../../../../pages/Room/UserVideoComponent';
 
 const StarScreen = styled.div`
-  overflow-x: auto;
+  overflow-y: auto;
   position: relative;
-  width: 60.041vw;
-  height: 82vh;
-  max-height: 82vh;
+  width: 63vw;
+  height: 90vh;
   background-color: white;
-  border-radius: 3.0643vh;
-  box-shadow: 0.306vh 0.306vh gray;
+  border-radius: 1vh;
+  // box-shadow: 0.306vh 0.306vh gray;
+  display: flex;
+  justify-content:center;
+
 `;
 
 const PerScPosition = styled.div`
-  position: absolute;
+  margin: 1.5vh 0 1.5vh 0.5vw;
   display: flex;
-  flex-direction: column;
   flex-wrap: wrap;
-  top: 2%;
-  left: 3%;
-  height: 82vh;
+  align-content: flex-start;
+  justify-content: center;
 `;
 
 export default function StarChosungScreen() {
+  const { subscribers, storeSession } = useSelector(state => ({
+    subscribers: state.MeetingRoom.subscribers,
+    storeSession: state.MeetingRoom.storeSession,
+  }));
   return (
     <MainDiv>
       <StarScreen>
         <PerScPosition>
-          <OtherScreenAngle value="3"></OtherScreenAngle>
-          <OtherScreenAngle></OtherScreenAngle>
-          <OtherScreenAngle></OtherScreenAngle>
-          <OtherScreenAngle></OtherScreenAngle>
-          <OtherScreenAngle></OtherScreenAngle>
-          <OtherScreenAngle></OtherScreenAngle>
-          <OtherScreenAngle></OtherScreenAngle>
-          <OtherScreenAngle></OtherScreenAngle>
-          <OtherScreenAngle></OtherScreenAngle>
-          <OtherScreenAngle></OtherScreenAngle>
-          <OtherScreenAngle></OtherScreenAngle>
-          <OtherScreenAngle></OtherScreenAngle>
-          <OtherScreenAngle></OtherScreenAngle>
-          <OtherScreenAngle></OtherScreenAngle>
-          <OtherScreenAngle></OtherScreenAngle>
-          <OtherScreenAngle></OtherScreenAngle>
-          <OtherScreenAngle></OtherScreenAngle>
+          {subscribers &&
+            subscribers.map((sub, i) => (
+              <div
+                // className="stream-container col-md-6 col-xs-6"
+                key={i}
+              >
+                <UserVideoComponent streamManager={sub} />
+              </div>
+            ))}
         </PerScPosition>
       </StarScreen>
     </MainDiv>

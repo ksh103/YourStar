@@ -30,26 +30,28 @@ const MypageProfileBlock = styled.div`
   }
   #profileNickname {
     font-weight: bold;
-    font-size: 1.5em;
+    font-size: 30px;
     margin: 5px;
   }
   #profileEmail {
-    font-size: 1em;
+    font-size: 20px;
     margin: 5px;
   }
 `;
 
 const MypageIconBlock = styled.div`
   display: inline-block;
-  width: 40px;
-  height: 40px;
-  font-size: 30px;
+  width: 50px;
+  height: 50px;
+  font-size: 40px;
   border-radius: 50%;
   background-color: ${blockColor};
 `;
 const MypageProfileButton = styled.div`
   margin: 5px;
+  margin-top: 20px;
   button {
+    font-size: 20px;
     background-color: ${pointColor};
     border-radius: 5px;
     color: white;
@@ -62,6 +64,7 @@ const MypageMenuWrapper = styled.div`
   align-items: center;
   margin-bottom: 10px;
   padding: 0 10%;
+  font-size: 20px;
   ul li {
     cursor: pointer;
     margin: 0 15px;

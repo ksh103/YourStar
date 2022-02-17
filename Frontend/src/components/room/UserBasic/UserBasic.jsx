@@ -2,7 +2,7 @@ import React from 'react';
 import styled from 'styled-components';
 import MyScreen from '../CommonComponents/MainItems/MyScreens/MyScreen';
 import OtherPersonScreen from '../CommonComponents/MainItems/OtherScreen/OtherPersonScreen';
-import DefaultUserScreen from '../CommonComponents/MainItems/DefaultUserScreen';
+import DefaultStarScreen from '../CommonComponents/MainItems/DefaultStarScreen';
 import LongChatting from '../CommonComponents/RightSideItems/Chatting/LongChatting';
 // 포지션작업
 const BackgroundDiv = styled.div`
@@ -14,7 +14,7 @@ const BackgroundDiv = styled.div`
 export default function UserBasic() {
   return (
     <BackgroundDiv>
-      <DefaultUserScreen></DefaultUserScreen>
+      <DefaultStarScreen></DefaultStarScreen>
       <MyScreen></MyScreen>
       <LongChatting></LongChatting>
       <OtherPersonScreen></OtherPersonScreen>

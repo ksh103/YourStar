@@ -47,6 +47,17 @@ const RedDiv = styled.div`
   }
 `;
 
+const WarningComment = styled.div`
+  position: absolute;
+`
+
 export default function RedCard() {
-  return <RedDiv></RedDiv>;
+  return (
+    <div>
+      <RedDiv></RedDiv>
+      <WarningComment>
+        <p>부적절한 행위 및 언행으로 경고 2회를 받으셨습니다.</p>
+        <p>10초 뒤 팬미팅에서 자동으로 나가게 되며, 재입장이 불가합니다.</p>
+      </WarningComment>
+    </div>);
 }

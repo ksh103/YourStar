@@ -1,0 +1,13 @@
+.randomRolling {
+  width: 100rem;
+}
+
+.countdown {
+  width: 50vw;
+  height: 30vh;
+  background-color: rgba(63, 255, 106, 0);
+  margin: 0px;
+  color: blueviolet;
+  font-size: 500px;
+  margin-bottom: 28px;
+}

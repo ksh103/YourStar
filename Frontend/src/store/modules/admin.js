@@ -3,6 +3,7 @@ const initialState = {
   createManagerLoading: false,
   createManagerDone: false,
   createManagerError: false,
+  createdAccount: [],
 };
 export const CREATE_MANAGER_REQUEST = 'CREATE_MANAGER_REQUEST'; // 관계자 계정 생성
 export const CREATE_MANAGER_SUCCESS = 'CREATE_MANAGER_SUCCESS';
@@ -19,10 +20,12 @@ const reducer = (state = initialState, action) =>
       case CREATE_MANAGER_SUCCESS:
         draft.createManagerLoading = false;
         draft.createManagerDone = true;
+        draft.createdAccount = action.data;
         break;
       case CREATE_MANAGER_FAILURE:
         draft.createManagerLoading = false;
-        draft.createManagerError = action.error;
+        draft.createManagerDone = false;
+        // draft.createManagerError = action.error;
         break;
       default:
         break;

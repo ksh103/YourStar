@@ -3,7 +3,6 @@ import { HalfSideDiv1, SmallBox } from '../../Chatting/Chatting.style';
 import styled from 'styled-components';
 
 const ScheduleListWrapper = styled.div`
-  /* border: solid red; */
   border-radius: 1vw;
   position: absolute;
   top: 2vh;
@@ -13,7 +12,6 @@ const ScheduleListWrapper = styled.div`
   overflow-y: auto;
 `;
 const ScheduleListBox = styled.div`
-  /* border: solid red; */
   background-color: black;
   border-radius: 1vw;
   margin-top: 1vh;

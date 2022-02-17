@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import Universe from '../../components/Main/Universe';
 import MainPoster from '../../components/Main/MainPoster/MainPoster';
 import { MainButton, MainSection, MainWrapper } from './Main.style';
@@ -6,18 +6,29 @@ import Navbar from '../../components/Navbar/Navbar';
 import Footer from '../../components/Footer/Footer';
 import { Link } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
-import { Layout } from '../../styles/variables';
 import { MY_PAGE_REQUEST } from '../../store/modules/mypage';
+import { APPROVED_MEETINGS_REQUEST } from '../../store/modules/meeting';
+import Header from '../../components/room/OneonOneMeeting/1_1Meeting/Header';
+
 export default function Main() {
   const dispatch = useDispatch();
   const { logInDone } = useSelector(state => state.member);
+  const { approvedMeetingsDone } = useSelector(state => state.meeting);
 
-  if (!logInDone && sessionStorage.length > 0) {
-    // 만약 토큰이 남아 있다면 or 새로고침 되었을 때 동작하도록 해야함
-    dispatch({
-      type: MY_PAGE_REQUEST,
-    });
-  }
+  useEffect(() => {
+    if (!logInDone && sessionStorage.length > 0) {
+      // 만약 토큰이 남아 있다면 or 새로고침 되었을 때 동작하도록 해야함
+      dispatch({
+        type: MY_PAGE_REQUEST,
+      });
+    }
+    if (!approvedMeetingsDone) {
+      dispatch({
+        type: APPROVED_MEETINGS_REQUEST,
+        data: { page: 1, size: 100 },
+      });
+    }
+  }, [approvedMeetingsDone, dispatch, logInDone]);
 
   return (
     <MainWrapper>

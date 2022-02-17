@@ -13,10 +13,13 @@ const MypageDetailHeader = styled.div`
   height: 12%;
   display: flex;
   align-items: center;
-  font-size: 1.5em;
+  font-size: 40px;
   #back-icon {
     margin: 0 20px;
     cursor: pointer;
+    &:hover {
+      color: ${pointColor};
+    }
   }
 `;
 const UserModifyHeader = styled.div`
@@ -25,8 +28,8 @@ const UserModifyHeader = styled.div`
     display: flex;
     justify-content: center;
     align-items: center;
-    height: 80%;
-    font-size: 2em;
+    height: 75%;
+    font-size: 50px;
     font-weight: bold;
     color: ${pointColor};
   }

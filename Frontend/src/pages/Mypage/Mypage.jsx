@@ -5,23 +5,22 @@ import { Block, Layout, Wrapper } from '../../styles/variables';
 import { MypageContent, MypageHeader, MypageWrapper } from './Mypage.style';
 import MypageProfile from '../../components/Mypage/MypageProfile';
 import MypageMenu from '../../components/Mypage/MypageMenu';
-import RepositoryMypageCard from '../../components/Mypage/RepositoryMypageCard';
 import StarMypageCard from '../../components/Mypage/StarMypageCard';
-import UserMypageCard from '../../components/Mypage/UserMypageCard';
 import Grid from '@mui/material/Grid';
 import { useDispatch, useSelector } from 'react-redux';
 import { TOTAL_MEETINGS_REQUEST } from '../../store/modules/meeting';
 import { SELECT_FANMEETING_REQUEST } from '../../store/modules/fan';
+import MypageFan from '../../components/Mypage/MypageFan.jsx';
 
 export default function Mypage() {
   const dispatch = useDispatch();
   const { totalMeetings, totalMeetingsDone, totalMeetingsLoading } =
     useSelector(state => state.meeting);
-  const { selectFanMeetingDone, applicant } = useSelector(state => state.fan);
-  const { menu, me } = useSelector(state => state.mypage);
+  const { selectFanMeetingDone } = useSelector(state => state.fan);
+  const { me } = useSelector(state => state.mypage);
 
   useEffect(() => {
-    if (!selectFanMeetingDone) {
+    if (!selectFanMeetingDone && me.memberId !== 0) {
       dispatch({
         type: SELECT_FANMEETING_REQUEST,
         data: { memberId: me.memberId, page: 1, size: 100 },
@@ -30,17 +29,14 @@ export default function Mypage() {
   }, [dispatch, me, selectFanMeetingDone]);
 
   const content = () => {
-    if (me.code === 2) {
+    if (me.code === 4) {
       // 스타(오픈한 팬 미팅)
       if (!totalMeetingsDone && !totalMeetingsLoading) {
         // 전체 미팅 내역 받아오기
-        dispatch(
-          {
-            type: TOTAL_MEETINGS_REQUEST,
-            data: { page: 1, size: 100 },
-          },
-          [dispatch]
-        );
+        dispatch({
+          type: TOTAL_MEETINGS_REQUEST,
+          data: { page: 1, size: 50 },
+        });
       }
       const myMeeting = totalMeetings.filter(
         // 스타 자신이 오픈한 팬 미팅 정보
@@ -49,16 +45,8 @@ export default function Mypage() {
       return myMeeting.map(meeting => (
         <StarMypageCard meeting={meeting} key={meeting.meetingId} />
       ));
-    } else if (menu === 1) {
-      // 나의 팬미팅
-      return applicant.map(meeting => (
-        <UserMypageCard meeting={meeting} key={meeting.meetingId} />
-      ));
-    } else if (menu === 2) {
-      // 추억보관함
-      return applicant.map(meeting => (
-        <RepositoryMypageCard meeting={meeting} key={meeting.meetingId} />
-      ));
+    } else {
+      return <MypageFan />;
     }
   };
 
@@ -74,7 +62,7 @@ export default function Mypage() {
             <MypageContent>
               <MypageMenu />
               <div className="poster">
-                <Grid container>{content()}</Grid>
+                <Grid container>{selectFanMeetingDone && content()}</Grid>
               </div>
             </MypageContent>
           </MypageWrapper>

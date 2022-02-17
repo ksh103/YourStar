@@ -33,14 +33,6 @@ public class MeetingRecordImgPath {
     @Column(name = "file_name")
     private String fileName;
 
-    @ApiModelProperty(value = "파일 크기", required = true)
-    @Column(name = "file_size")
-    private Long fileSize;
-
-    @ApiModelProperty(value = "파일 확장자명", required = true)
-    @Column(name = "file_content_type")
-    private String fileContentType;
-
     @ApiModelProperty(value = "파일이 저장된 주소", required = true)
     @Column(name = "file_url")
     private String fileUrl;

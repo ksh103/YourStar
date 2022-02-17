@@ -7,6 +7,7 @@ import meeting from './meeting';
 import mypage from './mypage';
 import MeetingRoom from './meetingRoom';
 import fan from './fan';
+import admin from './admin';
 export default combineReducers({
   selectmode,
   member,
@@ -16,4 +17,5 @@ export default combineReducers({
   MeetingRoom,
   meetingList,
   fan,
+  admin,
 });

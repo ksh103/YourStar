@@ -4,11 +4,11 @@ import {
   MeetingAllListAPI,
   ApprovedMeetingListAPI,
   PendingMeetingAPI,
-  WarningCount,
+  WarningCountAPI,
   WarningToMemberAPI,
   InsertMeetingAPI,
-  UpdateMeetingAPI,
-  DeleteMeetingAPI,
+  EndMeetingAPI,
+  getRecordAPI,
 } from '../apis/Main/meeting';
 import {
   DETAIL_MEETING_FAILURE,
@@ -23,20 +23,23 @@ import {
   UPDATE_APPROVE_REQUEST,
   UPDATE_APPROVE_SUCCESS,
   UPDATE_APPROVE_FAILURE,
+  WARNING_COUNT_REQUEST,
+  WARNING_COUNT_SUCCESS,
+  WARNING_COUNT_FAILURE,
   WARNING_MEMBER_REQUEST,
   WARNING_MEMBER_SUCCESS,
   WARNING_MEMBER_FAILURE,
   INSERT_MEETING_REQUEST,
   INSERT_MEETING_SUCCESS,
   INSERT_MEETING_FAILURE,
-  UPDATE_MEETING_REQUEST,
-  UPDATE_MEETING_SUCCESS,
-  UPDATE_MEETING_FAILURE,
-  DELETE_MEETING_REQUEST,
-  DELETE_MEETING_SUCCESS,
-  DELETE_MEETING_FAILURE,
+  END_MEETING_REQUEST,
+  END_MEETING_SUCCESS,
+  END_MEETING_FAILURE,
+  GET_RECORD_REQUEST,
+  GET_RECORD_SUCCESS,
+  GET_RECORD_FAILURE,
 } from '../modules/meeting';
-
+import swal from 'sweetalert';
 function* detailMeeting(action) {
   try {
     const result = yield call(MeetingDetailAPI, action.data);
@@ -83,12 +86,30 @@ function* updateApprove(action) {
       type: UPDATE_APPROVE_SUCCESS,
       data: result,
     });
+    swal('', '미팅이 등록 되었습니다.', 'success', {
+      buttons: false,
+      timer: 1800,
+    });
   } catch (err) {
     yield put({
       type: UPDATE_APPROVE_FAILURE,
     });
   }
 }
+function* warningCount(action) {
+  try {
+    const result = yield call(WarningCountAPI, action.data);
+    yield put({
+      type: WARNING_COUNT_SUCCESS,
+      data: result.data,
+    });
+  } catch (err) {
+    yield put({
+      type: WARNING_COUNT_FAILURE,
+    });
+  }
+}
+
 function* warningMember(action) {
   try {
     const result = yield call(WarningToMemberAPI, action.data);
@@ -102,12 +123,25 @@ function* warningMember(action) {
     });
   }
 }
+
 function* insertMeeting(action) {
   try {
     const result = yield call(InsertMeetingAPI, action.data);
     yield put({
       type: INSERT_MEETING_SUCCESS,
-      data: result,
+    });
+    swal(
+      '미팅 신청 성공',
+      '미팅 신청이 완료되었습니다. 승인을 기다려주세요.',
+      'success',
+      {
+        buttons: false,
+        timer: 1800,
+      }
+    );
+    yield put({
+      type: TOTAL_MEETINGS_REQUEST,
+      data: { page: 1, size: 100 },
     });
   } catch (err) {
     yield put({
@@ -115,29 +149,28 @@ function* insertMeeting(action) {
     });
   }
 }
-function* updateMeeting(action) {
+function* endMeeting(action) {
   try {
-    const result = yield call(UpdateMeetingAPI, action.data);
+    const result = yield call(EndMeetingAPI, action.data);
     yield put({
-      type: UPDATE_MEETING_SUCCESS,
-      data: result,
+      type: END_MEETING_SUCCESS,
     });
   } catch (err) {
     yield put({
-      type: UPDATE_MEETING_FAILURE,
+      type: END_MEETING_FAILURE,
     });
   }
 }
-function* deleteMeeting(action) {
+function* getRecord(action) {
   try {
-    const result = yield call(DeleteMeetingAPI, action.data);
+    const result = yield call(getRecordAPI, action.data);
     yield put({
-      type: DELETE_MEETING_SUCCESS,
+      type: GET_RECORD_SUCCESS,
       data: result,
     });
   } catch (err) {
     yield put({
-      type: DELETE_MEETING_FAILURE,
+      type: GET_RECORD_FAILURE,
     });
   }
 }
@@ -154,17 +187,20 @@ function* watchAprovedMeetings() {
 function* watchUpdateApprove() {
   yield takeLatest(UPDATE_APPROVE_REQUEST, updateApprove);
 }
+function* watchWarningCount() {
+  yield takeLatest(WARNING_COUNT_REQUEST, warningCount);
+}
 function* watchWarningMember() {
   yield takeLatest(WARNING_MEMBER_REQUEST, warningMember);
 }
 function* watchInsertMeeting() {
   yield takeLatest(INSERT_MEETING_REQUEST, insertMeeting);
 }
-function* watchUpdateMeeting() {
-  yield takeLatest(UPDATE_MEETING_REQUEST, updateMeeting);
+function* watchEndMeeting() {
+  yield takeLatest(END_MEETING_REQUEST, endMeeting);
 }
-function* watchDeleteMeeting() {
-  yield takeLatest(DELETE_MEETING_REQUEST, deleteMeeting);
+function* watchGetRecord() {
+  yield takeLatest(GET_RECORD_REQUEST, getRecord);
 }
 
 export default function* meetingSaga() {
@@ -173,9 +209,10 @@ export default function* meetingSaga() {
     fork(watchTotalMeetings),
     fork(watchAprovedMeetings),
     fork(watchUpdateApprove),
+    fork(watchWarningCount),
     fork(watchWarningMember),
     fork(watchInsertMeeting),
-    fork(watchUpdateMeeting),
-    fork(watchDeleteMeeting),
+    fork(watchEndMeeting),
+    fork(watchGetRecord),
   ]);
 }

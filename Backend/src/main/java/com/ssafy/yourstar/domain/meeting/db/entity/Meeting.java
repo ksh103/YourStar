@@ -7,6 +7,7 @@ import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.Getter;
 import lombok.Setter;
+import org.hibernate.annotations.CreationTimestamp;
 
 import javax.persistence.*;
 import java.time.LocalDateTime;
@@ -61,6 +62,12 @@ public class Meeting {
     @ApiModelProperty(value = "관리자의 팬미팅 승인 상태", required = true, example = "false")
     @Column(name = "is_approve")
     private boolean isApprove;
+
+    @Column(name = "meeting_reg_dt")
+    @CreationTimestamp
+    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss", shape = JsonFormat.Shape.STRING)
+    @ApiModelProperty(value = "팬미팅 등록 날짜 및 시간", required = true, example = "2022-02-10 23:00:00")
+    private LocalDateTime meetingRegDt;
 
     // 이미지 파일 테이블과 Mapping
     @OneToOne(mappedBy = "meetingId", cascade = CascadeType.ALL)

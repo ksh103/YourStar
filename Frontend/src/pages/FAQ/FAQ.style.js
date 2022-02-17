@@ -22,8 +22,8 @@ const ScheduleBlock = styled.div`
 `;
 
 const FAQHeader = styled.div`
-  height: 15%;
-  font-size: 1.3em;
+  height: 20%;
+  font-size: 2.5em;
   font-weight: bold;
   display: flex;
   align-items: center;
@@ -31,7 +31,7 @@ const FAQHeader = styled.div`
   color: black;
 `;
 const FAQContent = styled.div`
-  height: 85%;
+  height: 80%;
   #faq {
     height: 100%;
     margin: 0 10px;

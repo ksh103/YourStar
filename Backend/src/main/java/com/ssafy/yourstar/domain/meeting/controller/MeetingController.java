@@ -6,7 +6,6 @@ import com.ssafy.yourstar.domain.meeting.response.ApplicantDetailGetRes;
 import com.ssafy.yourstar.domain.meeting.response.MeetingDetailGetRes;
 import com.ssafy.yourstar.domain.meeting.response.MeetingListGetRes;
 import com.ssafy.yourstar.domain.meeting.service.MeetingService;
-import com.ssafy.yourstar.global.model.response.BaseResponseBody;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiParam;
@@ -22,7 +21,10 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PutMapping;
+import org.springframework.web.bind.annotation.RequestMapping;
 
 import java.io.IOException;
 import java.nio.file.Files;
@@ -42,7 +44,7 @@ public class MeetingController {
     public ResponseEntity<MeetingListGetRes> meetingList(int page, int size) {
         log.info("meetingList - Call");
 
-        Page<Meeting> meetingPage = meetingService.meetingList(PageRequest.of(page - 1, size));
+        Page<Meeting> meetingPage = meetingService.meetingList(PageRequest.of(page - 1, size, Sort.by(Sort.Direction.ASC, "meetingStartDate")));
 
         return ResponseEntity.status(200).body(MeetingListGetRes.of(200, "Success", meetingPage));
     }
@@ -55,7 +57,7 @@ public class MeetingController {
 
         log.info("meetingPendingList - Call");
 
-        Page<Meeting> meetingPage = meetingService.meetingPendingList(PageRequest.of(page - 1, size));
+        Page<Meeting> meetingPage = meetingService.meetingPendingList(PageRequest.of(page - 1, size, Sort.by(Sort.Direction.ASC, "meetingRegDt")));
 
         return ResponseEntity.status(200).body(MeetingListGetRes.of(200, "Success", meetingPage));
     }
@@ -65,7 +67,7 @@ public class MeetingController {
     public ResponseEntity<MeetingListGetRes> meetingApproveList(int page, int size) {
         log.info("meetingApproveList - Call");
 
-        Page<Meeting> meetingPage = meetingService.meetingApproveList(PageRequest.of(page - 1, size, Sort.by(Sort.Direction.DESC, "meetingStartDate")));
+        Page<Meeting> meetingPage = meetingService.meetingApproveList(PageRequest.of(page - 1, size, Sort.by(Sort.Direction.ASC, "meetingStartDate")));
 
         return ResponseEntity.status(200).body(MeetingListGetRes.of(200, "Success", meetingPage));
     }
@@ -104,16 +106,18 @@ public class MeetingController {
 
     @ApiOperation(value = "팬미팅에 참여한 팬에게 경고 주기")
     @PutMapping("/warning/{memberId}/{meetingId}")
-    public ResponseEntity<BaseResponseBody> meetingGiveWarnToUser
+    public ResponseEntity<ApplicantDetailGetRes> meetingGiveWarnToUser
             (@ApiParam(value = "회원 구분 번호") @PathVariable("memberId") int memberId,
              @ApiParam(value = "팬미팅 번호") @PathVariable("meetingId") int meetingId) {
         log.info("meetingGiveWarnToUser - Call");
 
-        if (meetingService.meetingGiveWarnToUser(memberId, meetingId)) {
-            return ResponseEntity.status(200).body(BaseResponseBody.of(200, "Success"));
-        } else {
+        Applicant applicant = meetingService.meetingGiveWarnToUser(memberId, meetingId);
+
+        if (applicant == null) {
             log.error("meetingGiveWarnToUser - This MeetingId or MemberId doesn't exist");
-            return ResponseEntity.status(400).body(BaseResponseBody.of(400, "This MeetingId or MemberId doesn't exist"));
+            return ResponseEntity.status(400).body(ApplicantDetailGetRes.of(400, "This MemberId or MeetingId doesn't exist", null));
+        } else {
+            return ResponseEntity.status(200).body(ApplicantDetailGetRes.of(200, "Success", applicant));
         }
     }
 

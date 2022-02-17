@@ -1,16 +1,11 @@
 package com.ssafy.yourstar.domain.meeting.service;
 
-import com.ssafy.yourstar.domain.meeting.db.entity.Applicant;
-import com.ssafy.yourstar.domain.meeting.db.entity.ApplicantID;
-import com.ssafy.yourstar.domain.meeting.db.entity.Meeting;
-import com.ssafy.yourstar.domain.meeting.db.entity.MeetingImgPath;
-import com.ssafy.yourstar.domain.meeting.db.repository.ApplicantRepository;
-import com.ssafy.yourstar.domain.meeting.db.repository.MeetingImgPathRepository;
-import com.ssafy.yourstar.domain.meeting.db.repository.MeetingRepository;
-import com.ssafy.yourstar.domain.meeting.db.repository.MeetingRepositorySpp;
+import com.ssafy.yourstar.domain.meeting.db.entity.*;
+import com.ssafy.yourstar.domain.meeting.db.repository.*;
 import com.ssafy.yourstar.domain.meeting.request.MeetingApplyByStarPostReq;
 import com.ssafy.yourstar.domain.meeting.request.MeetingApplyByUserPostReq;
-import com.ssafy.yourstar.domain.member.db.entity.Member;
+import com.ssafy.yourstar.domain.meeting.request.MeetingOathByUserPostReq;
+import com.ssafy.yourstar.domain.meeting.request.MeetingRoomEndByStarPostReq;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.io.FilenameUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -24,6 +19,7 @@ import org.springframework.web.multipart.MultipartHttpServletRequest;
 import javax.swing.filechooser.FileSystemView;
 import java.io.File;
 import java.io.IOException;
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.UUID;
 
@@ -38,6 +34,9 @@ public class MeetingServiceImpl implements MeetingService {
 
     @Autowired
     ApplicantRepository applicantRepository;
+
+    @Autowired
+    MeetingOathRepository meetingOathRepository;
 
     @Autowired
     MeetingRepositorySpp meetingRepositorySpp;
@@ -219,7 +218,8 @@ public class MeetingServiceImpl implements MeetingService {
 
     @Override
     public Page<Meeting> meetingApproveList(Pageable pageable) {
-        return meetingRepository.findAllByIsApproveTrue(pageable);
+        LocalDateTime date = LocalDateTime.now().plusHours(9);
+        return meetingRepository.findAllByIsApproveTrueAndMeetingStartDateAfter(date, pageable);
     }
 
     @Override
@@ -231,6 +231,17 @@ public class MeetingServiceImpl implements MeetingService {
         applicant.setApplicantWarnCount(0); // 신청 했을 때 경고 횟수는 0이다.
 
         return applicantRepository.save(applicant);
+    }
+
+    @Override
+    public MeetingOath meetingApplyOathByUser(MeetingApplyByUserPostReq meetingApplyByUserPostReq) {
+        MeetingOath meetingOath = new MeetingOath();
+
+        meetingOath.setMeetingId(meetingApplyByUserPostReq.getMeetingId());
+        meetingOath.setMemberId(meetingApplyByUserPostReq.getMemberId());
+        meetingOath.setIsOath(false);
+
+        return meetingOathRepository.save(meetingOath);
     }
 
     @Override
@@ -257,8 +268,8 @@ public class MeetingServiceImpl implements MeetingService {
     }
 
     @Override
-    public Page<Member> meetingApplyList(int meetingId, Pageable pageable) {
-        return meetingRepositorySpp.findAllApplyMeetingListByMeetingId(meetingId, pageable);
+    public Page<String> meetingApplyList(int meetingId, Pageable pageable) {
+        return meetingRepository.findAllApplyMeetingListByMeetingId(meetingId, pageable);
     }
 
     @Override
@@ -276,7 +287,7 @@ public class MeetingServiceImpl implements MeetingService {
     }
 
     @Override
-    public boolean meetingGiveWarnToUser(int memberId, int meetingId) {
+    public Applicant meetingGiveWarnToUser(int memberId, int meetingId) {
         ApplicantID applicantID = new ApplicantID();
         applicantID.setMemberId(memberId);
         applicantID.setMeetingId(meetingId);
@@ -287,9 +298,9 @@ public class MeetingServiceImpl implements MeetingService {
             applicant.setApplicantWarnCount(applicant.getApplicantWarnCount() + 1); // 현재 경고 횟수에서 +1
             applicantRepository.save(applicant); // 값 업데이트
 
-            return true;
+            return applicant;
         } else {
-            return false;
+            return null;
         }
     }
 
@@ -297,7 +308,42 @@ public class MeetingServiceImpl implements MeetingService {
     public String getMeetingImgPath(int fileId) {
         MeetingImgPath meetingImgPath = meetingImgPathRepository.findMeetingImgPathByFileId(fileId);
         String path = uploadPath + meetingImgPath.getFileUrl();
-        log.warn("Get Image Path : " + path);
         return path;
+    }
+
+    @Override
+    public MeetingOath meetingOathByUser(MeetingOathByUserPostReq meetingOathByUserPostReq) {
+        MeetingOath meetingOath = new MeetingOath();
+
+        meetingOath.setMeetingId(meetingOathByUserPostReq.getMeetingId());
+        meetingOath.setMemberId(meetingOathByUserPostReq.getMemberId());
+        meetingOath.setIsOath(true);
+
+        return meetingOathRepository.save(meetingOath);
+    }
+
+    @Override
+    public Meeting meetingEndByStar(MeetingRoomEndByStarPostReq meetingRoomEndByStarPostReq, LocalDateTime meetingEndDate) {
+        Meeting meeting = new Meeting();
+
+        if(meetingRepository.findById(meetingRoomEndByStarPostReq.getMeetingId()).isPresent()) {
+            int meetingId = meetingRoomEndByStarPostReq.getMeetingId();
+
+            meeting.setMeetingId(meetingId);
+            meeting.setMeetingEndDate(meetingEndDate);
+
+            // 그대로 유지
+            meeting.setManagerCode(meetingRepository.findById(meetingId).get().getManagerCode());
+            meeting.setMeetingName(meetingRepository.findById(meetingId).get().getMeetingName());
+            meeting.setMeetingOpenDate(meetingRepository.findById(meetingId).get().getMeetingOpenDate());
+            meeting.setMeetingStartDate(meetingRepository.findById(meetingId).get().getMeetingStartDate());
+            meeting.setMeetingCnt(meetingRepository.findById(meetingId).get().getMeetingCnt());
+            meeting.setMeetingPrice(meetingRepository.findById(meetingId).get().getMeetingPrice());
+            meeting.setMeetingDescription(meetingRepository.findById(meetingId).get().getMeetingDescription());
+            meeting.setApprove(true);
+            meeting.setMeetingRegDt(meetingRepository.findById(meetingId).get().getMeetingRegDt());
+
+            return meetingRepository.save(meeting);
+        }else return meeting;
     }
 }

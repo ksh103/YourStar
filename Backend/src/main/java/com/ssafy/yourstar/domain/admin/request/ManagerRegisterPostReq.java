@@ -9,6 +9,10 @@ import lombok.Setter;
 @Setter
 @ApiModel(value = "managerRegisterPostReq", description = "관계자 계정 생성시 필요한 정보")
 public class ManagerRegisterPostReq {
+
+    @ApiModelProperty(value = "관계자 대표 이메일", example = "ssafy@ssafy.com", required = true)
+    String managerEmail;
+
     @ApiModelProperty(value = "소속사 이름(소문자, 띄어쓰기 X)", example = "smtown", required = true)
     String managerCodeName;
 

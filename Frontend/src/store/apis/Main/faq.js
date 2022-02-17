@@ -3,8 +3,7 @@ import { BASE_URL } from '../../../utils/contants';
 
 // FAQ 전체 조회
 export async function FaqListAPI({ page, size }) {
-  const result = await axios.get(`${BASE_URL}faq?page=1&size=5`);
-  console.log(result);
+  const result = await axios.get(`${BASE_URL}faq?page=1&size=10`);
   return result.data.content;
 }
 

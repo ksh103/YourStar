@@ -20,16 +20,23 @@ export default function FAQ() {
     });
   }, [dispatch]);
   const FAQDate = () => {
-    return faqs.map(faq => (
-      <FAQContentRow key={faq.id}>
+    return faqs.map((faq, i) => (
+      <FAQContentRow key={i}>
         <Accordion>
           <AccordionSummary
             expandIcon={<MdExpandMore />}
-            sx={{ fontSize: '1.1em' }}
+            sx={{ fontSize: '1.5em', padding: '10px', paddingLeft: '25px' }}
           >
             <div>{faq.faqTitle}</div>
           </AccordionSummary>
-          <AccordionDetails sx={{ borderTop: `2px solid ${blockColor}` }}>
+          <AccordionDetails
+            sx={{
+              borderTop: `2px solid ${blockColor}`,
+              fontSize: '1.5em',
+              padding: '25px',
+              paddingLeft: '25px',
+            }}
+          >
             <div>{faq.faqContent}</div>
           </AccordionDetails>
         </Accordion>

@@ -8,6 +8,7 @@ import com.ssafy.yourstar.domain.member.response.MemberLoginPostRes;
 import com.ssafy.yourstar.domain.member.service.MemberService;
 import com.ssafy.yourstar.global.model.response.BaseResponseBody;
 import com.ssafy.yourstar.global.util.JwtTokenUtil;
+import com.ssafy.yourstar.global.util.MemberPasswordMailUtil;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiParam;
@@ -105,8 +106,10 @@ public class MemberController {
     public ResponseEntity<? extends BaseResponseBody> memberPasswordInit (@RequestBody @ApiParam(value = "이메일, 이름 입력을 통해 회원 확인 후 비밀번호 초기화", required = true) MemberPasswordPostReq memberPasswordPostReq) {
         log.info("memberPasswordInit - Call");
 
-        if(memberService.memberPasswordInit(memberPasswordPostReq) != null) {
-            memberService.memberPasswordInit(memberPasswordPostReq);
+        String newMemberPassword = MemberPasswordMailUtil.getRandomPassword(12);
+
+        if(memberService.memberPasswordInit(memberPasswordPostReq, newMemberPassword)) {
+
             return ResponseEntity.status(201).body(BaseResponseBody.of(201, "Success"));
         }else {
             return ResponseEntity.status(401).body(BaseResponseBody.of(401, "Invalid Email Or Name"));

@@ -1,19 +1,13 @@
 import styled from 'styled-components';
 
-// const StanbyBox = styled.div`
-//   border: 1px solid red;
-//   /* width: 1px; */
-// `;
-
 const StarScreen = styled.div`
   position: relative;
   left: 20%;
   top: 10%;
-  width: 60%;
+  /* width: 60%;
   height: 66.5vh;
   background-color: white;
-  border-radius: 3.0643vh;
-  box-shadow: 0.306vh 0.306vh gray;
+  border-radius: 3.0643vh; */
 `;
 
 const ColorCircleWrapper = styled.div`
@@ -24,7 +18,8 @@ const ColorCircleWrapper = styled.div`
   height: 4vh;
 `;
 const ColorCircleBox = styled.div`
-  display: flex;
+  padding-top: 20px;
+  width: 10vw;
   justify-content: center;
   align-items: center;
   height: 3.8vh;
@@ -54,7 +49,6 @@ const SettingIcons = styled.div`
 const CircleIconBox = styled.div``;
 
 export {
-  //   StanbyBox,
   ColorCircleWrapper,
   ColorCircleBox,
   CircleIconBox,

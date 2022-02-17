@@ -2,78 +2,63 @@ import React from 'react';
 import {
   AlertParentDiv,
   AlertHead,
-  ExitIcon,
   HeadTextArea,
   HeadContent,
   AlertBody,
 } from './Alert.style';
 import { FcLock } from 'react-icons/fc';
-import styled from 'styled-components';
-import ExitButton from './ExitButton';
+import {
+  PlaceHolderText,
+  ButtonInputArea,
+  ContentTextArea,
+} from './Alert.style';
+import swal from 'sweetalert';
+import { useState } from 'react';
+import { useHistory } from 'react-router';
+import axios from 'axios';
+import { BASE_URL } from '../../../../utils/contants';
+import { useSelector, useDispatch } from 'react-redux';
+import { ScreenChange } from '../../../../store/modules/meetingRoom';
 
-const ContentTextArea = styled.div`
-  position: absolute;
-  top: 6%;
-  left: 2%;
-  width: 96%;
-  height: 70%;
-  overflow-y: auto;
-  li {
-    color: black;
-    padding: 1vw;
-  }
-`;
+export default function Pledge(props) {
+  const history = useHistory();
 
-const ButtonInputArea = styled.div`
-  position: absolute;
-  left: 2.5%;
-  bottom: 4%;
-  width: 95%;
-  height: 22%;
-  input {
-    position: relative;
-    top: 35%;
-    border-radius: 1vh;
-    padding-left: 0.52vw;
-    padding-right: 0.52vw;
-    width: 75%;
-    height: 5.1vh;
-    font-size: 0.7em;
-  }
-  button {
-    position: relative;
-    width: 18%;
-    height: 5vh;
-    right: -4%;
-    top: 35%;
-    background: #ff5455;
-    border: 0.2vw solid #000000;
-    border-radius: 1vw;
-  }
-`;
+  const { me } = useSelector(state => state.mypage);
+  const { meeting, selectNum } = useSelector(state => state.meeting);
+  const [message, setMessage] = useState('');
+  const dispatch = useDispatch();
 
-const PlaceHolderText = styled.div`
-  pointer-events: none;
-  position: absolute;
-  top: 48.5%;
-  border-radius: 1vh;
-  padding-left: 0.52vw;
-  padding-right: 0.52vw;
-  width: 75%;
-  height: 5.1vh;
-  z-index: 2;
-  color: gray;
-  font-size: 0.7em;
-`;
+  const onClicksubmit = () => {
+    if (message === '본인은 위 사항을 지킬 것을 동의합니다') {
+      const result = axios // 1. 점수 집계 중입니다 먼저 띄워주기 (API 받아오기) 1초
+        .post(
+          `${BASE_URL}meetings/oath?meetingId=${meeting.id}&memberId=${me.memberId}`
+        );
+      // 보안서약서 내역 저장
+      swal(
+        '서약서 제출이 완료되었습니다',
+        '미팅 대기 페이지로 이동합니다.',
+        'success',
+        {
+          buttons: false,
+          timer: 1800,
+        }
+      ).then(() => {
+        history.push(`/stanby/${meeting.id}`);
+        dispatch(ScreenChange(7));
+      }); // 미팅 대기화면으로 이동
+    } else {
+      swal('', '서약서 서명이 일치하지 않습니다.', 'error', {
+        buttons: false,
+        timer: 1800,
+      });
+    }
+  };
 
-export default function Pledge() {
   return (
     <AlertParentDiv>
       {/* head 부분 */}
       <AlertHead>
-        <ExitIcon>
-          <ExitButton></ExitButton>
-        </ExitIcon>
         <HeadTextArea>
           <HeadContent>
             <FcLock style={{ fontSize: '3vw' }}></FcLock>
@@ -87,29 +72,39 @@ export default function Pledge() {
           <ul>
             <li>
               공식 시청 페이지에서 시청하는 방법 이외에, 해당 스트리밍 영상을
-              임의로 녹화하거나 추출하는 행위, 다수의 시청이 가능한 곳에서의
-              스트리밍 행위등은 엄격히 금지하고 있습니다.
+              임의로 녹화하거나 추출하는 행위, <br />
+              다수의 시청이 가능한 곳에서의 스트리밍 행위등은 엄격히 금지하고
+              있습니다.
+            </li>
+            <li>
+              티켓 구매자의 재생 환경 및 네트워크 환경 장애로 인해 발생하는
+              문제(끊김, 관람이 되지 않는 현상 등)로
+              <br /> 인한 환불이 불가하니 공연 전 재생 지원 환경을 반드시 확인
+              바랍니다.
             </li>
             <li>
               저작권자의 동의 없이 콘텐츠를 무단 배포 및 가공하는 행위는 저작권
               침해에 해당합니다.
             </li>
             <li>
-              저작권자의 동의 없이 콘텐츠를 무단 배포 및 가공하는 행위는 저작권
-              침해에 해당합니다.
-            </li>
-            <li>
-              저작권자의 동의 없이 콘텐츠를 무단 배포 및 가공하는 행위는 저작권
-              침해에 해당합니다.
+              위와 같이 금지된 행위가 적발될 경우, 저작권 침해에 의한 법적인
+              제재를 받으실 수 있습니다.
             </li>
           </ul>
         </ContentTextArea>
         <ButtonInputArea>
-          <input type="text"></input>
+          <input
+            type="text"
+            onChange={e => {
+              setMessage(e.target.value);
+            }}
+          ></input>
           <PlaceHolderText>
-            본인은 위 사항을 지킬것을 동의합니다
+            본인은 위 사항을 지킬 것을 동의합니다
           </PlaceHolderText>
-          <button>제출</button>
+          <button onClick={onClicksubmit} style={{ fontSize: '20px' }}>
+            제출
+          </button>
         </ButtonInputArea>
       </AlertBody>
     </AlertParentDiv>

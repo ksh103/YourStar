@@ -19,28 +19,17 @@ export async function MemberModifyAPI({
   memberPassword,
   memberPhone,
 }) {
-  const result = await axios.put(
-    `${BASE_URL}members/${memberId}`,
-    {
-      memberAddress: memberAddress,
-      memberNick: memberNick,
-      memberPassword: memberPassword,
-      memberPhone: memberPhone,
-    }
-    // {
-    //   headers: { Authorization: localStorage.getItem('userToken') },
-    // }
-  );
+  const result = await axios.put(`${BASE_URL}members/${memberId}`, {
+    memberAddress: memberAddress,
+    memberNick: memberNick,
+    memberPassword: memberPassword,
+    memberPhone: memberPhone,
+  });
   return result;
 }
 
 // 회원정보 탈퇴
 export async function MemberDeleteAPI({ memberId }) {
-  const result = await axios.delete(
-    `${BASE_URL}members/${memberId}`
-    //  {
-    //   headers: { Authorization: localStorage.getItem('userToken') },
-    // }
-  );
+  const result = await axios.delete(`${BASE_URL}members/${memberId}`);
   return result;
 }

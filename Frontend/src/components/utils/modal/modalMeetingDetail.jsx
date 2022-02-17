@@ -6,7 +6,10 @@ import { useDispatch, useSelector } from 'react-redux';
 import { setMeetingDetailState } from '../../../store/modules/mypage';
 import { Grid } from '@mui/material';
 import { useEffect } from 'react';
-import { MEETING_APPLY_REQUEST } from '../../../store/modules/meetingList';
+import {
+  MEETING_APPLY_REQUEST,
+  MEETING_GAME_RESULT_REQUEST,
+} from '../../../store/modules/meetingList';
 
 const style = {
   position: 'absolute',
@@ -24,18 +27,28 @@ const style = {
 
 export default function BasicModal({ meeting }) {
   const dispatch = useDispatch();
-  const handleClose = () => dispatch(setMeetingDetailState(false)); // modal창 밖을 클릭했을 때 off
+  const handleClose = () => {
+    dispatch(setMeetingDetailState(false));
+  }; // modal창 밖을 클릭했을 때 off
   useEffect(() => {
     // 미팅 참여인원 불러오기
     dispatch({
       type: MEETING_APPLY_REQUEST,
       data: { meetingId: meeting.id },
     });
-  }, []);
+    // 미팅 게임내역 불러오기
+    dispatch({
+      type: MEETING_GAME_RESULT_REQUEST,
+      data: { meetingId: meeting.id },
+    });
+  }, [dispatch, meeting.id]);
   // useSelector
   const { meetingDetailState } = useSelector(state => state.mypage);
-  const { meetingApplyList } = useSelector(state => state.meetingList);
+  const { meetingApplyList, meetingGameList } = useSelector(
+    state => state.meetingList
+  );
   let cnt = 0; // 회원번호 index
+  // let gameCnt = 0; // 게임번호 index
   const FanList = meetingApplyList.map((list, index) => {
     cnt += 1;
     return (
@@ -45,13 +58,27 @@ export default function BasicModal({ meeting }) {
             {cnt}.
           </Grid>
           <Grid item xs={2}>
-            {list.memberName}
+            {list[0]}
           </Grid>
           <Grid item xs={6}>
-            {list.memberEmail}
+            {list[1]}
           </Grid>
           <Grid item xs={3.4}>
-            {list.memberPhone}
+            {list[2] && '보안 작성 완료'}
+          </Grid>
+        </Grid>
+      </div>
+    );
+  });
+  const GameList = meetingGameList.map((list, index) => {
+    console.log(list[0]);
+    return (
+      <div key={index}>
+        <Grid container>
+          <Grid item xs={12}>
+            <div style={{ fontSize: '20px', marginTop: '20px' }}>
+              {index + 1}등 : {list[0]}
+            </div>
           </Grid>
         </Grid>
       </div>
@@ -73,9 +100,13 @@ export default function BasicModal({ meeting }) {
             id="modal-modal-title"
             variant="h6"
             component="h2"
-            style={{ textAlign: 'center' }}
+            style={{
+              textAlign: 'center',
+              fontSize: '30px',
+            }}
           >
-            {meeting.name} 미팅 상세정보
+            {meeting.name} <br />
+            미팅 상세정보
           </Typography>
           <Typography id="modal-modal-description" sx={{ mt: 2 }}>
             <Grid container>
@@ -86,6 +117,7 @@ export default function BasicModal({ meeting }) {
                       textAlign: 'center',
                       cursor: 'pointer',
                       color: 'red',
+                      fontSize: '20px',
                     }}
                     onClick={() => {
                       setToggle(0);
@@ -111,6 +143,7 @@ export default function BasicModal({ meeting }) {
                       textAlign: 'center',
                       cursor: 'pointer',
                       color: 'red',
+                      fontSize: '20px',
                     }}
                     onClick={() => {
                       setToggle(1);
@@ -132,7 +165,18 @@ export default function BasicModal({ meeting }) {
             </Grid>
             <br />
             {toggle === 0 && <div>{FanList}</div>}
-            {toggle === 1 && <div>미팅 게임 내역 출력 할 예정</div>}
+            {toggle === 1 && (
+              <div
+                style={{
+                  textAlign: 'center',
+                  fontSize: '20px',
+                  marginTop: '10px',
+                }}
+              >
+                <div style={{ fontSize: '25px' }}>🏆게임 최종 우승자🏆</div>
+                {GameList}
+              </div>
+            )}
           </Typography>
         </Box>
       </Modal>

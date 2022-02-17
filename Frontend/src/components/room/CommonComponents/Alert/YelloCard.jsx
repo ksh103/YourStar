@@ -1,7 +1,7 @@
 import React from 'react';
 import styled from 'styled-components';
 
-const YelloDiv = styled.div`
+const YellowDiv = styled.div`
   position: absolute;
   top: 10%;
   left: 36%;
@@ -48,6 +48,17 @@ const YelloDiv = styled.div`
   }
 `;
 
+const WarningComment = styled.div`
+  position: absolute;
+`
+
 export default function YelloCard() {
-  return <YelloDiv></YelloDiv>;
+  return (
+    <div>
+      <YellowDiv></YellowDiv>
+      <WarningComment>
+        <p>부적절한 행위 및 언행으로 경고 1회를 받으셨습니다.</p>
+        <p>경고 2회 누적 시 강퇴 및 재입장이 불가합니다.</p>
+      </WarningComment>
+    </div>);
 }

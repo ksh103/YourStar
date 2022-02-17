@@ -1,66 +1,119 @@
-import React, { useState } from 'react';
-import { HalfSideDiv1, SmallBox } from '../Chatting/Chatting.style';
-import styled from 'styled-components';
+import React, { useEffect } from 'react';
+import {
+  HalfSideDiv1,
+  SmallBoxSelectSchedule,
+} from '../Chatting/Chatting.style';
 import { useSelector, useDispatch } from 'react-redux';
-// import { changeList } from '../../../../../store/modules/selectList';
-import { ScreenChange } from '../../../../../store/modules/meetingRoom';
-const ScheduleListWrapper = styled.div`
-  /* border: solid red; */
-  border-radius: 1vw;
-  position: absolute;
-  top: 2vh;
-  left: 0.8vw;
-  width: 18vw;
-  height: 28vh;
-  overflow-y: auto;
-`;
-const ScheduleListBox = styled.div`
-  /* border: solid red; */
-  background-color: black;
-  border-radius: 1vw;
-  margin-top: 1vh;
-  margin-bottom: 1vh;
-  margin-left: 0.8vw;
-  width: 16vw;
-  height: 4vh;
-  cursor: pointer;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  color: white;
-`;
+import {
+  ResetIndex,
+  ScreenChange,
+  SetOneByOneMeetingTime,
+} from '../../../../../store/modules/meetingRoom';
+import {
+  ScheduleListBox,
+  ScheduleListWrapper,
+} from './ScheduleListSelect.style';
+import { blockColor } from '../../../../../styles/variables';
+import swal from 'sweetalert';
+import { useHistory, useParams } from 'react-router';
+import { END_MEETING_REQUEST } from '../../../../../store/modules/meeting';
 
 const List = [
-  '대기화면',
-  '공연모드',
-  'QnA모드',
-  '랜덤추첨',
-  'O/X게임',
-  '초성게임',
-  '1:1팬미팅',
+  '⭐ 대기화면',
+  '🎤 공연모드',
+  '📝 QnA모드',
+  '🎱 랜덤추첨',
+  '🙆‍♂️ O/X게임',
+  '🎮 초성게임',
+  '💞 1:1팬미팅',
 ];
 
 export default function ScheduleListSelect() {
-  // const { selectNum } = useSelector(state => ({
-  //   selectNum: state.selectmode.selectNum,
-  // }));
-
+  const id = useParams().id;
+  const history = useHistory();
   const dispatch = useDispatch();
+  const { storeSession } = useSelector(state => ({
+    storeSession: state.MeetingRoom.storeSession,
+  }));
+  const { selectNum, backgroundColor } = useSelector(
+    state => state.MeetingRoom
+  );
+  const { endMeetingDone } = useSelector(state => state.meeting);
 
-  const SetSelect = selectNum => dispatch(ScreenChange(selectNum));
+  useEffect(() => {
+    if (endMeetingDone) {
+      storeSession.signal({
+        data: '0',
+        to: [],
+        type: 'end',
+      });
+      storeSession.disconnect();
+      history.push(`/schedule/${id}`);
+    }
+  }, [endMeetingDone, history, id, storeSession]);
+
+  const SetSelect = selectNum => {
+    if (selectNum === 6) {
+      dispatch(ResetIndex());
+      swal({
+        title: '1대1 미팅 시간 입력',
+        text: '초를 기준으로 입력 ex) 1분 -> 60',
+        content: 'input',
+        button: '제출',
+        closeOnClickOutside: false,
+        closeOnEsc: false,
+      }).then(answer => {
+        dispatch(SetOneByOneMeetingTime(answer));
+        dispatch(ScreenChange(selectNum));
+      });
+    } else {
+      storeSession.signal({
+        data: `${selectNum}`,
+        to: [],
+        type: 'screen',
+      });
+      dispatch(ScreenChange(selectNum));
+    }
+  };
+
+  const endButton = () => {
+    swal({
+      text: '팬미팅을 종료하시겠습니까?',
+      buttons: true,
+    }).then(end => {
+      if (end) {
+        dispatch({
+          type: END_MEETING_REQUEST,
+          data: id,
+        });
+      }
+    });
+  };
 
   return (
     <>
       <HalfSideDiv1>
-        <SmallBox>
+        <SmallBoxSelectSchedule>
           <ScheduleListWrapper>
             {List.map((list, index) => (
-              <ScheduleListBox key={index} onClick={() => SetSelect(index)}>
+              <ScheduleListBox
+                key={index}
+                onClick={() => SetSelect(index)}
+                check={index === selectNum ? '1' : '0'}
+                color={index === selectNum ? backgroundColor : blockColor}
+              >
                 {list}
               </ScheduleListBox>
             ))}
+            <ScheduleListBox
+              onClick={() => endButton()}
+              check={'0'}
+              color={blockColor}
+            >
+              💣 팬미팅종료
+            </ScheduleListBox>
           </ScheduleListWrapper>
-        </SmallBox>
+        </SmallBoxSelectSchedule>
       </HalfSideDiv1>
     </>
   );

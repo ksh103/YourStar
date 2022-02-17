@@ -9,15 +9,12 @@ export default function ScheduleList() {
     useSelector(state => state.meeting);
   useEffect(() => {
     if (!approvedMeetingsDone && !approvedMeetingsLoading) {
-      dispatch(
-        {
-          type: APPROVED_MEETINGS_REQUEST,
-          data: { page: 1, size: 100 },
-        },
-        [dispatch]
-      );
+      dispatch({
+        type: APPROVED_MEETINGS_REQUEST,
+        data: { page: 1, size: 100 },
+      });
     }
-  });
+  }, [approvedMeetingsDone, approvedMeetingsLoading, dispatch]);
 
   return (
     <>

@@ -23,7 +23,7 @@ export default function ScheduleDetail() {
   useEffect(() => {
     dispatch({
       type: DETAIL_MEETING_REQUEST,
-      data: { memberId: me.memberId, meetingId: id },
+      data: { memberId: me.memberId, meetingId: id, email: me.email },
     });
   }, [id, dispatch, me]);
 
