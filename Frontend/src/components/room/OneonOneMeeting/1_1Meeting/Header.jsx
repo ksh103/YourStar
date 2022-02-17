@@ -2,6 +2,7 @@ import React, { useDispatch, useSelector } from 'react-redux';
 import { useState } from 'react';
 import Timer from '../../Timer/Timer';
 import { IoMdCreate, IoIosAperture } from 'react-icons/io';
+import { ImVideoCamera } from 'react-icons/im';
 import axios from 'axios';
 import swal from 'sweetalert';
 import { setSignButton } from '../../../../store/modules/meetingRoom';
@@ -32,7 +33,7 @@ export default function Header(props) {
   const OPENVIDU_SERVER_SECRET = 'YOURSTAR';
 
   const myAudio = new Audio();
-  
+
   const signalToNextUser = idx => {
     setPrevIdx(idx);
 
@@ -68,8 +69,8 @@ export default function Header(props) {
       const nextName = JSON.parse(
         subscribers[idx].stream.streamManager.stream.connection.data
       ).clientData;
-      myAudio.src = require('../../../../assets/sound effects/pop.mp3')
-      myAudio.play()
+      myAudio.src = require('../../../../assets/sound effects/pop.mp3');
+      myAudio.play();
       swal({
         title: '유저 입장 알림',
         text: nextName + '님이 입장하고 있습니다.',
@@ -177,7 +178,12 @@ export default function Header(props) {
           {prevIdx !== index ? signalToNextUser(index) : null}
           {prevCnt !== checkCnt ? signalToCurUserOut() : null}
           <IoMdCreate onClick={() => onSignClick()} />
-          <IoIosAperture />
+          <ImVideoCamera style={{ color: 'red' }} />
+          <div
+            style={{ fontSize: '20px', display: 'flex', alignItems: 'center' }}
+          >
+            녹화중
+          </div>
           {signButton && <ModalSign />}
         </SmallIconWrapper>
       )}
