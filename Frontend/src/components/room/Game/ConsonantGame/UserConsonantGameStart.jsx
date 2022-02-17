@@ -17,8 +17,9 @@ export default function UserConsonantGameStart() {
   const myAudio = new Audio();
 
   useEffect(() => {
-    myAudio.src = require('../../../../assets/sound effects/next.mp3')
-    myAudio.play()
+    myAudio.src = require('../../../../assets/sound effects/next.mp3');
+    myAudio.volume = 0.5;
+    myAudio.play();
     swal(
       '🔔초성게임이 시작됩니다🔔',
       '선착순 3명!! 스타가 내는 문제를 맞춰보세요',

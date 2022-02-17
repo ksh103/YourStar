@@ -45,8 +45,9 @@ export default function UserOXGame() {
 
   function start() {
     if (publisher.stream.videoActive) {
-      myAudio.src = require('../../../../assets/sound effects/next.mp3')
-      myAudio.play()
+      myAudio.src = require('../../../../assets/sound effects/next.mp3');
+      myAudio.volume = 0.5;
+      myAudio.play();
       swal('🙆‍♀️ 준비됐나요?  🙅‍♂️', 'O X 동작을 카메라에 보여주세요!', {
         buttons: false,
         timer: 2000,

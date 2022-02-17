@@ -286,8 +286,9 @@ class Room extends Component {
               // 게임 reset or 다시 하기
               this.setState({ choAnsUserCnt: 1 }); // 맞춘 사람 수 초기화
               setTimeout(function () {
-                myAudio.src = require('../../assets/sound effects/next.mp3')
-                myAudio.play()
+                myAudio.src = require('../../assets/sound effects/next.mp3');
+                myAudio.volume = 0.5;
+                myAudio.play();
                 swal('🎇3명의 정답자가 나왔습니다.🎇', '게임이 초기화됩니다.', {
                   button: false,
                   timer: 2000,
@@ -308,8 +309,9 @@ class Room extends Component {
         mySession.on('signal:endConsonant', () => {
           this.props.doScreenChange(5);
           this.props.publisher.publishVideo(true);
-          myAudio.src = require('../../assets/sound effects/next.mp3')
-          myAudio.play()
+          myAudio.src = require('../../assets/sound effects/next.mp3');
+          myAudio.volume = 0.5;
+          myAudio.play();
           swal('🎇3명의 정답자가 나왔습니다!!🎇', '다음 라운드로 넘어갑니다', {
             timer: 2000,
             button: false,
@@ -333,7 +335,9 @@ class Room extends Component {
             closeOnClickOutside: false,
             closeOnEsc: false,
           }).then(() => {
-            console.log('1////////////', data.content);
+            myAudio.src = require('../../assets/sound effects/winner.mp3')
+            myAudio.volume = 0.8;
+            myAudio.play()
             swal(
               '현재까지 게임 순위 결과 \n 축하합니다!🎉',
               `🥇: ${data.content[0][0]} : ${data.content[0][1]}점\n 🥈: ${data.content[1][0]} : ${data.content[1][1]}점\n 🥉: ${data.content[2][0]} : ${data.content[2][1]}점`,
@@ -384,6 +388,9 @@ class Room extends Component {
             closeOnClickOutside: false,
             closeOnEsc: false,
           }).then(() => {
+            myAudio.src = require('../../assets/sound effects/winner.mp3')
+            myAudio.volume = 0.8;
+            myAudio.play()
             swal(
               '현재까지 게임 순위 결과 \n 축하합니다!🎉',
               `🥇: ${data.content[0][0]} : ${data.content[0][1]}점\n 🥈: ${data.content[1][0]} : ${data.content[1][1]}점\n 🥉: ${data.content[2][0]} : ${data.content[2][1]}점`,
@@ -427,6 +434,7 @@ class Room extends Component {
         // 랜덤 돌아가는 효과음 
         mySession.on('signal:randomresult', event => {
           myAudio.src = require('../../assets/sound effects/slot machine.mp3')
+          myAudio.volume = 0.8;
           myAudio.play()
         })
 
@@ -451,6 +459,7 @@ class Room extends Component {
         // 경고창
         mySession.on('signal:warning', event => {
           myAudio.src = require('../../assets/sound effects/wrong.mp3')
+          myAudio.volume = 0.7;
           myAudio.play()
           if (parseInt(event.data) === 1) {
             swal({
@@ -547,6 +556,7 @@ class Room extends Component {
                 AddGameScoreAPI(this.state.mySessionId, this.state.me.memberId);
               } else {
                 myAudio.src = require('../../assets/sound effects/wrong.mp3')
+                myAudio.volume = 0.7;
                 myAudio.play()
                 swal({
                   title: round + '라운드 종료',

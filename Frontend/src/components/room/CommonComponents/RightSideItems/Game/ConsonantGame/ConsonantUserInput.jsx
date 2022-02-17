@@ -23,6 +23,7 @@ export default function ConsonantUserInput() {
       myAudio.src = require('../../../../../../assets/sound effects/correct.mp3')
     } else if (v == 2) {
       myAudio.src = require('../../../../../../assets/sound effects/wrong.mp3')
+      myAudio.volume = 0.7;
     }
     myAudio.play()
   }
