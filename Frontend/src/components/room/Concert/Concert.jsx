@@ -221,7 +221,6 @@ export default function Concert() {
       )}
 
       <EmoziBar></EmoziBar>
-      <button onClick={() => SetSelect(0)}>홈으로</button>
     </div>
   );
 }

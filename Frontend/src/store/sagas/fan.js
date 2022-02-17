@@ -24,7 +24,6 @@ import swal from 'sweetalert';
 
 function* insertFanMeeting(action) {
   try {
-    console.log(action);
     const result = yield call(FanApplicantAPI, action.data);
     yield put({
       type: DETAIL_MEETING_REQUEST,

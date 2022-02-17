@@ -32,7 +32,7 @@ import { WarningToMemberAPI } from '../../store/apis/Main/meeting';
 import { AddGameScoreAPI, CallGameRankAPI } from '../../store/apis/Room/game';
 // 컴포넌트
 import RoomComponent from './RoomComponent';
-import { BASE_URL } from '../../utils/contants';
+import { BASE_URL, HOME_URL } from '../../utils/contants';
 // import { BackgroundDiv } from '../../../components/room/styles/roomGlobal';
 
 const OPENVIDU_SERVER_URL = 'https://i6e204.p.ssafy.io:8443';
@@ -62,7 +62,25 @@ class Room extends Component {
       choAnsUserCnt: 1, // 초성게임 맞춘 유저 수
     };
   }
-
+  async componentWillMount() {
+    const result = await axios
+      .get(
+        `${BASE_URL}meetings/fan-applicant/list/${this.state.mySessionId}?page=1&size=100`
+      )
+      .then(res => res.data.content);
+    if (
+      this.state.me.code === 0 ||
+      (this.state.me.code === 3 &&
+        !result.some(
+          data =>
+            data[0] === this.state.me.name &&
+            data[1] === this.state.me.email &&
+            data[2]
+        ))
+    ) {
+      window.location.href = '/';
+    }
+  }
   componentDidMount() {
     window.addEventListener('beforeunload', this.onbeforeunload);
     this.joinSession();
@@ -227,8 +245,8 @@ class Room extends Component {
           let sec = parseInt(event.data);
           let min = parseInt(sec / 60);
           sec = sec % 60;
-          myAudio.src = require('../../assets/sound effects/pop.mp3')
-          myAudio.play()
+          myAudio.src = require('../../assets/sound effects/pop.mp3');
+          myAudio.play();
           if (min === 0) {
             swal({
               title: '1대1미팅 대기시간 알림',
@@ -335,9 +353,9 @@ class Room extends Component {
             closeOnClickOutside: false,
             closeOnEsc: false,
           }).then(() => {
-            myAudio.src = require('../../assets/sound effects/winner.mp3')
+            myAudio.src = require('../../assets/sound effects/winner.mp3');
             myAudio.volume = 0.8;
-            myAudio.play()
+            myAudio.play();
             swal(
               '현재까지 게임 순위 결과 \n 축하합니다!🎉',
               `🥇: ${data.content[0][0]} : ${data.content[0][1]}점\n 🥈: ${data.content[1][0]} : ${data.content[1][1]}점\n 🥉: ${data.content[2][0]} : ${data.content[2][1]}점`,
@@ -388,9 +406,9 @@ class Room extends Component {
             closeOnClickOutside: false,
             closeOnEsc: false,
           }).then(() => {
-            myAudio.src = require('../../assets/sound effects/winner.mp3')
+            myAudio.src = require('../../assets/sound effects/winner.mp3');
             myAudio.volume = 0.8;
-            myAudio.play()
+            myAudio.play();
             swal(
               '현재까지 게임 순위 결과 \n 축하합니다!🎉',
               `🥇: ${data.content[0][0]} : ${data.content[0][1]}점\n 🥈: ${data.content[1][0]} : ${data.content[1][1]}점\n 🥉: ${data.content[2][0]} : ${data.content[2][1]}점`,
@@ -431,12 +449,12 @@ class Room extends Component {
           this.props.doAddQnaList({ text: event.data });
         });
 
-        // 랜덤 돌아가는 효과음 
+        // 랜덤 돌아가는 효과음
         mySession.on('signal:randomresult', event => {
-          myAudio.src = require('../../assets/sound effects/slot machine.mp3')
+          myAudio.src = require('../../assets/sound effects/slot machine.mp3');
           myAudio.volume = 0.8;
-          myAudio.play()
-        })
+          myAudio.play();
+        });
 
         mySession.on('signal:audio', event => {
           console.log('===== 오디오 상태 변경 =====');
@@ -458,9 +476,9 @@ class Room extends Component {
 
         // 경고창
         mySession.on('signal:warning', event => {
-          myAudio.src = require('../../assets/sound effects/wrong.mp3')
+          myAudio.src = require('../../assets/sound effects/wrong.mp3');
           myAudio.volume = 0.7;
-          myAudio.play()
+          myAudio.play();
           if (parseInt(event.data) === 1) {
             swal({
               icon: 'https://cdn-icons-png.flaticon.com/512/2761/2761896.png',
@@ -521,8 +539,8 @@ class Room extends Component {
             window.location.host +
             `/schedule/${this.state.mySessionId}`;
           mySession.disconnect();
-          myAudio.src = require('../../assets/sound effects/pop.mp3')
-          myAudio.play()
+          myAudio.src = require('../../assets/sound effects/pop.mp3');
+          myAudio.play();
           swal({
             title: '미팅 종료 알림',
             text: '미팅 상세 페이지로 이동됩니다',
@@ -544,8 +562,8 @@ class Room extends Component {
 
             if (this.props.publisher.stream.videoActive) {
               if (this.props.myAnswer === starAnswer) {
-                myAudio.src = require('../../assets/sound effects/correct.mp3')
-                myAudio.play()
+                myAudio.src = require('../../assets/sound effects/correct.mp3');
+                myAudio.play();
                 swal({
                   title: round + '라운드 종료',
                   text: '정답 50point 적립!',
@@ -555,9 +573,9 @@ class Room extends Component {
                 });
                 AddGameScoreAPI(this.state.mySessionId, this.state.me.memberId);
               } else {
-                myAudio.src = require('../../assets/sound effects/wrong.mp3')
+                myAudio.src = require('../../assets/sound effects/wrong.mp3');
                 myAudio.volume = 0.7;
-                myAudio.play()
+                myAudio.play();
                 swal({
                   title: round + '라운드 종료',
                   text: '오답',

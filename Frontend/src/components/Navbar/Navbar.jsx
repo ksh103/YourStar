@@ -63,7 +63,7 @@ export default function Navbar() {
     >
       <List>
         <DrawerListRow>
-          <p className="name">반갑습니다 {me.name}님</p>
+          {me.code !== 0 && <p className="name">반갑습니다 {me.name}님</p>}
         </DrawerListRow>
         {(me.code === 2 || me.code === 4) && (
           <DrawerListRow onClick={() => changeMenu('signup')}>

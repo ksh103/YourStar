@@ -102,7 +102,6 @@ export async function PendingMeetingAPI(meeting) {
 
 // 팬미팅에 참여한 팬의 경고 횟수 확인
 export async function WarningCountAPI({ memberId, meetingId }) {
-  console.log('WarningCount', memberId, ' ', meetingId);
   const result = await axios.get(
     `${BASE_URL}meetings/warning/${memberId}/${meetingId}`
   );
