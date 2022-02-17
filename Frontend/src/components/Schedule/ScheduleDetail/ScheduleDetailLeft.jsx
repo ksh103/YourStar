@@ -70,7 +70,7 @@ export default function ScheduleDetailLeft() {
       url: '/v1/payment/ready',
       method: 'POST',
       headers: {
-        Authorization: `KakaoAK ${KAKAO_ADMIN_KEY}`,
+        Authorization: `KakaoAK 96bfb3817ab96ea563f81c8a5ceca182`,
         'Content-type': 'application/x-www-form-urlencoded;charset=utf-8',
       },
       params,
