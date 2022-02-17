@@ -213,7 +213,7 @@ export default function Signup() {
                 <input
                   type="text"
                   className="input check-input"
-                  placeholder="Adress"
+                  placeholder="Address"
                   value={address}
                 ></input>
                 <button
