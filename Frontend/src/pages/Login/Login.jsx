@@ -8,7 +8,7 @@ import {
   LoginContentRow,
   LoginHeader,
 } from './Login.style';
-import { LOG_IN_REQUEST } from '../../store/modules/member';
+import { LOG_IN_REQUEST, SET_MENU } from '../../store/modules/member';
 import { Link } from 'react-router-dom';
 import { useDispatch } from 'react-redux';
 
@@ -29,7 +29,9 @@ export default function Login() {
       });
     }
   };
-
+  const changeMenu = m => {
+    dispatch({ type: SET_MENU, data: m });
+  };
   return (
     <Layout>
       <Navbar />
@@ -68,11 +70,19 @@ export default function Login() {
               <div id="footer">
                 <p>아직 회원이 아니신가요?</p>
                 <br />
-                <Link to="/signup" style={{ color: 'gray' }}>
+                <Link
+                  to="/signup"
+                  style={{ color: 'gray' }}
+                  onClick={() => changeMenu('signup')}
+                >
                   회원가입
                 </Link>
                 &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;
-                <Link to="/find/password" style={{ color: 'gray' }}>
+                <Link
+                  to="/find/password"
+                  style={{ color: 'gray' }}
+                  onClick={() => changeMenu('main')}
+                >
                   비밀번호 찾기
                 </Link>
               </div>

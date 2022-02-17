@@ -9,7 +9,7 @@ import { useSelector, useDispatch } from 'react-redux';
 import { DELETE_FANMEETING_REQUEST } from '../../../store/modules/fan';
 import axios from 'axios';
 import { KAKAO_ADMIN_KEY } from '../../../utils/dev';
-import { IMAGE_URL } from '../../../utils/contants';
+import { BASE_URL, IMAGE_URL } from '../../../utils/contants';
 import { WARNING_COUNT_REQUEST } from '../../../store/modules/meeting';
 import swal from 'sweetalert';
 
@@ -32,9 +32,9 @@ export default function ScheduleDetailLeft() {
       total_amount: meeting.price,
       tax_free_amount: 0,
       // router에 지정한 PayResult의 경로로 수정
-      approval_url: `http://localhost:3000/pay`,
-      fail_url: `http://localhost:3000/pay`,
-      cancel_url: `http://localhost:3000/pay`,
+      approval_url: `${URL}pay`,
+      fail_url: `${URL}pay`,
+      cancel_url: `${URL}pay`,
     },
   };
 
