@@ -32,9 +32,9 @@ export default function ScheduleDetailLeft() {
       total_amount: meeting.price,
       tax_free_amount: 0,
       // router에 지정한 PayResult의 경로로 수정
-      approval_url: `${HOME_URL}pay`,
-      fail_url: `${HOME_URL}pay`,
-      cancel_url: `${HOME_URL}pay`,
+      approval_url: `https://i6e204.p.ssafy.io/pay`,
+      fail_url: `https://i6e204.p.ssafy.io/pay`,
+      cancel_url: `https://i6e204.p.ssafy.io/pay`,
     },
   };
 
@@ -59,41 +59,41 @@ export default function ScheduleDetailLeft() {
         data: { memberId: me.memberId, meetingId: meeting.id },
       });
   }, [dispatch, me.memberId, meeting.id, meeting.isReserve]);
-
+  const reserveMeeting = () => {
+    console.log('예매하기');
+    if (me.memberId === 0) {
+      return history.push('/login');
+    }
+    console.log('시작');
+    const { params } = state;
+    axios({
+      url: '/v1/payment/ready',
+      method: 'POST',
+      headers: {
+        Authorization: `KakaoAK ${KAKAO_ADMIN_KEY}`,
+        'Content-type': 'application/x-www-form-urlencoded;charset=utf-8',
+      },
+      params,
+    }).then(response => {
+      console.log('성공');
+      const {
+        data: { next_redirect_pc_url, tid },
+      } = response;
+      console.log(next_redirect_pc_url);
+      console.log(tid);
+      window.localStorage.setItem('tid', tid);
+      window.localStorage.setItem('meetingId', meeting.id);
+      window.location = next_redirect_pc_url;
+    });
+  };
+  const cancelMeeting = () => {
+    dispatch({
+      type: DELETE_FANMEETING_REQUEST,
+      data: { meetingId: meeting.id, memberId: me.memberId },
+    });
+  };
   const showButton = () => {
     const now = new Date();
-    const reserveMeeting = () => {
-      if (me.memberId === 0) {
-        return history.push('/login');
-      }
-      console.log('시작');
-      const { params } = state;
-      axios({
-        url: '/v1/payment/ready',
-        method: 'POST',
-        headers: {
-          Authorization: `KakaoAK ${KAKAO_ADMIN_KEY}`,
-          'Content-type': 'application/x-www-form-urlencoded;charset=utf-8',
-        },
-        params,
-      }).then(response => {
-        console.log('성공');
-        const {
-          data: { next_redirect_pc_url, tid },
-        } = response;
-        console.log(next_redirect_pc_url);
-        console.log(tid);
-        window.localStorage.setItem('tid', tid);
-        window.localStorage.setItem('meetingId', meeting.id);
-        window.location = next_redirect_pc_url;
-      });
-    };
-    const cancelMeeting = () => {
-      dispatch({
-        type: DELETE_FANMEETING_REQUEST,
-        data: { meetingId: meeting.id, memberId: me.memberId },
-      });
-    };
 
     if (new Date(meeting.endDate) < now) {
       return (
@@ -144,7 +144,7 @@ export default function ScheduleDetailLeft() {
         } else if (me.code === 3) {
           return (
             <ScheduleDetailButton color="1">
-              <div onClick={reserveMeeting}>예매하기</div>
+              <div onClick={() => reserveMeeting()}>예매하기</div>
             </ScheduleDetailButton>
           );
         }
