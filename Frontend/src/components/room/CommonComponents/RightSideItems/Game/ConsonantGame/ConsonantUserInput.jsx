@@ -15,6 +15,19 @@ export default function ConsonantUserInput() {
 
   const { me } = useSelector(state => state.mypage);
 
+  // 효과음
+  const myAudio = new Audio();
+
+  const soundEffect = v => { 
+    if (v == 1) {
+      myAudio.src = require('../../../../../../assets/sound effects/correct.mp3')
+    } else if (v == 2) {
+      myAudio.src = require('../../../../../../assets/sound effects/wrong.mp3')
+      myAudio.volume = 0.7;
+    }
+    myAudio.play()
+  }
+
   useEffect(() => {
     if (chosonantQuiz.length === 0) {
       // 초성게임에 문제가 없을 때 : 초기 상태일 때
@@ -26,6 +39,7 @@ export default function ConsonantUserInput() {
         button: '제출',
       }).then(answer => {
         if (answer === chosonantQuiz[1]) {
+          soundEffect(1)  // 정답 효과음
           swal(
             '축하합니다 정답입니다🎉',
             '정답 정보가 스타에게 제공됩니다',
@@ -41,6 +55,7 @@ export default function ConsonantUserInput() {
             type: 'ChoUserAns',
           });
         } else {
+          soundEffect (2) // 오답 효과음
           swal('틀렸습니다', '다시한번 풀어보세요!', 'error', {
             buttons: false,
             timer: 2800,
@@ -61,6 +76,7 @@ export default function ConsonantUserInput() {
       button: '제출',
     }).then(answer => {
       if (answer === chosonantQuiz[1]) {
+        soundEffect(1)  // 정답 효과음
         swal(
           '축하합니다 정답입니다🎉',
           '정답 정보가 스타에게 제공됩니다',
@@ -76,6 +92,7 @@ export default function ConsonantUserInput() {
           type: 'ChoUserAns',
         });
       } else {
+        soundEffect (2) // 오답 효과음
         swal('틀렸습니다', '다시한번 풀어보세요!', 'error', {
           buttons: false,
           timer: 2800,

@@ -19,8 +19,8 @@ export default function OtherScreenAngle(props) {
 
   const sendQnaContents = () => {
     swal({
-      title: '아래의 질문을 선택하시겠어요 ?',
-      text: props.text,
+      title: '이 질문을 선택하시겠어요 ?',
+      text: props.text + '\n \n \n (\'네 !\' 버튼을 클릭 시 위의 내용이 팬분들과 공유됩니다.)',
       buttons: {
         cancel: '아니오',
         confirm: '네 !',
@@ -33,6 +33,7 @@ export default function OtherScreenAngle(props) {
           type: 'qnaContents',
         });
         swal({
+          title: '아래의 질문을 팬분들과 공유하고 있어요',
           text: props.text,
           button: 'close',
         }).then(() => {

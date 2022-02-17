@@ -47,6 +47,7 @@ const List = [
   '초성게임',
   '1:1팬미팅',
 ];
+const myAudio = new Audio();
 
 class Room extends Component {
   constructor(props) {
@@ -226,7 +227,8 @@ class Room extends Component {
           let sec = parseInt(event.data);
           let min = parseInt(sec / 60);
           sec = sec % 60;
-
+          myAudio.src = require('../../assets/sound effects/pop.mp3')
+          myAudio.play()
           if (min === 0) {
             swal({
               title: '1대1미팅 대기시간 알림',
@@ -284,6 +286,9 @@ class Room extends Component {
               // 게임 reset or 다시 하기
               this.setState({ choAnsUserCnt: 1 }); // 맞춘 사람 수 초기화
               setTimeout(function () {
+                myAudio.src = require('../../assets/sound effects/next.mp3');
+                myAudio.volume = 0.5;
+                myAudio.play();
                 swal('🎇3명의 정답자가 나왔습니다.🎇', '게임이 초기화됩니다.', {
                   button: false,
                   timer: 2000,
@@ -304,6 +309,9 @@ class Room extends Component {
         mySession.on('signal:endConsonant', () => {
           this.props.doScreenChange(5);
           this.props.publisher.publishVideo(true);
+          myAudio.src = require('../../assets/sound effects/next.mp3');
+          myAudio.volume = 0.5;
+          myAudio.play();
           swal('🎇3명의 정답자가 나왔습니다!!🎇', '다음 라운드로 넘어갑니다', {
             timer: 2000,
             button: false,
@@ -327,7 +335,9 @@ class Room extends Component {
             closeOnClickOutside: false,
             closeOnEsc: false,
           }).then(() => {
-            console.log('1////////////', data.content);
+            myAudio.src = require('../../assets/sound effects/winner.mp3')
+            myAudio.volume = 0.8;
+            myAudio.play()
             swal(
               '현재까지 게임 순위 결과 \n 축하합니다!🎉',
               `🥇: ${data.content[0][0]} : ${data.content[0][1]}점\n 🥈: ${data.content[1][0]} : ${data.content[1][1]}점\n 🥉: ${data.content[2][0]} : ${data.content[2][1]}점`,
@@ -378,6 +388,9 @@ class Room extends Component {
             closeOnClickOutside: false,
             closeOnEsc: false,
           }).then(() => {
+            myAudio.src = require('../../assets/sound effects/winner.mp3')
+            myAudio.volume = 0.8;
+            myAudio.play()
             swal(
               '현재까지 게임 순위 결과 \n 축하합니다!🎉',
               `🥇: ${data.content[0][0]} : ${data.content[0][1]}점\n 🥈: ${data.content[1][0]} : ${data.content[1][1]}점\n 🥉: ${data.content[2][0]} : ${data.content[2][1]}점`,
@@ -418,6 +431,13 @@ class Room extends Component {
           this.props.doAddQnaList({ text: event.data });
         });
 
+        // 랜덤 돌아가는 효과음 
+        mySession.on('signal:randomresult', event => {
+          myAudio.src = require('../../assets/sound effects/slot machine.mp3')
+          myAudio.volume = 0.8;
+          myAudio.play()
+        })
+
         mySession.on('signal:audio', event => {
           console.log('===== 오디오 상태 변경 =====');
           if (event.data === 'true') {
@@ -438,6 +458,9 @@ class Room extends Component {
 
         // 경고창
         mySession.on('signal:warning', event => {
+          myAudio.src = require('../../assets/sound effects/wrong.mp3')
+          myAudio.volume = 0.7;
+          myAudio.play()
           if (parseInt(event.data) === 1) {
             swal({
               icon: 'https://cdn-icons-png.flaticon.com/512/2761/2761896.png',
@@ -498,6 +521,8 @@ class Room extends Component {
             window.location.host +
             `/schedule/${this.state.mySessionId}`;
           mySession.disconnect();
+          myAudio.src = require('../../assets/sound effects/pop.mp3')
+          myAudio.play()
           swal({
             title: '미팅 종료 알림',
             text: '미팅 상세 페이지로 이동됩니다',
@@ -519,6 +544,8 @@ class Room extends Component {
 
             if (this.props.publisher.stream.videoActive) {
               if (this.props.myAnswer === starAnswer) {
+                myAudio.src = require('../../assets/sound effects/correct.mp3')
+                myAudio.play()
                 swal({
                   title: round + '라운드 종료',
                   text: '정답 50point 적립!',
@@ -528,6 +555,9 @@ class Room extends Component {
                 });
                 AddGameScoreAPI(this.state.mySessionId, this.state.me.memberId);
               } else {
+                myAudio.src = require('../../assets/sound effects/wrong.mp3')
+                myAudio.volume = 0.7;
+                myAudio.play()
                 swal({
                   title: round + '라운드 종료',
                   text: '오답',
@@ -559,7 +589,8 @@ class Room extends Component {
               }
             } else {
               swal({
-                text: round + '라운드 종료',
+                title: round + '라운드 종료',
+                className: 'oxSwal',
                 buttons: false,
                 timer: 1500,
               });

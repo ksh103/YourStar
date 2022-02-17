@@ -18,10 +18,13 @@ const BackgroundDiv = styled.div`
 export default function UserQnA() {
   const { storeSession } = useSelector(state => state.MeetingRoom);
 
+  const myAudio = new Audio();
+
   storeSession.on('signal:qnaContents', event => {
     if (event.data.length > 1) {
       // qna 모달창 여는 신호 받음(값이 있는 경우)
       swal({
+        title: '스타가 선택한 질문입니다 👇🏻',
         text: event.data,
         button: true, 
       })
@@ -32,6 +35,8 @@ export default function UserQnA() {
 
   storeSession.on('signal:QnAmode', event => {
     if (event.data === 'start') {
+      myAudio.src = require('../../../assets/sound effects/pop.mp3')
+      myAudio.play()
       swal({
         text: '스타에게 궁금하거나 하고 싶었던 말을 적어 보내보세요 !',
         content: "input",
@@ -63,6 +68,8 @@ export default function UserQnA() {
   })
 
   const reQnASwal = event => {
+    myAudio.src = require('../../../assets/sound effects/pop.mp3')
+    myAudio.play()
     swal({
       text: '💌 여러분의 스타에게 궁금하거나 하고 싶었던 말을 적어 전송해주세요 !',
       content: "input",

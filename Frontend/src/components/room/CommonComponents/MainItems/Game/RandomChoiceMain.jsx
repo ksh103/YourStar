@@ -129,7 +129,7 @@ export default function RandomChoiceMain() {
         });
       }
     }
-
+    
     swal({
       className: 'countdown',
       timer: 3000,
@@ -168,6 +168,7 @@ export default function RandomChoiceMain() {
         className: 'number',
         content: <div className="ment">행운의 당첨자가 곧 나타납니다!</div>,
       }).then(() => {
+        soundEffect(1)  // 두구두구 소리 
         swal({
           buttons: false,
           timer: 1000,
@@ -186,6 +187,7 @@ export default function RandomChoiceMain() {
               className: 'number',
               content: <div className="number">1</div>,
             }).then(() => {
+              soundEffect(2)  // 짜잔 소리 
               setUserScreen(true);
             });
           }); // 틀렸을 때 게임 다시하기위해 호출하는 함수
@@ -196,6 +198,18 @@ export default function RandomChoiceMain() {
       setUserScreen(false);
     }, 30000);
   });
+
+  // 효과음
+  const myAudio = new Audio();
+  
+  const soundEffect = v => { 
+    if (v == 1) {
+      myAudio.src = require('../../../../../assets/sound effects/drum.mp3')
+    } else if (v == 2) {
+      myAudio.src = require('../../../../../assets/sound effects/tadan.mp3')
+    }
+    myAudio.play()
+  }
 
   return (
     <MainDiv>
