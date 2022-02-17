@@ -50,12 +50,7 @@ function App() {
             code={[0]}
           />
           <Route exact path="/pay" component={Pay} />
-          <PrivateRoute
-            exact
-            path="/room/:id"
-            component={Room}
-            code={[1, 2, 3, 4]}
-          />
+          <Route exact path="/room/:id" component={Room} />
           <Route path="/mypage/:id" component={MypageDetail} />
           <Route path="/pledge/:id">
             <Pledge />
