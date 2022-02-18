@@ -9,7 +9,7 @@ import {
   FindPwHeader,
 } from './FindPassword.style';
 import { useDispatch, useSelector } from 'react-redux';
-import { FIND_PW_REQUEST } from '../../../store/modules/member';
+import { FIND_PW_REQUEST, SET_MENU } from '../../../store/modules/member';
 import { useHistory } from 'react-router';
 
 export default function FindPassword() {
@@ -35,9 +35,10 @@ export default function FindPassword() {
 
   useEffect(() => {
     if (findPwDone) {
+      dispatch({ type: SET_MENU, data: 'login' });
       history.push('/login');
     }
-  }, [findPwDone, history]);
+  }, [dispatch, findPwDone, history]);
   return (
     <Layout>
       <Navbar />

@@ -19,6 +19,7 @@ import {
   EMAIL_CHECK_REQUEST,
   NICK_CHECK_REQUEST,
   setAddressButton,
+  SET_MENU,
   SIGN_UP_REQUEST,
 } from '../../../store/modules/member';
 import SearchAddrModal from '../../utils/modal/modalSearchAddr';
@@ -130,9 +131,10 @@ export default function Signup() {
 
   useEffect(() => {
     if (signUpDone) {
+      dispatch({ type: SET_MENU, data: 'login' });
       history.push('/login');
     }
-  }, [signUpDone, history]);
+  }, [signUpDone, history, dispatch]);
   return (
     <Layout>
       <Navbar />

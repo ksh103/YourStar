@@ -11,7 +11,7 @@ import Navbar from '../../Navbar/Navbar';
 import Footer from '../../Footer/Footer';
 import ScheduleDetailLeft from '../../Schedule/ScheduleDetail/ScheduleDetailLeft';
 import ScheduleDetailRight from '../../Schedule/ScheduleDetail/ScheduleDetailRight';
-import { useParams } from 'react-router-dom';
+import { Link, useParams } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
 import { DETAIL_MEETING_REQUEST } from '../../../store/modules/meeting';
 
@@ -36,7 +36,9 @@ export default function ScheduleDetail() {
             <ScheduleDetailHeader>
               <ScheduleDetailTitle>
                 <div id="meeting-icon">
-                  <IoIosArrowBack onClick={() => window.history.back()} />
+                  <Link to="/schedule">
+                    <IoIosArrowBack />
+                  </Link>
                 </div>
                 <div id="meeting-name">{meeting.name}</div>
               </ScheduleDetailTitle>
