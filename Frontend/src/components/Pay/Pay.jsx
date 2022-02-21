@@ -8,56 +8,6 @@ import { PayWrapper, PayBlock } from './Pay.style';
 
 export default function Pay() {
   const { meeting } = useSelector(state => state.meeting);
-  // const meetingId = window.localStorage.getItem('meetingId');
-  // const tid = window.localStorage.getItem('tid');
-  // useEffect(() => {
-  //   if (tid && meetingId) {
-  //     const state = {
-  //       params: {
-  //         cid: 'TC0ONETIME',
-  //         tid: tid,
-  //         partner_order_id: 'partner_order_id',
-  //         partner_user_id: 'partner_user_id',
-  //         pg_token: props.location.search.split('=')[1],
-  //       },
-  //     };
-
-  //     const { params } = state;
-  //     if (myPageDone) {
-  //       axios({
-  //         url: '/v1/payment/approve',
-  //         method: 'POST',
-  //         headers: {
-  //           Authorization: `KakaoAK ${KAKAO_ADMIN_KEY}`,
-  //           'Content-type': 'application/x-www-form-urlencoded;charset=utf-8',
-  //         },
-  //         params,
-  //       }).then(response => {
-  //         // 결제 승인에 대한 응답 출력
-  //         if (response.status === 200) {
-  //           dispatch({
-  //             type: INSERT_FANMEETING_REQUEST,
-  //             data: {
-  //               meetingId: meetingId,
-  //               memberId: me.memberId,
-  //               email: me.email,
-  //             },
-  //           });
-  //         }
-  //         window.localStorage.removeItem('tid');
-  //         window.localStorage.removeItem('meetingId');
-  //       });
-  //     }
-  //   }
-  // }, [
-  //   dispatch,
-  //   myPageDone,
-  //   me.memberId,
-  //   meetingId,
-  //   props.location.search,
-  //   tid,
-  //   me.email,
-  // ]);
 
   return (
     <Layout>

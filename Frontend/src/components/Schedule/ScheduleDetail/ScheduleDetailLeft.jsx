@@ -10,7 +10,6 @@ import {
   DELETE_FANMEETING_REQUEST,
   INSERT_FANMEETING_REQUEST,
 } from '../../../store/modules/fan';
-import axios from 'axios';
 import { IMAGE_URL } from '../../../utils/contants';
 import { WARNING_COUNT_REQUEST } from '../../../store/modules/meeting';
 import swal from 'sweetalert';
@@ -20,7 +19,6 @@ export default function ScheduleDetailLeft() {
     state => state.meeting
   );
   const { me } = useSelector(state => state.mypage);
-  const { insertFanMeetingDone } = useSelector(state => state.fan);
   const history = useHistory();
   const dispatch = useDispatch();
 
