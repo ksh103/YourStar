@@ -30,10 +30,10 @@ public class MemberPasswordMailUtil {
 
         final String charSet = "utf-8";
         final String hostSMTP = "smtp.naver.com";
-        final String hostSMTPid = "yourstar_ssafy";
-        final String hostSMTPpwd = "ssafy6th.!";
+        final String hostSMTPid = "";
+        final String hostSMTPpwd = "";
 
-        final String fromEmail = "yourstar_ssafy@naver.com";
+        final String fromEmail = "";
         final String fromName = "Your star";
         final String subject = "Your star 계정 패스워드 초기화 정보입니다.";
         String msg = "<div style=\"font-family: 'Apple SD Gothic Neo', 'sans-serif' !important; width: 540px; height: 600px; border-top: 4px solid #212121; margin: 100px auto; padding: 30px 0; box-sizing: border-box;\">";
