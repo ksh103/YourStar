@@ -1,4 +1,8 @@
-# YourStar 🌟
+# 
+
+![yourstar](https://user-images.githubusercontent.com/82499565/172150629-93c75299-d8bf-49cb-8566-f4714e10576b.png)
+
+## 
 
 ## **1.  서비스 소개**
 
